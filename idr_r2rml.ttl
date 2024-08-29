@@ -26,6 +26,22 @@ PREFIX dc: <http://purl.org/dc/elements/1.1/>
             rr:language "en" ]
     ] .
 
+<#project_annotation_join> 
+    rr:logicalTable [ rr:sqlQuery """select 
+        p.id as project_id, 
+        a.id as annotation_id 
+        from project p
+        left outer join projectannotationlink pal on p.id = pal.parent
+        left outer join annotation a on pal.child = a.id""" ] ;
+    rr:subjectMap [ rr:template "http://example.org/project/{project_id}" ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdfs:seeAlso ;
+        rr:objectMap [
+            rr:template "http://example.org/annotation/{annotation_id}" 
+        ] 
+    ] .
+
+    
 <#annotation> 
     rr:logicalTable [ rr:tableName 'annotation' ] ;
     rr:subjectMap [ rr:template "http://example.org/annotation/{id}" ;
