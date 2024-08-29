@@ -1,0 +1,49 @@
+PREFIX rr: <http://www.w3.org/ns/r2rml#>
+PREFIX uniprotkb: <http://purl.uniprot.org/uniprot/>
+PREFIX taxon: <http://purl.uniprot.org/taxonomy/>
+PREFIX up: <http://purl.uniprot.org/core/>
+PREFIX ensembltranscript: <http://rdf.ebi.ac.uk/resource/ensembl.transcript/>
+PREFIX ensemblterms: <http://rdf.ebi.ac.uk/terms/ensembl/>
+PREFIX ensemblprotein: <http://rdf.ebi.ac.uk/resource/ensembl.protein/>
+PREFIX ensemblexon: <http://rdf.ebi.ac.uk/resource/ensembl.exon/>
+PREFIX ensembl: <http://rdf.ebi.ac.uk/resource/ensembl/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX faldo: <http://biohackathon.org/resource/faldo#>
+PREFIX SO: <http://purl.obolibrary.org/obo/SO_000>
+PREFIX so: <http://purl.obolibrary.org/obo/so#>
+PREFIX sio: <http://semanticscience.org/resource/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+<#project> 
+    rr:logicalTable [ rr:tableName 'project' ] ;
+    rr:subjectMap [ rr:template "http://example.org/project/{id}" ; 
+        rr:class <http://schema.org/Project> ] ;
+
+     rr:predicateObjectMap [
+        rr:predicate rdfs:label ;
+        rr:objectMap [ rr:template "{name}"  ; 
+            rr:termType rr:Literal ; 
+            rr:language "en" ]
+    ] .
+
+<#annotation> 
+    rr:logicalTable [ rr:tableName 'annotation' ] ;
+    rr:subjectMap [ rr:template "http://example.org/annotation/{id}" ;
+                    rr:class up:Annotation  ] . #Wrong but just to get something
+
+<#annotation_mapvalue_uniprot_join>
+    rr:sqlQuery """select an.id as id, anmv.value as value from annotation_mapvalue anmv, annotation an  where anmv."name" = 'UniProt ID' and  an.id = anmv.annotation_id""" .
+
+<#annotation_mapvalue_to_uniprot>
+    rr:logicalTable  <#annotation_mapvalue_uniprot_join> ;
+    rr:subjectMap [ rr:template  "http://example.org/annotation/{id}" ] ;
+    rr:predicateObjectMap [ rr:predicate rdfs:seeAlso ; 
+        rr:objectMap [ rr:template "http://purl.uniprot.org/uniprot/{value}" ;
+                       rr:class up:Protein ]
+    ] .
+<#annotation_mapvalue_from_uniprot>
+    rr:logicalTable  <#annotation_mapvalue_uniprot_join> ;
+    rr:subjectMap [ rr:template  "http://purl.uniprot.org/uniprot/{value}" ; 
+                    rr:class up:Protein ] .
+        
+
