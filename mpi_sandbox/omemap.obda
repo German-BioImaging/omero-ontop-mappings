@@ -15,19 +15,19 @@ target		ome_core:Dataset/{id} a ome_core:Dataset ; rdfs:label {name}^^xsd:string
 source		select dataset.id, datasetannotationlink.child, datasetimagelink.child as image_id, dataset.name, dataset.description from dataset join datasetannotationlink on datasetannotationlink.parent = dataset.id join datasetimagelink on dataset.id = datasetimagelink.child;
 
 mappingId	MAPID-a4cb3fa530c84c5b90ddb5e81cbbcb72
-target		ome_core:Annotation/{id} a ome_core:Annotation ; rdfs:comment {textvalue}^^xsd:string . 
-source		select id, textvalue from annotation;
-
-mappingId	MAPID-a5fcd77a0a164d7fb12ac427c70e93a0
-target		ome_core:TagAnnotation/{id} a ome_core:TagAnnotation ; rdfs:comment {textvalue}^^xsd:string . 
-source		select * from annotation where discriminator='/basic/text/tag/' order by id
+target		ome_core:Annotation/{id} a ome_core:Annotation ; rdfs:comment {textvalue}^^xsd:string ; omemap:annotation_type {discriminator}^^xsd:string . 
+source		select annotation.id, annotation.discriminator, annotation.textvalue, annotation_mapvalue.name, annotation_mapvalue.value, annotation_mapvalue.index, annotation_mapvalue.annotation_id from annotation join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id order by annotation_id ;
 
 mappingId	MAPID-e7112763f8224ae6b61c7ce5665fe204
-target		ome_core:Image/{id} a ome_core:Image ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; ome_core:annotation ome_core:Annotation/{child} . 
-source		select image.id, image.name, image.description, imageannotationlink.child from image join imageannotationlink on image.id=imageannotationlink.parent;
+target		ome_core:Image/{image_id} a ome_core:Image ; rdfs:label {image_name}^^xsd:string ; rdfs:comment {image_description}^^xsd:string ; ome_core:annotation ome_core:Annotation/{annotation_id} . 
+source		select image.id as image_id, image.name as image_name, image.description as image_description, imageannotationlink.child as annotation_id from image join imageannotationlink on image.id=imageannotationlink.parent;
 
 mappingId	MAPID-3d5abba8f4834197b0edbd8d667802b3
 target		ome_core:Project/{id} a ome_core:Project ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; ome_core:dataset ome_core:Dataset/{child} ; ome_core:annotation ome_core:Annotation/{annotation_id} . 
 source		select project.id, project.name, project.description, projectdatasetlink.child, projectannotationlink.child as annotation_id from project join projectdatasetlink on project.id = projectdatasetlink.parent join projectannotationlink on project.id = projectannotationlink.parent;
+
+mappingId	MAPID-a4cb3fa530c84c5b90ddb5e81cbbcb72-c1
+target		ome_core:MapAnnotation/{id} a ome_core:MapAnnotation ; rdfs:comment {textvalue}^^xsd:string ; omemap:annotation_type "/map/"^^xsd:string . 
+source		select * from annotation where discriminator='/map/';
 ]]
 
