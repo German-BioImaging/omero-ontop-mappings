@@ -1,0 +1,79 @@
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  select * where {
+  ?ant a ome_core:Annotation ;
+          rdfs:comment ?cmnt .
+  ?ds a ome_core:Dataset ;
+         ome_core:annotation ?ant .
+  }
+  limit 10
+#+end_src
+
+#+RESULTS:
+| ant                                                                | cmnt                    | ds                                                             |
+|--------------------------------------------------------------------+-------------------------+----------------------------------------------------------------|
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3222 | pseudomonas fluorescens | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/602 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3219 | mat formation           | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/712 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3221 | mirror                  | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/709 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3217 | AxioZoom                | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/602 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3218 | darkfield               | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/703 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3221 | mirror                  | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/603 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3224 | upright                 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/752 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3220 | microscopy              | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/707 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/2106 | Lateral                 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/606 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/2105 | Top                     | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/603 |
+
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  select * where {
+  ?proj a ome_core:Project ;
+           rdfs:label ?lbl .
+  ?ds a ome_core:Dataset .
+  ?proj ome_core:dataset ?ds .
+  }
+limit 20
+#+end_src
+
+#+RESULTS:
+| proj                                                            | lbl                             | ds                                                              |
+|-----------------------------------------------------------------+---------------------------------+-----------------------------------------------------------------|
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/865  | MouseCT                         | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/3654 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/1303 | Elio shading test               | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/4544 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/904  | Imaging for Elisa Brambilla     | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/2962 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/655  | MouseCT_backup                  | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/1442 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/865  | MouseCT                         | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/2870 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/865  | MouseCT                         | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/2571 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/1308 | 3D Cell Atlas                   | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/4612 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/1002 | Mat_imaging                     | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/3759 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/865  | MouseCT                         | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/3193 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/151  | 2016                            | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/331  |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/865  | MouseCT                         | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/3383 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/655  | MouseCT_backup                  | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/1834 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/804  | 2020_2021_VPL_microscopy        | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/2200 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/865  | MouseCT                         | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/2890 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/1256 | Omnipose_Training_2D            | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/4448 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/1223 | Alejandro Microscopy            | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/4073 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/1223 | Alejandro Microscopy            | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/4427 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/655  | MouseCT_backup                  | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/2024 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/1007 | Microscopy_2024                 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/4556 |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project/1052 | minD oscillation in DrodA cells | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/4537 |
+
+
