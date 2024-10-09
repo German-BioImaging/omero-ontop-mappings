@@ -11,8 +11,8 @@ ome_core:	http://www.openmicroscopy.org/rdf/2016-06/ome_core/
 
 [MappingDeclaration] @collection [[
 mappingId	MAPID-ad72dafe19404fc2a460e734b0a2a0ee
-target		ome_core:Dataset/{id} a ome_core:Dataset ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; ome_core:annotation ome_core:Annotation/{child} . 
-source		select dataset.id, datasetannotationlink.child, dataset.name, dataset.description from datasetannotationlink join dataset on datasetannotationlink.parent = dataset.id;
+target		ome_core:Dataset/{id} a ome_core:Dataset ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; ome_core:annotation ome_core:Annotation/{child} ; ome_core:image ome_core:Image/{image_id} . 
+source		select dataset.id, datasetannotationlink.child, datasetimagelink.child as image_id, dataset.name, dataset.description from dataset join datasetannotationlink on datasetannotationlink.parent = dataset.id join datasetimagelink on dataset.id = datasetimagelink.child;
 
 mappingId	MAPID-a4cb3fa530c84c5b90ddb5e81cbbcb72
 target		ome_core:Annotation/{id} a ome_core:Annotation ; rdfs:comment {textvalue}^^xsd:string . 
@@ -27,7 +27,7 @@ target		ome_core:Image/{id} a ome_core:Image ; rdfs:label {name}^^xsd:string ; r
 source		select image.id, image.name, image.description, imageannotationlink.child from image join imageannotationlink on image.id=imageannotationlink.parent;
 
 mappingId	MAPID-3d5abba8f4834197b0edbd8d667802b3
-target		ome_core:Project/{id} a ome_core:Project ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; ome_core:dataset ome_core:Dataset/{child} . 
-source		select project.id, project.name, project.description, projectdatasetlink.child from project join projectdatasetlink on project.id = projectdatasetlink.parent;
+target		ome_core:Project/{id} a ome_core:Project ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; ome_core:dataset ome_core:Dataset/{child} ; ome_core:annotation ome_core:Annotation/{annotation_id} . 
+source		select project.id, project.name, project.description, projectdatasetlink.child, projectannotationlink.child as annotation_id from project join projectdatasetlink on project.id = projectdatasetlink.parent join projectannotationlink on project.id = projectannotationlink.parent;
 ]]
 
