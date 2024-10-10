@@ -30,14 +30,17 @@ jobs:
           repository: ome/omero-test-infra
           path: .omero
           ref: ${{ secrets.OMERO_TEST_INFRA_REF }}
-      - name: Install ontop-cli
-        run: curl -L https://github.com/ontop/ontop/releases/download/ontop-5.2.0/ontop-cli-5.2.0.zip ;\
-          mkdir -p ontop-cli ;\
-          cd ontop-cli ;\
-          unzip ../ontop-cli-5.2.0.zip ;\
-          cd jdbc ;\
-          curl -L https://jdbc.postgresql.org/download/postgresql-42.7.4.jar ;\
-          cd ../.. ;\
-          ls -R ontop-cli
+      - name: Download ontop-cli
+        run: curl -L https://github.com/ontop/ontop/releases/download/ontop-5.2.0/ontop-cli-5.2.0.zip
+      - name: Make ontop dir
+        run: mkdir -p ontop-cli
+      - name: cd into ontop-cli/
+        run: cd ontop-cli
+      - name: unpack ontop-cli
+        run: unzip ../ontop-cli-5.2.0.zip
+      - name: cd into jdbc
+        run: cd jdbc
+      - name: download jdbc driver
+        run: curl -L https://jdbc.postgresql.org/download/postgresql-42.7.4.jar
       - name: Build and run OMERO tests
         run: .omero/docker $STAGE
