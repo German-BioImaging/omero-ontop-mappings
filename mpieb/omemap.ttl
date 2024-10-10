@@ -11,15 +11,15 @@
 @base <https://www.openmicroscopy.org/omemap/> .
 
 <https://www.openmicroscopy.org/omemap> rdf:type owl:Ontology ;
-    owl:imports <https://gitlab.com/CFGrote/ome-owl/-/raw/master/ontology/owl/ome_core/ome_core.owl.ttl> .
+                                         owl:imports <https://gitlab.com/openmicroscopy/incubator/ome-owl/-/raw/master/ontology/owl/ome_core/ome_core.owl.ttl> .
 
 #################################################################
-#    Data properties
+#    Object Properties
 #################################################################
 
-###  https://www.openmicroscopy.org/omemap#annotation_type
-omemap:annotation_type rdf:type owl:DatatypeProperty ;
-                       rdfs:domain ome_core:Annotation .
+###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/mapAnnotationValue
+ome_core:mapAnnotationValue rdfs:domain ome_core:LongAnnotation ,
+                                        ome_core:StructuredAnnotation .
 
 
 #################################################################
