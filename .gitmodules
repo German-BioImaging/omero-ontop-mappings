@@ -1,0 +1,3 @@
+[submodule "ome-owl"]
+	path = ome-owl
+	url = git@gitlab.com:CFGrote/ome-owl
