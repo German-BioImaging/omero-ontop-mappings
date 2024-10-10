@@ -1,4 +1,4 @@
 *.properties
 .#*.*
-ci_utils/
 *.zip
+ontop-cli/
