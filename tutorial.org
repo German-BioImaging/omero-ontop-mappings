@@ -1,23 +1,8 @@
-* ONTOP Module for IDR on OMERO Backend
+* Tutorial on RDB to RDF Mapping with Ontop
   :PROPERTIES:
-  :CUSTOM_ID: ontop-module-for-idr-on-omero-backend
   :ID:       761499a5-07fb-49c7-9d08-fbc089249a5c
   :END:
-This repository contains the ONTOP mappings and ontology for OMERO. Specialized mappings reside in subdirectories, e.g. for the IDR, MPI Evolutionary Biology, and others.
-
-** Acknowledgments
-   :PROPERTIES:
-   :CUSTOM_ID: acknowledgments
-   :ID:       e34a66f1-7d4c-46be-aa63-63ae2835a3a6
-   :END:
-This project was developed with support from the Biohackathon 2024.
-
-** Howto Ontop
-   :PROPERTIES:
-   :CUSTOM_ID: howto-ontop
-   :ID:       aecb11a2-e7de-47f6-9516-64dab28a40c3
-   :END:
-*** Software
+** Software
     :PROPERTIES:
     :CUSTOM_ID: software
     :ID:       3d5fd4c6-298a-4d17-a92a-5e8bd212d0be
@@ -34,7 +19,7 @@ This project was developed with support from the Biohackathon 2024.
 - Save the jdbc driver into the jdbc/ subdirectory of the unpacked
   ontop-cli archive.
 
-*** Configure omero postgres db
+** Configure omero postgres db
     :PROPERTIES:
     :CUSTOM_ID: configure-omero-postgres-db
     :ID:       e3f44f2d-408d-4d04-97eb-615098f27bc5
@@ -72,7 +57,7 @@ host    all             all             ::/0                    md5
 sudo service postgresql restart
 #+end_example
 
-*** Test the connection
+** Test the connection
     :PROPERTIES:
     :CUSTOM_ID: test-the-connection
     :ID:       b5c4d4e1-6cb0-4994-bdf9-e1231ba11e38
@@ -99,12 +84,12 @@ sudo service postgresql restart
     details.
   - On success: Hurray!
 
-*** Crunch time: Your first mapping
+** Crunch time: Your first mapping
     :PROPERTIES:
     :CUSTOM_ID: crunch-time-your-first-mapping
     :ID:       c159cddc-a521-458f-812f-3c6f18299448
     :END:
-**** Add entity and property to active ontology
+*** Add entity and property to active ontology
      :PROPERTIES:
      :CUSTOM_ID: add-entity-and-property-to-active-ontology
      :ID:       f91fe330-e6b6-4388-8956-728891be343e
@@ -117,7 +102,7 @@ mapped to class instances (triple subjects), table columns headers are
 mapped to properties (table predicates), table column values are mapped
 to property values (table subjects).
 
-**** Define mapping
+*** Define mapping
      :PROPERTIES:
      :CUSTOM_ID: define-mapping
      :ID:       476119de-9e10-41cb-aa4c-33294c324a81
@@ -142,7 +127,7 @@ into the "Source" field.
 You may want to test your query by clicking the "Execute the sql query"
 which will populate the "SQL Query results" field.
 
-*** SPARQL query
+** SPARQL query
     :PROPERTIES:
     :CUSTOM_ID: sparql-query
     :ID:       e7269125-645c-405f-9707-f4e1fce17f92
@@ -161,7 +146,7 @@ And click "Execute". Find your omero dataset ids and names in the SPARQL
 results field and observe the generated SQL query in the "SQL
 tranlation" tab.
 
-*** Save mapping, ontology, and properties
+** Save mapping, ontology, and properties
     :PROPERTIES:
     :CUSTOM_ID: save-mapping-ontology-and-properties
     :ID:       c7223420-371e-46fc-a716-3524370b4f71
@@ -171,7 +156,7 @@ format and select a file name. This filename will serve as the basis for
 three files: /.properties/ (db connection settings), /.ttl/ (ontology),
 and /.obda/ (mapping definition in ontop format).
 
-*** Launch ontop SPARQL endpoint
+** Launch ontop SPARQL endpoint
     :PROPERTIES:
     :CUSTOM_ID: launch-ontop-sparql-endpoint
     :ID:       54d346f6-fbfe-4f59-a550-d3e96ca840e3
@@ -188,8 +173,7 @@ path/to/ontop-cli/ontop endpoint -m <filename>.obda -t <filename>.ttl -p <filena
 Open your webbrowser at http://localhost:8080 where a beautiful SPARQL
 frontend awaits your queries. Sparqly happy queries!
 
-
-*** And now for something more serious
+** And now for something more serious
 :PROPERTIES:
 :ID:       fbbeb2ab-0e4c-42c2-8653-a61180aba954
 :END:
@@ -204,7 +188,7 @@ Norio Kobayashi (@norikoba) and published in doi:10.48550/arXiv.2110.10407. It i
 https://gitlab.com/openmicroscopy/incubator/ome-owl.git. The owl formatted
 ontology file can be obtained from [[https://gitlab.com/openmicroscopy/incubator/ome-owl/-/raw/master/ontology/owl/ome_core/ome_core.owl.ttl?ref_type=heads&inline=false][here]] (gitlab download).
 
-*** Import ome_core.owl in Protege
+** Import ome_core.owl in Protege
 :PROPERTIES:
 :ID:       b94e98ea-5b70-4d68-978a-7f757adb864f
 :END:
@@ -227,7 +211,7 @@ Now select the "Entries/Classes" tab in Protege, which is now populated with all
 
 [[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_15-01-36_screenshot.png]]
 
-*** Optional: Set site prefix
+** Optional: Set site prefix
 :PROPERTIES:
 :ID:       b4fb7b24-144f-4d8e-bb10-d170d2770095
 :END:
@@ -241,8 +225,7 @@ URL (this example is for the MPI EB Omero instance, adjust according to your spe
 
 [[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_15-17-25_screenshot.png]]
 
-
-*** Map ontology terms
+** Map ontology terms
 :PROPERTIES:
 :ID:       c73fc3a9-3427-44c8-a966-0ee950ba467e
 :END:
@@ -291,13 +274,13 @@ from the two `join`s can then be referred to in the the Target Triples Template 
 Note that we also define aliases using the SQL `as` keyword for the templated variables to disambiguate
 them in case of potentially duplicate column names in the joined tables. 
 
-*** Mapping annotations
+** Mapping annotations
 :PROPERTIES:
 :ID:       ac97293d-f9ab-43cc-8a31-0dccf45bfb83
 :END:
 The above example adds triples to link Datasets to their images and annotations. Let's add a few more mappings:
 
-**** Images
+*** Images
 :PROPERTIES:
 :ID:       64112880-0be3-4991-b1d3-5f3a15263dba
 :END:
@@ -305,7 +288,7 @@ The above example adds triples to link Datasets to their images and annotations.
 [[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_16-39-27_screenshot.png]]
 
 
-**** Annotations
+*** Annotations
 :PROPERTIES:
 :ID:       b5ac8ce8-67f1-4ff1-bdba-40bd36338921
 :END:
@@ -318,7 +301,7 @@ The above example adds triples to link Datasets to their images and annotations.
 
 
 
-**** Maps (aka Key-Value pairs)
+*** Maps (aka Key-Value pairs)
 :PROPERTIES:
 :ID:       1d442d27-5d1d-4af3-9afc-2dbc0e1576bd
 :END:
@@ -370,7 +353,7 @@ With this, we are now in the position to query key-value pairs. E.g.
 
 Nice :partying_face:!
 
-*** Constructing new triples.
+** Constructing new triples.
 :PROPERTIES:
 :ID:       47f2342c-c5e5-4218-976f-cbf1896f3d84
 :END:
