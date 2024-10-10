@@ -196,9 +196,13 @@ frontend awaits your queries. Sparqly happy queries!
 Most likely, we do not want to work out the entire mapping ontology from scratch. Keep in mind that the omero postgresql database contains of the order 160 public tables.
 This means, we would have to create of the order 160 classes and as many properties as there are columns in all tables combined. Not cool.
 
-So instead, we will base our mapping on a existing omero ontology. **BEWARE** there is currently not one "the" omero ontology but a small number (somewhere between 3 and 10) of
-ontologies circulate in various repositories, ontology registries etc. Here, we employ the so called core omero ontology written by Norio Kobayashi (@norikoba) and published in [[^1]]. It is maintained in
-https://gitlab.com/openmicroscopy/incubator/ome-owl.git. The owl formatted ontology file can be obtained from [[https://gitlab.com/openmicroscopy/incubator/ome-owl/-/raw/master/ontology/owl/ome_core/ome_core.owl.ttl?ref_type=heads&inline=false][here]] (gitlab download).
+So instead, we will base our mapping on a existing omero ontology. **BEWARE**
+there is currently not one "the" omero ontology but a small number (somewhere
+between 3 and 10) of ontologies circulate in various repositories, ontology
+registries etc. Here, we employ the so called core omero ontology written by
+Norio Kobayashi (@norikoba) and published in doi:10.48550/arXiv.2110.10407. It is maintained in
+https://gitlab.com/openmicroscopy/incubator/ome-owl.git. The owl formatted
+ontology file can be obtained from [[https://gitlab.com/openmicroscopy/incubator/ome-owl/-/raw/master/ontology/owl/ome_core/ome_core.owl.ttl?ref_type=heads&inline=false][here]] (gitlab download).
 
 *** Import ome_core.owl in Protege
 :PROPERTIES:
