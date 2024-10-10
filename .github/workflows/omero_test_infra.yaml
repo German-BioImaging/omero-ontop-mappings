@@ -39,5 +39,6 @@ jobs:
           - cd jdbc
           - curl -L https://jdbc.postgresql.org/download/postgresql-42.7.4.jar
           - cd ../..
+          - ls -R ontop-cli
       - name: Build and run OMERO tests
         run: .omero/docker $STAGE
