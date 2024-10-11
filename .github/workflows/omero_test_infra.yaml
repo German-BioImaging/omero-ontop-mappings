@@ -31,10 +31,7 @@ jobs:
           path: .omero
           ref: ${{ secrets.OMERO_TEST_INFRA_REF }}
       - name: patch portmapping
-        run: cp ci_utils/portmapping.patch .omero &&\
-             cd .omero &&\
-             patch -p1 < portmapping.patch &&\
-             git diff
+        run: cp ci_utils/portmapping.patch .omero && cd .omero && patch -p1 < portmapping.patch && git diff
       - name: ontop-cli
         run: ci_utils/install_ontop.sh
       - name: Build and run OMERO tests
