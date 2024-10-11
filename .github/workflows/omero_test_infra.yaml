@@ -34,3 +34,5 @@ jobs:
         run: ci_utils/install_ontop.sh
       - name: Build and run OMERO tests
         run: .omero/docker $STAGE
+      - name: check db connection
+        run: psql -U omero --password $ROOTPASS -d omero -h localhost:5432 -c "select * from dataset;"
