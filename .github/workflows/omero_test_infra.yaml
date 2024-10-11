@@ -42,7 +42,7 @@ jobs:
       - name: Launch omero
         run: .omero/docker dev start_up
       - name: omero login
-        run: ~/miniconda3/bin/omero login -s localhost:14064 -u root -p omero
+        run: ~/miniconda3/bin/omero login -s localhost:14064 -u root -w omero
       - name: omero project
         run: ~/miniconda3/bin/omero obj new Project name="Project 0"
       - name: Inject data
