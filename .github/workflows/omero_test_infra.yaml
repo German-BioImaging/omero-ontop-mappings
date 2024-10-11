@@ -40,7 +40,7 @@ jobs:
       - name: patch portmapping
         run: cp ci_utils/portmapping.patch .omero && cd .omero && patch -p1 < portmapping.patch && git diff
       - name: Launch omero
-        run: .omero/docker dev start_up && ~/miniconda3/bin/omero login -s localhost:14064 -u root -w omero
+        run: .omero/docker dev start_up && curl http://localhost:14080
       - name: Inject data
         run: source ci_utils/insert_data.sh
       - name: Start ontop
