@@ -1,6 +1,8 @@
 #! /bin/bash
 set -e
 
+source ~/miniconda3/bin/activate
+
 omero logout
 omero login -u root -w omero -s localhost:14064
 
