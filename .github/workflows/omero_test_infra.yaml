@@ -42,7 +42,7 @@ jobs:
       - name: Launch omero
         run: .omero/docker dev start_up
       - name: Inject data
-        run: ci_utils/insert_data.sh
+        run: source ci_utils/insert_data.sh
       - name: Start ontop
         run: ontop-cli/ontop endpoint -t mpieb/omemap.ttl -m mpieb/omemap.obda -p mpieb/omero-test-infra.properties 
       - name: Test ontop sparql endpoint
