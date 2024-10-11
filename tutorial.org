@@ -1,0 +1,467 @@
+* Tutorial on RDB to RDF Mapping with Ontop
+  :PROPERTIES:
+  :ID:       761499a5-07fb-49c7-9d08-fbc089249a5c
+  :END:
+** Software
+    :PROPERTIES:
+    :CUSTOM_ID: software
+    :ID:       3d5fd4c6-298a-4d17-a92a-5e8bd212d0be
+    :END:
+- Protege: https://protege.stanford.edu/software.php#desktop-protege
+- Unpack on your system into a writable directory
+- Download ontop command line client (ontop-cli-x.y.z.zip) and ontop
+  plugin for Protege (it.unibz.inf.ontop.protege-x.y.z.jar) from
+  https://github.com/ontop/ontop/releases/latest
+- Unpack ontop-cli zip
+- Save ontop plugin into your Protege's plugin directory.
+- Download postgresql jdbc driver for your system's java version:
+  https://jdbc.postgresql.org/download/
+- Save the jdbc driver into the jdbc/ subdirectory of the unpacked
+  ontop-cli archive.
+
+** Configure omero postgres db
+    :PROPERTIES:
+    :CUSTOM_ID: configure-omero-postgres-db
+    :ID:       e3f44f2d-408d-4d04-97eb-615098f27bc5
+    :END:
+If you run ontop on a different host than your omero instance, you have
+to allow remote tcp/ip access to the latter via port 5432. By default,
+this is disabled and only connections from localhost are permitted. To
+this end, edit these two files (paths may vary according to host OS, on
+debian/ubuntu servers it will likely be
+//etc/postgresql/VERSION/main//). - /postgres.conf/ either allow all
+connections
+
+#+begin_example
+listen_addresses = '*'          # what IP address(es) to listen on;
+#+end_example
+
+or specify clients as comma separated values:
+
+#+begin_example
+listen_addresses = '192.168.1.10,172.5.16.4,localhost'          # what IP address(es) to listen on;
+#+end_example
+
+- /pg_hba.conf/ Adding these two lines worked for me but may be too
+  permissive in your situation (in particular if your omero is not
+  behind a firewall):
+
+#+begin_example
+host    all             all             0.0.0.0/0               md5
+host    all             all             ::/0                    md5
+#+end_example
+
+- restart your postgres service, i.e.
+
+#+begin_example
+sudo service postgresql restart
+#+end_example
+
+** Test the connection
+    :PROPERTIES:
+    :CUSTOM_ID: test-the-connection
+    :ID:       b5c4d4e1-6cb0-4994-bdf9-e1231ba11e38
+    :END:
+- Launch Protege
+- If not present, add ontop Tabs (Menu -> Window -> Tabs -> Ontop
+  Mappings)
+- Configure postgres jdbc driver:
+  - Select Menu -> File -> Preferences -> JDBC Drivers
+  - Click Add
+  - Select "org.postgresql.Driver" from Class name dropdown menu
+  - Select postgres jdbc driver jar file downloaded earlier from the
+    ontop-cli jdbc directory
+- Setup connection:
+  - In the Ontop Mappings Tab, select "Connection parameters" subtab
+    - Enter connection URL:
+      "jdbc:postgresql://your.omero.url:5432/omero"
+    - Enter a db username with at least read access to all tables in the
+      omero db.
+    - Enter db user's password
+    - Select "org.postgresql.Driver" as JDBC driver class.
+- Click test connection
+  - On error: Check postgres config on omero host and connection
+    details.
+  - On success: Hurray!
+
+** Crunch time: Your first mapping
+    :PROPERTIES:
+    :CUSTOM_ID: crunch-time-your-first-mapping
+    :ID:       c159cddc-a521-458f-812f-3c6f18299448
+    :END:
+*** Add entity and property to active ontology
+     :PROPERTIES:
+     :CUSTOM_ID: add-entity-and-property-to-active-ontology
+     :ID:       f91fe330-e6b6-4388-8956-728891be343e
+     :END:
+Add one class (e.g. =:Dataset=) and one data property (e.g. =:name=) to
+the ontology.
+
+More general, tables are mapped to classes, table index columns are
+mapped to class instances (triple subjects), table columns headers are
+mapped to properties (table predicates), table column values are mapped
+to property values (table subjects).
+
+*** Define mapping
+     :PROPERTIES:
+     :CUSTOM_ID: define-mapping
+     :ID:       476119de-9e10-41cb-aa4c-33294c324a81
+     :END:
+- Select "Mapping manager" tab
+- Click "New"
+- Enter
+
+#+begin_example
+:dataset/{id} a :Dataset;
+              :name {name} .
+#+end_example
+
+into the field "Target" and
+
+#+begin_src sql
+select id, name from dataset;
+#+end_src
+
+into the "Source" field.
+
+You may want to test your query by clicking the "Execute the sql query"
+which will populate the "SQL Query results" field.
+
+** SPARQL query
+    :PROPERTIES:
+    :CUSTOM_ID: sparql-query
+    :ID:       e7269125-645c-405f-9707-f4e1fce17f92
+    :END:
+Select the "Ontop SPARQL" tab. Click "Prefixes" and select the base
+prefix and further prefixes as needed. In the query editor enter
+
+#+begin_example
+select * where {
+    ?subj a :Dataset;
+          :name ?name .
+}
+#+end_example
+
+And click "Execute". Find your omero dataset ids and names in the SPARQL
+results field and observe the generated SQL query in the "SQL
+tranlation" tab.
+
+** Save mapping, ontology, and properties
+    :PROPERTIES:
+    :CUSTOM_ID: save-mapping-ontology-and-properties
+    :ID:       c7223420-371e-46fc-a716-3524370b4f71
+    :END:
+Select Menu -> Save (or Save as). Select "Turtle syntax" for the file
+format and select a file name. This filename will serve as the basis for
+three files: /.properties/ (db connection settings), /.ttl/ (ontology),
+and /.obda/ (mapping definition in ontop format).
+
+** Launch ontop SPARQL endpoint
+    :PROPERTIES:
+    :CUSTOM_ID: launch-ontop-sparql-endpoint
+    :ID:       54d346f6-fbfe-4f59-a550-d3e96ca840e3
+    :END:
+In a terminal, navigate to the directory where you just saved your
+mapping definition files to. In that directory, run
+
+#+begin_example
+path/to/ontop-cli/ontop endpoint -m <filename>.obda -t <filename>.ttl -p <filename>.properties
+#+end_example
+
+*replace* // with the actual filename from above.
+
+Open your webbrowser at http://localhost:8080 where a beautiful SPARQL
+frontend awaits your queries. Sparqly happy queries!
+
+** And now for something more serious
+:PROPERTIES:
+:ID:       fbbeb2ab-0e4c-42c2-8653-a61180aba954
+:END:
+Most likely, we do not want to work out the entire mapping ontology from scratch. Keep in mind that the omero postgresql database contains of the order 160 public tables.
+This means, we would have to create of the order 160 classes and as many properties as there are columns in all tables combined. Not cool.
+
+So instead, we will base our mapping on a existing omero ontology. **BEWARE**
+there is currently not one "the" omero ontology but a small number (somewhere
+between 3 and 10) of ontologies circulate in various repositories, ontology
+registries etc. Here, we employ the so called core omero ontology written by
+Norio Kobayashi (@norikoba) and published in doi:10.48550/arXiv.2110.10407. It is maintained in
+https://gitlab.com/openmicroscopy/incubator/ome-owl.git. The owl formatted
+ontology file can be obtained from [[https://gitlab.com/openmicroscopy/incubator/ome-owl/-/raw/master/ontology/owl/ome_core/ome_core.owl.ttl?ref_type=heads&inline=false][here]] (gitlab download).
+
+** Import ome_core.owl in Protege
+:PROPERTIES:
+:ID:       b94e98ea-5b70-4d68-978a-7f757adb864f
+:END:
+In Protege, select the "Active Ontology" tab and "Ontology imports" tab in the lower left corner. Click the (+) icon
+next to "Direct Imports". In the next dialogue, select "Import an ontology contained in a document located on the web."
+
+[[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_14-53-28_screenshot.png]]
+
+In the following dialogue, enter the URL https://gitlab.com/openmicroscopy/incubator/ome-owl/-/raw/master/ontology/owl/ome_core/ome_core.owl
+into the "URL" field.
+
+
+[[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_14-58-36_screenshot.png]]
+
+Optionally, save the URL as a bookmark for future reference.
+
+Click "Continue" and "Finish" in the next dialogue (if the latter does not come up, check the URL).
+
+Now select the "Entries/Classes" tab in Protege, which is now populated with all classes from the ome core ontology.
+
+[[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_15-01-36_screenshot.png]]
+
+** Optional: Set site prefix
+:PROPERTIES:
+:ID:       b4fb7b24-144f-4d8e-bb10-d170d2770095
+:END:
+You may want to add a prefix to the ontology that sets the base part of your omero object URIs. E.g. for the IDR,
+a sensible prefix could be "<http://idr.openmicroscopy.org/api/v0/m/>" In this way, the generated URIs for images, datasets,
+projects, etc. would become actually valid links to the json api resources representing that object. It would also
+entail the possibility to run SPARQL queries or HTTP requests against that json api resource.
+
+In the "Active ontology" tab, select "Ontology Prefixes" in the lower left, click (+) and enter the prefix name and
+URL (this example is for the MPI EB Omero instance, adjust according to your specifics).
+
+[[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_15-17-25_screenshot.png]]
+
+** Map ontology terms
+:PROPERTIES:
+:ID:       c73fc3a9-3427-44c8-a966-0ee950ba467e
+:END:
+Let's now define our first mapping based on the imported ontology.
+
+Select the "Ontop Mappings" tab and first enter your omero database connection parameters
+
+
+[[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_15-07-18_screenshot.png]]
+
+adjust the settings according to your omero instance's configuration. Test your connection.
+
+In the "Mapping manager" tab, click [[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_15-09-28_screenshot.png]["New" ]].
+
+Resuming the example made earlier [[id:476119de-9e10-41cb-aa4c-33294c324a81]], enter the target as
+
+
+#+DOWNLOADED: screenshot @ 2024-10-10 15:28:16
+[[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_15-28-16_screenshot.png]]
+
+This mapping is slightly more complex than the one above, so let's go through
+the details.
+
+The first three lines are repeated from the earlier, simple example. The
+dataset's name and description are linked to the Dataset instance template via
+the `rdfs:label` property and the `rdfs:comment` property, respectively. Note
+that the Dataset instance is prefixed by the site prefix defined [[id:b4fb7b24-144f-4d8e-bb10-d170d2770095][above]].
+Furthermore, the type property value "ome_core:Dataset" now employs the ome core
+ontology instead of the "toy" ontology written from scratch in the earlier
+example.
+
+The following two lines are new. They link property values to the Dataset instance: the dataset's annotation
+and the images contained in the dataset. However, this information is not provided in the postgresql database table
+"dataset", so how get it?
+
+The relation between a dataset and its images is a one-to-many relation because a given dataset
+typically contains more than one image). Relational databases represent such relations through
+link tables. Dataset-image relations are defined in the "datasetimagelink"
+table. The Source SQL query hence `join`s the "dataset" table and the
+"datasetimagelink" table on the "id" column from the "dataset" table and the
+"parent" column from the "datasetimagelink" table. A second `join` on the
+"datasetannotationlink" table also pulls
+the dataset annotations into the sql query result. The additional column names, resulting
+from the two `join`s can then be referred to in the the Target Triples Template in the two last lines.
+
+Note that we also define aliases using the SQL `as` keyword for the templated variables to disambiguate
+them in case of potentially duplicate column names in the joined tables. 
+
+** Mapping annotations
+:PROPERTIES:
+:ID:       ac97293d-f9ab-43cc-8a31-0dccf45bfb83
+:END:
+The above example adds triples to link Datasets to their images and annotations. Let's add a few more mappings:
+
+*** Images
+:PROPERTIES:
+:ID:       64112880-0be3-4991-b1d3-5f3a15263dba
+:END:
+#+DOWNLOADED: screenshot @ 2024-10-10 16:39:27
+[[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_16-39-27_screenshot.png]]
+
+
+*** Annotations
+:PROPERTIES:
+:ID:       b5ac8ce8-67f1-4ff1-bdba-40bd36338921
+:END:
+
+#+DOWNLOADED: screenshot @ 2024-10-10 16:47:01
+[[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_16-47-01_screenshot.png]]
+
+
+
+
+
+
+*** Maps (aka Key-Value pairs)
+:PROPERTIES:
+:ID:       1d442d27-5d1d-4af3-9afc-2dbc0e1576bd
+:END:
+
+[[file:img/ONTOP_Module_for_IDR_on_OMERO_Backend/2024-10-10_16-42-47_screenshot.png]]
+
+With this, we are now in the position to query key-value pairs. E.g.
+#+begin_src sparql :url http://localhost:8080/sparql
+
+      PREFIX : <https://www.openmicroscopy.org/omemap/>
+      PREFIX owl: <http://www.w3.org/2002/07/owl#>
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+      PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+      PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+      PREFIX obda: <https://w3id.org/obda/vocabulary#>
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+      PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+      PREFIX ome_instance: <http://ome.evolbio.mpg.de/api/v0/m/>
+
+
+  select distinct ?img ?key ?val where {
+      ?img a ome_core:Image;
+           ome_core:annotation ?annotation .
+      ?annotation ome_core:mapAnnotationValue ?map .
+      ?map ome_core:key ?key;
+           ome_core:value ?val .
+      }
+    order by ?img
+    limit 10
+  #+end_src
+
+  #+RESULTS:
+  | img                                          | key           | val                     |
+  |----------------------------------------------+---------------+-------------------------|
+  | https://ome.evolbio.mpg.de/api/v0/m/Image/1  | Assay         | pending                 |
+  | https://ome.evolbio.mpg.de/api/v0/m/Image/1  | Author        | Malavika Venu           |
+  | https://ome.evolbio.mpg.de/api/v0/m/Image/1  | Investigation | pending                 |
+  | https://ome.evolbio.mpg.de/api/v0/m/Image/1  | MPB           | 0                       |
+  | https://ome.evolbio.mpg.de/api/v0/m/Image/1  | Organism      | Pseudomonas fluorescens |
+  | https://ome.evolbio.mpg.de/api/v0/m/Image/1  | Parent        | 0                       |
+  | https://ome.evolbio.mpg.de/api/v0/m/Image/1  | Strain        | SBW25                   |
+  | https://ome.evolbio.mpg.de/api/v0/m/Image/1  | Study         | pending                 |
+  | https://ome.evolbio.mpg.de/api/v0/m/Image/1  | Type          | still                   |
+  | https://ome.evolbio.mpg.de/api/v0/m/Image/10 | Assay         | pending                 |
+
+
+
+
+Nice :partying_face:!
+
+** Constructing new triples.
+:PROPERTIES:
+:ID:       47f2342c-c5e5-4218-976f-cbf1896f3d84
+:END:
+The previous query seeks key-value annotations for images. Imagine we wanted to query for the Strain information. In
+above example we would have to filter on the "key" string, e.g. using a regular expression in a filter statement:
+#+begin_src sparql :url http://localhost:8080/sparql
+
+      PREFIX : <https://www.openmicroscopy.org/omemap/>
+      PREFIX owl: <http://www.w3.org/2002/07/owl#>
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+      PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+      PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+      PREFIX obda: <https://w3id.org/obda/vocabulary#>
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+      PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+      PREFIX ome_instance: <http://ome.evolbio.mpg.de/api/v0/m/>
+
+
+  select distinct ?img ?key ?val where {
+      ?img a ome_core:Image;
+           ome_core:annotation ?annotation .
+      ?annotation ome_core:mapAnnotationValue ?map .
+      ?map ome_core:key ?key;
+           ome_core:value ?val .
+      filter(regex(?key, "Strain"))
+      }
+    order by ?img
+    limit 1
+  #+end_src
+
+  #+RESULTS:
+  | img                                         | key    | val   |
+  |---------------------------------------------+--------+-------|
+  | https://ome.evolbio.mpg.de/api/v0/m/Image/1 | Strain | SBW25 |
+
+  The more intutive query would contain a triple template of the sort
+  =?img :strain ?strain=, i.e. we would ask to return the "strain" property of our image.
+
+  One way to achieve this is to add new triples using the =construct= keyword:
+  In other words, we have to convert the property value "?key" into an instance of =rdf:type rdf:Property=.
+  This can be achieved by a =construct= query:
+#+begin_example sparql :url http://localhost:8080/sparql
+
+    PREFIX : <https://www.openmicroscopy.org/omemap/>
+    PREFIX owl: <http://www.w3.org/2002/07/owl#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    PREFIX obda: <https://w3id.org/obda/vocabulary#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+    PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+    PREFIX ome_instance: <http://ome.evolbio.mpg.de/api/v0/m/>
+    prefix ome_instance_annotation: <http://ome.evolbio.mpg.de/api/v0/m/Annotation/>
+
+
+construct {
+  ?key a rdf:Property .
+  ?img ?key ?val .
+    }
+  where {
+    ?img a ome_core:Image;
+         ome_core:annotation ?annotation .
+    ?annotation ome_core:mapAnnotationValue ?map .
+    ?map ome_core:key ?keystr;
+         ome_core:value ?val .
+  bind(iri(concat("https://www.openmicroscopy.org/omemap#",str(?keystr))) as ?key)
+    }
+  limit 10
+#+end_example
+
+which results in
+
+#+begin_example sparql
+@prefix : <https://www.openmicroscopy.org/omemap/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix obda: <https://w3id.org/obda/vocabulary#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix omemap: <https://www.openmicroscopy.org/omemap#> .
+@prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/> .
+@prefix ome_instance: <https://ome.evolbio.mpg.de/api/v0/m/> .
+@prefix ome_instance_annotation: <https://ome.evolbio.mpg.de/api/v0/m/Annotation/> .
+@prefix rdf4j: <http://rdf4j.org/schema/rdf4j#> .
+@prefix sesame: <http://www.openrdf.org/schema/sesame#> .
+@prefix fn: <http://www.w3.org/2005/xpath-functions#> .
+
+
+omemap:Study a rdf:Property .
+omemap:Investigation a rdf:Property .
+omemap:Strain a rdf:Property .
+omemap:Organism a rdf:Property .
+omemap:Parent a rdf:Property .
+omemap:MPB a rdf:Property .
+omemap:Author a rdf:Property .
+omemap:Type a rdf:Property .
+omemap:Assay a rdf:Property .
+
+<https://ome.evolbio.mpg.de/api/v0/m/Image/1> omemap:Study "pending";
+  omemap:Investigation "pending";
+  omemap:Strain "SBW25";
+  omemap:Organism "Pseudomonas fluorescens";
+  omemap:Parent "0";
+  omemap:MPB "0";
+  omemap:Author "Malavika Venu";
+  omemap:Type "still";
+  omemap:Assay "pending" .
+#+end_example

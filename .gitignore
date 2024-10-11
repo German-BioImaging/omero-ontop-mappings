@@ -1,2 +1,4 @@
 *.properties
 .#*.*
+*.zip
+ontop-cli/
