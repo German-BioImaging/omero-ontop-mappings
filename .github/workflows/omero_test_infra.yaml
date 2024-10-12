@@ -23,6 +23,7 @@ jobs:
     env:
       STAGE: app
       NOCLEAN: true
+      VERBOSE: true
     steps:
       - uses: actions/checkout@v4
       - name: Checkout omero-test-infra
@@ -39,5 +40,7 @@ jobs:
         run: ci_utils/install_ontop.sh
       - name: patch portmapping
         run: cp ci_utils/portmapping.patch .omero && cd .omero && patch -p1 < portmapping.patch && git diff
+      - name: srv-test
+        run: .omero/docker run srv test
       - name: Launch omero, insert data and launch ontop
         run: bash ci_utils/omero-ontop.sh

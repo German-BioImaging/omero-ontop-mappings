@@ -6,7 +6,7 @@ source ~/miniconda3/bin/activate
 
 # Script to run as a single CI step in gh actions
 # Launch omero
-NOCLEAN=true .omero/docker dev start_up
+NOCLEAN=true .omero/docker dev 
 
 # Inject data
 omero login -s localhost:14064 -u root -w omero
