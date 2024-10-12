@@ -8,9 +8,6 @@ source ~/miniconda3/bin/activate
 # Launch omero
 NOCLEAN=true .omero/docker dev start_up
 
-# Check omero-web is reachable
-curl http://localhost:14080
-
 # Inject data
 ci_utils/insert_data.sh
 
