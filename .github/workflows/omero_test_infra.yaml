@@ -40,4 +40,4 @@ jobs:
       - name: patch portmapping
         run: cp ci_utils/portmapping.patch .omero && cd .omero && patch -p1 < portmapping.patch && git diff
       - name: Launch omero, insert data and launch ontop
-        run: omero-ontop.sh
+        run: ci_utils/omero-ontop.sh
