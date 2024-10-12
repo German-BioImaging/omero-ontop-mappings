@@ -39,11 +39,5 @@ jobs:
         run: ci_utils/install_ontop.sh
       - name: patch portmapping
         run: cp ci_utils/portmapping.patch .omero && cd .omero && patch -p1 < portmapping.patch && git diff
-      - name: Launch omero
-        run: .omero/docker dev start_up && curl http://localhost:14080
-      - name: Inject data
-        run: source ci_utils/insert_data.sh
-      - name: Start ontop
-        run: ontop-cli/ontop endpoint -t mpieb/omemap.ttl -m mpieb/omemap.obda -p mpieb/omero-test-infra.properties 
-      - name: Test ontop sparql endpoint
-        run: curl http://localhost:8080/sparql
+      - name: Launch omero, insert data and launch ontop
+        run: omero-ontop.sh
