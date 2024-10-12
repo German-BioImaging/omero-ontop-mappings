@@ -9,7 +9,7 @@ source ~/miniconda3/bin/activate
 NOCLEAN=true .omero/docker dev start_up
 
 # Inject data
-omero login - localhost:14064 -u root -w omero
+omero login -s localhost:14064 -u root -w omero
 ci_utils/insert_data.sh
 
 # Spin up ontop
