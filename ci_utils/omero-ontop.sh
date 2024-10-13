@@ -15,5 +15,5 @@ ci_utils/insert_data.sh
 # Spin up ontop
 ontop-cli/ontop endpoint -t mpieb/omemap.ttl -m mpieb/omemap.obda -p mpieb/omero-test-infra.properties 
 
-# Check sparql endpoint is reachable
-curl http://localhost:8080/sparql
+# Run a query (apache-jena/bin/ must be in $PATH)
+rsparql --service=localhost:8080/sparql --result=TSV --query=ci_utils/query01.rq > response01.tsv
