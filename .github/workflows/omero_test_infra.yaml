@@ -22,6 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STAGE: app
+      NOCLEAN: true
+      VERBOSE: true
     steps:
       - uses: actions/checkout@v4
       - name: Checkout omero-test-infra
@@ -30,9 +32,15 @@ jobs:
           repository: ome/omero-test-infra
           path: .omero
           ref: ${{ secrets.OMERO_TEST_INFRA_REF }}
+      - name: Install java
+        run: sudo apt install default-jdk -y
+      - name: Install omero-py
+        run: ci_utils/install_omero-py.sh
       - name: ontop-cli
         run: ci_utils/install_ontop.sh
-      - name: Build and run OMERO tests
-        run: .omero/docker $STAGE
-      - name: check db connection
-        run: psql -U omero --password $ROOTPASS -d omero -c "select * from dataset;"
+      - name: patch portmapping
+        run: cp ci_utils/portmapping.patch .omero && cd .omero && patch -p1 < portmapping.patch && git diff
+      - name: srv-test
+        run: .omero/docker dev run srv test
+      - name: Launch omero, insert data and launch ontop
+        run: bash ci_utils/omero-ontop.sh
