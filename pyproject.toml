@@ -6,6 +6,10 @@ build-backend = "setuptools.build_meta"
 name = "omero-ontop-mappings"
 version = "0.1"
 description = "Placeholder pyproject.toml for omero-ontop-mappings"
+dependencies = [
+  "rdflib",
+  "omero-py"
+]
 
 [tool.setuptools]
 packages=["omero_ontop_mappings"]

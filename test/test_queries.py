@@ -30,7 +30,6 @@ class QueriesTest(unittest.TestCase):
             elif os.path.isdir(item):
                 shutil.rmtree(item)
                 
-
     def test_dataset(self):
         """ Test that there are 3 datasets in the graph db"""
         
@@ -54,5 +53,6 @@ class QueriesTest(unittest.TestCase):
         # Test.
         assert len(response) == 3
 
+        
 if __name__ == "__main__":
     unittest.main()
