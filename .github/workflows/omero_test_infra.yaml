@@ -42,6 +42,8 @@ jobs:
         run: cp ci_utils/portmapping.patch .omero && cd .omero && patch -p1 < portmapping.patch && git diff
       - name: check python
         run: $(which python) --version
+      - name: check processes
+        run: ps ax | grep docker
       - name: test omero web
         run: wget http://localhost:14080 && ls -lrt
       - name: Launch omero, insert data and launch ontop
