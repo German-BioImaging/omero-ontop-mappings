@@ -188,7 +188,11 @@ limit 10
 | https://ome.evolbio.mpg.de/api/v0/m/Dataset/7 | https://ome.evolbio.mpg.de/api/v0/m/Annotation/7 | https://ome.evolbio.mpg.de/api/v0/m/Map/7/0 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Map |
 | https://ome.evolbio.mpg.de/api/v0/m/Dataset/5 | https://ome.evolbio.mpg.de/api/v0/m/Annotation/4 | https://ome.evolbio.mpg.de/api/v0/m/Map/4/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/key   | contributor                                            |
 
-* Construct new triples as <img> <key> <val>.
+* Construct new triples as <img> <key> <val>
+:PROPERTIES:
+:ID:       e0910c67-d5db-4f63-8416-d434e60261e9
+:END:
+not working in org-sparql, have to run this e.g. in the ontop sparql yasgui
 :PROPERTIES:
 :ID:       b02c886d-4def-4d2a-86a8-608a5aa12ba3
 :END:
@@ -226,6 +230,6 @@ construct {
 | HTTP/1.1 406               |                          |
 |----------------------------+--------------------------|
 | Transfer-Encoding: chunked |                          |
-| Date: Thu                  | 10 Oct 2024 12:13:18 GMT |
+| Date: Mon                  | 14 Oct 2024 20:31:04 GMT |
 | Keep-Alive: timeout=60     |                          |
 | Connection: keep-alive     |                          |
