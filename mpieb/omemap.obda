@@ -28,8 +28,8 @@ target		ome_instance:Project/{id} a ome_core:Project ; rdfs:label {name}^^xsd:st
 source		select project.id, project.name, project.description, projectdatasetlink.child, projectannotationlink.child as annotation_id from project join projectdatasetlink on project.id = projectdatasetlink.parent join projectannotationlink on project.id = projectannotationlink.parent;
 
 mappingId	MAPID-a4cb3fa530c84c5b90ddb5e81cbbcb73
-target		ome_instance:Map/{id}/{index} a ome_core:Map ; ome_core:key {key} ; ome_core:value {value} . 
-source		select annotation.id as id, annotation_mapvalue.index as index, annotation_mapvalue.name as key, annotation_mapvalue.value as value from annotation join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id where annotation.discriminator='/map/';
+target		ome_instance:Map/{id}/{index} a ome_core:Map ; ome_core:nameSpace {ns} ; ome_core:key {key} ; ome_core:value {value} . 
+source		select annotation.ns, annotation.id as id, annotation_mapvalue.index as index, annotation_mapvalue.name as key, annotation_mapvalue.value as value from annotation join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id where annotation.discriminator='/map/';
 
 mappingId	MAPID-a4cb3fa530c84c5b90ddb5e81cbbcb74
 target		ome_instance:MapAnnotation/{id} a ome_core:MapAnnotation ; ome_core:mapAnnotationValue ome_instance:Map/{id}/{index} . 

@@ -24,6 +24,15 @@ ome_core:mapAnnotationValue rdfs:domain ome_core:Annotation ,
 
 
 #################################################################
+#    Data properties
+#################################################################
+
+###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/nameSpace
+ome_core:nameSpace rdfs:domain ome_core:Annotation ,
+                               ome_core:MapAnnotation .
+
+
+#################################################################
 #    Classes
 #################################################################
 
