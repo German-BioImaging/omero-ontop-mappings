@@ -3,8 +3,7 @@ set -e
 
 source ~/miniconda3/bin/activate
 
-omero logout
-omero login -u root -w omero -s localhost:14064
+omero login -C -u root -w omero -s localhost:14064
 
 # Create 3 datasets
 DS1=$(omero obj new Dataset name="Dataset 1")
