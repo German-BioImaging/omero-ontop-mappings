@@ -22,8 +22,6 @@ class QueriesTest(unittest.TestCase):
     def tearDown(self):
         """ Teardown method run at the end of each test method. """
         
-        del self._graph
-        
         for item in self._thrash:
             if os.path.isfile(item):
                 os.remove(item)
@@ -52,7 +50,7 @@ class QueriesTest(unittest.TestCase):
 
         # Test.
         assert len(response) == 3
-
+ 
     def test_mapannotation(self):
         """ Test a query for map annotation, map, key, and value. """
 
@@ -62,14 +60,16 @@ class QueriesTest(unittest.TestCase):
         prefix mpieb: <https://ome.evolbio.mpg.de/api/v0/m/> 
         prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
 
-        SELECT distinct ?ds ?anno ?mav ?p ?o WHERE {{
+        SELECT distinct ?key  WHERE {{
           SERVICE <{ENDPOINT}> {{
-            ?ds a ome_core:Dataset .
-            ?ds ome_core:annotation ?anno .
-            ?anno ome_core:mapAnnotationValue ?mav .
-            ?mav ?p ?o .
-
-        }}
+            ?ds a ome_core:Dataset;
+                ome_core:annotation ?annotation .
+            ?annotation ome_core:mapAnnotationValue ?map .
+            ?map ome_core:key ?keystr;
+                ome_core:value ?val ;
+                ome_core:nameSpace ?ns .
+            bind(iri(concat(str(?ns),str(?keystr))) as ?key)
+         }}
         }}
         limit 20
         """
@@ -77,8 +77,11 @@ class QueriesTest(unittest.TestCase):
         # Run the query.
         response = graph.query(query_string)
 
-        for item in response:
-            print(item)
+        keys = [str(r.key) for r in response]
+
+        self.assertIn("http://purl.org/dc/terms/subject", keys)
+        self.assertIn("http://purl.org/dc/terms/contributor", keys)
+        self.assertIn("http://purl.org/dc/terms/provenance", keys)
 
 
         

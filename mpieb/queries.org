@@ -23,18 +23,8 @@
 #+end_src
 
 #+RESULTS:
-| ant                                                                | cmnt                    | ds                                                             |
-|--------------------------------------------------------------------+-------------------------+----------------------------------------------------------------|
-| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3222 | pseudomonas fluorescens | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/602 |
-| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3219 | mat formation           | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/712 |
-| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3221 | mirror                  | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/709 |
-| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3217 | AxioZoom                | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/602 |
-| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3218 | darkfield               | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/703 |
-| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3221 | mirror                  | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/603 |
-| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3224 | upright                 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/752 |
-| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/3220 | microscopy              | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/707 |
-| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/2106 | Lateral                 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/606 |
-| http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation/2105 | Top                     | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset/603 |
+| ant | cmnt | ds |
+|-----+------+----|
 
 * Project with datasets
 :PROPERTIES:
@@ -159,42 +149,44 @@ limit 10
 :ID:       9500a96c-a3ff-4f3b-9890-ca2fbf320f74
 :END:
 #+begin_src sparql :url http://localhost:8080/sparql
-  
-  PREFIX : <https://www.openmicroscopy.org/omemap/>
-  PREFIX owl: <http://www.w3.org/2002/07/owl#>
-  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-  PREFIX obda: <https://w3id.org/obda/vocabulary#>
-  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-  PREFIX ome_instance: <http://ome.evolbio.mpg.de/api/v0/m/>
-  prefix ome_instance_annotation: <http://ome.evolbio.mpg.de/api/v0/m/Annotation/>
 
-  select * where {
-  ?img a ome_core:Image .
-  ?img ome_core:annotation ?anno .
-  ?anno ome_core:mapAnnotationValue ?mav .
-  ?mav ?p ?o .
+     PREFIX : <https://www.openmicroscopy.org/omemap/>
+     PREFIX owl: <http://www.w3.org/2002/07/owl#>
+     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+     PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+     PREFIX obda: <https://w3id.org/obda/vocabulary#>
+     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+     PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+     PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+     PREFIX ome_instance: <http://ome.evolbio.mpg.de/api/v0/m/>
+     prefix ome_instance_annotation: <http://ome.evolbio.mpg.de/api/v0/m/Annotation/>
 
-  }
-  limit 10
+     select * where {
+     ?img a ome_core:Dataset .
+     ?img ome_core:annotation ?anno .
+     ?anno ome_core:mapAnnotationValue ?mav .
+     ?mav ?p ?o .
+
+     }
+     limit 10
 
 
 #+end_src
 
 #+RESULTS:
-| http://ome.evolbio.mpg.de/api/v0/m/Image/1523 | http://ome.evolbio.mpg.de/api/v0/m/Annotation/2   | http://ome.evolbio.mpg.de/api/v0/m/Map/2/0   | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Map |
-| http://ome.evolbio.mpg.de/api/v0/m/Image/1523 | http://ome.evolbio.mpg.de/api/v0/m/Annotation/2   | http://ome.evolbio.mpg.de/api/v0/m/Map/2/0   | http://www.openmicroscopy.org/rdf/2016-06/ome_core/value | sbw25                                                  |
-| http://ome.evolbio.mpg.de/api/v0/m/Image/1523 | http://ome.evolbio.mpg.de/api/v0/m/Annotation/2   | http://ome.evolbio.mpg.de/api/v0/m/Map/2/0   | http://www.openmicroscopy.org/rdf/2016-06/ome_core/key   | strain                                                 |
-| http://ome.evolbio.mpg.de/api/v0/m/Image/1624 | http://ome.evolbio.mpg.de/api/v0/m/Annotation/222 | http://ome.evolbio.mpg.de/api/v0/m/Map/222/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/value | 0                                                      |
-| http://ome.evolbio.mpg.de/api/v0/m/Image/1624 | http://ome.evolbio.mpg.de/api/v0/m/Annotation/222 | http://ome.evolbio.mpg.de/api/v0/m/Map/222/0 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Map |
-| http://ome.evolbio.mpg.de/api/v0/m/Image/1624 | http://ome.evolbio.mpg.de/api/v0/m/Annotation/222 | http://ome.evolbio.mpg.de/api/v0/m/Map/222/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/key   | Position                                               |
-| http://ome.evolbio.mpg.de/api/v0/m/Image/1625 | http://ome.evolbio.mpg.de/api/v0/m/Annotation/223 | http://ome.evolbio.mpg.de/api/v0/m/Map/223/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/value | 0                                                      |
-| http://ome.evolbio.mpg.de/api/v0/m/Image/1625 | http://ome.evolbio.mpg.de/api/v0/m/Annotation/223 | http://ome.evolbio.mpg.de/api/v0/m/Map/223/0 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Map |
-| http://ome.evolbio.mpg.de/api/v0/m/Image/1625 | http://ome.evolbio.mpg.de/api/v0/m/Annotation/223 | http://ome.evolbio.mpg.de/api/v0/m/Map/223/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/key   | Position                                               |
-| http://ome.evolbio.mpg.de/api/v0/m/Image/1626 | http://ome.evolbio.mpg.de/api/v0/m/Annotation/224 | http://ome.evolbio.mpg.de/api/v0/m/Map/224/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/value | 0                                                      |
+| img                                           | anno                                             | mav                                         | p                                                        | o                                                      |
+|-----------------------------------------------+--------------------------------------------------+---------------------------------------------+----------------------------------------------------------+--------------------------------------------------------|
+| https://ome.evolbio.mpg.de/api/v0/m/Dataset/2 | https://ome.evolbio.mpg.de/api/v0/m/Annotation/1 | https://ome.evolbio.mpg.de/api/v0/m/Map/1/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/key   | contributor                                            |
+| https://ome.evolbio.mpg.de/api/v0/m/Dataset/2 | https://ome.evolbio.mpg.de/api/v0/m/Annotation/1 | https://ome.evolbio.mpg.de/api/v0/m/Map/1/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/value | Test User                                              |
+| https://ome.evolbio.mpg.de/api/v0/m/Dataset/2 | https://ome.evolbio.mpg.de/api/v0/m/Annotation/1 | https://ome.evolbio.mpg.de/api/v0/m/Map/1/0 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Map |
+| https://ome.evolbio.mpg.de/api/v0/m/Dataset/8 | https://ome.evolbio.mpg.de/api/v0/m/Annotation/7 | https://ome.evolbio.mpg.de/api/v0/m/Map/7/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/key   | contributor                                            |
+| https://ome.evolbio.mpg.de/api/v0/m/Dataset/8 | https://ome.evolbio.mpg.de/api/v0/m/Annotation/7 | https://ome.evolbio.mpg.de/api/v0/m/Map/7/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/value | Test User                                              |
+| https://ome.evolbio.mpg.de/api/v0/m/Dataset/8 | https://ome.evolbio.mpg.de/api/v0/m/Annotation/7 | https://ome.evolbio.mpg.de/api/v0/m/Map/7/0 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Map |
+| https://ome.evolbio.mpg.de/api/v0/m/Dataset/7 | https://ome.evolbio.mpg.de/api/v0/m/Annotation/7 | https://ome.evolbio.mpg.de/api/v0/m/Map/7/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/key   | contributor                                            |
+| https://ome.evolbio.mpg.de/api/v0/m/Dataset/7 | https://ome.evolbio.mpg.de/api/v0/m/Annotation/7 | https://ome.evolbio.mpg.de/api/v0/m/Map/7/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/value | Test User                                              |
+| https://ome.evolbio.mpg.de/api/v0/m/Dataset/7 | https://ome.evolbio.mpg.de/api/v0/m/Annotation/7 | https://ome.evolbio.mpg.de/api/v0/m/Map/7/0 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Map |
+| https://ome.evolbio.mpg.de/api/v0/m/Dataset/5 | https://ome.evolbio.mpg.de/api/v0/m/Annotation/4 | https://ome.evolbio.mpg.de/api/v0/m/Map/4/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/key   | contributor                                            |
 
 * Construct new triples as <img> <key> <val>.
 :PROPERTIES:
