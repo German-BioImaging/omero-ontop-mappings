@@ -53,6 +53,34 @@ class QueriesTest(unittest.TestCase):
         # Test.
         assert len(response) == 3
 
+    def test_mapannotation(self):
+        """ Test a query for map annotation, map, key, and value. """
+
+        graph = self._graph
+
+        query_string = f"""
+        prefix mpieb: <https://ome.evolbio.mpg.de/api/v0/m/> 
+        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+        SELECT distinct ?ds ?anno ?mav ?p ?o WHERE {{
+          SERVICE <{ENDPOINT}> {{
+            ?ds a ome_core:Dataset .
+            ?ds ome_core:annotation ?anno .
+            ?anno ome_core:mapAnnotationValue ?mav .
+            ?mav ?p ?o .
+
+        }}
+        }}
+        limit 20
+        """
+
+        # Run the query.
+        response = graph.query(query_string)
+
+        for item in response:
+            print(item)
+
+
         
 if __name__ == "__main__":
     unittest.main()
