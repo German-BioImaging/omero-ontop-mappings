@@ -12,7 +12,7 @@ ome_instance:	https://ome.evolbio.mpg.de/api/v0/m/
 
 [MappingDeclaration] @collection [[
 mappingId	MAPID-ad72dafe19404fc2a460e734b0a2a0ee
-target		ome_instance:Dataset/{id} a ome_core:Dataset ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; ome_core:annotation ome_core:Annotation/{child} ; ome_core:image ome_core:Image/{image_id} . 
+target		ome_instance:Dataset/{id} a ome_core:Dataset ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; ome_core:annotation ome_instance:Annotation/{child} ; ome_core:image ome_instance:Image/{image_id} . 
 source		select dataset.id, datasetannotationlink.child, datasetimagelink.child as image_id, dataset.name, dataset.description from dataset join datasetannotationlink on datasetannotationlink.parent = dataset.id join datasetimagelink on dataset.id = datasetimagelink.child;
 
 mappingId	MAPID-a4cb3fa530c84c5b90ddb5e81cbbcb72
