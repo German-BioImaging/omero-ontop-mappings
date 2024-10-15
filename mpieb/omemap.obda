@@ -8,7 +8,7 @@ obda:		https://w3id.org/obda/vocabulary#
 rdfs:		http://www.w3.org/2000/01/rdf-schema#
 omemap:		https://www.openmicroscopy.org/omemap#
 ome_core:	http://www.openmicroscopy.org/rdf/2016-06/ome_core/
-ome_instance:	https://ome.evolbio.mpg.de/api/v0/m/
+ome_instance:	https://example.org/site/
 
 [MappingDeclaration] @collection [[
 mappingId	MAPID-ad72dafe19404fc2a460e734b0a2a0ee
@@ -24,8 +24,8 @@ target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name}
 source		select image.id as image_id, image.name as image_name, image.description as image_description, imageannotationlink.child as annotation_id from image join imageannotationlink on image.id=imageannotationlink.parent;
 
 mappingId	MAPID-3d5abba8f4834197b0edbd8d667802b3
-target		ome_instance:Project/{id} a ome_core:Project ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; ome_core:dataset ome_instance:Dataset/{child} ; ome_core:annotation ome_instance:Annotation/{annotation_id} . 
-source		select project.id, project.name, project.description, projectdatasetlink.child, projectannotationlink.child as annotation_id from project join projectdatasetlink on project.id = projectdatasetlink.parent join projectannotationlink on project.id = projectannotationlink.parent;
+target		ome_instance:Project/{id} a ome_core:Project ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; ome_core:dataset ome_instance:Dataset/{dataset_id} ; ome_core:annotation ome_instance:Annotation/{annotation_id} . 
+source		select project.id, project.name, project.description, projectdatasetlink.child as dataset_id, projectannotationlink.child as annotation_id from project left join projectdatasetlink on project.id = projectdatasetlink.parent left join projectannotationlink on project.id = projectannotationlink.parent;
 
 mappingId	MAPID-a4cb3fa530c84c5b90ddb5e81cbbcb73
 target		ome_instance:Map/{id}/{index} a ome_core:Map ; ome_core:nameSpace {ns}^^xsd:anyURI ; ome_core:key {key} ; ome_core:value {value} . 
