@@ -34,7 +34,6 @@ class QueriesTest(unittest.TestCase):
         graph = self._graph
 
         query_string = f"""
-        prefix mpieb: <https://ome.evolbio.mpg.de/api/v0/m/> 
         prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
 
         SELECT distinct ?ds WHERE {{
@@ -49,15 +48,40 @@ class QueriesTest(unittest.TestCase):
         response = graph.query(query_string)
 
         # Test.
-        assert len(response) == 3
+        self.assertEqual(len(response), 3)
  
+    def test_project_dataset_image(self):
+        """ Test a query for a project-dataset-image hierarchy. """
+
+        graph = self._graph
+
+        query_string = f"""
+        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+        SELECT distinct ?project ?dataset ?image ?image_name  WHERE {{
+          SERVICE <{ENDPOINT}> {{
+            ?project a ome_core:Project ;
+                     ome_core:dataset ?dataset .
+            ?dataset a ome_core:Dataset ;
+                     ome_core:image ?image .
+            ?image a ome_core:Image ;
+                   rdfs:label ?image_name .
+        }}
+        }}
+        """
+
+        # Run the query.
+        response = graph.query(query_string)
+
+        # Should get 10 images.
+        self.assertEqual(len(response), 10)
+
     def test_mapannotation(self):
         """ Test a query for map annotation, map, key, and value. """
 
         graph = self._graph
 
         query_string = f"""
-        prefix mpieb: <https://ome.evolbio.mpg.de/api/v0/m/> 
         prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
 
         SELECT distinct ?key  WHERE {{
@@ -77,7 +101,7 @@ class QueriesTest(unittest.TestCase):
         # Run the query.
         response = graph.query(query_string)
 
-        keys = [str(r.key) for r in response]
+        keys = set([str(r.key) for r in response])
 
         self.assertIn("http://purl.org/dc/terms/subject", keys)
         self.assertIn("http://purl.org/dc/terms/contributor", keys)
