@@ -35,6 +35,13 @@ omero obj new ProjectDatasetLink parent=$PROJ child=$DS1
 omero obj new ProjectDatasetLink parent=$PROJ child=$DS2
 omero obj new ProjectDatasetLink parent=$PROJ child=$DS3
 
+# Add project annotation.
+MAP4=$(omero obj new MapAnnotation ns="http://purl.org/dc/terms/")
+omero obj new ProjectAnnotationLink parent=$PROJ child=$MAP4
+omero obj map-set $MAP4 mapValue contributor "Nophretete"
+omero obj map-set $MAP4 mapValue subject "OMERO Ontology"
+omero obj map-set $MAP4 mapValue provenance "Test Data"
+
 
 # Add images
 images1=$(find img/ -name "*_14-*.png" | xargs -i realpath {}) 
@@ -44,6 +51,15 @@ images3=$(find img/ -name "*_16-*.png" | xargs -i realpath {})
 for img in $images1; do omero import $img -d $DS1; done
 for img in $images2; do omero import $img -d $DS2; done
 for img in $images3; do omero import $img -d $DS3; done
+
+for image_index in {1..10}; do
+    ann=$(omero obj new MapAnnotation ns="http://purl.org/dc/terms/")
+    omero obj new ImageAnnotationLink parent=Image:$image_index child=$ann
+    omero obj map-set $ann mapValue date "$(date)"
+    omero obj map-set $ann mapValue contributor "Test User"
+    omero obj map-set $ann mapValue subject "Unittest"
+done
+ 
 
 # List all objects
 today=$(date +%Y-%m-%d)
