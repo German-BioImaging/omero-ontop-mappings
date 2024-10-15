@@ -16,12 +16,12 @@ target		ome_instance:Dataset/{dataset_id} a ome_core:Dataset ; rdfs:label {name}
 source		select dataset.id as dataset_id, datasetannotationlink.child as annotation_id, datasetimagelink.child as image_id, dataset.name, dataset.description from dataset join datasetannotationlink on datasetannotationlink.parent = dataset.id join datasetimagelink on dataset.id = datasetimagelink.parent;
 
 mappingId	MAPID-a4cb3fa530c84c5b90ddb5e81cbbcb72
-target		ome_instance:Annotation/{id} a ome_core:Annotation ; ome_core:mapAnnotationValue ome_instance:Map/{id}/{index} . 
-source		select annotation.id as id, annotation_mapvalue.index as index from annotation join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id;
+target		ome_instance:Annotation/{id} a ome_core:Annotation ; ome_core:mapAnnotationValue ome_instance:Map/{id}/{index} ; ome_core:nameSpace {annotation_ns}^^xsd:anyURI . 
+source		select annotation.id as id, annotation.ns as annotation_ns, annotation_mapvalue.index as index from annotation join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id;
 
 mappingId	MAPID-e7112763f8224ae6b61c7ce5665fe204
 target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name}^^xsd:string ; rdfs:comment {image_description}^^xsd:string ; ome_core:annotation ome_instance:Annotation/{annotation_id} . 
-source		select image.id as image_id, image.name as image_name, image.description as image_description, imageannotationlink.child as annotation_id from image join imageannotationlink on image.id=imageannotationlink.parent;
+source		select image.id as image_id, image.name as image_name, image.description as image_description, imageannotationlink.child as annotation_id, annotation.ns as annotation_ns from image join imageannotationlink on image.id=imageannotationlink.parent join annotation on imageannotationlink.child = annotation.id ;
 
 mappingId	MAPID-3d5abba8f4834197b0edbd8d667802b3
 target		ome_instance:Project/{id} a ome_core:Project ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; ome_core:dataset ome_instance:Dataset/{dataset_id} ; ome_core:annotation ome_instance:Annotation/{annotation_id} . 
@@ -32,7 +32,33 @@ target		ome_instance:Map/{id}/{index} a ome_core:Map ; ome_core:nameSpace {ns}^^
 source		select annotation.ns, annotation.id as id, annotation_mapvalue.index as index, annotation_mapvalue.name as key, annotation_mapvalue.value as value from annotation join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id where annotation.discriminator='/map/';
 
 mappingId	MAPID-a4cb3fa530c84c5b90ddb5e81cbbcb74
-target		ome_instance:MapAnnotation/{id} a ome_core:MapAnnotation ; ome_core:mapAnnotationValue ome_instance:Map/{id}/{index} . 
-source		select annotation.id as id, annotation_mapvalue.index as index  from annotation join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id;
+target		ome_instance:MapAnnotation/{id} a ome_core:MapAnnotation ; ome_core:mapAnnotationValue ome_instance:Map/{id}/{index} ; ome_core:nameSpace {annotation_ns}^^xsd:anyURI . 
+source		select annotation.id as id, annotation_mapvalue.index as index, annotation.ns as annotation_ns  from annotation join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id;
+
+mappingId	MAPID-e7112763f8224ae6b61c7ce5665fe204(0)
+target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name}^^xsd:string ; rdfs:comment {image_description}^^xsd:string ; ome_core:annotation ome_instance:Annotation/{annotation_id} ; ome_core:nameSpace {namespace}^^xsd:anyURI ; ome_core:key {mapvalue_key} ; ome_core:value {mapvalue_value} . 
+source		select
+			    image_annotation.image_id as image_id,
+			    image_annotation.image_name as image_name,
+			    image_annotation.image_description as image_description,
+			    image_annotation.annotation_id as annotation_id,
+			    annotation_ns as namespace,
+			    annotation_mapvalue.name as mapvalue_key,
+			    annotation_mapvalue.value as mapvalue_value
+			  from (
+			    select
+			    image.id as image_id,
+			    image.name as image_name,
+			    image.description as image_description,
+			    imageannotationlink.child as annotation_id,
+			    annotation.ns as annotation_ns
+			    from
+			    image
+			    join imageannotationlink on image.id=imageannotationlink.parent
+			    join annotation on imageannotationlink.child = annotation.id
+			    ) as image_annotation
+			  join
+			  annotation_mapvalue
+			  on image_annotation.annotation_id = annotation_mapvalue.annotation_id ;
 ]]
 
