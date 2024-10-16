@@ -1,0 +1,32 @@
+{
+    "relations": [
+        {
+            "name": ["lenses", "image_key_value"],
+            "join": {
+                "relations": [
+                    ["image"],
+                    ["annotation"],
+                    ["imageannotationlink"],
+                    ["annotation_mapvalue"]
+                ],
+                "columnPrefixes": [
+                    "image_",
+                    "annotation_",
+                    "imageannotationlink_",
+                    "annotation_mapvalue_"
+                ]
+            },
+            "columns": {
+                "added": [
+                    {
+                        "name": "key_property",
+                        "expression": "CAST(CONCAT(annotation_ns, annotation_mapvalue_name) as VARCHAR)"
+                    }],
+                "hidden": [
+                ]
+            },
+            "filterExpression": "image_id = imageannotationlink_parent AND imageannotationlink_child = annotation_id AND annotation_mapvalue_annotation_id = annotation_id",
+            "type": "JoinLens"
+        }
+    ]
+}

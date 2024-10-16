@@ -353,3 +353,47 @@ limit 20
 |       10 | 2024-10-10_16-39-27_screenshot.png |                   |            14 | date         | Tue Oct 15 03:27:11 PM CEST 2024 |
 |       10 | 2024-10-10_16-39-27_screenshot.png |                   |            14 | contributor  | Test User                        |
 |       10 | 2024-10-10_16-39-27_screenshot.png |                   |            14 | subject      | Unittest                         |
+
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+
+    -- select image.id, annotation.ns, annotation_mapvalue.name, annotation_mapvalue.value
+    select image.id, annotation.ns, annotation_mapvalue.name, annotation_mapvalue.value
+    from image
+    join imageannotationlink on image.id=imageannotationlink.parent
+    join annotation on imageannotationlink.child = annotation.id
+    join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id
+#+end_src
+
+#+RESULTS:
+| id | ns                        | name        | value                            |
+|----+---------------------------+-------------+----------------------------------|
+|  1 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:26:52 PM CEST 2024 |
+|  1 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  1 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  2 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:26:54 PM CEST 2024 |
+|  2 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  2 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  3 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:26:56 PM CEST 2024 |
+|  3 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  3 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  4 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:26:59 PM CEST 2024 |
+|  4 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  4 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  5 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:27:01 PM CEST 2024 |
+|  5 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  5 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  6 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:27:03 PM CEST 2024 |
+|  6 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  6 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  7 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:27:05 PM CEST 2024 |
+|  7 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  7 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  8 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:27:07 PM CEST 2024 |
+|  8 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  8 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  9 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:27:09 PM CEST 2024 |
+|  9 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  9 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+| 10 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:27:11 PM CEST 2024 |
+| 10 | http://purl.org/dc/terms/ | contributor | Test User                        |
+| 10 | http://purl.org/dc/terms/ | subject     | Unittest                         |
