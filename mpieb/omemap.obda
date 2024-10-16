@@ -36,6 +36,6 @@ target		ome_instance:MapAnnotation/{id} a ome_core:MapAnnotation ; ome_core:mapA
 source		select annotation.id as id, annotation_mapvalue.index as index, annotation.ns as annotation_ns  from annotation join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id;
 
 mappingId	MAPID-e7112763f8224ae6b61c7ce5665fe204(0)
-target	ome_instance:Image/{image_id} <{key_property}> {annotation_mapvalue_value}.
-source		select image_id, key_property, annotation_mapvalue_value from "lenses"."image_key_value" ;
+target	  ome_instance:Image/{image_id} <{key_property}> {value}.
+source		select image_id, key_property, value from lenses.keyvalue;
 ]]
