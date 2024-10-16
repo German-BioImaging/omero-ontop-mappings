@@ -278,6 +278,45 @@ limit 20
 | https://example.org/site/Image/9  | http://purl.org/dc/terms/subject | Tue Oct 15 03:27:09 PM CEST 2024 |
 | https://example.org/site/Image/9  | http://purl.org/dc/terms/subject | Unittest                         |
  
+* query dc:term from mapannotation
+:PROPERTIES:
+:ID:       15ce1361-5957-4e96-8153-7effadefe36b
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+
+   PREFIX : <https://www.openmicroscopy.org/omemap/>
+   PREFIX owl: <http://www.w3.org/2002/07/owl#>
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+   PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+   PREFIX obda: <https://w3id.org/obda/vocabulary#>
+   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+   PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+   PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+   prefix dc: <http://purl.org/dc/terms/>
+
+  SELECT distinct ?img ?subj ?contributor  WHERE {
+      ?img a ome_core:Image;
+           dc:subject ?subj ;
+           dc:contributor ?contributor .
+   }
+  order by ?img
+#+end_src
+
+#+RESULTS:
+| img                               | subj     | contributor |
+|-----------------------------------+----------+-------------|
+| https://example.org/site/Image/1  | Unittest | Test User   |
+| https://example.org/site/Image/10 | Unittest | Test User   |
+| https://example.org/site/Image/2  | Unittest | Test User   |
+| https://example.org/site/Image/3  | Unittest | Test User   |
+| https://example.org/site/Image/4  | Unittest | Test User   |
+| https://example.org/site/Image/5  | Unittest | Test User   |
+| https://example.org/site/Image/6  | Unittest | Test User   |
+| https://example.org/site/Image/7  | Unittest | Test User   |
+| https://example.org/site/Image/8  | Unittest | Test User   |
+| https://example.org/site/Image/9  | Unittest | Test User   |
+
 * sql queries
 :PROPERTIES:
 :ID:       fa4c3fd2-f1a9-4ac5-867e-be5a2050dbd9
