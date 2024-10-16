@@ -117,14 +117,11 @@ class QueriesTest(unittest.TestCase):
         prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
         prefix dc: <http://purl.org/dc/terms/>
 
-        SELECT distinct ?img ?prop ?value WHERE {{
+        SELECT distinct ?img ?author ?subject ?provenance WHERE {{
           SERVICE <{ENDPOINT}> {{
             ?img a ome_core:Image;
-                 ome_core:nameSpace ?ns;
-                 ome_core:key ?key;
-                 ome_core:value ?value.
-            bind(iri(concat(str(?ns), ?key)) as ?prop)
-            values ?prop {{dc:subject}}
+                 dc:contributor ?author;
+                 dc:subject ?subject.
          }}
         }}
         """

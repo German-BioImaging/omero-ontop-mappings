@@ -1,4 +1,4 @@
-*.properties
+mpi.properties
 .#*.*
 *.zip
 ontop-cli/
