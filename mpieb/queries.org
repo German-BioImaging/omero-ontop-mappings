@@ -1,3 +1,39 @@
+* Project 
+:PROPERTIES:
+:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  select ?ds ?tp where {
+  ?ds a ome_core:Project ;
+      a ?tp .
+  }
+  limit 10
+#+end_src
+
+#+RESULTS:
+| ds                                 | tp                                                                   |
+|------------------------------------+----------------------------------------------------------------------|
+| https://example.org/site/Project/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image             |
+| https://example.org/site/Project/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Well              |
+| https://example.org/site/Project/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project           |
+| https://example.org/site/Project/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset           |
+| https://example.org/site/Project/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Experiment        |
+| https://example.org/site/Project/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/ReagentSet        |
+| https://example.org/site/Project/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/ExperimenterGroup |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/WellSample        |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset           |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/WellSample        |
+
 * Dataset 
 :PROPERTIES:
 :ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
@@ -68,6 +104,7 @@
 | https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Well              |
 | https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/WellSample        |
 | https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset           |
+
 
 * Dataset with annotations
 :PROPERTIES:
