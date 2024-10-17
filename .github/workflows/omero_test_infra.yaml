@@ -50,3 +50,5 @@ jobs:
         run: wget http://localhost:14080 && ls -lrt
       - name: Launch omero, insert data and launch ontop
         run: bash utils/omero-ontop.sh
+      - name: pytest
+        run: pytest
