@@ -11,7 +11,7 @@
 @base <https://www.openmicroscopy.org/omemap/> .
 
 <https://www.openmicroscopy.org/omemap> rdf:type owl:Ontology ;
-                                         owl:imports <https://gitlab.com/openmicroscopy/incubator/ome-owl/-/raw/master/ontology/owl/ome_core/ome_core.owl.ttl> .
+    owl:imports <https://github.com/German-BioImaging/ome-owl/raw/refs/heads/main/ontology/owl/ome_core/ome_core.owl.ttl> .
 
 #################################################################
 #    Object Properties
