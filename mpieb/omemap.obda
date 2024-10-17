@@ -35,12 +35,34 @@ mappingId	MAPID-a4cb3fa530c84c5b90ddb5e81cbbcb74
 target		ome_instance:MapAnnotation/{id} a ome_core:MapAnnotation ; ome_core:mapAnnotationValue ome_instance:Map/{id}/{index} ; ome_core:nameSpace {annotation_ns}^^xsd:anyURI . 
 source		select annotation.id as id, annotation_mapvalue.index as index, annotation.ns as annotation_ns  from annotation join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id;
 
-mappingId	MAPID-e7112763f8224ae6b61c7ce5665fe204(0)
-target		<{key}> a rdf:Property ; rdfs:domain ome_core:Image , ome_core:Project , ome_core:Dataset ; rdfs:range xsd:str . ome_instance:Image/{image_id} <{key}> {value} . 
+mappingId	MAPID-e7112763f8224ae6b61c7ce5665fe2041
+target		ome_instance:Image/{image_id} <{key}> {value} . 
 source		select image.id as image_id, concat(annotation.ns, annotation_mapvalue.name) as key, annotation_mapvalue.value as value
 			from image
 			join imageannotationlink on image.id=imageannotationlink.parent
 			join annotation on imageannotationlink.child = annotation.id
+			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id ;
+
+mappingId	MAPID-e7112763f8224ae6b61c7ce5665fe2042
+target		ome_instance:Project/{project_id} <{key}> {value} . 
+source		select project.id as project_id, concat(annotation.ns, annotation_mapvalue.name) as key, annotation_mapvalue.value as value
+			from project
+			join projectannotationlink on project.id=projectannotationlink.parent
+			join annotation on projectannotationlink.child = annotation.id
+			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id ;
+
+mappingId	MAPID-e7112763f8224ae6b61c7ce5665fe2043
+target		ome_instance:Dataset/{dataset_id} <{key}> {value} . 
+source		select dataset.id as dataset_id, concat(annotation.ns, annotation_mapvalue.name) as key, annotation_mapvalue.value as value
+			from dataset
+			join datasetannotationlink on dataset.id=datasetannotationlink.parent
+			join annotation on datasetannotationlink.child = annotation.id
+			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id ;
+
+mappingId	MAPID-7c1429585f804924b421b90a54c9a594
+target		<{key}> a rdf:Property ; rdfs:domain ome_core:Image , ome_core:Project , ome_core:Dataset ; rdfs:range xsd:str . 
+source		select concat(annotation.ns, annotation_mapvalue.name) as key, annotation_mapvalue.value as value
+			from annotation 
 			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id ;
 ]]
 
