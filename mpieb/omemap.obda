@@ -38,9 +38,9 @@ source		select annotation.id as id, annotation_mapvalue.index as index, annotati
 mappingId	MAPID-e7112763f8224ae6b61c7ce5665fe204(0)
 target		<{key}> a rdf:Property ; rdfs:domain ome_core:Image , ome_core:Project , ome_core:Dataset ; rdfs:range xsd:str . ome_instance:Image/{image_id} <{key}> {value} . 
 source		select image.id as image_id, concat(annotation.ns, annotation_mapvalue.name) as key, annotation_mapvalue.value as value
-			    from image
-			    join imageannotationlink on image.id=imageannotationlink.parent
-			    join annotation on imageannotationlink.child = annotation.id
-			    join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id ;
+			from image
+			join imageannotationlink on image.id=imageannotationlink.parent
+			join annotation on imageannotationlink.child = annotation.id
+			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id ;
 ]]
 
