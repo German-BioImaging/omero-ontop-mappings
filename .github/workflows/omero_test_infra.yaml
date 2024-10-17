@@ -35,11 +35,11 @@ jobs:
       - name: Install java
         run: sudo apt install default-jdk -y
       - name: Install omero-py
-        run: ci_utils/install_omero-py.sh
+        run: utils/install_omero-py.sh
       - name: ontop-cli
-        run: ci_utils/install_ontop.sh
+        run: utils/install_ontop.sh
       - name: patch portmapping
-        run: cp ci_utils/portmapping.patch .omero && cd .omero && patch -p1 < portmapping.patch && git diff
+        run: cp utils/portmapping.patch .omero && cd .omero && patch -p1 < portmapping.patch && git diff
       - name: check python
         run: $(which python) --version
       - name: start omero
@@ -49,4 +49,4 @@ jobs:
       - name: test omero web
         run: wget http://localhost:14080 && ls -lrt
       - name: Launch omero, insert data and launch ontop
-        run: bash ci_utils/omero-ontop.sh
+        run: bash utils/omero-ontop.sh
