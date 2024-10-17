@@ -2,10 +2,19 @@ from rdflib import Graph
 import os
 import sys
 import shutil
+import requests
 
 import unittest
 
 ENDPOINT = "http://localhost:8080/sparql"
+
+# Check if endpoint is reachable.
+try:
+    response = requests.get("/".join(os.path.split(ENDPOINT)[:-1]))
+    assert response.status_code == 200
+
+except: 
+    raise RuntimeError("Could not connect to ontop endpoint %s. Is ontop endpoint up and running?" % ENDPOINT)
 
 class QueriesTest(unittest.TestCase):
     
