@@ -1,0 +1,497 @@
+* Number of projects, datasets, images
+:PROPERTIES:
+:ID:       b8d9a7e6-cb6f-46a3-a198-f8a57a3e81ba
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+ PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  select (count(?project) as ?nproj) where {
+  ?project a ome_core:Project .
+  }
+#+end_src
+#+begin_src sparql :url http://localhost:8080/sparql
+ PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  select (count(?dataset) as ?nds) where {
+  ?dataset a ome_core:Dataset .
+  }
+#+end_src
+
+#+RESULTS:
+| nds |
+|-----|
+|   3 |
+
+#+begin_src sparql :url http://localhost:8080/sparql
+ PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  select (count(?img) as ?nimg) where {
+  ?img a ome_core:Image .
+  }
+#+end_src
+#+RESULTS:
+| nimg |
+|------|
+|   10 |
+
+
+* Project
+:PROPERTIES:
+:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  select distinct  ?ds ?tp where {
+  ?ds a ome_core:Project ;
+      rdf:type ?tp ;
+  }
+  limit 10
+#+end_src
+
+#+RESULTS:
+| ds                                 | tp                                                         |
+|------------------------------------+------------------------------------------------------------|
+| https://example.org/site/Project/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project |
+
+* Dataset 
+:PROPERTIES:
+:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  select ?ds where {
+  ?ds a ome_core:Dataset .
+  }
+  limit 10
+#+end_src
+
+#+RESULTS:
+| ds                                 |
+|------------------------------------|
+| https://example.org/site/Dataset/3 |
+| https://example.org/site/Dataset/2 |
+| https://example.org/site/Dataset/1 |
+
+* Dataset II
+:PROPERTIES:
+:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  select distinct ?ds ?tp where {
+  ?ds a ome_core:Dataset .
+  ?ds a ?tp .
+  }
+  limit 10
+#+end_src
+
+#+RESULTS:
+| ds                                 | tp                                                            |
+|------------------------------------+---------------------------------------------------------------|
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset    |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Folder     |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/WellSample |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset    |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Folder     |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/WellSample |
+| https://example.org/site/Dataset/3 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset    |
+| https://example.org/site/Dataset/3 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Folder     |
+| https://example.org/site/Dataset/3 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/WellSample |
+
+
+* Project with datasets
+:PROPERTIES:
+:ID:       9114c7b4-6367-43f6-a8d2-9583999e554f
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  select * where {
+  ?proj a ome_core:Project ;
+           rdfs:label ?lbl .
+  ?ds a ome_core:Dataset .
+  ?proj ome_core:dataset ?ds .
+  }
+limit 20
+#+end_src
+
+#+RESULTS:
+| proj                               | lbl     | ds                                 |
+|------------------------------------+---------+------------------------------------|
+| https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/1 |
+| https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/3 |
+| https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/2 |
+
+
+* Project with datasets and images
+:PROPERTIES:
+:ID:       9114c7b4-6367-43f6-a8d2-9583999e554f
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+    PREFIX : <https://www.openmicroscopy.org/omemap/>
+    PREFIX owl: <http://www.w3.org/2002/07/owl#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    PREFIX obda: <https://w3id.org/obda/vocabulary#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+    PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+    select distinct * where {
+    ?proj a ome_core:Project ;
+      ome_core:dataset ?dataset .
+    ?dataset a ome_core:Dataset ;
+      ome_core:image ?image .
+    ?image a ome_core:Image ;
+      rdfs:label ?name .
+    }
+  limit 20
+#+end_src
+
+#+RESULTS:
+| proj                               | dataset                            | image                             | name                               |
+|------------------------------------+------------------------------------+-----------------------------------+------------------------------------|
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/6  | 2024-10-10_15-09-28_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/9  | 2024-10-10_16-42-47_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/2  | 2024-10-10_14-53-28_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/4  | 2024-10-10_15-28-16_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/10 | 2024-10-10_16-39-27_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/1  | 2024-10-10_14-58-36_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/5  | 2024-10-10_15-01-36_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/8  | 2024-10-10_16-47-01_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/7  | 2024-10-10_15-07-18_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/3  | 2024-10-10_15-17-25_screenshot.png |
+
+
+
+* query dc:term from mapannotation
+:PROPERTIES:
+:ID:       15ce1361-5957-4e96-8153-7effadefe36b
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+
+   PREFIX : <https://www.openmicroscopy.org/omemap/>
+   PREFIX owl: <http://www.w3.org/2002/07/owl#>
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+   PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+   PREFIX obda: <https://w3id.org/obda/vocabulary#>
+   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+   PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+   PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+   prefix dc: <http://purl.org/dc/terms/>
+
+  SELECT distinct ?s  WHERE {
+      ?s a ome_core:Dataset.
+   }
+#+end_src
+
+#+RESULTS:
+| s                                  |
+|------------------------------------|
+| https://example.org/site/Dataset/3 |
+| https://example.org/site/Dataset/2 |
+| https://example.org/site/Dataset/1 |
+
+#+begin_src sparql :url http://localhost:8080/sparql
+
+   PREFIX : <https://www.openmicroscopy.org/omemap/>
+   PREFIX owl: <http://www.w3.org/2002/07/owl#>
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+   PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+   PREFIX obda: <https://w3id.org/obda/vocabulary#>
+   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+   PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+   PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+   prefix dc: <http://purl.org/dc/terms/>
+
+  SELECT distinct ?img ?prop ?val WHERE {
+      ?img a ome_core:Image;
+           ?prop ?val .
+   }
+#+end_src
+
+#+RESULTS:
+| img                               | prop                                            | val                                                      |
+|-----------------------------------+-------------------------------------------------+----------------------------------------------------------|
+| https://example.org/site/Image/1  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image |
+| https://example.org/site/Image/1  | http://purl.org/dc/terms/contributor            | Test User                                                |
+| https://example.org/site/Image/1  | http://purl.org/dc/terms/date                   | Thu Oct 17 10:23:03 AM CEST 2024                         |
+| https://example.org/site/Image/1  | http://purl.org/dc/terms/subject                | Unittest                                                 |
+| https://example.org/site/Image/1  | http://www.w3.org/2000/01/rdf-schema#label      | 2024-10-10_14-58-36_screenshot.png                       |
+| https://example.org/site/Image/2  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image |
+| https://example.org/site/Image/2  | http://purl.org/dc/terms/contributor            | Test User                                                |
+| https://example.org/site/Image/2  | http://purl.org/dc/terms/date                   | Thu Oct 17 10:23:05 AM CEST 2024                         |
+| https://example.org/site/Image/2  | http://purl.org/dc/terms/subject                | Unittest                                                 |
+| https://example.org/site/Image/2  | http://www.w3.org/2000/01/rdf-schema#label      | 2024-10-10_14-53-28_screenshot.png                       |
+| https://example.org/site/Image/3  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image |
+| https://example.org/site/Image/3  | http://purl.org/dc/terms/contributor            | Test User                                                |
+| https://example.org/site/Image/3  | http://purl.org/dc/terms/date                   | Thu Oct 17 10:23:07 AM CEST 2024                         |
+| https://example.org/site/Image/3  | http://purl.org/dc/terms/subject                | Unittest                                                 |
+| https://example.org/site/Image/3  | http://www.w3.org/2000/01/rdf-schema#label      | 2024-10-10_15-17-25_screenshot.png                       |
+| https://example.org/site/Image/4  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image |
+| https://example.org/site/Image/4  | http://purl.org/dc/terms/contributor            | Test User                                                |
+| https://example.org/site/Image/4  | http://purl.org/dc/terms/date                   | Thu Oct 17 10:23:10 AM CEST 2024                         |
+| https://example.org/site/Image/4  | http://purl.org/dc/terms/subject                | Unittest                                                 |
+| https://example.org/site/Image/4  | http://www.w3.org/2000/01/rdf-schema#label      | 2024-10-10_15-28-16_screenshot.png                       |
+| https://example.org/site/Image/5  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image |
+| https://example.org/site/Image/5  | http://purl.org/dc/terms/contributor            | Test User                                                |
+| https://example.org/site/Image/5  | http://purl.org/dc/terms/date                   | Thu Oct 17 10:23:12 AM CEST 2024                         |
+| https://example.org/site/Image/5  | http://purl.org/dc/terms/subject                | Unittest                                                 |
+| https://example.org/site/Image/5  | http://www.w3.org/2000/01/rdf-schema#label      | 2024-10-10_15-01-36_screenshot.png                       |
+| https://example.org/site/Image/6  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image |
+| https://example.org/site/Image/6  | http://purl.org/dc/terms/contributor            | Test User                                                |
+| https://example.org/site/Image/6  | http://purl.org/dc/terms/date                   | Thu Oct 17 10:23:14 AM CEST 2024                         |
+| https://example.org/site/Image/6  | http://purl.org/dc/terms/subject                | Unittest                                                 |
+| https://example.org/site/Image/6  | http://www.w3.org/2000/01/rdf-schema#label      | 2024-10-10_15-09-28_screenshot.png                       |
+| https://example.org/site/Image/7  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image |
+| https://example.org/site/Image/7  | http://purl.org/dc/terms/contributor            | Test User                                                |
+| https://example.org/site/Image/7  | http://purl.org/dc/terms/date                   | Thu Oct 17 10:23:16 AM CEST 2024                         |
+| https://example.org/site/Image/7  | http://purl.org/dc/terms/subject                | Unittest                                                 |
+| https://example.org/site/Image/7  | http://www.w3.org/2000/01/rdf-schema#label      | 2024-10-10_15-07-18_screenshot.png                       |
+| https://example.org/site/Image/8  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image |
+| https://example.org/site/Image/8  | http://purl.org/dc/terms/contributor            | Test User                                                |
+| https://example.org/site/Image/8  | http://purl.org/dc/terms/date                   | Thu Oct 17 10:23:18 AM CEST 2024                         |
+| https://example.org/site/Image/8  | http://purl.org/dc/terms/subject                | Unittest                                                 |
+| https://example.org/site/Image/8  | http://www.w3.org/2000/01/rdf-schema#label      | 2024-10-10_16-47-01_screenshot.png                       |
+| https://example.org/site/Image/9  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image |
+| https://example.org/site/Image/9  | http://purl.org/dc/terms/contributor            | Test User                                                |
+| https://example.org/site/Image/9  | http://purl.org/dc/terms/date                   | Thu Oct 17 10:23:20 AM CEST 2024                         |
+| https://example.org/site/Image/9  | http://purl.org/dc/terms/subject                | Unittest                                                 |
+| https://example.org/site/Image/9  | http://www.w3.org/2000/01/rdf-schema#label      | 2024-10-10_16-42-47_screenshot.png                       |
+| https://example.org/site/Image/10 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image |
+| https://example.org/site/Image/10 | http://purl.org/dc/terms/contributor            | Test User                                                |
+| https://example.org/site/Image/10 | http://purl.org/dc/terms/date                   | Thu Oct 17 10:23:22 AM CEST 2024                         |
+| https://example.org/site/Image/10 | http://purl.org/dc/terms/subject                | Unittest                                                 |
+| https://example.org/site/Image/10 | http://www.w3.org/2000/01/rdf-schema#label      | 2024-10-10_16-39-27_screenshot.png                       |
+
+#+begin_src sparql :url http://localhost:8080/sparql
+
+   PREFIX : <https://www.openmicroscopy.org/omemap/>
+   PREFIX owl: <http://www.w3.org/2002/07/owl#>
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+   PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+   PREFIX obda: <https://w3id.org/obda/vocabulary#>
+   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+   PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+   PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+   prefix dc: <http://purl.org/dc/terms/>
+
+  SELECT distinct ?img ?subject WHERE {
+      ?img a ome_core:Image;
+           dc:subject ?subject .
+   }
+  order by ?img
+#+end_src
+
+#+RESULTS:
+| img                               | subject  |
+|-----------------------------------+----------|
+| https://example.org/site/Image/1  | Unittest |
+| https://example.org/site/Image/10 | Unittest |
+| https://example.org/site/Image/2  | Unittest |
+| https://example.org/site/Image/3  | Unittest |
+| https://example.org/site/Image/4  | Unittest |
+| https://example.org/site/Image/5  | Unittest |
+| https://example.org/site/Image/6  | Unittest |
+| https://example.org/site/Image/7  | Unittest |
+| https://example.org/site/Image/8  | Unittest |
+| https://example.org/site/Image/9  | Unittest |
+
+* sql queries
+:PROPERTIES:
+:ID:       fa4c3fd2-f1a9-4ac5-867e-be5a2050dbd9
+:END:
+#+begin_src sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select * from dataset limit 20;
+#+end_src
+
+#+RESULTS:
+| id | description | permissions | name      | version | creation_id | external_id | group_id | owner_id | update_id |
+|----+-------------+-------------+-----------+---------+-------------+-------------+----------+----------+-----------|
+|  1 |             |        -120 | Dataset 1 |         |         540 |             |        0 |        0 |       540 |
+|  2 |             |        -120 | Dataset 2 |         |         547 |             |        0 |        0 |       547 |
+|  3 |             |        -120 | Dataset 3 |         |         548 |             |        0 |        0 |       548 |
+|    |             |             |           |         |             |             |          |          |           |
+
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+
+  select
+    image_annotation.image_id as image_id,
+    image_annotation.image_name as image_name,
+    image_annotation.image_description as image_description,
+    image_annotation.annotation_id as annotation_id,
+    annotation_mapvalue.name as mapvalue_key,
+    annotation_mapvalue.value as mapvalue_value
+  from (
+    select
+    image.id as image_id,
+    image.name as image_name,
+    image.description as image_description,
+    imageannotationlink.child as annotation_id,
+    annotation.ns as annotation_ns
+    from
+    image
+    join imageannotationlink on image.id=imageannotationlink.parent
+    join annotation on imageannotationlink.child = annotation.id
+    ) as image_annotation
+  join
+  annotation_mapvalue
+  on image_annotation.annotation_id = annotation_mapvalue.annotation_id ;
+#+end_src
+
+#+RESULTS:
+| image_id | image_name                         | image_description | annotation_id | mapvalue_key | mapvalue_value                   |
+|----------+------------------------------------+-------------------+---------------+--------------+----------------------------------|
+|        1 | 2024-10-10_14-58-36_screenshot.png |                   |             5 | date         | Tue Oct 15 03:26:52 PM CEST 2024 |
+|        1 | 2024-10-10_14-58-36_screenshot.png |                   |             5 | contributor  | Test User                        |
+|        1 | 2024-10-10_14-58-36_screenshot.png |                   |             5 | subject      | Unittest                         |
+|        2 | 2024-10-10_14-53-28_screenshot.png |                   |             6 | date         | Tue Oct 15 03:26:54 PM CEST 2024 |
+|        2 | 2024-10-10_14-53-28_screenshot.png |                   |             6 | contributor  | Test User                        |
+|        2 | 2024-10-10_14-53-28_screenshot.png |                   |             6 | subject      | Unittest                         |
+|        3 | 2024-10-10_15-17-25_screenshot.png |                   |             7 | date         | Tue Oct 15 03:26:56 PM CEST 2024 |
+|        3 | 2024-10-10_15-17-25_screenshot.png |                   |             7 | contributor  | Test User                        |
+|        3 | 2024-10-10_15-17-25_screenshot.png |                   |             7 | subject      | Unittest                         |
+|        4 | 2024-10-10_15-28-16_screenshot.png |                   |             8 | date         | Tue Oct 15 03:26:59 PM CEST 2024 |
+|        4 | 2024-10-10_15-28-16_screenshot.png |                   |             8 | contributor  | Test User                        |
+|        4 | 2024-10-10_15-28-16_screenshot.png |                   |             8 | subject      | Unittest                         |
+|        5 | 2024-10-10_15-01-36_screenshot.png |                   |             9 | date         | Tue Oct 15 03:27:01 PM CEST 2024 |
+|        5 | 2024-10-10_15-01-36_screenshot.png |                   |             9 | contributor  | Test User                        |
+|        5 | 2024-10-10_15-01-36_screenshot.png |                   |             9 | subject      | Unittest                         |
+|        6 | 2024-10-10_15-09-28_screenshot.png |                   |            10 | date         | Tue Oct 15 03:27:03 PM CEST 2024 |
+|        6 | 2024-10-10_15-09-28_screenshot.png |                   |            10 | contributor  | Test User                        |
+|        6 | 2024-10-10_15-09-28_screenshot.png |                   |            10 | subject      | Unittest                         |
+|        7 | 2024-10-10_15-07-18_screenshot.png |                   |            11 | date         | Tue Oct 15 03:27:05 PM CEST 2024 |
+|        7 | 2024-10-10_15-07-18_screenshot.png |                   |            11 | contributor  | Test User                        |
+|        7 | 2024-10-10_15-07-18_screenshot.png |                   |            11 | subject      | Unittest                         |
+|        8 | 2024-10-10_16-47-01_screenshot.png |                   |            12 | date         | Tue Oct 15 03:27:07 PM CEST 2024 |
+|        8 | 2024-10-10_16-47-01_screenshot.png |                   |            12 | contributor  | Test User                        |
+|        8 | 2024-10-10_16-47-01_screenshot.png |                   |            12 | subject      | Unittest                         |
+|        9 | 2024-10-10_16-42-47_screenshot.png |                   |            13 | date         | Tue Oct 15 03:27:09 PM CEST 2024 |
+|        9 | 2024-10-10_16-42-47_screenshot.png |                   |            13 | contributor  | Test User                        |
+|        9 | 2024-10-10_16-42-47_screenshot.png |                   |            13 | subject      | Unittest                         |
+|       10 | 2024-10-10_16-39-27_screenshot.png |                   |            14 | date         | Tue Oct 15 03:27:11 PM CEST 2024 |
+|       10 | 2024-10-10_16-39-27_screenshot.png |                   |            14 | contributor  | Test User                        |
+|       10 | 2024-10-10_16-39-27_screenshot.png |                   |            14 | subject      | Unittest                         |
+
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+    select image.id, annotation.ns, annotation_mapvalue.name, annotation_mapvalue.value
+    from image
+    join imageannotationlink on image.id=imageannotationlink.parent
+    join annotation on imageannotationlink.child = annotation.id
+    join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id
+#+end_src
+
+#+RESULTS:
+| id | ns                        | name        | value                            |
+|----+---------------------------+-------------+----------------------------------|
+|  1 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:26:52 PM CEST 2024 |
+|  1 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  1 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  2 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:26:54 PM CEST 2024 |
+|  2 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  2 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  3 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:26:56 PM CEST 2024 |
+|  3 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  3 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  4 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:26:59 PM CEST 2024 |
+|  4 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  4 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  5 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:27:01 PM CEST 2024 |
+|  5 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  5 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  6 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:27:03 PM CEST 2024 |
+|  6 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  6 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  7 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:27:05 PM CEST 2024 |
+|  7 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  7 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  8 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:27:07 PM CEST 2024 |
+|  8 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  8 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+|  9 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:27:09 PM CEST 2024 |
+|  9 | http://purl.org/dc/terms/ | contributor | Test User                        |
+|  9 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+| 10 | http://purl.org/dc/terms/ | date        | Tue Oct 15 03:27:11 PM CEST 2024 |
+| 10 | http://purl.org/dc/terms/ | contributor | Test User                        |
+| 10 | http://purl.org/dc/terms/ | subject     | Unittest                         |
+
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+    select image.id, concat(annotation.ns, annotation_mapvalue.name) as key, annotation_mapvalue.value
+    from image
+    join imageannotationlink on image.id=imageannotationlink.parent
+    join annotation on imageannotationlink.child = annotation.id
+    join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id
+#+end_src
+
+#+RESULTS:
+| id | key                                  | value                            |
+|----+--------------------------------------+----------------------------------|
+|  1 | http://purl.org/dc/terms/date        | Tue Oct 15 03:26:52 PM CEST 2024 |
+|  1 | http://purl.org/dc/terms/contributor | Test User                        |
+|  1 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  2 | http://purl.org/dc/terms/date        | Tue Oct 15 03:26:54 PM CEST 2024 |
+|  2 | http://purl.org/dc/terms/contributor | Test User                        |
+|  2 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  3 | http://purl.org/dc/terms/date        | Tue Oct 15 03:26:56 PM CEST 2024 |
+|  3 | http://purl.org/dc/terms/contributor | Test User                        |
+|  3 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  4 | http://purl.org/dc/terms/date        | Tue Oct 15 03:26:59 PM CEST 2024 |
+|  4 | http://purl.org/dc/terms/contributor | Test User                        |
+|  4 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  5 | http://purl.org/dc/terms/date        | Tue Oct 15 03:27:01 PM CEST 2024 |
+|  5 | http://purl.org/dc/terms/contributor | Test User                        |
+|  5 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  6 | http://purl.org/dc/terms/date        | Tue Oct 15 03:27:03 PM CEST 2024 |
+|  6 | http://purl.org/dc/terms/contributor | Test User                        |
+|  6 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  7 | http://purl.org/dc/terms/date        | Tue Oct 15 03:27:05 PM CEST 2024 |
+|  7 | http://purl.org/dc/terms/contributor | Test User                        |
+|  7 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  8 | http://purl.org/dc/terms/date        | Tue Oct 15 03:27:07 PM CEST 2024 |
+|  8 | http://purl.org/dc/terms/contributor | Test User                        |
+|  8 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  9 | http://purl.org/dc/terms/date        | Tue Oct 15 03:27:09 PM CEST 2024 |
+|  9 | http://purl.org/dc/terms/contributor | Test User                        |
+|  9 | http://purl.org/dc/terms/subject     | Unittest                         |
+| 10 | http://purl.org/dc/terms/date        | Tue Oct 15 03:27:11 PM CEST 2024 |
+| 10 | http://purl.org/dc/terms/contributor | Test User                        |
+| 10 | http://purl.org/dc/terms/subject     | Unittest                         |
