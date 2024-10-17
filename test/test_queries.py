@@ -108,7 +108,7 @@ class QueriesTest(unittest.TestCase):
         self.assertIn("http://purl.org/dc/terms/provenance", keys)
 
 
-    def test_key_value_query(self):
+    def test_image_key_value(self):
         """ Test querying for an image property via the mapannotation key."""
 
         graph = self._graph
@@ -128,8 +128,65 @@ class QueriesTest(unittest.TestCase):
 
         # Run the query.
         response = graph.query(query_string)
+        for r in response:
+            print(r.img, r.author, r.subject)
 
         self.assertEqual(len(response), 10)
+
+    def test_project_key_value(self):
+        """ Test querying for a project property via the mapannotation key."""
+
+        graph = self._graph
+
+        query_string = f"""
+        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        prefix dc: <http://purl.org/dc/terms/>
+
+        SELECT distinct ?project ?author ?subject ?provenance WHERE {{
+          SERVICE <{ENDPOINT}> {{
+            ?project a ome_core:Project;
+                 dc:contributor ?author;
+                 dc:subject ?subject;
+                 dc:provenance ?provenance.
+         }}
+        }}
+        """
+
+        # Run the query.
+        response = graph.query(query_string)
+
+        for r in response:
+            print(r.project, r.author, r.subject, r.provenance)
+
+        self.assertEqual(len(response), 4)
+
+    def test_dataset_key_value(self):
+        """ Test querying for an dataset property via the mapannotation key."""
+
+        graph = self._graph
+
+        query_string = f"""
+        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        prefix dc: <http://purl.org/dc/terms/>
+
+        SELECT distinct ?dataset ?author ?subject ?provenance WHERE {{
+          SERVICE <{ENDPOINT}> {{
+            ?dataset a ome_core:Dataset;
+                 dc:contributor ?author;
+                 dc:provenance ?provenance;
+                 dc:subject ?subject.
+         }}
+        }}
+        """
+
+        # Run the query.
+        response = graph.query(query_string)
+
+        for r in response:
+            print(r.dataset, r.author, r.subject, r.provenance)
+
+        self.assertEqual(len(response), 3)
+
 
 
 if __name__ == "__main__":

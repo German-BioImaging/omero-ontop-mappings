@@ -25,13 +25,49 @@
 | https://example.org/site/Dataset/3 |
 | https://example.org/site/Dataset/2 |
 | https://example.org/site/Dataset/1 |
+| https://example.org/site/Project/1 |
 | https://example.org/site/Image/1   |
 | https://example.org/site/Image/2   |
 | https://example.org/site/Image/3   |
 | https://example.org/site/Image/4   |
 | https://example.org/site/Image/5   |
 | https://example.org/site/Image/6   |
-| https://example.org/site/Image/7   |
+
+* Dataset II
+:PROPERTIES:
+:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  select distinct ?ds ?tp where {
+  ?ds a ome_core:Dataset .
+  ?ds a ?tp .
+  }
+  limit 10
+#+end_src
+
+#+RESULTS:
+| ds                                 | tp                                                                   |
+|------------------------------------+----------------------------------------------------------------------|
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset           |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Experiment        |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/ExperimenterGroup |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Folder            |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image             |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project           |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/ReagentSet        |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Well              |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/WellSample        |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset           |
 
 * Dataset with annotations
 :PROPERTIES:
@@ -59,6 +95,7 @@
 #+RESULTS:
 | ds                                 | ant                                    |
 |------------------------------------+----------------------------------------|
+| https://example.org/site/Project/1 | https://example.org/site/Annotation/4  |
 | https://example.org/site/Dataset/1 | https://example.org/site/Annotation/1  |
 | https://example.org/site/Dataset/3 | https://example.org/site/Annotation/3  |
 | https://example.org/site/Dataset/2 | https://example.org/site/Annotation/1  |
@@ -68,7 +105,6 @@
 | https://example.org/site/Image/3   | https://example.org/site/Annotation/7  |
 | https://example.org/site/Image/1   | https://example.org/site/Annotation/5  |
 | https://example.org/site/Image/4   | https://example.org/site/Annotation/8  |
-| https://example.org/site/Image/10  | https://example.org/site/Annotation/14 |
 
 * Project with datasets
 :PROPERTIES:
@@ -97,9 +133,9 @@ limit 20
 #+RESULTS:
 | proj                               | lbl     | ds                                 |
 |------------------------------------+---------+------------------------------------|
-| https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/2 |
-| https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/3 |
 | https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/1 |
+| https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/3 |
+| https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/2 |
 
 
 * Project with datasets and images
@@ -129,11 +165,18 @@ limit 20
 #+end_src
 
 #+RESULTS:
-| proj                               | dataset                            | image                            | name                               |
-|------------------------------------+------------------------------------+----------------------------------+------------------------------------|
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/1 | 2024-10-10_14-58-36_screenshot.png |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/2 | 2024-10-10_14-53-28_screenshot.png |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/3 | 2024-10-10_15-17-25_screenshot.png |
+| proj                               | dataset                            | image                             | name                               |
+|------------------------------------+------------------------------------+-----------------------------------+------------------------------------|
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/6  | 2024-10-10_15-09-28_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/9  | 2024-10-10_16-42-47_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/2  | 2024-10-10_14-53-28_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/4  | 2024-10-10_15-28-16_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/10 | 2024-10-10_16-39-27_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/1  | 2024-10-10_14-58-36_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/5  | 2024-10-10_15-01-36_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/8  | 2024-10-10_16-47-01_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/7  | 2024-10-10_15-07-18_screenshot.png |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/3  | 2024-10-10_15-17-25_screenshot.png |
 
 
 
@@ -165,18 +208,18 @@ limit 20
 #+end_src
 
 #+RESULTS:
-| ds                                 | img                              | name                               | img_ant                               | key         | val                              |
-|------------------------------------+----------------------------------+------------------------------------+---------------------------------------+-------------+----------------------------------|
-| https://example.org/site/Dataset/1 | https://example.org/site/Image/1 | 2024-10-10_14-58-36_screenshot.png | https://example.org/site/Annotation/5 | date        | Tue Oct 15 03:26:52 PM CEST 2024 |
-| https://example.org/site/Dataset/1 | https://example.org/site/Image/1 | 2024-10-10_14-58-36_screenshot.png | https://example.org/site/Annotation/5 | date        | Test User                        |
-| https://example.org/site/Dataset/1 | https://example.org/site/Image/1 | 2024-10-10_14-58-36_screenshot.png | https://example.org/site/Annotation/5 | date        | Unittest                         |
-| https://example.org/site/Dataset/1 | https://example.org/site/Image/1 | 2024-10-10_14-58-36_screenshot.png | https://example.org/site/Annotation/5 | contributor | Tue Oct 15 03:26:52 PM CEST 2024 |
-| https://example.org/site/Dataset/1 | https://example.org/site/Image/1 | 2024-10-10_14-58-36_screenshot.png | https://example.org/site/Annotation/5 | contributor | Test User                        |
-| https://example.org/site/Dataset/1 | https://example.org/site/Image/1 | 2024-10-10_14-58-36_screenshot.png | https://example.org/site/Annotation/5 | contributor | Unittest                         |
-| https://example.org/site/Dataset/1 | https://example.org/site/Image/1 | 2024-10-10_14-58-36_screenshot.png | https://example.org/site/Annotation/5 | subject     | Tue Oct 15 03:26:52 PM CEST 2024 |
-| https://example.org/site/Dataset/1 | https://example.org/site/Image/1 | 2024-10-10_14-58-36_screenshot.png | https://example.org/site/Annotation/5 | subject     | Test User                        |
-| https://example.org/site/Dataset/1 | https://example.org/site/Image/1 | 2024-10-10_14-58-36_screenshot.png | https://example.org/site/Annotation/5 | subject     | Unittest                         |
-| https://example.org/site/Dataset/2 | https://example.org/site/Image/2 | 2024-10-10_14-53-28_screenshot.png | https://example.org/site/Annotation/6 | date        | Tue Oct 15 03:26:54 PM CEST 2024 |
+| ds                                 | img                               | name                               | img_ant                                | key         | val                              |
+|------------------------------------+-----------------------------------+------------------------------------+----------------------------------------+-------------+----------------------------------|
+| https://example.org/site/Dataset/2 | https://example.org/site/Image/3  | 2024-10-10_15-17-25_screenshot.png | https://example.org/site/Annotation/7  | contributor | Thu Oct 17 10:23:07 AM CEST 2024 |
+| https://example.org/site/Dataset/2 | https://example.org/site/Image/6  | 2024-10-10_15-09-28_screenshot.png | https://example.org/site/Annotation/10 | subject     | Test User                        |
+| https://example.org/site/Dataset/3 | https://example.org/site/Image/10 | 2024-10-10_16-39-27_screenshot.png | https://example.org/site/Annotation/14 | date        | Thu Oct 17 10:23:22 AM CEST 2024 |
+| https://example.org/site/Dataset/1 | https://example.org/site/Image/2  | 2024-10-10_14-53-28_screenshot.png | https://example.org/site/Annotation/6  | contributor | Test User                        |
+| https://example.org/site/Dataset/2 | https://example.org/site/Image/5  | 2024-10-10_15-01-36_screenshot.png | https://example.org/site/Annotation/9  | contributor | Test User                        |
+| https://example.org/site/Dataset/2 | https://example.org/site/Image/7  | 2024-10-10_15-07-18_screenshot.png | https://example.org/site/Annotation/11 | date        | Thu Oct 17 10:23:16 AM CEST 2024 |
+| https://example.org/site/Dataset/3 | https://example.org/site/Image/8  | 2024-10-10_16-47-01_screenshot.png | https://example.org/site/Annotation/12 | subject     | Thu Oct 17 10:23:18 AM CEST 2024 |
+| https://example.org/site/Dataset/2 | https://example.org/site/Image/6  | 2024-10-10_15-09-28_screenshot.png | https://example.org/site/Annotation/10 | date        | Thu Oct 17 10:23:14 AM CEST 2024 |
+| https://example.org/site/Dataset/3 | https://example.org/site/Image/10 | 2024-10-10_16-39-27_screenshot.png | https://example.org/site/Annotation/14 | contributor | Test User                        |
+| https://example.org/site/Dataset/3 | https://example.org/site/Image/10 | 2024-10-10_16-39-27_screenshot.png | https://example.org/site/Annotation/14 | contributor | Thu Oct 17 10:23:22 AM CEST 2024 |
 
 * var image and annotations
 :PROPERTIES:
@@ -209,16 +252,16 @@ limit 20
 #+RESULTS:
 | img                                | anno                                  | mav                              | p                                                            | o                                                                       |
 |------------------------------------+---------------------------------------+----------------------------------+--------------------------------------------------------------+-------------------------------------------------------------------------|
-| https://example.org/site/Dataset/2 | https://example.org/site/Annotation/1 | https://example.org/site/Map/1/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/key       | contributor                                                             |
-| https://example.org/site/Dataset/2 | https://example.org/site/Annotation/1 | https://example.org/site/Map/1/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/value     | Test User                                                               |
-| https://example.org/site/Dataset/2 | https://example.org/site/Annotation/1 | https://example.org/site/Map/1/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/nameSpace | http://purl.org/dc/terms/                                               |
-| https://example.org/site/Dataset/2 | https://example.org/site/Annotation/1 | https://example.org/site/Map/1/0 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type              | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Map                  |
-| https://example.org/site/Dataset/2 | https://example.org/site/Annotation/1 | https://example.org/site/Map/1/0 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type              | http://www.openmicroscopy.org/rdf/2016-06/ome_core/MapAnnotation        |
-| https://example.org/site/Dataset/2 | https://example.org/site/Annotation/1 | https://example.org/site/Map/1/0 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type              | http://www.openmicroscopy.org/rdf/2016-06/ome_core/StructuredAnnotation |
-| https://example.org/site/Dataset/2 | https://example.org/site/Annotation/1 | https://example.org/site/Map/1/0 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type              | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation           |
-| https://example.org/site/Dataset/1 | https://example.org/site/Annotation/1 | https://example.org/site/Map/1/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/key       | subject                                                                 |
-| https://example.org/site/Dataset/1 | https://example.org/site/Annotation/1 | https://example.org/site/Map/1/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/value     | Test images                                                             |
-| https://example.org/site/Dataset/1 | https://example.org/site/Annotation/1 | https://example.org/site/Map/1/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/nameSpace | http://purl.org/dc/terms/                                               |
+| https://example.org/site/Project/1 | https://example.org/site/Annotation/4 | https://example.org/site/Map/4/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/key       | provenance                                                              |
+| https://example.org/site/Project/1 | https://example.org/site/Annotation/4 | https://example.org/site/Map/4/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/value     | Test Data                                                               |
+| https://example.org/site/Project/1 | https://example.org/site/Annotation/4 | https://example.org/site/Map/4/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/nameSpace | http://purl.org/dc/terms/                                               |
+| https://example.org/site/Project/1 | https://example.org/site/Annotation/4 | https://example.org/site/Map/4/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type              | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Map                  |
+| https://example.org/site/Project/1 | https://example.org/site/Annotation/4 | https://example.org/site/Map/4/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type              | http://www.openmicroscopy.org/rdf/2016-06/ome_core/MapAnnotation        |
+| https://example.org/site/Project/1 | https://example.org/site/Annotation/4 | https://example.org/site/Map/4/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type              | http://www.openmicroscopy.org/rdf/2016-06/ome_core/StructuredAnnotation |
+| https://example.org/site/Project/1 | https://example.org/site/Annotation/4 | https://example.org/site/Map/4/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type              | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Annotation           |
+| https://example.org/site/Project/1 | https://example.org/site/Annotation/4 | https://example.org/site/Map/4/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/key       | contributor                                                             |
+| https://example.org/site/Project/1 | https://example.org/site/Annotation/4 | https://example.org/site/Map/4/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/value     | Nophretete                                                              |
+| https://example.org/site/Project/1 | https://example.org/site/Annotation/4 | https://example.org/site/Map/4/0 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/nameSpace | http://purl.org/dc/terms/                                               |
 
 #+begin_src sparql :url http://localhost:8080/sparql
 
@@ -295,27 +338,28 @@ limit 20
    PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
    prefix dc: <http://purl.org/dc/terms/>
 
-  SELECT distinct ?img ?subj ?contributor  WHERE {
-      ?img a ome_core:Image;
-           dc:subject ?subj ;
-           dc:contributor ?contributor .
+  SELECT distinct ?s  WHERE {
+      ?s a ome_core:Dataset.
    }
-  order by ?img
 #+end_src
 
 #+RESULTS:
-| img                               | subj     | contributor |
-|-----------------------------------+----------+-------------|
-| https://example.org/site/Image/1  | Unittest | Test User   |
-| https://example.org/site/Image/10 | Unittest | Test User   |
-| https://example.org/site/Image/2  | Unittest | Test User   |
-| https://example.org/site/Image/3  | Unittest | Test User   |
-| https://example.org/site/Image/4  | Unittest | Test User   |
-| https://example.org/site/Image/5  | Unittest | Test User   |
-| https://example.org/site/Image/6  | Unittest | Test User   |
-| https://example.org/site/Image/7  | Unittest | Test User   |
-| https://example.org/site/Image/8  | Unittest | Test User   |
-| https://example.org/site/Image/9  | Unittest | Test User   |
+| s                                  |
+|------------------------------------|
+| https://example.org/site/Dataset/3 |
+| https://example.org/site/Dataset/2 |
+| https://example.org/site/Dataset/1 |
+| https://example.org/site/Project/1 |
+| https://example.org/site/Image/9   |
+| https://example.org/site/Image/3   |
+| https://example.org/site/Image/5   |
+| https://example.org/site/Image/4   |
+| https://example.org/site/Image/10  |
+| https://example.org/site/Image/6   |
+| https://example.org/site/Image/2   |
+| https://example.org/site/Image/7   |
+| https://example.org/site/Image/1   |
+| https://example.org/site/Image/8   |
 
 #+begin_src sparql :url http://localhost:8080/sparql
 
@@ -340,13 +384,12 @@ limit 20
 | prop                                                          |
 |---------------------------------------------------------------|
 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/annotation |
-| http://purl.org/dc/terms/contributor                          |
-| http://purl.org/dc/terms/date                                 |
-| http://www.w3.org/1999/02/22-rdf-syntax-ns#type               |
 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image      |
 | http://purl.org/dc/terms/subject                              |
-| http://www.openmicroscopy.org/rdf/2016-06/ome_core/dataset    |
 | http://www.w3.org/2000/01/rdf-schema#label                    |
+| http://purl.org/dc/terms/contributor                          |
+| http://purl.org/dc/terms/provenance                           |
+| http://www.w3.org/1999/02/22-rdf-syntax-ns#type               |
 
 * sql queries
 :PROPERTIES:
