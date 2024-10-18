@@ -36,7 +36,49 @@ class QueriesTest(unittest.TestCase):
                 os.remove(item)
             elif os.path.isdir(item):
                 shutil.rmtree(item)
-                
+
+    def test_number_of_projects_datasets_images(self):
+
+        graph = self._graph
+
+        query_string = f"""
+prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+select ?n_projects ?n_datasets ?n_images where {{
+    SERVICE <{ENDPOINT}> {{
+    {{
+      select (count(?project) as ?n_projects) where {{
+        ?project a ome_core:Project .
+      }}
+    }}
+    {{
+      select (count(?dataset) as ?n_datasets) where {{
+        ?dataset a ome_core:Dataset .
+        }}
+    }}
+    {{
+      select (count(?image) as ?n_images) where {{
+        ?image a ome_core:Image .
+      }}
+    }}
+  }}
+}}
+"""
+
+        # Run the query.
+        response = graph.query(query_string)
+
+        # Test.
+        self.assertEqual(len(response), 1)
+
+        # Check numbers.
+        number_of_objects = [r for r in response][0]
+        self.assertEqual(int(number_of_objects.n_projects), 1)
+        self.assertEqual(int(number_of_objects.n_datasets), 3)
+        self.assertEqual(int(number_of_objects.n_images  ),  10)
+ 
+
+
     def test_project(self):
         """ Test number of projects in the VKG. """
         
