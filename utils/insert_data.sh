@@ -16,6 +16,9 @@ omero obj map-set $MAP1 mapValue contributor "Test User"
 omero obj map-set $MAP1 mapValue subject "Test images"
 omero obj map-set $MAP1 mapValue provenance "Screenshots"
 
+TAG1=$(omero tag create "TestTag")
+# TBD: Link to DS1
+
 MAP2=$( omero obj new MapAnnotation ns=http://purl.org/dc/terms/)
 omero obj new DatasetAnnotationLink parent=$DS2 child=$MAP1
 omero obj map-set $MAP2 mapValue contributor "Anonymous"
