@@ -1,0 +1,313 @@
+* All tables
+:PROPERTIES:
+:ID:       1833555d-5364-4fe1-aab7-d088644b0e87
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+SELECT table_name FROM information_schema.tables where table_schema='public'
+ORDER BY table_name;
+#+end_src
+
+#+RESULTS:
+| table_name                                       |
+|--------------------------------------------------|
+| _current_admin_privileges                        |
+| _fs_deletelog                                    |
+| _lock_ids                                        |
+| _reindexing_required                             |
+| _roles                                           |
+| acquisitionmode                                  |
+| adminprivilege                                   |
+| affinetransform                                  |
+| annotation                                       |
+| annotation_mapvalue                              |
+| annotationannotationlink                         |
+| arc                                              |
+| arctype                                          |
+| binning                                          |
+| channel                                          |
+| channelannotationlink                            |
+| channelbinding                                   |
+| checksumalgorithm                                |
+| codomainmapcontext                               |
+| configuration                                    |
+| contrastmethod                                   |
+| contraststretchingcontext                        |
+| correction                                       |
+| count_annotation_annotationlinks_by_owner        |
+| count_channel_annotationlinks_by_owner           |
+| count_dataset_annotationlinks_by_owner           |
+| count_dataset_imagelinks_by_owner                |
+| count_dataset_projectlinks_by_owner              |
+| count_detector_annotationlinks_by_owner          |
+| count_dichroic_annotationlinks_by_owner          |
+| count_experimenter_annotationlinks_by_owner      |
+| count_experimentergroup_annotationlinks_by_owner |
+| count_fileset_annotationlinks_by_owner           |
+| count_fileset_joblinks_by_owner                  |
+| count_filter_annotationlinks_by_owner            |
+| count_filter_emissionfilterlink_by_owner         |
+| count_filter_excitationfilterlink_by_owner       |
+| count_filterset_emissionfilterlink_by_owner      |
+| count_filterset_excitationfilterlink_by_owner    |
+| count_folder_annotationlinks_by_owner            |
+| count_folder_imagelinks_by_owner                 |
+| count_folder_roilinks_by_owner                   |
+| count_image_annotationlinks_by_owner             |
+| count_image_datasetlinks_by_owner                |
+| count_image_folderlinks_by_owner                 |
+| count_instrument_annotationlinks_by_owner        |
+| count_job_originalfilelinks_by_owner             |
+| count_lightpath_annotationlinks_by_owner         |
+| count_lightpath_emissionfilterlink_by_owner      |
+| count_lightpath_excitationfilterlink_by_owner    |
+| count_lightsource_annotationlinks_by_owner       |
+| count_namespace_annotationlinks_by_owner         |
+| count_node_annotationlinks_by_owner              |
+| count_objective_annotationlinks_by_owner         |
+| count_originalfile_annotationlinks_by_owner      |
+| count_originalfile_pixelsfilemaps_by_owner       |
+| count_pixels_pixelsfilemaps_by_owner             |
+| count_planeinfo_annotationlinks_by_owner         |
+| count_plate_annotationlinks_by_owner             |
+| count_plate_screenlinks_by_owner                 |
+| count_plateacquisition_annotationlinks_by_owner  |
+| count_project_annotationlinks_by_owner           |
+| count_project_datasetlinks_by_owner              |
+| count_reagent_annotationlinks_by_owner           |
+| count_reagent_welllinks_by_owner                 |
+| count_roi_annotationlinks_by_owner               |
+| count_roi_folderlinks_by_owner                   |
+| count_screen_annotationlinks_by_owner            |
+| count_screen_platelinks_by_owner                 |
+| count_session_annotationlinks_by_owner           |
+| count_shape_annotationlinks_by_owner             |
+| count_well_annotationlinks_by_owner              |
+| count_well_reagentlinks_by_owner                 |
+| dataset                                          |
+| datasetannotationlink                            |
+| datasetimagelink                                 |
+| dbpatch                                          |
+| detector                                         |
+| detectorannotationlink                           |
+| detectorsettings                                 |
+| detectortype                                     |
+| dichroic                                         |
+| dichroicannotationlink                           |
+| dimensionorder                                   |
+| event                                            |
+| eventlog                                         |
+| eventtype                                        |
+| experiment                                       |
+| experimenter                                     |
+| experimenter_config                              |
+| experimenterannotationlink                       |
+| experimentergroup                                |
+| experimentergroup_config                         |
+| experimentergroupannotationlink                  |
+| experimenttype                                   |
+| externalinfo                                     |
+| family                                           |
+| filament                                         |
+| filamenttype                                     |
+| fileset                                          |
+| filesetannotationlink                            |
+| filesetentry                                     |
+| filesetjoblink                                   |
+| filter                                           |
+| filterannotationlink                             |
+| filterset                                        |
+| filtersetemissionfilterlink                      |
+| filtersetexcitationfilterlink                    |
+| filtertype                                       |
+| folder                                           |
+| folderannotationlink                             |
+| folderimagelink                                  |
+| folderroilink                                    |
+| format                                           |
+| genericexcitationsource                          |
+| genericexcitationsource_map                      |
+| groupexperimentermap                             |
+| illumination                                     |
+| image                                            |
+| imageannotationlink                              |
+| imagingenvironment                               |
+| imagingenvironment_map                           |
+| immersion                                        |
+| importjob                                        |
+| indexingjob                                      |
+| instrument                                       |
+| instrumentannotationlink                         |
+| integritycheckjob                                |
+| job                                              |
+| joboriginalfilelink                              |
+| jobstatus                                        |
+| laser                                            |
+| lasermedium                                      |
+| lasertype                                        |
+| lightemittingdiode                               |
+| lightpath                                        |
+| lightpathannotationlink                          |
+| lightpathemissionfilterlink                      |
+| lightpathexcitationfilterlink                    |
+| lightsettings                                    |
+| lightsource                                      |
+| lightsourceannotationlink                        |
+| link                                             |
+| logicalchannel                                   |
+| medium                                           |
+| metadataimportjob                                |
+| metadataimportjob_versioninfo                    |
+| microbeammanipulation                            |
+| microbeammanipulationtype                        |
+| microscope                                       |
+| microscopetype                                   |
+| namespace                                        |
+| namespaceannotationlink                          |
+| node                                             |
+| nodeannotationlink                               |
+| objective                                        |
+| objectiveannotationlink                          |
+| objectivesettings                                |
+| originalfile                                     |
+| originalfileannotationlink                       |
+| otf                                              |
+| parsejob                                         |
+| password                                         |
+| photometricinterpretation                        |
+| pixeldatajob                                     |
+| pixels                                           |
+| pixelsoriginalfilemap                            |
+| pixelstype                                       |
+| planeinfo                                        |
+| planeinfoannotationlink                          |
+| planeslicingcontext                              |
+| plate                                            |
+| plateacquisition                                 |
+| plateacquisitionannotationlink                   |
+| plateannotationlink                              |
+| project                                          |
+| projectannotationlink                            |
+| projectdatasetlink                               |
+| projectionaxis                                   |
+| projectiondef                                    |
+| projectiontype                                   |
+| pulse                                            |
+| quantumdef                                       |
+| reagent                                          |
+| reagentannotationlink                            |
+| renderingdef                                     |
+| renderingmodel                                   |
+| reverseintensitycontext                          |
+| roi                                              |
+| roiannotationlink                                |
+| screen                                           |
+| screenannotationlink                             |
+| screenplatelink                                  |
+| scriptjob                                        |
+| session                                          |
+| sessionannotationlink                            |
+| shape                                            |
+| shapeannotationlink                              |
+| share                                            |
+| sharemember                                      |
+| stagelabel                                       |
+| statsinfo                                        |
+| thumbnail                                        |
+| thumbnailgenerationjob                           |
+| transmittancerange                               |
+| uploadjob                                        |
+| uploadjob_versioninfo                            |
+| well                                             |
+| wellannotationlink                               |
+| wellreagentlink                                  |
+| wellsample                                       |
+
+* Image
+:PROPERTIES:
+:ID:       71a91350-a2a8-4479-bfad-19325d02fd25
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select image.id, concat(annotation.ns, annotation_mapvalue.name) as key, annotation_mapvalue.value
+  from image
+  join imageannotationlink on image.id=imageannotationlink.parent
+  join annotation on imageannotationlink.child = annotation.id
+  join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id
+#+end_src
+
+#+RESULTS:
+| id | key                                  | value                            |
+|----+--------------------------------------+----------------------------------|
+|  1 | http://purl.org/dc/terms/date        | Thu Oct 17 10:23:03 AM CEST 2024 |
+|  1 | http://purl.org/dc/terms/contributor | Test User                        |
+|  1 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  2 | http://purl.org/dc/terms/date        | Thu Oct 17 10:23:05 AM CEST 2024 |
+|  2 | http://purl.org/dc/terms/contributor | Test User                        |
+|  2 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  3 | http://purl.org/dc/terms/date        | Thu Oct 17 10:23:07 AM CEST 2024 |
+|  3 | http://purl.org/dc/terms/contributor | Test User                        |
+|  3 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  4 | http://purl.org/dc/terms/date        | Thu Oct 17 10:23:10 AM CEST 2024 |
+|  4 | http://purl.org/dc/terms/contributor | Test User                        |
+|  4 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  5 | http://purl.org/dc/terms/date        | Thu Oct 17 10:23:12 AM CEST 2024 |
+|  5 | http://purl.org/dc/terms/contributor | Test User                        |
+|  5 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  6 | http://purl.org/dc/terms/date        | Thu Oct 17 10:23:14 AM CEST 2024 |
+|  6 | http://purl.org/dc/terms/contributor | Test User                        |
+|  6 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  7 | http://purl.org/dc/terms/date        | Thu Oct 17 10:23:16 AM CEST 2024 |
+|  7 | http://purl.org/dc/terms/contributor | Test User                        |
+|  7 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  8 | http://purl.org/dc/terms/date        | Thu Oct 17 10:23:18 AM CEST 2024 |
+|  8 | http://purl.org/dc/terms/contributor | Test User                        |
+|  8 | http://purl.org/dc/terms/subject     | Unittest                         |
+|  9 | http://purl.org/dc/terms/date        | Thu Oct 17 10:23:20 AM CEST 2024 |
+|  9 | http://purl.org/dc/terms/contributor | Test User                        |
+|  9 | http://purl.org/dc/terms/subject     | Unittest                         |
+| 10 | http://purl.org/dc/terms/date        | Thu Oct 17 10:23:22 AM CEST 2024 |
+| 10 | http://purl.org/dc/terms/contributor | Test User                        |
+| 10 | http://purl.org/dc/terms/subject     | Unittest                         |
+
+* Folder
+:PROPERTIES:
+:ID:       62965f07-a737-4050-b2ee-6418baff21f3
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select * from folder;
+#+end_src
+
+#+RESULTS:
+| id | description | permissions | name | version | creation_id | external_id | group_id | owner_id | update_id | parentfolder |
+|----+-------------+-------------+------+---------+-------------+-------------+----------+----------+-----------+--------------|
+
+* Folderannotationlink
+:PROPERTIES:
+:ID:       12bc20b2-9037-4f1b-9612-0fa8c36aaabc
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select * from folderannotationlink;
+#+end_src
+
+#+RESULTS:
+| id | permissions | version | child | creation_id | external_id | group_id | owner_id | update_id | parent |
+|----+-------------+---------+-------+-------------+-------------+----------+----------+-----------+--------|
+
+* datasets in separate joins
+:PROPERTIES:
+:ID:       c254b55f-6517-4782-a09a-f38c937e5231
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+      select * from
+                 (select dataset.id, datasetannotationlink.child as datasetannotationslink_annotation_id
+                           from dataset join datasetannotationlink on dataset.id = datasetannotationlink.parent ) as dataset_datasetannotationlink
+                 join (
+                 (select dataset.id, datasetimagelink.child as datasetimagelink_image_id
+                           from dataset join datasetimagelink on dataset.id = datasetimagelink.parent) as dataset_datasetimagelink
+                           ) on dataset_datasetimagelink.dataset.id = dataset_datasetannotation.dataset.id
+                        ;
+
+#+end_src
+
+#+RESULTS:
+|---|
+
