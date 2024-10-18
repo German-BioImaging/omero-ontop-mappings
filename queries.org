@@ -329,6 +329,87 @@ limit 20
 | https://example.org/site/Dataset/2 | Test images   |
 | https://example.org/site/Dataset/3 | OMERO Mapping |
 
+* Tagged images
+:PROPERTIES:
+:ID:       3fb29f13-6b99-4d93-9757-7b6d90a40e93
+:END:
+
+#+begin_src sparql :url http://localhost:8080/sparql
+
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  SELECT distinct ?img ?tag WHERE {
+      ?img a ome_core:Image;
+           ome_core:tagAnnotationValue ?tag .
+   }
+  order by ?img
+#+end_src
+
+#+RESULTS:
+| img                               | tag        |
+|-----------------------------------+------------|
+| https://example.org/site/Image/1  | Screenshot |
+| https://example.org/site/Image/10 | Screenshot |
+| https://example.org/site/Image/2  | Screenshot |
+| https://example.org/site/Image/3  | Screenshot |
+| https://example.org/site/Image/4  | Screenshot |
+| https://example.org/site/Image/5  | Screenshot |
+| https://example.org/site/Image/6  | Screenshot |
+| https://example.org/site/Image/7  | Screenshot |
+| https://example.org/site/Image/8  | Screenshot |
+| https://example.org/site/Image/9  | Screenshot |
+
+
+* Tagged dataset
+:PROPERTIES:
+:ID:       5ccad4e1-5090-438e-b90c-ede0bd3356bc
+:END:
+
+Find all datasets tagged "TestTag".
+
+#+begin_src sparql :url http://localhost:8080/sparql
+
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  SELECT distinct ?ds ?name WHERE {
+      ?ds a ome_core:Dataset;
+           ome_core:tagAnnotationValue ?tag .
+    filter(regex(?tag, "^TestTag$"))
+    ?ds rdfs:label ?name .
+   }
+  order by ?img
+#+end_src
+
+#+RESULTS:
+| ds                                 | name      |
+|------------------------------------+-----------|
+| https://example.org/site/Dataset/1 | Dataset 1 |
+
+* Number of contained images per dataset (by aggregation)
+:PROPERTIES:
+:ID:       5ccad4e1-5090-438e-b90c-ede0bd3356bc
+:END:
+
+Find all datasets tagged "TestTag".
+
+#+begin_src sparql :url http://localhost:8080/sparql
+
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  SELECT distinct ?ds (count(?img) as ?number_of_images) WHERE {
+      ?ds a ome_core:Dataset;
+          ome_core:image ?img
+   }
+  group by ?ds
+#+end_src
+
+#+RESULTS:
+| ds                                 | number_of_images |
+|------------------------------------+------------------|
+| https://example.org/site/Dataset/3 |                3 |
+| https://example.org/site/Dataset/2 |                5 |
+| https://example.org/site/Dataset/1 |                2 |
+
 * Folder 
 :PROPERTIES:
 :ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
