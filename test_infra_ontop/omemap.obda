@@ -36,9 +36,12 @@ source		select
 			dataset.name as dataset_name,
 			dataset.description as dataset_description,
 			concat(annotation.ns, annotation_mapvalue.name) as map_key,
-			annotation_mapvalue.value as map_value
-			from dataset, datasetannotationlink, annotation, annotation_mapvalue, datasetimagelink
-			where (datasetannotationlink.parent = dataset.id AND datasetannotationlink.child = annotation.id AND annotation.id = annotation_mapvalue.annotation_id AND dataset.id = datasetimagelink.parent);
+			annotation_mapvalue.value as map_value,
+			annotation.textvalue as tag_text
+			from dataset
+			join datasetannotationlink on datasetannotationlink.parent = dataset.id
+			join annotation on datasetannotationlink.child = annotation.id
+			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id join datasetimagelink on dataset.id = datasetimagelink.parent;
 
 mappingId	MAPID-Image
 target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; <{map_key}> {map_value} . 
@@ -83,5 +86,32 @@ target		ome_instance:ReagentSet/{reagentset_id} a ome_core:ReagentSet .
 source		select
 			reagent.id as reagentset_id
 			from reagent ;
+
+mappingId	MAPID-dataset_tag
+target		ome_instance:Dataset/{dataset_id} ome_core:tagAnnotationValue {tag_text} . 
+source		select
+			dataset.id as dataset_id,
+			annotation.textvalue as tag_text
+			from dataset
+			join datasetannotationlink on datasetannotationlink.parent = dataset.id
+			join annotation on datasetannotationlink.child = annotation.id where annotation.textvalue is not NULL;
+
+mappingId	MAPID-image_tag
+target		ome_instance:Image/{image_id} ome_core:tagAnnotationValue {tag_text} . 
+source		select
+			image.id as image_id,
+			annotation.textvalue as tag_text
+			from image
+			join imageannotationlink on imageannotationlink.parent = image.id
+			join annotation on imageannotationlink.child = annotation.id where annotation.textvalue is not NULL;
+
+mappingId	MAPID-project_tag
+target		ome_instance:Project/{project_id} ome_core:tagAnnotationValue {tag_text} . 
+source		select
+			project.id as project_id,
+			annotation.textvalue as tag_text
+			from project
+			join projectannotationlink on projectannotationlink.parent = project.id
+			join annotation on projectannotationlink.child = annotation.id where annotation.textvalue is not NULL;
 ]]
 
