@@ -9,7 +9,7 @@
     :END:
 - Protege: https://protege.stanford.edu/software.php#desktop-protege
 - Unpack on your system into a writable directory
-- Download ontop command line client (ontop-cli-x.y.z.zip) and ontop
+- Download ontop command line client (ontop-cli-x.y.z.zip) **and** ontop
   plugin for Protege (it.unibz.inf.ontop.protege-x.y.z.jar) from
   https://github.com/ontop/ontop/releases/latest
 - Unpack ontop-cli zip
