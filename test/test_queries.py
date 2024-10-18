@@ -3,6 +3,7 @@ import os
 import sys
 import shutil
 import requests
+from urllib import parse
 
 import unittest
 
@@ -295,6 +296,49 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         self.assertEqual(len(response), 3)
 
+    def test_tagged_dataset(self):
+        """ Test querying all tagged datasets and their tag(s). """
+
+
+        query = """
+
+        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        SELECT distinct ?s ?tag WHERE {
+            ?s a ome_core:Dataset;
+               ome_core:tagAnnotationValue ?tag.
+        }
+        """
+        escapedQuery = parse.quote(query)
+        requestURL = ENDPOINT + "?query=" + escapedQuery
+        response = requests.get(requestURL).json()
+        bindings = response['results']['bindings']
+
+        self.assertEqual(len(bindings), 1)
+        self.assertEqual(bindings[0]['tag']['value'], 'TestTag')
+
+    def test_tagged_images(self):
+        """ Test querying all tagged images and their tag(s). """
+
+
+        query = """
+
+        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        SELECT distinct ?s ?tag WHERE {
+            ?s a ome_core:Image;
+               ome_core:tagAnnotationValue ?tag.
+        }
+        """
+        escapedQuery = parse.quote(query)
+        requestURL = ENDPOINT + "?query=" + escapedQuery
+        response = requests.get(requestURL).json()
+        bindings = response['results']['bindings']
+
+        # All images (10) are tagged.
+        self.assertEqual(len(bindings), 10)
+
+        # They're all tagged "Screenshot"
+        self.assertEqual(len(set([b['tag']['value'] for b in bindings])), 1)
+        self.assertEqual(bindings[0]['tag']['value'], "Screenshot")
 
 
 if __name__ == "__main__":
