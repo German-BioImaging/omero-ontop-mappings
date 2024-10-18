@@ -1,4 +1,4 @@
-from rdflib import Graph
+from rdflib import Graph, URIRef, Literal, BNode
 import os
 import sys
 import shutil
@@ -36,6 +36,51 @@ class QueriesTest(unittest.TestCase):
                 os.remove(item)
             elif os.path.isdir(item):
                 shutil.rmtree(item)
+
+    def test_dataset_type_relations(self):
+        """ There must be one and only one rdf:type relation for datasets (issue #5)."""
+
+        graph = self._graph
+
+        query_string = f"""
+prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+select (count(distinct ?tp) as ?n_types) where {{
+    SERVICE <{ENDPOINT}> {{
+            ?s a ome_core:Dataset;
+                a ?tp .
+    }}
+}}
+"""
+        print(query_string)
+        response = graph.query(query_string)
+
+        for r in response:
+            print(r)
+
+        self.assertEqual(len(response), 1)
+        self.assertEqual(int([r.n_types for r in response][0]), 1)
+
+    def test_dataset_type_value(self):
+        """ A ome_core:Dataset instance must be of type ome_core:Dataset (issue #5)."""
+
+        query_string = f"""
+prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+select distinct ?tp where {{
+    SERVICE <{ENDPOINT}> {{
+            ?s a ome_core:Dataset;
+                a ?tp .
+    }}
+}}
+"""
+        print(query_string)
+        response = self._graph.query(query_string)
+
+        for r in response:
+            print(r)
+
+        self.assertIn(URIRef("http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset"), [r.tp for r in response])
 
     def test_number_of_projects_datasets_images(self):
 
@@ -76,8 +121,6 @@ select ?n_projects ?n_datasets ?n_images where {{
         self.assertEqual(int(number_of_objects.n_projects), 1)
         self.assertEqual(int(number_of_objects.n_datasets), 3)
         self.assertEqual(int(number_of_objects.n_images  ),  10)
- 
-
 
     def test_project(self):
         """ Test number of projects in the VKG. """
@@ -89,7 +132,7 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         SELECT distinct ?s WHERE {{
           SERVICE <{ENDPOINT}> {{
-            ?ds a ome_core:Project .
+            ?s a ome_core:Project .
           }}
         }}
         limit 3
