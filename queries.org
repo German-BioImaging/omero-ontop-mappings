@@ -89,6 +89,71 @@
 | https://example.org/site/Dataset/1 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 1                                                     |
 | https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image | https://example.org/site/Image/3                              |
 
+* Dataset number of type relations
+:PROPERTIES:
+:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+
+    select (count(distinct ?tp) as ?n_types) where {
+        ?s a ome_core:Dataset;
+            a ?tp .
+}
+
+#+end_src
+
+#+RESULTS:
+| n_types |
+|---------|
+|       3 |
+
+* Dataset type relations
+:PROPERTIES:
+:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+    PREFIX : <https://www.openmicroscopy.org/omemap/>
+    PREFIX owl: <http://www.w3.org/2002/07/owl#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    PREFIX obda: <https://w3id.org/obda/vocabulary#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+    PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+
+      select ?s ?tp  where {
+          ?s a ome_core:Dataset;
+              a ?tp .
+  }
+  order by ?tp
+
+#+end_src
+
+#+RESULTS:
+| s                                  | tp                                                            |
+|------------------------------------+---------------------------------------------------------------|
+| https://example.org/site/Dataset/3 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset    |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset    |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset    |
+| https://example.org/site/Dataset/3 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Folder     |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Folder     |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Folder     |
+| https://example.org/site/Dataset/3 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/WellSample |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/WellSample |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/WellSample |
+
 * Image properties
 :PROPERTIES:
 :ID:       7452daa7-4c93-448f-9c35-6a9efd910cb1
@@ -255,3 +320,24 @@ limit 20
 | https://example.org/site/Dataset/1 | Test images   |
 | https://example.org/site/Dataset/2 | Test images   |
 | https://example.org/site/Dataset/3 | OMERO Mapping |
+
+* Folder 
+:PROPERTIES:
+:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  select ?s where {
+  ?s a ome_core:Folder 
+  }
+  limit 10
+#+end_src
+
+#+RESULTS:
+| s                                  |
+|------------------------------------|
+| https://example.org/site/Dataset/1 |
+| https://example.org/site/Dataset/2 |
+| https://example.org/site/Dataset/3 |

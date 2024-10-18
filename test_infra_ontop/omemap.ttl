@@ -11,11 +11,16 @@
 @base <https://www.openmicroscopy.org/omemap/> .
 
 <https://www.openmicroscopy.org/omemap> rdf:type owl:Ontology ;
-    owl:imports <https://github.com/German-BioImaging/ome-owl/raw/refs/heads/main/ontology/owl/ome_core/ome_core.owl.ttl> .
+                                         owl:imports <https://github.com/German-BioImaging/ome-owl/raw/refs/heads/main/ontology/owl/ome_core/ome_core.owl.ttl> .
 
 #################################################################
 #    Object Properties
 #################################################################
+
+###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/annotation
+ome_core:annotation rdfs:domain ome_core:Folder ,
+                                ome_core:WellSample .
+
 
 ###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/mapAnnotationValue
 ome_core:mapAnnotationValue rdfs:domain ome_core:Annotation ,
@@ -35,6 +40,10 @@ ome_core:nameSpace rdfs:domain ome_core:Annotation ,
 #################################################################
 #    Classes
 #################################################################
+
+###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/Folder
+ome_core:Folder rdfs:subClassOf owl:Thing .
+
 
 ###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/StructuredAnnotation
 ome_core:StructuredAnnotation rdfs:subClassOf ome_core:Annotation .
