@@ -11,7 +11,23 @@
 @base <https://www.openmicroscopy.org/omemap/> .
 
 <https://www.openmicroscopy.org/omemap> rdf:type owl:Ontology ;
-                                         owl:imports <https://github.com/German-BioImaging/ome-owl/raw/refs/heads/main/ontology/owl/ome_core/ome_core.owl.ttl> .
+                                         owl:imports ome_core: .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/annotation
+ome_core:annotation rdf:type owl:AnnotationProperty .
+
+
+###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/mapAnnotationValue
+ome_core:mapAnnotationValue rdf:type owl:AnnotationProperty .
+
+
+###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/nameSpace
+ome_core:nameSpace rdf:type owl:AnnotationProperty .
+
 
 #################################################################
 #    Object Properties
