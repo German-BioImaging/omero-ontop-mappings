@@ -16,7 +16,8 @@ omero obj map-set $MAP1 mapValue contributor "Test User"
 omero obj map-set $MAP1 mapValue subject "Test images"
 omero obj map-set $MAP1 mapValue provenance "Screenshots"
 
-TAG1=$(omero tag create "TestTag")
+TAG1=$(omero tag create --name "TestTag")
+omero obj new DatasetAnnotationLink parent=$DS1 child=$TAG1
 # TBD: Link to DS1
 
 MAP2=$( omero obj new MapAnnotation ns=http://purl.org/dc/terms/)
@@ -55,12 +56,14 @@ for img in $images1; do omero import $img -d $DS1; done
 for img in $images2; do omero import $img -d $DS2; done
 for img in $images3; do omero import $img -d $DS3; done
 
+TAG2=$(omero tag create --name "Screenshot")
 for image_index in {1..10}; do
     ann=$(omero obj new MapAnnotation ns="http://purl.org/dc/terms/")
     omero obj new ImageAnnotationLink parent=Image:$image_index child=$ann
     omero obj map-set $ann mapValue date "$(date)"
     omero obj map-set $ann mapValue contributor "Test User"
     omero obj map-set $ann mapValue subject "Unittest"
+    omero obj new ImageAnnotationLink parent=Image:$image_index child=$TAG2
 done
  
 
