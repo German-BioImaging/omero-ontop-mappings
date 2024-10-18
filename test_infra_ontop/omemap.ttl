@@ -53,6 +53,10 @@ ome_core:nameSpace rdfs:domain ome_core:Annotation ,
                                ome_core:MapAnnotation .
 
 
+###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/tagAnnotationValue
+ome_core:tagAnnotationValue rdf:type owl:DatatypeProperty .
+
+
 #################################################################
 #    Classes
 #################################################################
