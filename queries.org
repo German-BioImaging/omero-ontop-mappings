@@ -75,33 +75,59 @@
 #+end_src
 
 #+RESULTS:
-| ds                                 | prop                                                     | value                                                      |
-|------------------------------------+----------------------------------------------------------+------------------------------------------------------------|
-| https://example.org/site/Dataset/1 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 1                                                  |
-| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image | https://example.org/site/Image/1                           |
-| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image | https://example.org/site/Image/2                           |
-| https://example.org/site/Dataset/1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset |
-| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/provenance                      | Screenshots                                                |
-| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/subject                         | Test images                                                |
-| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/contributor                     | Test User                                                  |
-| https://example.org/site/Dataset/2 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 2                                                  |
-| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image | https://example.org/site/Image/3                           |
-| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image | https://example.org/site/Image/4                           |
-| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image | https://example.org/site/Image/5                           |
-| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image | https://example.org/site/Image/6                           |
-| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image | https://example.org/site/Image/7                           |
-| https://example.org/site/Dataset/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/provenance                      | Screenshots                                                |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/subject                         | Test images                                                |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/contributor                     | Test User                                                  |
-| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/contributor                     | Caligula                                                   |
-| https://example.org/site/Dataset/3 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 3                                                  |
-| https://example.org/site/Dataset/3 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image | https://example.org/site/Image/10                          |
-| https://example.org/site/Dataset/3 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image | https://example.org/site/Image/8                           |
-| https://example.org/site/Dataset/3 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image | https://example.org/site/Image/9                           |
-| https://example.org/site/Dataset/3 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset |
-| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/subject                         | OMERO Mapping                                              |
-| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/provenance                      | Screenshots                                                |
+| ds                                 | prop                                                                  | value                                                      |
+|------------------------------------+-----------------------------------------------------------------------+------------------------------------------------------------|
+| https://example.org/site/Dataset/1 | http://www.w3.org/2000/01/rdf-schema#label                            | Dataset 1                                                  |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image              | https://example.org/site/Image/1                           |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image              | https://example.org/site/Image/2                           |
+| https://example.org/site/Dataset/1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                       | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset |
+| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/provenance                                   | Screenshots                                                |
+| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/subject                                      | Test images                                                |
+| https://example.org/site/Dataset/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/tagAnnotationValue | TestTag                                                    |
+| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/contributor                                  | Test User                                                  |
+| https://example.org/site/Dataset/2 | http://www.w3.org/2000/01/rdf-schema#label                            | Dataset 2                                                  |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image              | https://example.org/site/Image/3                           |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image              | https://example.org/site/Image/4                           |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image              | https://example.org/site/Image/5                           |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image              | https://example.org/site/Image/6                           |
+| https://example.org/site/Dataset/2 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image              | https://example.org/site/Image/7                           |
+| https://example.org/site/Dataset/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                       | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/provenance                                   | Screenshots                                                |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/subject                                      | Test images                                                |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/contributor                                  | Test User                                                  |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/contributor                                  | Caligula                                                   |
+| https://example.org/site/Dataset/3 | http://www.w3.org/2000/01/rdf-schema#label                            | Dataset 3                                                  |
+| https://example.org/site/Dataset/3 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image              | https://example.org/site/Image/10                          |
+| https://example.org/site/Dataset/3 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image              | https://example.org/site/Image/8                           |
+| https://example.org/site/Dataset/3 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/image              | https://example.org/site/Image/9                           |
+| https://example.org/site/Dataset/3 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                       | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/subject                                      | OMERO Mapping                                              |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/provenance                                   | Screenshots                                                |
+
+* Image with owner
+:PROPERTIES:
+:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+  prefix vcard: <https://www.w3.org/2006/vcard/ns#>
+  select distinct * where {
+  ?ds a ome_core:Image .
+  ?ds ome_core:experimenterGroup ?owner .
+  }
+#+end_src
+
+#+RESULTS:
+| ds | owner |
+|----+-------|
 
 * Dataset number of type relations
 :PROPERTIES:

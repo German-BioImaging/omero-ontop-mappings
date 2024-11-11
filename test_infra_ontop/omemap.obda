@@ -7,6 +7,7 @@ xsd:		http://www.w3.org/2001/XMLSchema#
 foaf:		http://xmlns.com/foaf/0.1/
 obda:		https://w3id.org/obda/vocabulary#
 rdfs:		http://www.w3.org/2000/01/rdf-schema#
+vcard:		http://www.w3.org/2006/vcard/ns#
 omemap:		https://www.openmicroscopy.org/omemap#
 ome_core:	http://www.openmicroscopy.org/rdf/2016-06/ome_core/
 ome_instance:	https://example.org/site/
@@ -45,11 +46,12 @@ source		select
 			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id join datasetimagelink on dataset.id = datasetimagelink.parent;
 
 mappingId	MAPID-Image
-target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; <{map_key}> {map_value} . 
+target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; <{map_key}> {map_value} ; ome_core:experimenterGroup foaf:Person/{owner_id} . 
 source		select
 			image.id as image_id,
 			imageannotationlink.child as annotation_id,
 			image.name as image_name,
+			image.owner_id as owner_id,
 			image.description as image_description,
 			concat(annotation.ns, annotation_mapvalue.name) as map_key,
 			annotation_mapvalue.value as map_value
@@ -114,9 +116,5 @@ source		select
 			from project
 			join projectannotationlink on projectannotationlink.parent = project.id
 			join annotation on projectannotationlink.child = annotation.id where annotation.textvalue is not NULL;
-
-mappingId	MAPID-c7b7cd431c564bf58269ff190295c601
-target		ome_instance:Experimenter/{experimenter_id} a foaf:Person . 
-source		select experimenter.id as experimenter_id from experimenter;
 ]]
 
