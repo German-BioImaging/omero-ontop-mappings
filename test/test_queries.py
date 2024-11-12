@@ -3,6 +3,7 @@ import os
 import sys
 import shutil
 import requests
+import pandas
 from urllib import parse
 
 import unittest
@@ -18,20 +19,21 @@ except:
     raise RuntimeError("Could not connect to ontop endpoint %s. Is ontop endpoint up and running?" % ENDPOINT)
 
 class QueriesTest(unittest.TestCase):
-    
+    """ :class QueriesTest: Test class hosting all test queries. """
+
     def setUp(self):
         """ Setup run at the beginning of each test method."""
-        
+
         # Setup a graph.
         self._graph = Graph()
-        
+
         # Empty list to collect files and dirs created during tests. These will be
         #+ deleted after the test ends (see `tearDown()` below).
         self._thrash = []
-        
+
     def tearDown(self):
         """ Teardown method run at the end of each test method. """
-        
+
         for item in self._thrash:
             if os.path.isfile(item):
                 os.remove(item)
@@ -53,7 +55,6 @@ select (count(distinct ?tp) as ?n_types) where {{
     }}
 }}
 """
-        print(query_string)
         response = graph.query(query_string)
 
         for r in response:
@@ -75,7 +76,6 @@ select distinct ?tp where {{
     }}
 }}
 """
-        print(query_string)
         response = self._graph.query(query_string)
 
         for r in response:
@@ -84,6 +84,7 @@ select distinct ?tp where {{
         self.assertIn(URIRef("http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset"), [r.tp for r in response])
 
     def test_number_of_projects_datasets_images(self):
+        """ Check a query on the count of projects, datasets, and images. """
 
         graph = self._graph
 
@@ -125,7 +126,7 @@ select ?n_projects ?n_datasets ?n_images where {{
 
     def test_project(self):
         """ Test number of projects in the VKG. """
-        
+
         graph = self._graph
 
         query_string = f"""
@@ -340,6 +341,62 @@ select ?n_projects ?n_datasets ?n_images where {{
         self.assertEqual(len(set([b['tag']['value'] for b in bindings])), 1)
         self.assertEqual(bindings[0]['tag']['value'], "Screenshot")
 
+    def test_image_properties(self):
+        """ Check Image instances have all expected properties. """
+        query = """prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+SELECT distinct ?s ?prop WHERE {
+    ?s a ome_core:Image;
+        ?prop ?val .
+}
+"""
+        response_df = run_query(query)
+
+        expected_properties = [
+            "http://www.w3.org/2000/01/rdf-schema#label",
+            "http://www.openmicroscopy.org/rdf/2016-06/ome_core/tagAnnotationValue",
+            "http://www.openmicroscopy.org/rdf/2016-06/ome_core/experimenterGroup",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+            "http://purl.org/dc/terms/subject",
+            "http://purl.org/dc/terms/contributor",
+            "http://purl.org/dc/terms/date"
+        ]
+
+        for expected_property in expected_properties:
+            self.assertIn(expected_property, response_df.prop.unique())
+
+        print(response_df)
+
+
+def run_query(query_string, endpoint=ENDPOINT, return_as_df=True):
+    """ Run the query against the configured endpoint.
+
+    :param query_string: The unescaped sparql query.
+    :example query_string: 'select * where {?s ?p ?o .} limit 10'
+
+    :param endpoint: The sparql endpoint URL.
+
+    :param return_as_df: if true: return query results as pandas dataframe, if false: return as returned from requests.get().
+    """
+
+    escapedQuery = parse.quote(query_string)
+    requestURL = ENDPOINT + "?query=" + escapedQuery
+
+    response = requests.get(requestURL, timeout=600).json()
+
+    if return_as_df:
+        return response_frame(response)
+
+    return response
+
+
+def response_frame(response):
+    """ Convert http response to pandas dataframe. """
+
+    response_vars = response['head']['vars']
+    response_bindings = response['results']['bindings']
+    tmp = [dict([(var,binding[var]['value']) for var in response_vars]) for binding in response_bindings]
+
+    return pandas.DataFrame(data=tmp)
 
 if __name__ == "__main__":
     unittest.main()
