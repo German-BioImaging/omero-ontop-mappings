@@ -222,6 +222,39 @@ ORDER BY table_name;
 | wellreagentlink                                  |
 | wellsample                                       |
 
+* All in columns in image
+:PROPERTIES:
+:ID:       cd51a3b2-086b-44c8-a129-284dea4d5306
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select column_name from information_schema.columns where table_name='image';
+#+end_src
+
+#+RESULTS:
+| column_name        |
+|--------------------|
+| id                 |
+| acquisitiondate    |
+| archived           |
+| description        |
+| permissions        |
+| name               |
+| partial            |
+| series             |
+| version            |
+| creation_id        |
+| external_id        |
+| group_id           |
+| owner_id           |
+| update_id          |
+| experiment         |
+| fileset            |
+| format             |
+| imagingenvironment |
+| instrument         |
+| objectivesettings  |
+| stagelabel         |
+
 * Image
 :PROPERTIES:
 :ID:       71a91350-a2a8-4479-bfad-19325d02fd25
