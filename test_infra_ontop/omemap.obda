@@ -1,5 +1,6 @@
 [PrefixDeclaration]
 :		https://www.openmicroscopy.org/omemap/
+dc:		http://purl.org/dc/elements/1.1/
 owl:		http://www.w3.org/2002/07/owl#
 rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
 xml:		http://www.w3.org/XML/1998/namespace
@@ -46,9 +47,10 @@ source		select
 			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id join datasetimagelink on dataset.id = datasetimagelink.parent;
 
 mappingId	MAPID-Image
-target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; <{map_key}> {map_value} ; ome_core:experimenterGroup foaf:Person/{owner_id} . 
+target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; <{map_key}> {map_value} ; ome_core:experimenterGroup foaf:Person/{owner_id} ; ome_core:acquisitionDate {image_acquisitiondate}^^xsd:dateTime ; dc:identifier {image_id}^^xsd:string . 
 source		select
 			image.id as image_id,
+			image.acquisitiondate as image_acquisitiondate,
 			imageannotationlink.child as annotation_id,
 			image.name as image_name,
 			image.owner_id as owner_id,

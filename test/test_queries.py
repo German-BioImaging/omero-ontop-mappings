@@ -352,6 +352,7 @@ SELECT distinct ?s ?prop WHERE {
         response_df = run_query(query)
 
         expected_properties = [
+            "http://purl.org/dc/elements/1.1/identifier",
             "http://www.w3.org/2000/01/rdf-schema#label",
             "http://www.openmicroscopy.org/rdf/2016-06/ome_core/tagAnnotationValue",
             "http://www.openmicroscopy.org/rdf/2016-06/ome_core/experimenterGroup",
