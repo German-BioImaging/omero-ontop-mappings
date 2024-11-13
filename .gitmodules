@@ -1,6 +1,6 @@
 [submodule "ome-owl"]
 	path = ome-owl
-	url = git@gitlab.com:CFGrote/ome-owl
+	url = git@github.com:German-BioImaging/ome-owl.git
 [submodule ".omero"]
 	path = .omero
 	url = https://github.com/openmicroscopy/omero-test-infra
