@@ -47,13 +47,12 @@ source		select
 			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id join datasetimagelink on dataset.id = datasetimagelink.parent;
 
 mappingId	MAPID-Image
-target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; <{map_key}> {map_value} ; ome_core:experimenterGroup foaf:Person/{owner_id} ; ome_core:acquisitionDate {image_acquisitiondate}^^xsd:dateTime ; dc:identifier {image_id}^^xsd:string . 
+target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; <{map_key}> {map_value} ; ome_core:acquisitionDate {image_acquisitiondate}^^xsd:dateTime ; dc:identifier {image_id}^^xsd:string . 
 source		select
 			image.id as image_id,
 			image.acquisitiondate as image_acquisitiondate,
 			imageannotationlink.child as annotation_id,
 			image.name as image_name,
-			image.owner_id as owner_id,
 			image.description as image_description,
 			concat(annotation.ns, annotation_mapvalue.name) as map_key,
 			annotation_mapvalue.value as map_value
