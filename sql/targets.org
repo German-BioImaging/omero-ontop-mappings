@@ -222,6 +222,52 @@ ORDER BY table_name;
 | wellreagentlink                                  |
 | wellsample                                       |
 
+* All in columns in roi
+:PROPERTIES:
+:ID:       7ba37cb7-5374-4702-a8e4-9002f4af62ef
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select column_name from information_schema.columns where table_name='roi';
+#+end_src
+
+#+RESULTS:
+| column_name |
+|-------------|
+| id          |
+| description |
+| permissions |
+| name        |
+| version     |
+| creation_id |
+| external_id |
+| group_id    |
+| owner_id    |
+| update_id   |
+| image       |
+| source      |
+
+* Image and ROI
+:PROPERTIES:
+:ID:       5c84a6e2-b418-4c21-b455-ee4a76475e60
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select image.id as image_id, roi.id as roi_id from image left join roi on roi.image = image.id;
+#+end_src
+
+#+RESULTS:
+| image_id | roi_id |
+|----------+--------|
+|        5 |      1 |
+|       10 |        |
+|        2 |        |
+|        8 |        |
+|        6 |        |
+|        4 |        |
+|        1 |        |
+|        3 |        |
+|        9 |        |
+|        7 |        |
+
 * All in columns in image
 :PROPERTIES:
 :ID:       cd51a3b2-086b-44c8-a129-284dea4d5306

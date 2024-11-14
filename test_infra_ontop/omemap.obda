@@ -117,5 +117,13 @@ source		select
 			from project
 			join projectannotationlink on projectannotationlink.parent = project.id
 			join annotation on projectannotationlink.child = annotation.id where annotation.textvalue is not NULL;
+
+mappingId	MAPID-a5bdd29d4c994a6bbb3acdc666403abd
+target		ome_instance:RegionOfInterest/{roi_id} a ome_core:RegionOfInterest ; dc:identifier {roi_id}^^xsd:string . 
+source		select id as roi_id from roi;
+
+mappingId	MAPID-roi
+target		ome_instance:RegionOfInterest/{roi_id} a ome_core:RegionOfInterest ; ome_core:image ome_instance:Image/{roi_image_id} ; dc:identifier {roi_id}^^xsd:string . 
+source		select id as roi_id, image as roi_image_id from roi ;
 ]]
 

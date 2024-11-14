@@ -8,6 +8,18 @@ from urllib import parse
 
 import unittest
 
+ENDPOINT = "http://localhost:8080/sparql"
+
+# Check if endpoint is reachable.
+try:
+    response = requests.get("/".join(os.path.split(ENDPOINT)[:-1]))
+    assert response.status_code == 200
+
+except: 
+    raise RuntimeError("Could not connect to ontop endpoint %s. Is ontop endpoint up and running?" % ENDPOINT)
+
+
+
 # Test helpers
 def run_query(query_string, endpoint=ENDPOINT, return_as_df=True):
     """ Run the query against the configured endpoint.
@@ -45,16 +57,6 @@ def response_frame(response):
     tmp = [dict([(var,binding[var]['value']) for var in response_vars]) for binding in response_bindings]
 
     return pandas.DataFrame(data=tmp)
-
-ENDPOINT = "http://localhost:8080/sparql"
-
-# Check if endpoint is reachable.
-try:
-    response = requests.get("/".join(os.path.split(ENDPOINT)[:-1]))
-    assert response.status_code == 200
-
-except: 
-    raise RuntimeError("Could not connect to ontop endpoint %s. Is ontop endpoint up and running?" % ENDPOINT)
 
 class QueriesTest(unittest.TestCase):
     """ :class QueriesTest: Test class hosting all test queries. """
@@ -95,8 +97,6 @@ select (count(distinct ?tp) as ?n_types) where {{
 """
         response = graph.query(query_string)
 
-        for r in response:
-
         self.assertEqual(len(response), 1)
         self.assertEqual(int([r.n_types for r in response][0]), 1)
 
@@ -114,8 +114,6 @@ select distinct ?tp where {{
 }}
 """
         response = self._graph.query(query_string)
-
-        for r in response:
 
         self.assertIn(URIRef("http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset"), [r.tp for r in response])
 
@@ -222,7 +220,6 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Run the query.
         response = graph.query(query_string)
-        for r in response:
 
         # Test.
         self.assertEqual(len(response), 10)
@@ -273,7 +270,6 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Run the query.
         response = graph.query(query_string)
-        for r in response:
 
         self.assertEqual(len(response), 10)
 
@@ -299,8 +295,6 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Run the query.
         response = graph.query(query_string)
 
-        for r in response:
-
         self.assertEqual(len(response), 1)
 
     def test_dataset_key_value(self):
@@ -324,8 +318,6 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Run the query.
         response = graph.query(query_string)
-
-        for r in response:
 
         self.assertEqual(len(response), 3)
 
@@ -373,6 +365,25 @@ select ?n_projects ?n_datasets ?n_images where {{
         self.assertEqual(len(set([b['tag']['value'] for b in bindings])), 1)
         self.assertEqual(bindings[0]['tag']['value'], "Screenshot")
 
+    def test_image_roi(self):
+        """ Test querying image with ROI. """
+
+        query = """prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+SELECT distinct ?img ?roi WHERE {
+    ?img a ome_core:Image;
+         ^ome_core:image ?roi .
+      ?roi a ome_core:RegionOfInterest .
+}
+        order by ?img
+"""
+        results = run_query(query)
+
+        # Check return values.
+        self.assertEqual(results.loc[0, "img"], "https://example.org/site/Image/5")
+        self.assertEqual(results.loc[0, "roi"], "https://example.org/site/RegionOfInterest/1")
+        self.assertEqual(results.loc[1, "img"], "https://example.org/site/Image/6")
+        self.assertEqual(results.loc[1, "roi"], "https://example.org/site/RegionOfInterest/2")
+
     def test_image_properties(self):
         """ Check Image instances have all expected properties. """
         query = """prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
@@ -390,7 +401,8 @@ SELECT distinct ?s ?prop WHERE {
             "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
             "http://purl.org/dc/terms/subject",
             "http://purl.org/dc/terms/contributor",
-            "http://purl.org/dc/terms/date"
+            "http://purl.org/dc/terms/date",
+            "http://www.openmicroscopy.org/rdf/2016-06/ome_core/regionOfInterest",
         ]
 
         for expected_property in expected_properties:

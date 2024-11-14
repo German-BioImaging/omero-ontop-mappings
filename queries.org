@@ -106,6 +106,34 @@
 
 * Image with owner
 :PROPERTIES:
+:ID:       c856598c-c952-4964-b4b2-40b4a1269afc
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  prefix vcard: <https://www.w3.org/2006/vcard/ns#>
+  prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+  SELECT distinct ?img ?roi WHERE {
+      ?img a ome_core:Image;
+          ^ome_core:image ?roi .
+      ?roi a ome_core:RegionOfInterest .
+  }
+  #+end_src
+
+#+RESULTS:
+| img                              | roi                                         |
+|----------------------------------+---------------------------------------------|
+| https://example.org/site/Image/5 | https://example.org/site/RegionOfInterest/1 |
+| https://example.org/site/Image/6 | https://example.org/site/RegionOfInterest/2 |
+
+* Image with owner
+:PROPERTIES:
 :ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
 :END:
 #+begin_src sparql :url http://localhost:8080/sparql
