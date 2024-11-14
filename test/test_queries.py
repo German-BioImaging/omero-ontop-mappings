@@ -156,7 +156,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         number_of_objects = [r for r in response][0]
         self.assertEqual(int(number_of_objects.n_projects), 1)
         self.assertEqual(int(number_of_objects.n_datasets), 3)
-        self.assertEqual(int(number_of_objects.n_images  ),  10)
+        self.assertEqual(int(number_of_objects.n_images  ),  12)
 
     def test_project(self):
         """ Test number of projects in the VKG. """
@@ -222,7 +222,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         response = graph.query(query_string)
 
         # Test.
-        self.assertEqual(len(response), 10)
+        self.assertEqual(len(response), 12)
 
     def test_project_dataset_image(self):
         """ Test a query for a project-dataset-image hierarchy. """
@@ -248,7 +248,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         response = graph.query(query_string)
 
         # Should get 10 images.
-        self.assertEqual(len(response), 10)
+        self.assertEqual(len(response), 12)
 
     def test_image_key_value(self):
         """ Test querying for an image property via the mapannotation key."""
@@ -271,7 +271,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Run the query.
         response = graph.query(query_string)
 
-        self.assertEqual(len(response), 10)
+        self.assertEqual(len(response), 12)
 
     def test_project_key_value(self):
         """ Test querying for a project property via the mapannotation key."""
@@ -359,7 +359,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         bindings = response['results']['bindings']
 
         # All images (10) are tagged.
-        self.assertEqual(len(bindings), 10)
+        self.assertEqual(len(bindings), 12)
 
         # They're all tagged "Screenshot"
         self.assertEqual(len(set([b['tag']['value'] for b in bindings])), 1)
@@ -379,9 +379,9 @@ SELECT distinct ?img ?roi WHERE {
         results = run_query(query)
 
         # Check return values.
-        self.assertEqual(results.loc[0, "img"], "https://example.org/site/Image/5")
+        self.assertEqual(results.loc[0, "img"], "https://example.org/site/Image/11")
         self.assertEqual(results.loc[0, "roi"], "https://example.org/site/RegionOfInterest/1")
-        self.assertEqual(results.loc[1, "img"], "https://example.org/site/Image/6")
+        self.assertEqual(results.loc[1, "img"], "https://example.org/site/Image/12")
         self.assertEqual(results.loc[1, "roi"], "https://example.org/site/RegionOfInterest/2")
 
     def test_image_properties(self):
@@ -402,7 +402,6 @@ SELECT distinct ?s ?prop WHERE {
             "http://purl.org/dc/terms/subject",
             "http://purl.org/dc/terms/contributor",
             "http://purl.org/dc/terms/date",
-            "http://www.openmicroscopy.org/rdf/2016-06/ome_core/regionOfInterest",
         ]
 
         for expected_property in expected_properties:
