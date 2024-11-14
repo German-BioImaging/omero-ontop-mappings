@@ -8,6 +8,44 @@ from urllib import parse
 
 import unittest
 
+# Test helpers
+def run_query(query_string, endpoint=ENDPOINT, return_as_df=True):
+    """ Run the query against the configured endpoint.
+
+    :param query_string: The unescaped sparql query.
+    :example query_string: 'select * where {?s ?p ?o .} limit 10'
+
+    :param endpoint: The sparql endpoint URL.
+
+    :param return_as_df: if true: return query results as pandas dataframe, if false: return as returned from requests.get().
+    """
+
+    escapedQuery = parse.quote(query_string)
+    requestURL = ENDPOINT + "?query=" + escapedQuery
+
+    response = requests.get(requestURL, timeout=600).json()
+
+    if return_as_df:
+        return response_frame(response)
+
+    return response
+
+
+def response_frame(response):
+    """ Convert http response to pandas dataframe.
+
+    :param response: The return from a requests.get() .
+
+    :return: The values of response['results']['bindings'] and vars as a pandas.DataFrame.
+    :rtype: pandas.DataFrame
+    """
+
+    response_vars = response['head']['vars']
+    response_bindings = response['results']['bindings']
+    tmp = [dict([(var,binding[var]['value']) for var in response_vars]) for binding in response_bindings]
+
+    return pandas.DataFrame(data=tmp)
+
 ENDPOINT = "http://localhost:8080/sparql"
 
 # Check if endpoint is reachable.
@@ -58,7 +96,6 @@ select (count(distinct ?tp) as ?n_types) where {{
         response = graph.query(query_string)
 
         for r in response:
-            print(r)
 
         self.assertEqual(len(response), 1)
         self.assertEqual(int([r.n_types for r in response][0]), 1)
@@ -79,7 +116,6 @@ select distinct ?tp where {{
         response = self._graph.query(query_string)
 
         for r in response:
-            print(r)
 
         self.assertIn(URIRef("http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset"), [r.tp for r in response])
 
@@ -187,7 +223,6 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Run the query.
         response = graph.query(query_string)
         for r in response:
-            print(r)
 
         # Test.
         self.assertEqual(len(response), 10)
@@ -239,7 +274,6 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Run the query.
         response = graph.query(query_string)
         for r in response:
-            print(r.img, r.author, r.subject)
 
         self.assertEqual(len(response), 10)
 
@@ -266,7 +300,6 @@ select ?n_projects ?n_datasets ?n_images where {{
         response = graph.query(query_string)
 
         for r in response:
-            print(r.project, r.author, r.subject, r.provenance)
 
         self.assertEqual(len(response), 1)
 
@@ -293,7 +326,6 @@ select ?n_projects ?n_datasets ?n_images where {{
         response = graph.query(query_string)
 
         for r in response:
-            print(r.dataset, r.author, r.subject, r.provenance)
 
         self.assertEqual(len(response), 3)
 
@@ -363,40 +395,6 @@ SELECT distinct ?s ?prop WHERE {
 
         for expected_property in expected_properties:
             self.assertIn(expected_property, response_df.prop.unique())
-
-        print(response_df)
-
-
-def run_query(query_string, endpoint=ENDPOINT, return_as_df=True):
-    """ Run the query against the configured endpoint.
-
-    :param query_string: The unescaped sparql query.
-    :example query_string: 'select * where {?s ?p ?o .} limit 10'
-
-    :param endpoint: The sparql endpoint URL.
-
-    :param return_as_df: if true: return query results as pandas dataframe, if false: return as returned from requests.get().
-    """
-
-    escapedQuery = parse.quote(query_string)
-    requestURL = ENDPOINT + "?query=" + escapedQuery
-
-    response = requests.get(requestURL, timeout=600).json()
-
-    if return_as_df:
-        return response_frame(response)
-
-    return response
-
-
-def response_frame(response):
-    """ Convert http response to pandas dataframe. """
-
-    response_vars = response['head']['vars']
-    response_bindings = response['results']['bindings']
-    tmp = [dict([(var,binding[var]['value']) for var in response_vars]) for binding in response_bindings]
-
-    return pandas.DataFrame(data=tmp)
 
 if __name__ == "__main__":
     unittest.main()
