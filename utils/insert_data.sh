@@ -56,6 +56,10 @@ for img in $images1; do omero import $img -d $DS1; done
 for img in $images2; do omero import $img -d $DS2; done
 for img in $images3; do omero import $img -d $DS3; done
 
+# Import images with roi into Dataset:2
+images4=$(find img/ -name "*.ome.tif" | xargs -i realpath {}) 
+for img in $images4; do omero import $img -d $DS2; done
+
 TAG2=$(omero tag create --name "Screenshot")
 for image_index in {1..10}; do
     ann=$(omero obj new MapAnnotation ns="http://purl.org/dc/terms/")

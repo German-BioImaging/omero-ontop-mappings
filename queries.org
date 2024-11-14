@@ -127,10 +127,13 @@
   #+end_src
 
 #+RESULTS:
-| img                              | roi                                         |
-|----------------------------------+---------------------------------------------|
-| https://example.org/site/Image/5 | https://example.org/site/RegionOfInterest/1 |
-| https://example.org/site/Image/6 | https://example.org/site/RegionOfInterest/2 |
+| img                               | roi                                         |
+|-----------------------------------+---------------------------------------------|
+| https://example.org/site/Image/5  | https://example.org/site/RegionOfInterest/1 |
+| https://example.org/site/Image/6  | https://example.org/site/RegionOfInterest/2 |
+| https://example.org/site/Image/11 | https://example.org/site/RegionOfInterest/3 |
+| https://example.org/site/Image/22 | https://example.org/site/RegionOfInterest/4 |
+| https://example.org/site/Image/23 | https://example.org/site/RegionOfInterest/5 |
 
 * Image with owner
 :PROPERTIES:

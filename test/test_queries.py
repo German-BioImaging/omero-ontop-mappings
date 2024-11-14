@@ -379,9 +379,9 @@ SELECT distinct ?img ?roi WHERE {
         results = run_query(query)
 
         # Check return values.
-        self.assertEqual(results.loc[0, "img"], "https://example.org/site/Image/5")
+        self.assertEqual(results.loc[0, "img"], "https://example.org/site/Image/11")
         self.assertEqual(results.loc[0, "roi"], "https://example.org/site/RegionOfInterest/1")
-        self.assertEqual(results.loc[1, "img"], "https://example.org/site/Image/6")
+        self.assertEqual(results.loc[1, "img"], "https://example.org/site/Image/12")
         self.assertEqual(results.loc[1, "roi"], "https://example.org/site/RegionOfInterest/2")
 
     def test_image_properties(self):
