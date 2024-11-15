@@ -1,0 +1,54 @@
+# Install and test and OMERO plugin e.g. a Web app, a CLI plugin or a library
+#
+# This workflow will install omero-test-infra, start an OMERO environment
+# including database, server and web deployment, configure the OMERO plugin
+# and run integration tests.
+#
+# 1. Set up the stage variable depending on the plugin. Supported stages
+# are: app, cli, scripts, lib, srv
+#
+# 2. Adjust the cron schedule as necessary
+
+name: OMERO
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * 0'
+
+jobs:
+  test:
+    name: Run integration tests against OMERO
+    runs-on: ubuntu-latest
+    env:
+      STAGE: app
+      NOCLEAN: true
+      VERBOSE: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkout omero-test-infra
+        uses: actions/checkout@master
+        with:
+          repository: ome/omero-test-infra
+          path: .omero
+          ref: ${{ secrets.OMERO_TEST_INFRA_REF }}
+      - name: Install java
+        run: sudo apt install default-jdk -y
+      - name: Install omero-py
+        run: utils/install_omero-py.sh
+      - name: ontop-cli
+        run: utils/install_ontop.sh
+      - name: patch portmapping
+        run: cp utils/portmapping.patch .omero && cd .omero && patch -p1 < portmapping.patch && git diff
+      - name: check python
+        run: $(which python) --version
+      - name: start omero
+        run: .omero/docker dev start_up
+      - name: check processes
+        run: ps ax | grep docker
+      - name: test omero web
+        run: wget http://localhost:14080 && ls -lrt
+      - name: Launch omero, insert data and launch ontop
+        run: bash utils/omero-ontop.sh
+      - name: pytest
+        run: pytest

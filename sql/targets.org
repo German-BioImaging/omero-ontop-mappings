@@ -1,0 +1,387 @@
+* All tables
+:PROPERTIES:
+:ID:       1833555d-5364-4fe1-aab7-d088644b0e87
+:END:
+#+begin_src  sql :engine postgres :dbhost micropop046 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+SELECT table_name FROM information_schema.tables where table_schema='public'
+ORDER BY table_name;
+#+end_src
+
+#+RESULTS:
+| table_name                                       |
+|--------------------------------------------------|
+| _current_admin_privileges                        |
+| _fs_deletelog                                    |
+| _lock_ids                                        |
+| _reindexing_required                             |
+| _roles                                           |
+| acquisitionmode                                  |
+| adminprivilege                                   |
+| affinetransform                                  |
+| annotation                                       |
+| annotation_mapvalue                              |
+| annotationannotationlink                         |
+| arc                                              |
+| arctype                                          |
+| binning                                          |
+| channel                                          |
+| channelannotationlink                            |
+| channelbinding                                   |
+| checksumalgorithm                                |
+| codomainmapcontext                               |
+| configuration                                    |
+| contrastmethod                                   |
+| contraststretchingcontext                        |
+| correction                                       |
+| count_annotation_annotationlinks_by_owner        |
+| count_channel_annotationlinks_by_owner           |
+| count_dataset_annotationlinks_by_owner           |
+| count_dataset_imagelinks_by_owner                |
+| count_dataset_projectlinks_by_owner              |
+| count_detector_annotationlinks_by_owner          |
+| count_dichroic_annotationlinks_by_owner          |
+| count_experimenter_annotationlinks_by_owner      |
+| count_experimentergroup_annotationlinks_by_owner |
+| count_fileset_annotationlinks_by_owner           |
+| count_fileset_joblinks_by_owner                  |
+| count_filter_annotationlinks_by_owner            |
+| count_filter_emissionfilterlink_by_owner         |
+| count_filter_excitationfilterlink_by_owner       |
+| count_filterset_emissionfilterlink_by_owner      |
+| count_filterset_excitationfilterlink_by_owner    |
+| count_folder_annotationlinks_by_owner            |
+| count_folder_imagelinks_by_owner                 |
+| count_folder_roilinks_by_owner                   |
+| count_image_annotationlinks_by_owner             |
+| count_image_datasetlinks_by_owner                |
+| count_image_folderlinks_by_owner                 |
+| count_instrument_annotationlinks_by_owner        |
+| count_job_originalfilelinks_by_owner             |
+| count_lightpath_annotationlinks_by_owner         |
+| count_lightpath_emissionfilterlink_by_owner      |
+| count_lightpath_excitationfilterlink_by_owner    |
+| count_lightsource_annotationlinks_by_owner       |
+| count_namespace_annotationlinks_by_owner         |
+| count_node_annotationlinks_by_owner              |
+| count_objective_annotationlinks_by_owner         |
+| count_originalfile_annotationlinks_by_owner      |
+| count_originalfile_pixelsfilemaps_by_owner       |
+| count_pixels_pixelsfilemaps_by_owner             |
+| count_planeinfo_annotationlinks_by_owner         |
+| count_plate_annotationlinks_by_owner             |
+| count_plate_screenlinks_by_owner                 |
+| count_plateacquisition_annotationlinks_by_owner  |
+| count_project_annotationlinks_by_owner           |
+| count_project_datasetlinks_by_owner              |
+| count_reagent_annotationlinks_by_owner           |
+| count_reagent_welllinks_by_owner                 |
+| count_roi_annotationlinks_by_owner               |
+| count_roi_folderlinks_by_owner                   |
+| count_screen_annotationlinks_by_owner            |
+| count_screen_platelinks_by_owner                 |
+| count_session_annotationlinks_by_owner           |
+| count_shape_annotationlinks_by_owner             |
+| count_well_annotationlinks_by_owner              |
+| count_well_reagentlinks_by_owner                 |
+| dataset                                          |
+| datasetannotationlink                            |
+| datasetimagelink                                 |
+| dbpatch                                          |
+| detector                                         |
+| detectorannotationlink                           |
+| detectorsettings                                 |
+| detectortype                                     |
+| dichroic                                         |
+| dichroicannotationlink                           |
+| dimensionorder                                   |
+| event                                            |
+| eventlog                                         |
+| eventtype                                        |
+| experiment                                       |
+| experimenter                                     |
+| experimenter_config                              |
+| experimenterannotationlink                       |
+| experimentergroup                                |
+| experimentergroup_config                         |
+| experimentergroupannotationlink                  |
+| experimenttype                                   |
+| externalinfo                                     |
+| family                                           |
+| filament                                         |
+| filamenttype                                     |
+| fileset                                          |
+| filesetannotationlink                            |
+| filesetentry                                     |
+| filesetjoblink                                   |
+| filter                                           |
+| filterannotationlink                             |
+| filterset                                        |
+| filtersetemissionfilterlink                      |
+| filtersetexcitationfilterlink                    |
+| filtertype                                       |
+| folder                                           |
+| folderannotationlink                             |
+| folderimagelink                                  |
+| folderroilink                                    |
+| format                                           |
+| genericexcitationsource                          |
+| genericexcitationsource_map                      |
+| groupexperimentermap                             |
+| illumination                                     |
+| image                                            |
+| imageannotationlink                              |
+| imagingenvironment                               |
+| imagingenvironment_map                           |
+| immersion                                        |
+| importjob                                        |
+| indexingjob                                      |
+| instrument                                       |
+| instrumentannotationlink                         |
+| integritycheckjob                                |
+| job                                              |
+| joboriginalfilelink                              |
+| jobstatus                                        |
+| laser                                            |
+| lasermedium                                      |
+| lasertype                                        |
+| lightemittingdiode                               |
+| lightpath                                        |
+| lightpathannotationlink                          |
+| lightpathemissionfilterlink                      |
+| lightpathexcitationfilterlink                    |
+| lightsettings                                    |
+| lightsource                                      |
+| lightsourceannotationlink                        |
+| link                                             |
+| logicalchannel                                   |
+| medium                                           |
+| metadataimportjob                                |
+| metadataimportjob_versioninfo                    |
+| microbeammanipulation                            |
+| microbeammanipulationtype                        |
+| microscope                                       |
+| microscopetype                                   |
+| namespace                                        |
+| namespaceannotationlink                          |
+| node                                             |
+| nodeannotationlink                               |
+| objective                                        |
+| objectiveannotationlink                          |
+| objectivesettings                                |
+| originalfile                                     |
+| originalfileannotationlink                       |
+| otf                                              |
+| parsejob                                         |
+| password                                         |
+| photometricinterpretation                        |
+| pixeldatajob                                     |
+| pixels                                           |
+| pixelsoriginalfilemap                            |
+| pixelstype                                       |
+| planeinfo                                        |
+| planeinfoannotationlink                          |
+| planeslicingcontext                              |
+| plate                                            |
+| plateacquisition                                 |
+| plateacquisitionannotationlink                   |
+| plateannotationlink                              |
+| project                                          |
+| projectannotationlink                            |
+| projectdatasetlink                               |
+| projectionaxis                                   |
+| projectiondef                                    |
+| projectiontype                                   |
+| pulse                                            |
+| quantumdef                                       |
+| reagent                                          |
+| reagentannotationlink                            |
+| renderingdef                                     |
+| renderingmodel                                   |
+| reverseintensitycontext                          |
+| roi                                              |
+| roiannotationlink                                |
+| screen                                           |
+| screenannotationlink                             |
+| screenplatelink                                  |
+| scriptjob                                        |
+| session                                          |
+| sessionannotationlink                            |
+| shape                                            |
+| shapeannotationlink                              |
+| share                                            |
+| sharemember                                      |
+| stagelabel                                       |
+| statsinfo                                        |
+| thumbnail                                        |
+| thumbnailgenerationjob                           |
+| transmittancerange                               |
+| uploadjob                                        |
+| uploadjob_versioninfo                            |
+| well                                             |
+| wellannotationlink                               |
+| wellreagentlink                                  |
+| wellsample                                       |
+
+* All in columns in roi
+:PROPERTIES:
+:ID:       7ba37cb7-5374-4702-a8e4-9002f4af62ef
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select column_name from information_schema.columns where table_name='roi';
+#+end_src
+
+#+RESULTS:
+| column_name |
+|-------------|
+| id          |
+| description |
+| permissions |
+| name        |
+| version     |
+| creation_id |
+| external_id |
+| group_id    |
+| owner_id    |
+| update_id   |
+| image       |
+| source      |
+
+* Image and ROI
+:PROPERTIES:
+:ID:       5c84a6e2-b418-4c21-b455-ee4a76475e60
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select image.id as image_id, roi.id as roi_id from image left join roi on roi.image = image.id;
+#+end_src
+
+#+RESULTS:
+| image_id | roi_id |
+|----------+--------|
+|        5 |      1 |
+|       10 |        |
+|        2 |        |
+|        8 |        |
+|        6 |        |
+|        4 |        |
+|        1 |        |
+|        3 |        |
+|        9 |        |
+|        7 |        |
+
+* All in columns in image
+:PROPERTIES:
+:ID:       cd51a3b2-086b-44c8-a129-284dea4d5306
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select column_name from information_schema.columns where table_name='image';
+#+end_src
+
+#+RESULTS:
+| column_name        |
+|--------------------|
+| id                 |
+| acquisitiondate    |
+| archived           |
+| description        |
+| permissions        |
+| name               |
+| partial            |
+| series             |
+| version            |
+| creation_id        |
+| external_id        |
+| group_id           |
+| owner_id           |
+| update_id          |
+| experiment         |
+| fileset            |
+| format             |
+| imagingenvironment |
+| instrument         |
+| objectivesettings  |
+| stagelabel         |
+
+* Image
+:PROPERTIES:
+:ID:       71a91350-a2a8-4479-bfad-19325d02fd25
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select image.id, concat(annotation.ns, annotation_mapvalue.name) as key, annotation_mapvalue.value
+  from image
+  join imageannotationlink on image.id=imageannotationlink.parent
+  join annotation on imageannotationlink.child = annotation.id
+  join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id
+#+end_src
+
+#+RESULTS:
+|---|
+
+* Folder
+:PROPERTIES:
+:ID:       62965f07-a737-4050-b2ee-6418baff21f3
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select * from folder;
+#+end_src
+
+#+RESULTS:
+| id | description | permissions | name | version | creation_id | external_id | group_id | owner_id | update_id | parentfolder |
+|----+-------------+-------------+------+---------+-------------+-------------+----------+----------+-----------+--------------|
+
+* Folderannotationlink
+:PROPERTIES:
+:ID:       12bc20b2-9037-4f1b-9612-0fa8c36aaabc
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select * from folderannotationlink;
+#+end_src
+
+#+RESULTS:
+| id | permissions | version | child | creation_id | external_id | group_id | owner_id | update_id | parent |
+|----+-------------+---------+-------+-------------+-------------+----------+----------+-----------+--------|
+
+* datasets in separate joins
+:PROPERTIES:
+:ID:       c254b55f-6517-4782-a09a-f38c937e5231
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+      select * from
+                 (select dataset.id, datasetannotationlink.child as datasetannotationslink_annotation_id
+                           from dataset join datasetannotationlink on dataset.id = datasetannotationlink.parent ) as dataset_datasetannotationlink
+                 join (
+                 (select dataset.id, datasetimagelink.child as datasetimagelink_image_id
+                           from dataset join datasetimagelink on dataset.id = datasetimagelink.parent) as dataset_datasetimagelink
+                           ) on dataset_datasetimagelink.dataset.id = dataset_datasetannotation.dataset.id
+                        ;
+
+#+end_src
+
+#+RESULTS:
+|---|
+
+* Annotations
+:PROPERTIES:
+:ID:       c163c7b2-d0be-4894-bfb4-ebce24817c0e
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+      select * from annotation;
+      #+end_src
+
+      #+RESULTS:
+      | discriminator    | id | description | permissions | name | ns                        | version | boolvalue | textvalue  | doublevalue | longvalue | termvalue | timevalue | creation_id | external_id | group_id | owner_id | update_id | file |
+      |------------------+----+-------------+-------------+------+---------------------------+---------+-----------+------------+-------------+-----------+-----------+-----------+-------------+-------------+----------+----------+-----------+------|
+      | /map/            |  1 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |          41 |             |        0 |        0 |        63 |      |
+      | /map/            |  2 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |          75 |             |        0 |        0 |       112 |      |
+      | /map/            |  3 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         124 |             |        0 |        0 |       168 |      |
+      | /map/            |  4 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         221 |             |        0 |        0 |       260 |      |
+      | /map/            |  5 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         578 |             |        0 |        0 |       582 |      |
+      | /map/            |  6 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         583 |             |        0 |        0 |       587 |      |
+      | /map/            |  7 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         588 |             |        0 |        0 |       592 |      |
+      | /map/            |  8 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         593 |             |        0 |        0 |       597 |      |
+      | /map/            |  9 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         598 |             |        0 |        0 |       602 |      |
+      | /map/            | 10 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         603 |             |        0 |        0 |       607 |      |
+      | /map/            | 11 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         608 |             |        0 |        0 |       612 |      |
+      | /map/            | 12 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         613 |             |        0 |        0 |       617 |      |
+      | /map/            | 13 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         618 |             |        0 |        0 |       622 |      |
+      | /map/            | 14 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         623 |             |        0 |        0 |       627 |      |
+      | /basic/text/tag/ | 15 |             |        -120 |      |                           |         |           | TestingTag |             |           |           |           |         867 |             |        0 |        0 |       867 |      |
