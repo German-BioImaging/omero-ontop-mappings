@@ -125,5 +125,21 @@ source		select id as roi_id from roi;
 mappingId	MAPID-roi
 target		ome_instance:RegionOfInterest/{roi_id} a ome_core:RegionOfInterest ; ome_core:image ome_instance:Image/{roi_image_id} ; dc:identifier {roi_id}^^xsd:string . 
 source		select id as roi_id, image as roi_image_id from roi ;
+
+mappingId	MAPID-project(0)
+target		ome_instance:Project/{project_id} a ome_core:Project ; rdfs:label {project_name} ; rdfs:comment {project_description} ; ome_core:dataset ome_instance:Dataset/{dataset_id} ; <{map_key}> {map_value} . 
+source		select
+			project.id as project_id,
+			projectannotationlink.child as annotation_id,
+			projectdatasetlink.child as dataset_id,
+			project.name as project_name,
+			project.description as project_description,
+			concat('http://',annotation.ns,'#', annotation_mapvalue.name) as map_key,
+			annotation_mapvalue.value as map_value
+			from project
+			join projectannotationlink on projectannotationlink.parent = project.id
+			join annotation on projectannotationlink.child = annotation.id
+			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id
+			join projectdatasetlink on project.id = projectdatasetlink.parent;
 ]]
 
