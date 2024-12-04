@@ -22,7 +22,7 @@ source		select
 			projectdatasetlink.child as dataset_id,
 			project.name as project_name,
 			project.description as project_description,
-			concat(annotation.ns, annotation_mapvalue.name) as map_key,
+			concat('http://',annotation.ns,'#', annotation_mapvalue.name) as map_key,
 			annotation_mapvalue.value as map_value
 			from project
 			join projectannotationlink on projectannotationlink.parent = project.id
@@ -38,7 +38,7 @@ source		select
 			datasetimagelink.child as image_id,
 			dataset.name as dataset_name,
 			dataset.description as dataset_description,
-			concat(annotation.ns, annotation_mapvalue.name) as map_key,
+			concat('http://',annotation.ns,'#', annotation_mapvalue.name) as map_key,
 			annotation_mapvalue.value as map_value,
 			annotation.textvalue as tag_text
 			from dataset
@@ -54,7 +54,7 @@ source		select
 			imageannotationlink.child as annotation_id,
 			image.name as image_name,
 			image.description as image_description,
-			concat(annotation.ns, annotation_mapvalue.name) as map_key,
+			concat('http://',annotation.ns,'#', annotation_mapvalue.name) as map_key,
 			annotation_mapvalue.value as map_value
 			from image
 			join imageannotationlink on imageannotationlink.parent = image.id
