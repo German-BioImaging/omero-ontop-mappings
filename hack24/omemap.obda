@@ -106,29 +106,29 @@ source		select
 mappingId	MAPID-dataset_tag
 target		ome_instance:Dataset/{dataset_id} ome_core:tagAnnotationValue {tag_text} . 
 source		select
-			dataset.id as dataset_id,
-			annotation.textvalue as tag_text
-			from dataset
-			join datasetannotationlink on datasetannotationlink.parent = dataset.id
-			join annotation on datasetannotationlink.child = annotation.id where annotation.textvalue is not NULL
+			_dataset.id as dataset_id,
+			_annotation.textvalue as tag_text
+			from dataset as _dataset
+			left join datasetannotationlink as _datasetannotationlink on _datasetannotationlink.parent = _dataset.id
+			join annotation as _annotation on _datasetannotationlink.child = _annotation.id where _annotation.textvalue is not NULL
 
 mappingId	MAPID-image_tag
 target		ome_instance:Image/{image_id} ome_core:tagAnnotationValue {tag_text} .
 source		select
-			image.id as image_id,
-			annotation.textvalue as tag_text
-			from image
-			join imageannotationlink on imageannotationlink.parent = image.id
-			join annotation on imageannotationlink.child = annotation.id where annotation.textvalue is not NULL
+			_image.id as image_id,
+			_annotation.textvalue as tag_text
+			from image as _image
+			left join imageannotationlink as _imageannotationlink on _imageannotationlink.parent = _image.id
+			left join annotation as _annotation on _imageannotationlink.child = _annotation.id where _annotation.textvalue is not NULL
 
 mappingId	MAPID-project_tag
 target		ome_instance:Project/{project_id} ome_core:tagAnnotationValue {tag_text} . 
 source		select
-			project.id as project_id,
-			annotation.textvalue as tag_text
-			from project
-			join projectannotationlink on projectannotationlink.parent = project.id
-			join annotation on projectannotationlink.child = annotation.id where annotation.textvalue is not NULL
+			_project.id as project_id,
+			_annotation.textvalue as tag_text
+			from project as _project
+			left join projectannotationlink as _projectannotationlink on _projectannotationlink.parent = _project.id
+			left join annotation as _annotation on _projectannotationlink.child = _annotation.id where _annotation.textvalue is not NULL
 
 mappingId	MAPID-a5bdd29d4c994a6bbb3acdc666403abd
 target		ome_instance:RegionOfInterest/{roi_id} a ome_core:RegionOfInterest ; dc:identifier {roi_id}^^xsd:string . 
