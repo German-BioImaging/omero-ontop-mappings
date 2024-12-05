@@ -301,6 +301,21 @@ ORDER BY table_name;
 | objectivesettings  |
 | stagelabel         |
 
+* Projects
+:PROPERTIES:
+:ID:       466e7663-27d9-48e6-b10c-4bcaa238d145
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 5432 :dbuser omero_db :dbpassword omero_db :database omero_database
+  select * from project
+  left join projectannotationlink on projectannotationlink.parent = project.id
+#+end_src
+#+RESULTS:
+| id | description | permissions | name      | version | creation_id | external_id | group_id | owner_id | update_id | id | permissions | version | child | creation_id | external_id | group_id | owner_id | update_id | parent |
+|----+-------------+-------------+-----------+---------+-------------+-------------+----------+----------+-----------+----+-------------+---------+-------+-------------+-------------+----------+----------+-----------+--------|
+| 51 |             |          -8 | TFLM      |         |        5865 |             |       53 |       52 |      5865 |    |             |         |       |             |             |          |          |           |        |
+|  1 |             |         -40 | project01 |         |        1162 |             |        3 |        2 |      1162 |    |             |         |       |             |             |          |          |           |        |
+
+
 * Image
 :PROPERTIES:
 :ID:       71a91350-a2a8-4479-bfad-19325d02fd25
