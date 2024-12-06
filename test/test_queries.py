@@ -180,7 +180,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Test.
         self.assertEqual(len(response), 1)
 
-     def test_dataset_marshal(self):
+    def test_dataset_marshal(self):
         """ Test query with the marshal prefix and ontology. """
         
         graph = self._graph
