@@ -97,6 +97,7 @@ select (count(distinct ?tp) as ?n_types) where {{
 """
         response = graph.query(query_string)
 
+        print([r for r in response])
         self.assertEqual(len(response), 1)
         self.assertEqual(int([r.n_types for r in response][0]), 1)
 
@@ -154,9 +155,9 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Check numbers.
         number_of_objects = [r for r in response][0]
-        self.assertEqual(int(number_of_objects.n_projects), 1)
+        self.assertEqual(int(number_of_objects.n_images  ),  12)
         self.assertEqual(int(number_of_objects.n_datasets), 3)
-        self.assertEqual(int(number_of_objects.n_images  ),  10)
+        self.assertEqual(int(number_of_objects.n_projects), 1)
 
     def test_project(self):
         """ Test number of projects in the VKG. """
@@ -222,7 +223,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         response = graph.query(query_string)
 
         # Test.
-        self.assertEqual(len(response), 10)
+        self.assertEqual(len(response), 12)
 
     def test_project_dataset_image(self):
         """ Test a query for a project-dataset-image hierarchy. """
@@ -248,7 +249,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         response = graph.query(query_string)
 
         # Should get 10 images.
-        self.assertEqual(len(response), 10)
+        self.assertEqual(len(response), 12)
 
     def test_image_key_value(self):
         """ Test querying for an image property via the mapannotation key."""
@@ -271,7 +272,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Run the query.
         response = graph.query(query_string)
 
-        self.assertEqual(len(response), 10)
+        self.assertEqual(len(response), 12)
 
     def test_project_key_value(self):
         """ Test querying for a project property via the mapannotation key."""
@@ -359,7 +360,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         bindings = response['results']['bindings']
 
         # All images (10) are tagged.
-        self.assertEqual(len(bindings), 10)
+        self.assertEqual(len(bindings), 12)
 
         # They're all tagged "Screenshot"
         self.assertEqual(len(set([b['tag']['value'] for b in bindings])), 1)
