@@ -10,7 +10,6 @@
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 @prefix omemap: <https://www.openmicroscopy.org/omemap#> .
 @prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/> .
-@prefix ome_marshal: <http://www.openmicroscopy.org/Schemas/OME/2015-01/> .
 @prefix ome_instance: <https://example.org/site/> .
 @base <https://www.openmicroscopy.org/omemap/> .
 
@@ -60,14 +59,8 @@ ome_core:tagAnnotationValue rdf:type owl:DatatypeProperty .
 #    Classes
 #################################################################
 
-###  http://www.openmicroscopy.org/Schemas/OME/2015-01/Dataset
-ome_marshal:Dataset rdf:type owl:Class ;
-                    owl:equivalentClass ome_core:Dataset .
-
-
 ###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset
-ome_core:Dataset owl:disjointWith ome_core:Image ;
-                 rdfs:isDefinedBy ome_marshal:Dataset .
+ome_core:Dataset owl:disjointWith ome_core:Image .
 
 
 ###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/Folder
