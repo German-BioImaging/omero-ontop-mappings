@@ -98,7 +98,8 @@ select (count(distinct ?tp) as ?n_types) where {{
         response = graph.query(query_string)
 
         self.assertEqual(len(response), 1)
-        self.assertEqual(int([r.n_types for r in response][0]), 1)
+
+        self.assertEqual(int([r.n_types for r in response][0]), 2)
 
     def test_dataset_type_value(self):
         """ A ome_core:Dataset instance must be of type ome_core:Dataset (issue #5)."""
@@ -187,7 +188,7 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         query_string = f"""
         prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-        prefix ome_marshal: <http://www.openmicroscopy.org/Schema/OME/2015-01/>
+        prefix ome_marshal: <http://www.openmicroscopy.org/Schemas/OME/2015-01/>
 
         SELECT distinct ?ds WHERE {{
           SERVICE <{ENDPOINT}> {{
