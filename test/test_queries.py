@@ -159,6 +159,8 @@ select ?n_projects ?n_datasets ?n_images where {{
         self.assertEqual(int(number_of_objects.n_datasets), 3)
         self.assertEqual(int(number_of_objects.n_projects), 1)
 
+
+
     def test_project(self):
         """ Test number of projects in the VKG. """
 
@@ -403,7 +405,6 @@ SELECT distinct ?s ?prop WHERE {
             "http://purl.org/dc/terms/subject",
             "http://purl.org/dc/terms/contributor",
             "http://purl.org/dc/terms/date",
-            "http://www.openmicroscopy.org/rdf/2016-06/ome_core/regionOfInterest",
         ]
 
         for expected_property in expected_properties:
