@@ -7,4 +7,5 @@ ontop-cli/
 __pycache__/
 /ontop-cli-5.2.0.zip.1
 *.properties
-!test_infra_ontop/omemap.properties
+!ontop/test_infra.properties
+!ontop/omemap.properties

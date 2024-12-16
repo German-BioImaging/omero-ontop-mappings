@@ -1,6 +1,6 @@
-# ONTOP Module for IDR on OMERO Backend
+# ONTOP for OMERO
 
-This repository contains the ONTOP module for the Image Data Resource (IDR) that runs on the OMERO backend.
+This repository contains the code to create a virtual knowledge graph for OMERO using ontop-vkg mappings.
 
 ## Development 
 For development, the omero-test-infra docker-compose file can be used. Follow these step to set it up:
@@ -51,10 +51,10 @@ utils/insert_data.sh
 ### Launch ontop endpoint
 Assuming `ontop` is in your path:
 ```console
-ontop endpoint --mapping test_infra_ontop/omemap.obda \
-               --ontology test_infra_ontop/omemap.ttl \
-               --properties test_infra_ontop/omemap.properties \
-               --xml-catalog test_infra_ontop/catalog-v001.xml \
+ontop endpoint --mapping ontop/omemap.obda \
+               --ontology ontop/omemap.ttl \
+               --properties ontop/omemap.properties \
+               --xml-catalog ontop/catalog-v001.xml \
                --dev
 ```
 The commandline arguments point to the mappings file, mapping ontology, database connection details (properties), ontology import catalog, respectively. The `--dev` flag starts ontop int development mode. Edits to the mappings or ontology will trigger a restart of the endpoint. By default, the ontop endpoint is served at [http://localhost:8080/sparql](http://localhost:8080/sparql) , the query editor is at [http://localhost:8080](http://localhost:8080) . Use the `--port` option to configure a different port.

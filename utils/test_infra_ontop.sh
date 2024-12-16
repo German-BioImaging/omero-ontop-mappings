@@ -2,9 +2,9 @@
 
 # Spin up ontop
 ontop-cli/ontop endpoint \
-                -t test_infra_ontop/omemap.ttl \
-                -m test_infra_ontop/omemap.obda \
-                -p test_infra_ontop/omemap.properties \
-                -x test_infra_ontop/catalog-v001.xml \
+                -t ontop/omemap.ttl \
+                -m ontop/omemap.obda \
+                -p ontop/omemap.properties \
+                -x ontop/catalog-v001.xml \
                 --dev
 
