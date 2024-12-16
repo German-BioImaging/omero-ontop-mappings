@@ -97,6 +97,7 @@ select (count(distinct ?tp) as ?n_types) where {{
 """
         response = graph.query(query_string)
 
+        print([r for r in response])
         self.assertEqual(len(response), 1)
         self.assertEqual(int([r.n_types for r in response][0]), 2)
 
@@ -154,9 +155,11 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Check numbers.
         number_of_objects = [r for r in response][0]
-        self.assertEqual(int(number_of_objects.n_projects), 1)
-        self.assertEqual(int(number_of_objects.n_datasets), 3)
         self.assertEqual(int(number_of_objects.n_images  ),  12)
+        self.assertEqual(int(number_of_objects.n_datasets), 3)
+        self.assertEqual(int(number_of_objects.n_projects), 1)
+
+
 
     def test_project(self):
         """ Test number of projects in the VKG. """

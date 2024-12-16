@@ -23,12 +23,18 @@ patch -p1 < portmapping.patch
 cd ..
 ```
 
+### Add ontop database user
+```console
+psql -U postgres -W -h localhost -p 15432 -d postgres < sql/ontop_user.sql
+```
+
 ### Get omero-py
 Install omero-py via pip or from conda-forge. The script /utils\/install_omero-py.sh/ downloads and installs miniconda to the user's home directory and install omero-py as well as pytest and rdflib into the base environment.
 
 ```console
 source utils/install_omero-py.sh
 ```
+
 ### Launch omero-test-infra
 ```console
 .omero/docker dev start_up
