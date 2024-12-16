@@ -99,7 +99,8 @@ select (count(distinct ?tp) as ?n_types) where {{
 
         print([r for r in response])
         self.assertEqual(len(response), 1)
-        self.assertEqual(int([r.n_types for r in response][0]), 1)
+
+        self.assertEqual(int([r.n_types for r in response][0]), 2)
 
     def test_dataset_type_value(self):
         """ A ome_core:Dataset instance must be of type ome_core:Dataset (issue #5)."""
@@ -182,6 +183,29 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Test.
         self.assertEqual(len(response), 1)
+
+    def test_dataset_marshal(self):
+        """ Test query with the marshal prefix and ontology. """
+        
+        graph = self._graph
+
+        query_string = f"""
+        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        prefix ome_marshal: <http://www.openmicroscopy.org/Schemas/OME/2015-01/>
+
+        SELECT distinct ?ds WHERE {{
+          SERVICE <{ENDPOINT}> {{
+            ?ds a ome_marshal:Dataset .
+          }}
+        }}
+        limit 10
+        """
+
+        # Run the query.
+        response = graph.query(query_string)
+
+        # Test.
+        self.assertEqual(len(response), 3)
  
     def test_dataset(self):
         """ Test that there are 3 datasets in the graph db"""

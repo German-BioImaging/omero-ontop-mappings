@@ -44,6 +44,8 @@ jobs:
         run: $(which python) --version
       - name: start omero
         run: .omero/docker dev start_up
+      - name: db user 
+        run: PGPASSWORD=postgres psql -U postgres -d postgres -h localhost -p 15432 < sql/ontop_user.sql
       - name: check processes
         run: ps ax | grep docker
       - name: test omero web

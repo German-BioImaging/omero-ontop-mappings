@@ -484,3 +484,26 @@ Find all datasets tagged "TestTag".
 #+RESULTS:
 | s |
 |---|
+
+
+* MPIEB
+:PROPERTIES:
+:ID:       1bdfaf0a-1483-44e0-b216-f97a319293b5
+:END:
+** SPO
+:PROPERTIES:
+:ID:       b11378ed-b938-4bb9-ad4b-b9cd0df59f75
+:END:
+#+header: :url http://localhost:8080/sparql
+
+#+begin_src sparql
+
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+
+  SELECT distinct ?ds (count(?img) as ?number_of_images) WHERE {
+      ?ds a ome_core:Dataset;
+          ome_core:image ?img
+   }
+  group by ?ds
+#+end_src
+
