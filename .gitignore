@@ -7,3 +7,6 @@ ontop-cli/
 .ipynb_checkpoints/
 __pycache__/
 /ontop-cli-5.2.0.zip.1
+*.properties
+!ontop/test_infra.properties
+!ontop/omemap.properties
