@@ -1,0 +1,66 @@
+#+PROPERTY: header-args :engine postgres :dbhost micropop046 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+
+* List users
+:PROPERTIES:
+:ID:       f4c3a7f5-38a9-46a5-8251-cd3114042f29
+:END:
+#+begin_src  sql :engine postgres :dbhost micropop046 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+SELECT usename FROM pg_catalog.pg_user;
+#+end_src
+
+#+RESULTS:
+| usename  |
+|----------|
+| postgres |
+| ontop    |
+
+* Create user ontop
+:PROPERTIES:
+:ID:       61480e81-428c-4ff0-bb44-3f79ea1eeda9
+:END:
+#+begin_src  sql :engine postgres :dbhost micropop046 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+create user ontop with password '!ontop$';
+#+end_src
+
+#+RESULTS:
+| CREATE ROLE |
+|-------------|
+
+** Confirm
+:PROPERTIES:
+:ID:       a9a1f234-6f10-44b1-819e-70a642c1d1bb
+:END:
+#+begin_src  sql :engine postgres :dbhost micropop046 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select usename from pg_catalog.pg_user;
+#+end_src
+
+#+RESULTS:
+| usename  |
+|----------|
+| postgres |
+| ontop    |
+
+
+* Grant
+:PROPERTIES:
+:ID:       56ea12b8-80aa-4948-9ae8-85e2404eac00
+:END:
+#+begin_src  sql :engine postgres :dbhost micropop046 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  grant select on all tables in schema public to ontop;
+#+end_src
+
+#+RESULTS:
+| GRANT |
+|-------|
+
+* Grant for future tables
+:PROPERTIES:
+:ID:       acb0c228-3d5a-499d-a699-f0469448aa4c
+:END:
+#+begin_src  sql :engine postgres :dbhost micropop046 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  alter default privileges in schema public grant select on tables to ontop;
+#+end_src
+
+#+RESULTS:
+| ALTER DEFAULT PRIVILEGES |
+|--------------------------|
