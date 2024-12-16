@@ -123,7 +123,7 @@ target		ome_instance:RegionOfInterest/{roi_id} a ome_core:RegionOfInterest ; dc:
 source		select id as roi_id from roi;
 
 mappingId	MAPID-roi
-target		ome_instance:RegionOfInterest/{roi_id} a ome_core:RegionOfInterest ; ome_core:image ome_instance:Image/{roi_image_id} ; dc:identifier {roi_id}^^xsd:string . 
+target		ome_instance:RegionOfInterest/{roi_id} a ome_core:RegionOfInterest ; ome_core:image ome_instance:Image/{roi_image_id} ; dc:identifier {roi_id}^^xsd:string . ome_instance:Image/{roi_image_id} ome_core:regionOfInterest ome_instance:RegionOfInterest/{roi_id} . 
 source		select id as roi_id, image as roi_image_id from roi ;
 ]]
 
