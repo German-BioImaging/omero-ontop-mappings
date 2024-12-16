@@ -99,7 +99,6 @@ select (count(distinct ?tp) as ?n_types) where {{
 
         print([r for r in response])
         self.assertEqual(len(response), 1)
-
         self.assertEqual(int([r.n_types for r in response][0]), 2)
 
     def test_dataset_type_value(self):
