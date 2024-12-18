@@ -413,7 +413,7 @@ SELECT distinct ?img ?roi WHERE {
     def test_image_properties(self):
         """ Check Image instances have all expected properties. """
         query = """prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-SELECT distinct ?s ?prop WHERE {
+SELECT distinct ?prop WHERE {
     ?s a ome_core:Image;
         ?prop ?val .
 }
@@ -432,6 +432,21 @@ SELECT distinct ?s ?prop WHERE {
 
         for expected_property in expected_properties:
             self.assertIn(expected_property, response_df.prop.unique())
+
+    def test_namespace_fixing_1(self):
+        """ Test that non-URI namespaces are correctly fixed """
+        query = """
+prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+prefix ome_site: <http://example.com/site/>
+prefix ome_site_image: <http://example.com/site/Image/>
+SELECT ?st WHERE {
+    ome_site_image:11 <http://www.openmicroscopy.org/ns/default/sampletype> ?st.
+}
+"""
+        response_df = run_query(query)
+
+        self.assertEqual(response_df.iloc[0,0], 'screen')
+
 
 if __name__ == "__main__":
     unittest.main()
