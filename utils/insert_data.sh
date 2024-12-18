@@ -69,6 +69,11 @@ for image_index in {1..10}; do
     omero obj map-set $ann mapValue subject "Unittest"
     omero obj new ImageAnnotationLink parent=Image:$image_index child=$TAG2
 done
+
+# Add another mapannotation but do not specify the namespace.
+ann=$(omero obj new MapAnnotation)
+omero obj new ImageAnnotationLink parent=Image:$12 child=$ann
+omero obj map-set $ann mapValue annotator "MrX"
  
 
 # List all objects
