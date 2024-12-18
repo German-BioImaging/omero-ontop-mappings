@@ -56,14 +56,17 @@ source		select
 			image.name as image_name,
 			image.description as image_description,
 			concat( regexp_replace(
-			    case when annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
-			    else 
-			      case
-			      when starts_with(annotation.ns, 'http') then annotation.ns
-			      else concat('http', annotation.ns)
-			    end
-			    end, '[^\/#]$','/'),
-			 annotation_mapvalue.name) as map_key,
+			                     regexp_replace(
+			                       case
+			                         when annotation.ns is null then 'www.openmicroscopy.org/ns/default'
+			                         else annotation.ns
+			                       end,
+			                       '^([^h])',
+			                       'http://\1'),
+			                     '([^\/,#])$',
+			                     '\1/'
+			            ),
+			annotation_mapvalue.name) as map_key,
 			annotation_mapvalue.value as map_value
 			from image
 			join imageannotationlink on imageannotationlink.parent = image.id

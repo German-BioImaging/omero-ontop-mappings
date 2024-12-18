@@ -413,17 +413,20 @@ ORDER BY table_name;
 :ID:       ed9d6bf8-7e22-4e3d-b168-f0002e86ac59
 :END:
 
-#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser ontop :dbpassword !ontop$ :database postgres
-  select case
-    when annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
-    else 
-      case
-      when starts_with(annotation.ns, 'http') then annotation.ns
-      else concat('http', annotation.ns)
-    end
-    end
-    as ns
-    from annotation;
+#+begin_src  sql :engine postgres :dbhost micropop046 :dbport 15432 :dbuser ontop :dbpassword !ontop$ :database postgres
+            select regexp_replace(
+                     regexp_replace(
+                       case
+                         when annotation.ns is null then 'www.openmicroscopy.org/ns/default'
+                         else annotation.ns
+                       end,
+                       '^([^h])',
+                       'http://\1'),
+                     '([^\/,#])$',
+                     '\1/'
+            )
+              as ns
+              from annotation;
 #+end_src
 
 #+RESULTS:
@@ -450,3 +453,4 @@ ORDER BY table_name;
 | http://purl.org/dc/terms/                 |
 | http://purl.org/dc/terms/                 |
 | http://purl.org/dc/terms/                 |
+
