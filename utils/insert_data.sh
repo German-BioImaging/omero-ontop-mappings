@@ -72,9 +72,13 @@ done
 
 # Add another mapannotation but do not specify the namespace.
 ann=$(omero obj new MapAnnotation)
-omero obj new ImageAnnotationLink parent=Image:$12 child=$ann
+omero obj new ImageAnnotationLink parent=Image:12 child=$ann
 omero obj map-set $ann mapValue annotator "MrX"
- 
+
+# Add another mapannotation with namespace that is not a valid URI
+ann=$(omero obj new MapAnnotation ns="www.openmicroscopy.ns/default")
+omero obj new ImageAnnotationLink parent=Image:11 child=$ann
+omero obj map-set $ann mapValue sampletype "pixels"
 
 # List all objects
 today=$(date +%Y-%m-%d)

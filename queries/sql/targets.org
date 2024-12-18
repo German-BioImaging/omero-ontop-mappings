@@ -425,32 +425,33 @@ ORDER BY table_name;
                      '([^\/,#])$',
                      '\1/'
             )
-              as ns
+              as ns, annotation.ns 
               from annotation;
 #+end_src
 
 #+RESULTS:
-| ns                                        |
-|-------------------------------------------|
-| http://purl.org/dc/terms/                 |
-| http://purl.org/dc/terms/                 |
-| http://www.openmicroscopy.org/ns/default/ |
-| http://www.openmicroscopy.org/ns/default/ |
-| http://purl.org/dc/terms/                 |
-| http://purl.org/dc/terms/                 |
-| http://purl.org/dc/terms/                 |
-| http://www.openmicroscopy.org/ns/default/ |
-| http://purl.org/dc/terms/                 |
-| http://www.openmicroscopy.org/ns/default/ |
-| http://purl.org/dc/terms/                 |
-| http://www.openmicroscopy.org/ns/default/ |
-| http://purl.org/dc/terms/                 |
-| http://purl.org/dc/terms/                 |
-| http://purl.org/dc/terms/                 |
-| http://purl.org/dc/terms/                 |
-| http://purl.org/dc/terms/                 |
-| http://purl.org/dc/terms/                 |
-| http://purl.org/dc/terms/                 |
-| http://purl.org/dc/terms/                 |
-| http://purl.org/dc/terms/                 |
+| ns                                        | ns                        |
+|-------------------------------------------+---------------------------|
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://www.openmicroscopy.org/ns/default/ |                           |
+| http://www.openmicroscopy.org/ns/default/ |                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://openmicroscopy.ns.default/         | openmicroscopy.ns.default |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://www.openmicroscopy.org/ns/default/ |                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://www.openmicroscopy.org/ns/default/ |                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://www.openmicroscopy.org/ns/default/ |                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
 
