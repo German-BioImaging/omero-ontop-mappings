@@ -1,8 +1,6 @@
 #! /bin/bash
 set -e
 
-source ~/miniconda3/bin/activate
-
 omero login -C -u root -w omero -s localhost:14064
 
 # Create 3 datasets
@@ -79,6 +77,12 @@ omero obj map-set $ann mapValue annotator "MrX"
 ann=$(omero obj new MapAnnotation ns="www.openmicroscopy.org/ns/default")
 omero obj new ImageAnnotationLink parent=Image:11 child=$ann
 omero obj map-set $ann mapValue sampletype "screen"
+
+# Add another mapannotation with namespace that is not a valid URI (issue #16).
+ann=$(omero obj new MapAnnotation ns="hms.harvard.edu/omero/forms/kvdata/MPB Annotations/")
+omero obj new ImageAnnotationLink parent=Image:10 child=$ann
+omero obj map-set $ann mapValue Assay "PRTSC"
+
 
 # List all objects
 today=$(date +%Y-%m-%d)
