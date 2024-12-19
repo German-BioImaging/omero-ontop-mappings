@@ -520,10 +520,10 @@ Find all datasets tagged "TestTag".
 
 #+begin_src sparql :url http://localhost:8080/sparql
   PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-  prefix image: <https://example.org/site/Image/>
-  prefix ome_ns: <http://www.openmicroscopy.org/ns/default/>
+  PREFIX image: <https://example.org/site/Image/>
+  PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
-  SELECT distinct * WHERE {
+  SELECT DISTINCT * WHERE {
     image:11 ome_ns:sampletype ?val.
    }
 #+end_src

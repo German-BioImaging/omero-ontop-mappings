@@ -24,8 +24,9 @@ cd ..
 ```
 
 ### Add ontop database user
+This step must be redone every time after resetting the test infrastructure.
 ```console
-psql -U postgres -W -h localhost -p 15432 -d postgres < sql/ontop_user.sql
+utils/setup_ontop_dbuser.short
 ```
 
 ### Get omero-py

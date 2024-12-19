@@ -31,7 +31,7 @@ create user ontop with password '!ontop$';
 :ID:       a9a1f234-6f10-44b1-819e-70a642c1d1bb
 :END:
 #+begin_src  sql :engine postgres :dbhost micropop046 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
-  select usename from pg_catalog.pg_user;
+  select usename from pg_catalog.pg_user
 #+end_src
 
 #+RESULTS:
