@@ -414,44 +414,46 @@ ORDER BY table_name;
 :END:
 
 #+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser ontop :dbpassword !ontop$ :database postgres
-            select regexp_replace(
-                     regexp_replace(
-                       case
-                         when annotation.ns is null then 'www.openmicroscopy.org/ns/default'
-                         else annotation.ns
-                       end,
-                       '^([^h])',
-                       'http://\1'),
-                     '([^\/,#])$',
-                     '\1/'
-            )
-              as ns, annotation.ns 
-              from annotation;
+    select regexp_replace(regexp_replace(
+               case
+                 when annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+                 else
+                 case
+               when starts_with(annotation.ns, 'http') then annotation.ns
+                 else concat('http://', annotation.ns)
+                end
+               end,
+             '([^\/,#])$',
+             '\1/'
+    ), '\s', '_')
+      as ns, annotation.ns 
+      from annotation;
 #+end_src
 
 #+RESULTS:
-| ns                                        | ns                                |
-|-------------------------------------------+-----------------------------------|
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://www.openmicroscopy.org/ns/default/ |                                   |
-| http://www.openmicroscopy.org/ns/default/ |                                   |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://www.openmicroscopy.org/ns/default/ | www.openmicroscopy.org/ns/default |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://www.openmicroscopy.org/ns/default/ |                                   |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://www.openmicroscopy.org/ns/default/ |                                   |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://www.openmicroscopy.org/ns/default/ |                                   |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| ns                                                         | ns                                                  |
+|------------------------------------------------------------+-----------------------------------------------------|
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://www.openmicroscopy.org/ns/default/                  |                                                     |
+| http://www.openmicroscopy.org/ns/default/                  |                                                     |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://www.openmicroscopy.org/ns/default/                  | www.openmicroscopy.org/ns/default                   |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://hms.harvard.edu/omero/forms/kvdata/MPB_Annotations/ | hms.harvard.edu/omero/forms/kvdata/MPB Annotations/ |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://www.openmicroscopy.org/ns/default/                  |                                                     |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://www.openmicroscopy.org/ns/default/                  |                                                     |
+| http://www.openmicroscopy.org/ns/default/                  |                                                     |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
 

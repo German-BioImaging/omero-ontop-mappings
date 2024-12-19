@@ -463,6 +463,22 @@ SELECT DISTINCT * WHERE {
 
         self.assertEqual(response_df.iloc[0,0], 'MrX')
 
+    def test_namespace_fixing_issue16(self):
+        """ Test that empty namespaces are set to a default value."""
+        query = """
+PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+PREFIX image: <https://example.org/site/Image/>
+PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
+
+SELECT DISTINCT * WHERE {
+  image:10 <http://hms.harvard.edu/omero/forms/kvdata/MPB_Annotations/Assay> ?assay .
+}
+"""
+        response_df = run_query(query)
+
+        self.assertEqual(response_df.iloc[0,0], 'PRTSC')
+
+
 
 
 if __name__ == "__main__":
