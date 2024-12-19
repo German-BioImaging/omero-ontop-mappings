@@ -413,7 +413,7 @@ ORDER BY table_name;
 :ID:       ed9d6bf8-7e22-4e3d-b168-f0002e86ac59
 :END:
 
-#+begin_src  sql :engine postgres :dbhost micropop046 :dbport 15432 :dbuser ontop :dbpassword !ontop$ :database postgres
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser ontop :dbpassword !ontop$ :database postgres
             select regexp_replace(
                      regexp_replace(
                        case
@@ -430,28 +430,28 @@ ORDER BY table_name;
 #+end_src
 
 #+RESULTS:
-| ns                                        | ns                        |
-|-------------------------------------------+---------------------------|
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://www.openmicroscopy.org/ns/default/ |                           |
-| http://www.openmicroscopy.org/ns/default/ |                           |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://openmicroscopy.ns.default/         | openmicroscopy.ns.default |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://www.openmicroscopy.org/ns/default/ |                           |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://www.openmicroscopy.org/ns/default/ |                           |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://www.openmicroscopy.org/ns/default/ |                           |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
-| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/ |
+| ns                                        | ns                                |
+|-------------------------------------------+-----------------------------------|
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://www.openmicroscopy.org/ns/default/ |                                   |
+| http://www.openmicroscopy.org/ns/default/ |                                   |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://www.openmicroscopy.org/ns/default/ | www.openmicroscopy.org/ns/default |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://www.openmicroscopy.org/ns/default/ |                                   |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://www.openmicroscopy.org/ns/default/ |                                   |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://www.openmicroscopy.org/ns/default/ |                                   |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/         |
 

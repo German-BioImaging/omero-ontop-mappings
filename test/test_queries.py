@@ -433,19 +433,36 @@ SELECT distinct ?prop WHERE {
         for expected_property in expected_properties:
             self.assertIn(expected_property, response_df.prop.unique())
 
-    def test_namespace_fixing_1(self):
+    def test_namespace_fixing_non_uri(self):
         """ Test that non-URI namespaces are correctly fixed """
         query = """
-prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-prefix ome_site: <http://example.com/site/>
-prefix ome_site_image: <http://example.com/site/Image/>
-SELECT ?st WHERE {
-    ome_site_image:11 <http://www.openmicroscopy.org/ns/default/sampletype> ?st.
+PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+PREFIX image: <https://example.org/site/Image/>
+PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
+
+SELECT DISTINCT * WHERE {
+  image:11 ome_ns:sampletype ?st .
 }
 """
         response_df = run_query(query)
 
         self.assertEqual(response_df.iloc[0,0], 'screen')
+
+    def test_namespace_fixing_no_ns(self):
+        """ Test that empty namespaces are set to a default value."""
+        query = """
+PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+PREFIX image: <https://example.org/site/Image/>
+PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
+
+SELECT DISTINCT * WHERE {
+  image:12 ome_ns:annotator ?st .
+}
+"""
+        response_df = run_query(query)
+
+        self.assertEqual(response_df.iloc[0,0], 'MrX')
+
 
 
 if __name__ == "__main__":
