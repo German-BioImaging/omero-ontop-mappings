@@ -494,9 +494,8 @@ Find all datasets tagged "TestTag".
 :PROPERTIES:
 :ID:       b11378ed-b938-4bb9-ad4b-b9cd0df59f75
 :END:
-#+header: :url http://localhost:8080/sparql
 
-#+begin_src sparql
+#+begin_src sparql :url http://localhost:8080/sparql
 
   PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
 
@@ -506,4 +505,31 @@ Find all datasets tagged "TestTag".
    }
   group by ?ds
 #+end_src
+
+#+RESULTS:
+| ds                                 | number_of_images |
+|------------------------------------+------------------|
+| https://example.org/site/Dataset/3 |                3 |
+| https://example.org/site/Dataset/2 |                7 |
+| https://example.org/site/Dataset/1 |                2 |
+
+* Namespace fixed
+:PROPERTIES:
+:ID:       f538ab93-67f7-4a3e-aa6e-9b6d82e2f99c
+:END:
+
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+  PREFIX image: <https://example.org/site/Image/>
+  PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
+
+  SELECT DISTINCT * WHERE {
+    image:11 ome_ns:sampletype ?val.
+   }
+#+end_src
+
+#+RESULTS:
+| val    |
+|--------|
+| screen |
 

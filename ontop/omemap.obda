@@ -15,52 +15,113 @@ ome_marshal:	http://www.openmicroscopy.org/Schemas/OME/2015-01/
 ome_instance:	https://example.org/site/
 
 [MappingDeclaration] @collection [[
-mappingId	MAPID-project
-target		ome_instance:Project/{project_id} a ome_core:Project ; rdfs:label {project_name} ; rdfs:comment {project_description} ; ome_core:dataset ome_instance:Dataset/{dataset_id} ; <{map_key}> {map_value} . 
+mappingId	MAPID-project(1)
+target		ome_instance:Project/{project_id} a ome_core:Project ; rdfs:label {project_name} ; rdfs:comment {project_description} .
 source		select
-			project.id as project_id,
-			projectannotationlink.child as annotation_id,
-			projectdatasetlink.child as dataset_id,
-			project.name as project_name,
-			project.description as project_description,
-			concat(annotation.ns, annotation_mapvalue.name) as map_key,
-			annotation_mapvalue.value as map_value
-			from project
-			join projectannotationlink on projectannotationlink.parent = project.id
-			join annotation on projectannotationlink.child = annotation.id
-			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id
-			join projectdatasetlink on project.id = projectdatasetlink.parent;
+			_project.id as project_id,
+			_project.name as project_name,
+			_project.description as project_description
+			from project as _project
 
-mappingId	MAPID-dataset
-target		ome_instance:Dataset/{dataset_id} a ome_core:Dataset ; rdfs:label {dataset_name} ; rdfs:comment {dataset_description} ; ome_core:image ome_instance:Image/{image_id} ; <{map_key}> {map_value} . 
+mappingId	MAPID-project(2)
+target		ome_instance:Project/{project_id} a ome_core:Project ; ome_core:dataset ome_instance:Dataset/{dataset_id} .
 source		select
-			dataset.id as dataset_id,
-			datasetannotationlink.child as annotation_id,
-			datasetimagelink.child as image_id,
-			dataset.name as dataset_name,
-			dataset.description as dataset_description,
-			concat(annotation.ns, annotation_mapvalue.name) as map_key,
-			annotation_mapvalue.value as map_value,
-			annotation.textvalue as tag_text
-			from dataset
-			join datasetannotationlink on datasetannotationlink.parent = dataset.id
-			join annotation on datasetannotationlink.child = annotation.id
-			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id join datasetimagelink on dataset.id = datasetimagelink.parent;
+			_project.id as project_id,
+			_projectdatasetlink.child as dataset_id
+			from project as _project
+			left join projectdatasetlink as _projectdatasetlink on _project.id = _projectdatasetlink.parent
 
-mappingId	MAPID-Image
-target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; <{map_key}> {map_value} ; ome_core:acquisitionDate {image_acquisitiondate}^^xsd:dateTime ; dc:identifier {image_id}^^xsd:string . 
+mappingId	MAPID-project(3)
+target		ome_instance:Project/{project_id} a ome_core:Project ; <{map_key}> {map_value} .
 source		select
-			image.id as image_id,
-			image.acquisitiondate as image_acquisitiondate,
-			imageannotationlink.child as annotation_id,
-			image.name as image_name,
-			image.description as image_description,
-			concat(annotation.ns, annotation_mapvalue.name) as map_key,
-			annotation_mapvalue.value as map_value
-			from image
-			join imageannotationlink on imageannotationlink.parent = image.id
-			join annotation on imageannotationlink.child = annotation.id
-			join annotation_mapvalue on annotation.id = annotation_mapvalue.annotation_id;
+			      _project.id as project_id,
+              concat( regexp_replace(
+                           regexp_replace(
+                                         case
+                                         when _annotation.ns is null then 'www.openmicroscopy.org/ns/default'
+                                         else _annotation.ns
+                                         end,
+                                         '^([^h])',
+                                         'http://\1'),
+                           '([^\/,#])$',
+                           '\1/'
+                           ),
+           _annotation_mapvalue.name) as map_key,
+			_annotation_mapvalue.value as map_value
+			from project as _project
+			join projectannotationlink as _projectannotationlink on _projectannotationlink.parent = _project.id
+			join annotation as _annotation on _projectannotationlink.child = _annotation.id
+			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
+
+mappingId	MAPID-dataset-0
+target		ome_instance:Dataset/{dataset_id} a ome_core:Dataset ; rdfs:label {dataset_name} ; rdfs:comment {dataset_description}.
+source		select
+			_dataset.id as dataset_id,
+			_dataset.name as dataset_name,
+			_dataset.description as dataset_description
+			from dataset as _dataset
+
+mappingId	MAPID-dataset-1
+target		ome_instance:Dataset/{dataset_id} ome_core:image ome_instance:Image/{image_id}.
+source		select
+			_dataset.id as dataset_id,
+			_datasetimagelink.child as image_id
+			from dataset as _dataset
+      left join datasetimagelink  as _datasetimagelink on _dataset.id = _datasetimagelink.parent
+
+mappingId	MAPID-dataset-2
+target		ome_instance:Dataset/{dataset_id} <{map_key}> {map_value} .
+source		select
+			_dataset.id as dataset_id,
+			_datasetannotationlink.child as annotation_id,
+			                              concat( regexp_replace(
+                                                           regexp_replace(
+                                                                          case
+                                                                          when _annotation.ns is null then 'www.openmicroscopy.org/ns/default'
+                                                                          else _annotation.ns
+                                                                          end,
+                                                                          '^([^h])',
+                                                                          'http://\1'),
+                                                           '([^\/,#])$',
+                                                           '\1/'
+                                                           ),
+                                           _annotation_mapvalue.name) as map_key,
+			_annotation_mapvalue.value as map_value
+			from dataset as _dataset
+			join datasetannotationlink as _datasetannotationlink on _datasetannotationlink.parent = _dataset.id
+			join annotation as _annotation on _datasetannotationlink.child = _annotation.id
+			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
+
+mappingId	MAPID-Image-0
+target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; ome_core:acquisitionDate {image_acquisitiondate}^^xsd:dateTime ; dc:identifier {image_id}^^xsd:string .
+source		select
+			_image.id as image_id,
+			_image.acquisitiondate as image_acquisitiondate,
+			_image.name as image_name,
+			_image.description as image_description
+			from image as _image
+
+mappingId	MAPID-Image-1
+target		ome_instance:Image/{image_id} a ome_core:Image; <{map_key}> {map_value} .
+source		select
+  _image.id as image_id,
+  concat( regexp_replace(
+                          regexp_replace(
+                                        case
+                                        when _annotation.ns is null then 'www.openmicroscopy.org/ns/default'
+                                        else _annotation.ns
+                                        end,
+                                        '^([^h])',
+                                        'http://\1'),
+                          '([^\/,#])$',
+                          '\1/'
+                          ),
+          _annotation_mapvalue.name) as map_key,
+  _annotation_mapvalue.value as map_value
+  from image as _image
+  join imageannotationlink as _imageannotationlink on _imageannotationlink.parent = _image.id
+  join annotation as _annotation on _imageannotationlink.child = _annotation.id
+  join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
 mappingId	MAPID-experimentergroup
 target		ome_instance:ExperimenterGroup/{experimentergroup_id} a ome_core:ExperimenterGroup . 
