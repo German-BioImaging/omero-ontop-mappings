@@ -478,6 +478,21 @@ SELECT DISTINCT * WHERE {
 
         self.assertEqual(response_df.iloc[0,0], 'PRTSC')
 
+    def test_namespace_fixing_issue17(self):
+        """ Test that namespaces starting with "/" are correctly fixed."""
+        query = """
+PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+PREFIX image: <https://example.org/site/Image/>
+PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
+
+SELECT DISTINCT * WHERE {
+  image:9 <http://MouseCT/Skyscan/System/Assay> ?assay .
+}
+"""
+        response_df = run_query(query)
+
+        self.assertEqual(response_df.iloc[0,0], 'Bruker')
+
 
 
 
