@@ -35,12 +35,13 @@ mappingId	MAPID-project(3)
 target		ome_instance:Project/{project_id} a ome_core:Project ; <{map_key}> {map_value}^^xsd:string .
 source		select
 			      _project.id as project_id,
-                                    concat(regexp_replace(regexp_replace(
-                                                                         case
-                                                                         when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
-                                                                         else
-                                                                         case
-                                                                         when starts_with(_annotation.ns, 'http') then _annotation.ns
+   concat(regexp_replace(regexp_replace(
+        case
+            when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+         else
+         case
+             when starts_with(_annotation.ns, 'http') then _annotation.ns
+             when starts_with(_annotation.ns, '/') then regexp_replace(_annotation.ns, '^[\/]*', 'http://')
                                                                          else concat('http://', _annotation.ns)
                                                                          end
                                                                          end,
@@ -81,6 +82,7 @@ source		select
                                                                          else
                                                                          case
                                                                          when starts_with(_annotation.ns, 'http') then _annotation.ns
+             when starts_with(_annotation.ns, '/') then regexp_replace(_annotation.ns, '^[\/]*', 'http://')
                                                                          else concat('http://', _annotation.ns)
                                                                          end
                                                                          end,
@@ -113,6 +115,7 @@ source		select
                                                                          else
                                                                          case
                                                                          when starts_with(_annotation.ns, 'http') then _annotation.ns
+             when starts_with(_annotation.ns, '/') then regexp_replace(_annotation.ns, '^[\/]*', 'http://')
                                                                          else concat('http://', _annotation.ns)
                                                                          end
                                                                          end,
