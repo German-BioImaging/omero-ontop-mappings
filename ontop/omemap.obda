@@ -40,7 +40,7 @@ source		select
                when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
                else
                 case
-                  when regexp_like(_annotation.ns, '^http[s]{0,1}:\/\/') then _annotation.ns
+                  when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
                   else 'http://www.openmicroscopy.org/ns/default/'
                 end
              end,
@@ -80,7 +80,7 @@ source		select
                when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
                else
                 case
-                  when regexp_like(_annotation.ns, '^http[s]{0,1}:\/\/') then _annotation.ns
+                  when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
                   else 'http://www.openmicroscopy.org/ns/default/'
                 end
              end,
@@ -111,7 +111,7 @@ source		select
                when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
                else
                 case
-                  when regexp_like(_annotation.ns, '^http[s]{0,1}:\/\/') then _annotation.ns
+                  when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
                   else 'http://www.openmicroscopy.org/ns/default/'
                 end
              end,
