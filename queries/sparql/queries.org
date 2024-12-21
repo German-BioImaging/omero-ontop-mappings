@@ -533,3 +533,30 @@ Find all datasets tagged "TestTag".
 |--------|
 | screen |
 
+
+* Image 9 MouseCT/Skyscan/System namespace
+:PROPERTIES:
+:ID:       d2ec4a2a-806a-45ae-95a0-3b36d16aa030
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+  PREFIX image: <https://example.org/site/Image/>
+  PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
+
+  SELECT DISTINCT * WHERE {
+    image:9 ?prop ?val .
+   }
+#+end_src
+
+#+RESULTS:
+| prop                                                                  | val                                                      |
+|-----------------------------------------------------------------------+----------------------------------------------------------|
+| http://www.w3.org/1999/02/22-rdf-syntax-ns#type                       | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image |
+| http://www.openmicroscopy.org/rdf/2016-06/ome_core/tagAnnotationValue | Screenshot                                               |
+| http://purl.org/dc/elements/1.1/identifier                            | 9                                                        |
+| http://www.w3.org/2000/01/rdf-schema#label                            | 2024-10-10_16-42-47_screenshot.png                       |
+| http://purl.org/dc/terms/contributor                                  | Test User                                                |
+| http://purl.org/dc/terms/subject                                      | Unittest                                                 |
+| http://purl.org/dc/terms/date                                         | Sat Dec 21 06:08:37 PM CET 2024                          |
+| http://MouseCT/Skyscan/System/Assay                                   | Bruker                                                   |
+
