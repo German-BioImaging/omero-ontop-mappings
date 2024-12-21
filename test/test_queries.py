@@ -471,7 +471,7 @@ PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
 SELECT DISTINCT * WHERE {
-  image:10 <http://hms.harvard.edu/omero/forms/kvdata/MPB_Annotations/Assay> ?assay .
+  image:10 ome_ns:Assay ?assay .
 }
 """
         response_df = run_query(query)
@@ -486,7 +486,7 @@ PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
 SELECT DISTINCT * WHERE {
-  image:9 <http://MouseCT/Skyscan/System/Assay> ?assay .
+  image:9 ome_ns:Assay ?assay .
 }
 """
         response_df = run_query(query)

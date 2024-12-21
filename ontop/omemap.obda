@@ -36,18 +36,17 @@ target		ome_instance:Project/{project_id} a ome_core:Project ; <{map_key}> {map_
 source		select
 			      _project.id as project_id,
    concat(regexp_replace(regexp_replace(
-        case
-            when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
-         else
-         case
-             when starts_with(_annotation.ns, 'http') then _annotation.ns
-             when starts_with(_annotation.ns, '/') then regexp_replace(_annotation.ns, '^[\/]*', 'http://')
-                                                                         else concat('http://', _annotation.ns)
-                                                                         end
-                                                                         end,
-                                                                         '([^\/,#])$',
-                                                                         '\1/'
-                                                                         ), '\s', '_') ,
+             case
+               when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+               else
+                case
+                  when regexp_like(_annotation.ns, '^http[s]{0,1}:\/\/') then _annotation.ns
+                  else 'http://www.openmicroscopy.org/ns/default/'
+                end
+             end,
+           '([^\/,#])$',
+           '\1/'
+  ), '\s', '_'),
            _annotation_mapvalue.name) as map_key,
 			_annotation_mapvalue.value as map_value
 			from project as _project
@@ -76,20 +75,18 @@ target		ome_instance:Dataset/{dataset_id} <{map_key}> {map_value}^^xsd:string .
 source		select
 			_dataset.id as dataset_id,
 			_datasetannotationlink.child as annotation_id,
-			                              concat(regexp_replace(regexp_replace(
-                                                                         case
-                                                                         when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
-                                                                         else
-                                                                         case
-                                                                         when starts_with(_annotation.ns, 'http') then _annotation.ns
-             when starts_with(_annotation.ns, '/') then regexp_replace(_annotation.ns, '^[\/]*', 'http://')
-                                                                         else concat('http://', _annotation.ns)
-                                                                         end
-                                                                         end,
-                                                                         '([^\/,#])$',
-                                                                         '\1/'
-                                                                         ), '\s', '_'),
-                                           _annotation_mapvalue.name) as map_key,
+           concat(regexp_replace(regexp_replace(
+             case
+               when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+               else
+                case
+                  when regexp_like(_annotation.ns, '^http[s]{0,1}:\/\/') then _annotation.ns
+                  else 'http://www.openmicroscopy.org/ns/default/'
+                end
+             end,
+           '([^\/,#])$',
+           '\1/'
+  ), '\s', '_'), _annotation_mapvalue.name) as map_key,
 			_annotation_mapvalue.value as map_value
 			from dataset as _dataset
 			join datasetannotationlink as _datasetannotationlink on _datasetannotationlink.parent = _dataset.id
@@ -110,18 +107,17 @@ target		ome_instance:Image/{image_id} a ome_core:Image; <{map_key}> {map_value}^
 source		select
   _image.id as image_id,
   concat(regexp_replace(regexp_replace(
-                                                                         case
-                                                                         when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
-                                                                         else
-                                                                         case
-                                                                         when starts_with(_annotation.ns, 'http') then _annotation.ns
-             when starts_with(_annotation.ns, '/') then regexp_replace(_annotation.ns, '^[\/]*', 'http://')
-                                                                         else concat('http://', _annotation.ns)
-                                                                         end
-                                                                         end,
-                                                                         '([^\/,#])$',
-                                                                         '\1/'
-                                                                         ), '\s', '_'),
+             case
+               when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+               else
+                case
+                  when regexp_like(_annotation.ns, '^http[s]{0,1}:\/\/') then _annotation.ns
+                  else 'http://www.openmicroscopy.org/ns/default/'
+                end
+             end,
+           '([^\/,#])$',
+           '\1/'
+  ), '\s', '_'),
           _annotation_mapvalue.name) as map_key,
   _annotation_mapvalue.value as map_value
   from image as _image
