@@ -459,4 +459,54 @@ ORDER BY table_name;
 | http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
 | http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
 
+* namespace regex replace
+:PROPERTIES:
+:ID:       ed9d6bf8-7e22-4e3d-b168-f0002e86ac59
+:END:
+
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser ontop :dbpassword !ontop$ :database postgres
+  select regexp_replace(regexp_replace(
+             case
+               when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+               else
+                case
+                  when regexp_like(_annotation.ns, '^http[s]{0,1}:\/\/') then _annotation.ns
+                  else 'http://www.openmicroscopy.org/ns/default/'
+                end
+             end,
+           '([^\/,#])$',
+           '\1/'
+  ), '\s', '_')
+    as ns, _annotation.ns 
+    from annotation as _annotation;
+#+end_src
+
+#+RESULTS:
+| ns                                        | ns                                                  |
+|-------------------------------------------+-----------------------------------------------------|
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://www.openmicroscopy.org/ns/default/ |                                                     |
+| http://www.openmicroscopy.org/ns/default/ |                                                     |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://www.openmicroscopy.org/ns/default/ | www.openmicroscopy.org/ns/default                   |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://www.openmicroscopy.org/ns/default/ | hms.harvard.edu/omero/forms/kvdata/MPB Annotations/ |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://www.openmicroscopy.org/ns/default/ |                                                     |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://www.openmicroscopy.org/ns/default/ |                                                     |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://www.openmicroscopy.org/ns/default/ |                                                     |
+| http://www.openmicroscopy.org/ns/default/ | /MouseCT/Skyscan/System                             |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+| http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
+
 
