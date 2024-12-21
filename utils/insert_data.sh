@@ -83,6 +83,12 @@ ann=$(omero obj new MapAnnotation ns="hms.harvard.edu/omero/forms/kvdata/MPB Ann
 omero obj new ImageAnnotationLink parent=Image:10 child=$ann
 omero obj map-set $ann mapValue Assay "PRTSC"
 
+# Add another mapannotation with namespace that starts with "/" (issue #17)
+ann=$(omero obj new MapAnnotation ns="/MouseCT/Skyscan/System")
+omero obj new ImageAnnotationLink parent=Image:9 child=$ann
+omero obj map-set $ann mapValue Assay "Bruker"
+
+
 
 # List all objects
 today=$(date +%Y-%m-%d)
