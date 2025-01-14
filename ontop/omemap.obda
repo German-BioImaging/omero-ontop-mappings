@@ -16,7 +16,7 @@ ome_instance:	https://example.org/site/
 
 [MappingDeclaration] @collection [[
 mappingId	MAPID-project(1)
-target		ome_instance:Project/{project_id} a ome_core:Project ; rdfs:label {project_name} ; rdfs:comment {project_description} .
+target		ome_instance:Project/{project_id} a ome_core:Project ; rdfs:label {project_name} ; rdfs:comment {project_description} . 
 source		select
 			_project.id as project_id,
 			_project.name as project_name,
@@ -24,7 +24,7 @@ source		select
 			from project as _project
 
 mappingId	MAPID-project(2)
-target		ome_instance:Project/{project_id} a ome_core:Project ; ome_core:dataset ome_instance:Dataset/{dataset_id} .
+target		ome_instance:Project/{project_id} a ome_core:Project ; ome_core:dataset ome_instance:Dataset/{dataset_id} . 
 source		select
 			_project.id as project_id,
 			_projectdatasetlink.child as dataset_id
@@ -32,22 +32,22 @@ source		select
 			left join projectdatasetlink as _projectdatasetlink on _project.id = _projectdatasetlink.parent
 
 mappingId	MAPID-project(3)
-target		ome_instance:Project/{project_id} a ome_core:Project ; <{map_key}> {map_value}^^xsd:string .
+target		ome_instance:Project/{project_id} a ome_core:Project ; <{map_key}> {map_value}^^xsd:string . 
 source		select
-			      _project.id as project_id,
-   concat(regexp_replace(regexp_replace(
-             case
-               when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
-               else
-                case
-                  when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
-                  else 'http://www.openmicroscopy.org/ns/default/'
-                end
-             end,
-           '([^\/,#])$',
-           '\1/'
-  ), '\s', '_'),
-           _annotation_mapvalue.name) as map_key,
+			_project.id as project_id,
+			regexp_replace(regexp_replace(
+			concat(
+			case
+			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+			else
+			case
+			when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
+			else 'http://www.openmicroscopy.org/ns/default/'
+			end
+			end, _annotation_mapvalue.name),
+			'([^\/,#])$',
+			'\1/'
+			), '[\s,\[,\],\{,\},\<,\>]', '_') as map_key,
 			_annotation_mapvalue.value as map_value
 			from project as _project
 			join projectannotationlink as _projectannotationlink on _projectannotationlink.parent = _project.id
@@ -55,7 +55,7 @@ source		select
 			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
 mappingId	MAPID-dataset-0
-target		ome_instance:Dataset/{dataset_id} a ome_core:Dataset ; rdfs:label {dataset_name} ; rdfs:comment {dataset_description}.
+target		ome_instance:Dataset/{dataset_id} a ome_core:Dataset ; rdfs:label {dataset_name} ; rdfs:comment {dataset_description} . 
 source		select
 			_dataset.id as dataset_id,
 			_dataset.name as dataset_name,
@@ -63,30 +63,31 @@ source		select
 			from dataset as _dataset
 
 mappingId	MAPID-dataset-1
-target		ome_instance:Dataset/{dataset_id} ome_core:image ome_instance:Image/{image_id}.
+target		ome_instance:Dataset/{dataset_id} ome_core:image ome_instance:Image/{image_id} . 
 source		select
 			_dataset.id as dataset_id,
 			_datasetimagelink.child as image_id
 			from dataset as _dataset
-      left join datasetimagelink  as _datasetimagelink on _dataset.id = _datasetimagelink.parent
+			left join datasetimagelink  as _datasetimagelink on _dataset.id = _datasetimagelink.parent
 
 mappingId	MAPID-dataset-2
-target		ome_instance:Dataset/{dataset_id} <{map_key}> {map_value}^^xsd:string .
+target		ome_instance:Dataset/{dataset_id} <{map_key}> {map_value}^^xsd:string . 
 source		select
 			_dataset.id as dataset_id,
 			_datasetannotationlink.child as annotation_id,
-           concat(regexp_replace(regexp_replace(
-             case
-               when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
-               else
-                case
-                  when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
-                  else 'http://www.openmicroscopy.org/ns/default/'
-                end
-             end,
-           '([^\/,#])$',
-           '\1/'
-  ), '\s', '_'), _annotation_mapvalue.name) as map_key,
+			regexp_replace(regexp_replace(
+			concat(
+			case
+			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+			else
+			case
+			when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
+			else 'http://www.openmicroscopy.org/ns/default/'
+			end
+			end, _annotation_mapvalue.name),
+			'([^\/,#])$',
+			'\1/'),
+			'[\s,\[,\],\{,\},\<,\>]', '_') as map_key,
 			_annotation_mapvalue.value as map_value
 			from dataset as _dataset
 			join datasetannotationlink as _datasetannotationlink on _datasetannotationlink.parent = _dataset.id
@@ -94,7 +95,7 @@ source		select
 			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
 mappingId	MAPID-Image-0
-target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; ome_core:acquisitionDate {image_acquisitiondate}^^xsd:dateTime ; dc:identifier {image_id}^^xsd:string .
+target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; ome_core:acquisitionDate {image_acquisitiondate}^^xsd:dateTime ; dc:identifier {image_id}^^xsd:string . 
 source		select
 			_image.id as image_id,
 			_image.acquisitiondate as image_acquisitiondate,
@@ -103,27 +104,27 @@ source		select
 			from image as _image
 
 mappingId	MAPID-Image-1
-target		ome_instance:Image/{image_id} a ome_core:Image; <{map_key}> {map_value}^^xsd:string .
+target		ome_instance:Image/{image_id} a ome_core:Image ; <{map_key}> {map_value}^^xsd:string . 
 source		select
-  _image.id as image_id,
-  concat(regexp_replace(regexp_replace(
-             case
-               when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
-               else
-                case
-                  when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
-                  else 'http://www.openmicroscopy.org/ns/default/'
-                end
-             end,
-           '([^\/,#])$',
-           '\1/'
-  ), '\s', '_'),
-          _annotation_mapvalue.name) as map_key,
-  _annotation_mapvalue.value as map_value
-  from image as _image
-  join imageannotationlink as _imageannotationlink on _imageannotationlink.parent = _image.id
-  join annotation as _annotation on _imageannotationlink.child = _annotation.id
-  join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
+			_image.id as image_id,
+			regexp_replace(regexp_replace(
+			concat(
+			case
+			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+			else
+			case
+			when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
+			else 'http://www.openmicroscopy.org/ns/default/'
+			end
+			end, _annotation_mapvalue.name),
+			'([^\/,#])$',
+			'\1/'),
+			'[\s,\[,\],\{,\},\<,\>]', '_') as map_key,
+			_annotation_mapvalue.value as map_value
+			from image as _image
+			join imageannotationlink as _imageannotationlink on _imageannotationlink.parent = _image.id
+			join annotation as _annotation on _imageannotationlink.child = _annotation.id
+			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
 mappingId	MAPID-experimentergroup
 target		ome_instance:ExperimenterGroup/{experimentergroup_id} a ome_core:ExperimenterGroup . 
