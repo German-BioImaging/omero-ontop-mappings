@@ -47,7 +47,7 @@ source		select
 			end, _annotation_mapvalue.name),
 			'([^\/,#])$',
 			'\1/'
-			), '[\s,\[,\],\{,\},\<,\>]', '_') as map_key,
+			), '[\s,\[,\],\{,\},\<,\>]', '_', 'g') as map_key,
 			_annotation_mapvalue.value as map_value
 			from project as _project
 			join projectannotationlink as _projectannotationlink on _projectannotationlink.parent = _project.id
@@ -87,7 +87,7 @@ source		select
 			end, _annotation_mapvalue.name),
 			'([^\/,#])$',
 			'\1/'),
-			'[\s,\[,\],\{,\},\<,\>]', '_') as map_key,
+			'[\s,\[,\],\{,\},\<,\>]', '_', 'g') as map_key,
 			_annotation_mapvalue.value as map_value
 			from dataset as _dataset
 			join datasetannotationlink as _datasetannotationlink on _datasetannotationlink.parent = _dataset.id
@@ -119,7 +119,7 @@ source		select
 			end, _annotation_mapvalue.name),
 			'([^\/,#])$',
 			'\1/'),
-			'[\s,\[,\],\{,\},\<,\>]', '_') as map_key,
+			'[\s,\[,\],\{,\},\<,\>]', '_', 'g') as map_key,
 			_annotation_mapvalue.value as map_value
 			from image as _image
 			join imageannotationlink as _imageannotationlink on _imageannotationlink.parent = _image.id
