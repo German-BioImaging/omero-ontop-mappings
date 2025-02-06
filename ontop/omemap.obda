@@ -10,7 +10,7 @@ obda:		https://w3id.org/obda/vocabulary#
 rdfs:		http://www.w3.org/2000/01/rdf-schema#
 vcard:		http://www.w3.org/2006/vcard/ns#
 omemap:		https://www.openmicroscopy.org/omemap#
-ome_core:	http://www.openmicroscopy.org/rdf/2016-06/ome_core/
+ome_core:	https://ld.openmicroscopy.org/core/
 ome_marshal:	http://www.openmicroscopy.org/Schemas/OME/2015-01/
 ome_instance:	https://example.org/site/
 
@@ -99,7 +99,7 @@ source		select
 			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
 mappingId	MAPID-Image-0
-target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; ome_core:acquisitionDate {image_acquisitiondate}^^xsd:dateTime ; dc:identifier {image_id}^^xsd:string . 
+target		ome_instance:Image/{image_id} a ome_core:Image ; rdfs:label {image_name} ; rdfs:comment {image_description} ; ome_core:acquisition_date {image_acquisitiondate}^^xsd:dateTime ; ome_core:id {image_id}^^xsd:string . 
 source		select
 			_image.id as image_id,
 			_image.acquisitiondate as image_acquisitiondate,
@@ -156,14 +156,8 @@ source		select
 			wellsample.id as wellsample_id
 			from wellsample ;
 
-mappingId	MAPID-reagentset
-target		ome_instance:ReagentSet/{reagentset_id} a ome_core:ReagentSet . 
-source		select
-			reagent.id as reagentset_id
-			from reagent ;
-
 mappingId	MAPID-dataset_tag
-target		ome_instance:Dataset/{dataset_id} ome_core:tagAnnotationValue {tag_text} . 
+target		ome_instance:Dataset/{dataset_id} ome_core:tag_annotation_value {tag_text} . 
 source		select
 			dataset.id as dataset_id,
 			annotation.textvalue as tag_text
@@ -172,7 +166,7 @@ source		select
 			join annotation on datasetannotationlink.child = annotation.id where annotation.textvalue is not NULL;
 
 mappingId	MAPID-image_tag
-target		ome_instance:Image/{image_id} ome_core:tagAnnotationValue {tag_text} . 
+target		ome_instance:Image/{image_id} ome_core:tag_annotation_value {tag_text} . 
 source		select
 			image.id as image_id,
 			annotation.textvalue as tag_text
@@ -181,7 +175,7 @@ source		select
 			join annotation on imageannotationlink.child = annotation.id where annotation.textvalue is not NULL;
 
 mappingId	MAPID-project_tag
-target		ome_instance:Project/{project_id} ome_core:tagAnnotationValue {tag_text} . 
+target		ome_instance:Project/{project_id} ome_core:tag_annotation_value {tag_text} . 
 source		select
 			project.id as project_id,
 			annotation.textvalue as tag_text
@@ -190,11 +184,11 @@ source		select
 			join annotation on projectannotationlink.child = annotation.id where annotation.textvalue is not NULL;
 
 mappingId	MAPID-a5bdd29d4c994a6bbb3acdc666403abd
-target		ome_instance:RegionOfInterest/{roi_id} a ome_core:RegionOfInterest ; dc:identifier {roi_id}^^xsd:string . 
+target		ome_instance:RegionOfInterest/{roi_id} a ome_core:ROI ; ome_core:id {roi_id}^^xsd:string . 
 source		select id as roi_id from roi;
 
 mappingId	MAPID-roi
-target		ome_instance:RegionOfInterest/{roi_id} a ome_core:RegionOfInterest ; ome_core:image ome_instance:Image/{roi_image_id} ; dc:identifier {roi_id}^^xsd:string . ome_instance:Image/{roi_image_id} ome_core:regionOfInterest ome_instance:RegionOfInterest/{roi_id} . 
+target		ome_instance:ROI/{roi_id} a ome_core:ROI ; ome_core:image ome_instance:Image/{roi_image_id} ; ome_core:id {roi_id}^^xsd:string . ome_instance:Image/{roi_image_id} ome_core:roi ome_instance:RegionOfInterest/{roi_id} . 
 source		select id as roi_id, image as roi_image_id from roi ;
 ]]
 

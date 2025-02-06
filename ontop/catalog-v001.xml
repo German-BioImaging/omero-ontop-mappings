@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <uri id="Imports Wizard Entry" name="http://www.openmicroscopy.org/rdf/2016-06/ome_core/" uri="https://raw.githubusercontent.com/German-BioImaging/ome-owl/refs/heads/ome-owl_for_ontop/ontology/owl/ome_core/ome_core.owl.ttl"/>
+    <uri id="User Edited Redirect" name="https://ld.openmicroscopy.org/core/" uri="core.owl.ttl"/>
+    <uri id="Imports Wizard Entry" name="http://purl.org/dc/elements/1.1/" uri="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_elements.ttl"/>
+    <uri id="Imports Wizard Entry" name="http://www.w3.org/2000/01/rdf-schema#" uri="https://www.w3.org/2000/01/rdf-schema"/>
     <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base=""/>
 </catalog>
