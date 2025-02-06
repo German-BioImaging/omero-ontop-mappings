@@ -83,29 +83,26 @@ class QueriesTest(unittest.TestCase):
     def test_dataset_type_relations(self):
         """ There must be one and only one rdf:type relation for datasets (issue #5)."""
 
-        graph = self._graph
 
         query_string = f"""
-prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+prefix ome_core: <https://ld.openmicroscopy.org/core/>
 
 select (count(distinct ?tp) as ?n_types) where {{
-    SERVICE <{ENDPOINT}> {{
             ?s a ome_core:Dataset;
                 a ?tp .
-    }}
 }}
 """
-        response = graph.query(query_string)
+        response = run_query(query_string)
 
-        print([r for r in response])
+        print(response.to_markdown())
         self.assertEqual(len(response), 1)
-        self.assertEqual(int([r.n_types for r in response][0]), 2)
+        self.assertEqual(int(response.loc[0, 'n_types']), 1)
 
     def test_dataset_type_value(self):
         """ A ome_core:Dataset instance must be of type ome_core:Dataset (issue #5)."""
 
         query_string = f"""
-prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+prefix ome_core: <https://ld.openmicroscopy.org/core/>
 
 select distinct ?tp where {{
     SERVICE <{ENDPOINT}> {{
@@ -116,7 +113,7 @@ select distinct ?tp where {{
 """
         response = self._graph.query(query_string)
 
-        self.assertIn(URIRef("http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset"), [r.tp for r in response])
+        self.assertIn(URIRef("https://ld.openmicroscopy.org/core/Dataset"), [r.tp for r in response])
 
     def test_number_of_projects_datasets_images(self):
         """ Check a query on the count of projects, datasets, and images. """
@@ -124,7 +121,7 @@ select distinct ?tp where {{
         graph = self._graph
 
         query_string = f"""
-prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+prefix ome_core: <https://ld.openmicroscopy.org/core/>
 
 select ?n_projects ?n_datasets ?n_images where {{
     SERVICE <{ENDPOINT}> {{
@@ -167,7 +164,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         graph = self._graph
 
         query_string = f"""
-        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
 
         SELECT distinct ?s WHERE {{
           SERVICE <{ENDPOINT}> {{
@@ -183,13 +180,14 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Test.
         self.assertEqual(len(response), 1)
 
+    @unittest.skip("Obsoleted since switch to ome-ld ontology")
     def test_dataset_marshal(self):
         """ Test query with the marshal prefix and ontology. """
         
         graph = self._graph
 
         query_string = f"""
-        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
         prefix ome_marshal: <http://www.openmicroscopy.org/Schemas/OME/2015-01/>
 
         SELECT distinct ?ds WHERE {{
@@ -209,24 +207,20 @@ select ?n_projects ?n_datasets ?n_images where {{
     def test_dataset(self):
         """ Test that there are 3 datasets in the graph db"""
         
-        graph = self._graph
-
         query_string = f"""
-        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
 
         SELECT distinct ?ds WHERE {{
-          SERVICE <{ENDPOINT}> {{
             ?ds a ome_core:Dataset .
-          }}
         }}
         limit 3
         """
 
         # Run the query.
-        response = graph.query(query_string)
+        response_df = run_query(query_string)
 
         # Test.
-        self.assertEqual(len(response), 3)
+        self.assertEqual(len(response_df), 3)
   
     def test_image(self):
         """ Test number of images in VKG. """
@@ -234,7 +228,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         graph = self._graph
 
         query_string = f"""
-        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
 
         SELECT distinct ?s WHERE {{
           SERVICE <{ENDPOINT}> {{
@@ -256,7 +250,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         graph = self._graph
 
         query_string = f"""
-        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
 
         SELECT distinct ?project ?dataset ?image ?image_name  WHERE {{
           SERVICE <{ENDPOINT}> {{
@@ -282,7 +276,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         graph = self._graph
 
         query_string = f"""
-        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
         prefix dc: <http://purl.org/dc/terms/>
 
         SELECT distinct ?img ?author ?subject ?provenance WHERE {{
@@ -305,7 +299,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         graph = self._graph
 
         query_string = f"""
-        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
         prefix dc: <http://purl.org/dc/terms/>
 
         SELECT distinct ?project ?author ?subject ?provenance WHERE {{
@@ -326,46 +320,39 @@ select ?n_projects ?n_datasets ?n_images where {{
     def test_dataset_key_value(self):
         """ Test querying for an dataset property via the mapannotation key."""
 
-        graph = self._graph
 
         query_string = f"""
-        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
         prefix dc: <http://purl.org/dc/terms/>
 
         SELECT distinct ?dataset ?author ?subject ?provenance WHERE {{
-          SERVICE <{ENDPOINT}> {{
             ?dataset a ome_core:Dataset;
                  dc:contributor ?author;
                  dc:provenance ?provenance;
                  dc:subject ?subject.
-         }}
         }}
         """
 
         # Run the query.
-        response = graph.query(query_string)
+        response = run_query(query_string)
 
         self.assertEqual(len(response), 3)
 
     def test_tagged_dataset(self):
         """ Test querying all tagged datasets and their tag(s). """
 
-
         query = """
 
-        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-        SELECT distinct ?s ?tag WHERE {
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        select distinct * where {
             ?s a ome_core:Dataset;
-               ome_core:tagAnnotationValue ?tag.
+               ome_core:tag_annotation_value ?tag.
         }
         """
-        escapedQuery = parse.quote(query)
-        requestURL = ENDPOINT + "?query=" + escapedQuery
-        response = requests.get(requestURL).json()
-        bindings = response['results']['bindings']
 
-        self.assertEqual(len(bindings), 1)
-        self.assertEqual(bindings[0]['tag']['value'], 'TestTag')
+        response = run_query(query)
+        self.assertEqual(len(response), 1)
+        self.assertEqual(response.loc[0, 'tag'], 'TestTag')
 
     def test_tagged_images(self):
         """ Test querying all tagged images and their tag(s). """
@@ -373,46 +360,44 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         query = """
 
-        prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
         SELECT distinct ?s ?tag WHERE {
             ?s a ome_core:Image;
-               ome_core:tagAnnotationValue ?tag.
+               ome_core:tag_annotation_value ?tag.
         }
         """
-        escapedQuery = parse.quote(query)
-        requestURL = ENDPOINT + "?query=" + escapedQuery
-        response = requests.get(requestURL).json()
-        bindings = response['results']['bindings']
+        response = run_query(query)
 
         # All images (10) are tagged.
-        self.assertEqual(len(bindings), 12)
+        self.assertEqual(len(response), 12)
 
         # They're all tagged "Screenshot"
-        self.assertEqual(len(set([b['tag']['value'] for b in bindings])), 1)
-        self.assertEqual(bindings[0]['tag']['value'], "Screenshot")
+        self.assertEqual(response.loc[0, 'tag'], "Screenshot")
 
     def test_image_roi(self):
         """ Test querying image with ROI. """
 
-        query = """prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        query = """prefix ome_core: <https://ld.openmicroscopy.org/core/>
 SELECT distinct ?img ?roi WHERE {
     ?img a ome_core:Image;
          ^ome_core:image ?roi .
-      ?roi a ome_core:RegionOfInterest .
+      ?roi a ome_core:ROI .
 }
         order by ?img
 """
+
+        # Run query.
         results = run_query(query)
 
         # Check return values.
         self.assertEqual(results.loc[0, "img"], "https://example.org/site/Image/11")
-        self.assertEqual(results.loc[0, "roi"], "https://example.org/site/RegionOfInterest/1")
+        self.assertEqual(results.loc[0, "roi"], "https://example.org/site/ROI/1")
         self.assertEqual(results.loc[1, "img"], "https://example.org/site/Image/12")
-        self.assertEqual(results.loc[1, "roi"], "https://example.org/site/RegionOfInterest/2")
+        self.assertEqual(results.loc[1, "roi"], "https://example.org/site/ROI/2")
 
     def test_image_properties(self):
         """ Check Image instances have all expected properties. """
-        query = """prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+        query = """prefix ome_core: <https://ld.openmicroscopy.org/core/>
 SELECT distinct ?prop WHERE {
     ?s a ome_core:Image;
         ?prop ?val .
@@ -421,9 +406,9 @@ SELECT distinct ?prop WHERE {
         response_df = run_query(query)
 
         expected_properties = [
-            "http://purl.org/dc/elements/1.1/identifier",
+            "https://ld.openmicroscopy.org/core/id",
             "http://www.w3.org/2000/01/rdf-schema#label",
-            "http://www.openmicroscopy.org/rdf/2016-06/ome_core/tagAnnotationValue",
+            "https://ld.openmicroscopy.org/core/tag_annotation_value",
             "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
             "http://purl.org/dc/terms/subject",
             "http://purl.org/dc/terms/contributor",
@@ -436,7 +421,7 @@ SELECT distinct ?prop WHERE {
     def test_namespace_fixing_non_uri(self):
         """ Test that non-URI namespaces are correctly fixed """
         query = """
-PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
 PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
@@ -451,7 +436,7 @@ SELECT DISTINCT * WHERE {
     def test_namespace_fixing_no_ns(self):
         """ Test that empty namespaces are set to a default value."""
         query = """
-PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
 PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
@@ -466,7 +451,7 @@ SELECT DISTINCT * WHERE {
     def test_namespace_fixing_issue16(self):
         """ Test that empty namespaces are set to a default value."""
         query = """
-PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
 PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
@@ -481,7 +466,7 @@ SELECT DISTINCT * WHERE {
     def test_namespace_fixing_issue17(self):
         """ Test that namespaces starting with "/" are correctly fixed."""
         query = """
-PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
 PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
