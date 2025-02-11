@@ -2,6 +2,14 @@
 
 This repository contains the code to create a virtual knowledge graph for [OMERO](https://openmicroscopy.org/omero) using [ontop-vkg](https://ontop-vkg.org) mappings.
 
+## Preparations
+### Install the Ontop command line client
+The utility script in *utils\/install_ontop.sh* can be used to install the ontop cli into *ontop-cli*. We will assume the binary *ontop* is located in that directory. The script also installs the postgresql jdbc driver into *ontop-cli\/jdbc\/*.
+
+### Create read-only OMERO DB user
+We strongly suggest to create a special DB user to the OMERO postgresql database with read-only access to all public
+tables in the OMERO database. In the following, we assume this user with username `ontop` and password `!ontop$` exists.
+
 ## Deployment
 To deploy your own OMERO-VKG, follow these steps:
 ### Generate site configuration directory
@@ -9,17 +17,17 @@ In the top level directory, run the command
 ```console
 bash deploy.sh PREFIX URI
 ```
-Replace `PREFIX` AND `URI` with the prefix name and URL for your OMERO instance, respectively. E.g. for the (hypothetical ) Institute of Bioimaging, which
-runs OMERO at the URL `https://ome.iob.net`, a sensible choice would be `setup_site.sh iob https://ome.iob.net/`.
+Replace `PREFIX` AND `URI` with the prefix name and URL for your OMERO instance, respectively. E.g. for the (hypothetical ) Institute of Bioimaging, which 
+runs OMERO at the URL `https://ome.iob.net`, a sensible choice would be `bash deploy.sh iob https://ome.iob.net/`.
 
 This will create a new deployment directory named after the `PREFIX` (/iob\// in the example above),
 containing these files:
 
-1. /iob\/iob.ttl/: The mapping ontology
-1. /iob\/iob.obda/: The mappings with adjusted site prefix and URL.
-1. /iob\/catalog-v001.xml/: 3rd party ontologies imported into /omemap.ttl/, in particular the OME core ontology.
-1. /iob\/iob.properties/: Properties file containing the database connection parameters.
-1. /iob\/core.owl.ttl: A patched version of the OMERO core ontology originally obtained form https://joshmoore.github.io/ome-ld/core . 
+1. *PREFIX.ttl*: The mapping ontology
+1. *PREFIX.obda*: The mappings with adjusted site prefix and URL.
+1. *catalog-v001.xml*: 3rd party ontologies imported into /omemap.ttl/, in particular the OME core ontology.
+1. *PREFIX.properties*: Properties file containing the database connection parameters.
+1. *core.owl.ttl*: A patched version of the OMERO core ontology originally obtained form https://joshmoore.github.io/ome-ld/core . 
 
 ### Edit properties file
 In the properties file, you need to change the values for `jdbc.user`, `jdbc.password`, and `jdbc.url`. Consider setting up a read-only database user (role)
@@ -29,18 +37,22 @@ the postgresql daemon accepts requests. Leave the `jdbc.driver` value as it is.
 ### Test setup
 Run
 ```console
-ontop-cli/ontop validate -m PREFIX/PREFIX.obda -t PREFIX/omemap.ttl -p PREFIX/PREFIX.properties -x PREFIX/catalog-v001.xml
+ontop-cli/ontop validate -m PREFIX/PREFIX.obda -t PREFIX/PREFIX.ttl -p PREFIX/PREFIX.properties -x PREFIX/catalog-v001.xml
 ```
 to validate your deployment.
 
 ### Launch OMERO-VKG
-Run
+Change into the deployment directory
 ```console
-ontop-cli/ontop endpoint -m PREFIX/PREFIX.obda -t PREFIX/omemap.ttl -p PREFIX/PREFIX.properties -x PREFIX/catalog-v001.xml
+cd PREFIX
 ```
- or use the convenience script provided in the deployment directory.
+and run the `omero-ontop.sh` script
 
-If all goes well, this will launch the OMERO Virtual Knowledge Graph SPARQL endpoint at http://localhost:8080. You may wish to configure a different
+```console
+bash omero-ontop.sh
+```
+
+This will launch the OMERO Virtual Knowledge Graph SPARQL endpoint at http://localhost:8080. You may wish to configure a different
 port and/or hostname. Consult the ontop-cli user manual to this effect (`ontop-cli/ontop help endpoint`). 
 
 ## Development 
