@@ -64,7 +64,7 @@ cd ..
 ### Add ontop database user
 This step must be redone every time after resetting the test infrastructure.
 ```console
-utils/setup_ontop_dbuser.short
+utils/setup_ontop_dbuser.sh
 ```
 
 ### Get omero-py
@@ -90,10 +90,10 @@ utils/insert_data.sh
 ### Launch ontop endpoint
 Assuming `ontop` is in your path:
 ```console
-ontop endpoint --mapping ontop/omemap.obda \
-               --ontology ontop/omemap.ttl \
-               --properties ontop/omemap.properties \
-               --xml-catalog ontop/catalog-v001.xml \
+omero-ontop-mappings endpoint --mapping omero-ontop-mappings/omero-ontop-mappings.obda \
+               --ontology omero-ontop-mappings/omero-ontop-mappings.ttl \
+               --properties omero-ontop-mappings/omero-ontop-mappings.properties \
+               --xml-catalog omero-ontop-mappings/catalog-v001.xml \
                --dev
 ```
 The commandline arguments point to the mappings file, mapping ontology, database connection details (properties), ontology import catalog, respectively. The `--dev` flag starts ontop int development mode. Edits to the mappings or ontology will trigger a restart of the endpoint. By default, the ontop endpoint is served at [http://localhost:8080/sparql](http://localhost:8080/sparql) , the query editor is at [http://localhost:8080](http://localhost:8080) . Use the `--port` option to configure a different port.
