@@ -10,6 +10,6 @@ CATALOG=catalog-v001.xml
 
 $ONTOPBIN endpoint --mapping $MAPPING \
                    --ontology $ONTOLOGY \
-                   --properties $PROPERTIES
+                   --properties $PROPERTIES \
                    --xml-catalog $CATALOG \
                    $@
