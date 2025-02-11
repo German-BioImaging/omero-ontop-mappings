@@ -27,16 +27,19 @@ cp -v omero-ontop-mappings/catalog-v001.xml ${PREFIX}/.
 cp -v omero-ontop-mappings/core.owl.ttl ${PREFIX}/.
 
 # Replace site prefix and URL
-cat omero-ontop-mappings/omero-ontop-mappings.obda | sed "s/ome_instance/${PREFIX}/g" | sed "s/https:\/\/example\.org\/site\//${ESCSITE}/g" | tee ${PREFIX}/${PREFIX}.obda
+cat omero-ontop-mappings/omero-ontop-mappings.obda | sed "s/ome_instance/${PREFIX}/g" | sed "s/https:\/\/example\.org\/site\//${ESCSITE}/g" > ${PREFIX}/${PREFIX}.obda
+
+# Adjust ontop launch script
+cat omero-ontop-mappings/omero-ontop.sh | sed "s/omero-ontop-mappings/${PREFIX}/g" > ${PREFIX}/${PREFIX}-ontop.sh
 
 # If all went well, echo how to start the endpoint
 echo "Successfully deployed omero virtual knowledge graph in ${PREFIX}/ ."
 echo ""
 echo "You should now edit the file ${PREFIX}/${PREFIX}.properties and set the correct OMERO DB username, password, and URL."
 echo ""
-echo "To launch the SPARQL endpoint and query frontend, you can then run the command"
+echo "To launch the SPARQL endpoint and query frontend, you can then `cd` into ${PREFIX}/"
+echo "and run the provided script ${PREFIX}-ontop.sh."
 echo ""
-echo "ontop-cli/ontop endpoint -m ${PREFIX}/${PREFIX}.obda -t ${PREFIX}/${PREFIX}.ttl -p ${PREFIX}/${PREFIX}.properties -x ${PREFIX}/catalog-v001.xml"
 
 
 

@@ -1,5 +1,6 @@
 #!/bin/bash
-# Launch ontop endpoint in dev mode on the omero_test_infra server.
+# Launch ontop endpoint.
+# Additional arguments and flags can be passed, e.g. `--dev` for development mode.
 
 ONTOPBIN=../ontop-cli/ontop
 MAPPING=omero-ontop-mappings.obda
@@ -7,4 +8,8 @@ ONTOLOGY=omero-ontop-mappings.ttl
 PROPERTIES=omero-ontop-mappings.properties
 CATALOG=catalog-v001.xml
 
-$ONTOPBIN endpoint -m $MAPPING -t $ONTOLOGY -p $PROPERTIES -x $CATALOG $@
+$ONTOPBIN endpoint --mapping $MAPPING \
+                   --ontology $ONTOLOGY \
+                   --properties $PROPERTIES
+                   --xml-catalog $CATALOG \
+                   $@
