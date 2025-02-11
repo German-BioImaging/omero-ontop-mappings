@@ -7,7 +7,7 @@ To deploy your own OMERO-VKG, follow these steps:
 ### Generate site configuration directory
 In the top level directory, run the command
 ```console
-deploy.sh PREFIX URI
+bash deploy.sh PREFIX URI
 ```
 Replace `PREFIX` AND `URI` with the prefix name and URL for your OMERO instance, respectively. E.g. for the (hypothetical ) Institute of Bioimaging, which
 runs OMERO at the URL `https://ome.iob.net`, a sensible choice would be `setup_site.sh iob https://ome.iob.net/`.

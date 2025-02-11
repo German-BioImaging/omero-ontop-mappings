@@ -18,16 +18,15 @@ echo $(escape_regex "$SITE")
 
 echo "Deploying site $SITE with prefix $PREFIX."
 # Copy ontop dir
-cp -avr template.d $PREFIX
-
-# Cd into new dir
-cd $PREFIX
+mkdir -vp $PREFIX
 
 # Rename files
-cp omemap.properties ${PREFIX}.properties
+cp -v template.d/omemap.properties ${PREFIX}/${PREFIX}.properties
+cp -v template.d/omemap.ttl ${PREFIX}/.
+cp -v template.d/catalog-v001.xml ${PREFIX}/.
 
 # Replace site prefix and URL
-cat omemap.obda | sed "s/ome_instance/${PREFIX}/g" | sed "s/https:\/\/example\.org\/site\//${ESCSITE}/g" > ${PREFIX}.obda
+cat template.d/omemap.obda | sed "s/ome_instance/${PREFIX}/g" | sed "s/https:\/\/example\.org\/site\//${ESCSITE}/g" > ${PREFIX}/${PREFIX}.obda
 
 
 
