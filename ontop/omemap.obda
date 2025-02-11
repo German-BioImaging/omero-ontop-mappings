@@ -11,11 +11,10 @@ rdfs:		http://www.w3.org/2000/01/rdf-schema#
 vcard:		http://www.w3.org/2006/vcard/ns#
 omemap:		https://www.openmicroscopy.org/omemap#
 ome_core:	https://ld.openmicroscopy.org/core/
-ome_marshal:	http://www.openmicroscopy.org/Schemas/OME/2015-01/
 ome_instance:	https://example.org/site/
 
 [MappingDeclaration] @collection [[
-mappingId	MAPID-project(1)
+mappingId	MAPID-project-0
 target		ome_instance:Project/{project_id} a ome_core:Project ; rdfs:label {project_name} ; rdfs:comment {project_description} . 
 source		select
 			_project.id as project_id,
@@ -23,7 +22,7 @@ source		select
 			_project.description as project_description
 			from project as _project
 
-mappingId	MAPID-project(2)
+mappingId	MAPID-project-1
 target		ome_instance:Project/{project_id} a ome_core:Project ; ome_core:dataset ome_instance:Dataset/{dataset_id} . 
 source		select
 			_project.id as project_id,
@@ -31,7 +30,7 @@ source		select
 			from project as _project
 			left join projectdatasetlink as _projectdatasetlink on _project.id = _projectdatasetlink.parent
 
-mappingId	MAPID-project(3)
+mappingId	MAPID-project-2
 target		ome_instance:Project/{project_id} a ome_core:Project ; <{map_key}> {map_value}^^xsd:string . 
 source		select
 			_project.id as project_id,
@@ -174,7 +173,7 @@ source		select
 			join imageannotationlink on imageannotationlink.parent = image.id
 			join annotation on imageannotationlink.child = annotation.id where annotation.textvalue is not NULL;
 
-mappingId	MAPID-project_tag
+mappingId	MAPID-project-3
 target		ome_instance:Project/{project_id} ome_core:tag_annotation_value {tag_text} . 
 source		select
 			project.id as project_id,
