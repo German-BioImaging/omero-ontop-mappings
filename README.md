@@ -6,7 +6,7 @@ This repository contains the code to create a virtual knowledge graph for [OMERO
 To deploy your own OMERO-VKG, follow these steps:
 ### Generate site configuration directory
 In the top level directory, run the command
-```
+```console
 deploy.sh PREFIX URI
 ```
 Replace `PREFIX` AND `URI` with the prefix name and URL for your OMERO instance, respectively. E.g. for the (hypothetical ) Institute of Bioimaging, which
@@ -19,7 +19,27 @@ This will create a new directory named after the `PREFIX` (/iob\//) in the examp
 1. /iob\/catalog-v001.xml/: 3rd party ontologies imported into /omemap.ttl/, in particular the OME core ontology.
 1. /job\/iob.properties/: Properties file containing the database connection parameters.
 
-### Adjust site prefix
+### Edit properties file
+In the properties file, you need to change the values for `jdbc.user`, `jdbc.password`, and `jdbc.url`. Consider setting up a read-only database user (role)
+with SELECT rights on the public database tables. The `jdbc.url` should be configured according to your OMERO DB host's hostname and port on which
+the postgresql daemon accepts requests. Leave the `jdbc.driver` value as it is.
+
+### Test setup
+Run
+```console
+ontop-cli/ontop validate -m PREFIX/PREFIX.obda -t PREFIX/omemap.ttl -p PREFIX/PREFIX.properties -x PREFIX/catalog-v001.xml
+```
+to validate your deployment.
+
+### Launch OMERO-VKG
+Run
+```console
+ontop-cli/ontop endpoint -m PREFIX/PREFIX.obda -t PREFIX/omemap.ttl -p PREFIX/PREFIX.properties -x PREFIX/catalog-v001.xml
+```
+
+If all goes well, this will launch the OMERO Virtual Knowledge Graph SPARQL endpoint at http://localhost:8080. You may wish to configure a different
+port and/or hostname. Consult the ontop-cli user manual to this effect (`ontop-cli/ontop help endpoint`). 
+
 ## Development 
 For development, the omero-test-infra docker-compose file can be used. Follow these step to set it up:
 
