@@ -2,13 +2,8 @@
 
 This repository contains the code to create a virtual knowledge graph for [OMERO](https://openmicroscopy.org/omero) using [ontop-vkg](https://ontop-vkg.org) mappings.
 
-## Preparations
-### Install the Ontop command line client
+## Install the Ontop command line client
 The utility script in *utils\/install_ontop.sh* can be used to install the ontop cli into *ontop-cli*. We will assume the binary *ontop* is located in that directory. The script also installs the postgresql jdbc driver into *ontop-cli\/jdbc\/*.
-
-### Create read-only OMERO DB user
-We strongly suggest to create a special DB user to the OMERO postgresql database with read-only access to all public
-tables in the OMERO database. In the following, we assume this user with username `ontop` and password `!ontop$` exists.
 
 ## Deployment
 To deploy your own OMERO-VKG, follow these steps:
@@ -31,8 +26,12 @@ containing these files:
 
 ### Edit properties file
 In the properties file, you need to change the values for `jdbc.user`, `jdbc.password`, and `jdbc.url`. Consider setting up a read-only database user (role)
-with SELECT rights on the public database tables. The `jdbc.url` should be configured according to your OMERO DB host's hostname and port on which
+with SELECT rights on the public database tables (see below). The `jdbc.url` should be configured according to your OMERO DB host's hostname and port on which
 the postgresql daemon accepts requests. Leave the `jdbc.driver` value as it is.
+
+#### Create read-only OMERO DB user
+Consult *utils/setup_ontop_dbuser.sh* and *queries/sql/ontop_user.sql* to setup the read-only DB user.
+
 
 ### Test setup
 Run
