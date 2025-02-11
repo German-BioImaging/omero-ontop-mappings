@@ -10,7 +10,6 @@
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 @prefix omemap: <https://www.openmicroscopy.org/omemap#> .
 @prefix ome_core: <https://ld.openmicroscopy.org/core/> .
-@prefix ome_marshal: <http://www.openmicroscopy.org/Schemas/OME/2015-01/> .
 @prefix ome_instance: <https://example.org/site/> .
 @base <https://www.openmicroscopy.org/omemap/> .
 
