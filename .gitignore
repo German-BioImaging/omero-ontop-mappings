@@ -6,3 +6,4 @@ ontop-cli/
 __pycache__/
 *.properties
 !omero-ontop-mappings/omero-ontop-mappings.properties
+/mpieb/
