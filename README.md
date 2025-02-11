@@ -12,12 +12,14 @@ bash deploy.sh PREFIX URI
 Replace `PREFIX` AND `URI` with the prefix name and URL for your OMERO instance, respectively. E.g. for the (hypothetical ) Institute of Bioimaging, which
 runs OMERO at the URL `https://ome.iob.net`, a sensible choice would be `setup_site.sh iob https://ome.iob.net/`.
 
-This will create a new directory named after the `PREFIX` (/iob\//) in the example above, containing four files:
+This will create a new deployment directory named after the `PREFIX` (/iob\// in the example above),
+containing these files:
 
-1. /iob\/omemap.ttl/: The mapping ontology
+1. /iob\/iob.ttl/: The mapping ontology
 1. /iob\/iob.obda/: The mappings with adjusted site prefix and URL.
 1. /iob\/catalog-v001.xml/: 3rd party ontologies imported into /omemap.ttl/, in particular the OME core ontology.
-1. /job\/iob.properties/: Properties file containing the database connection parameters.
+1. /iob\/iob.properties/: Properties file containing the database connection parameters.
+1. /iob\/core.owl.ttl: A patched version of the OMERO core ontology originally obtained form https://joshmoore.github.io/ome-ld/core . 
 
 ### Edit properties file
 In the properties file, you need to change the values for `jdbc.user`, `jdbc.password`, and `jdbc.url`. Consider setting up a read-only database user (role)
@@ -36,6 +38,7 @@ Run
 ```console
 ontop-cli/ontop endpoint -m PREFIX/PREFIX.obda -t PREFIX/omemap.ttl -p PREFIX/PREFIX.properties -x PREFIX/catalog-v001.xml
 ```
+ or use the convenience script provided in the deployment directory.
 
 If all goes well, this will launch the OMERO Virtual Knowledge Graph SPARQL endpoint at http://localhost:8080. You may wish to configure a different
 port and/or hostname. Consult the ontop-cli user manual to this effect (`ontop-cli/ontop help endpoint`). 
