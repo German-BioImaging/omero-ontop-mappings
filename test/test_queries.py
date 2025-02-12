@@ -81,7 +81,10 @@ class QueriesTest(unittest.TestCase):
                 shutil.rmtree(item)
 
     def test_dataset_type_relations(self):
-        """ There must be one and only one rdf:type relation for datasets (issue #5)."""
+        """ There must be one and only one rdf:type relation for datasets (issue #5).
+        Erratum: Since workaround of https://github.com/joshmoore/ome-ld/issues/6 most instances now have to rdf:type relations, one
+        in the omekg ontology, one in the ome core ontology.
+        """
 
 
         query_string = f"""
@@ -96,7 +99,7 @@ select (count(distinct ?tp) as ?n_types) where {{
 
         print(response.to_markdown())
         self.assertEqual(len(response), 1)
-        self.assertEqual(int(response.loc[0, 'n_types']), 1)
+        self.assertEqual(int(response.loc[0, 'n_types']), 2)
 
     def test_dataset_type_value(self):
         """ A ome_core:Dataset instance must be of type ome_core:Dataset (issue #5)."""
@@ -180,19 +183,17 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Test.
         self.assertEqual(len(response), 1)
 
-    @unittest.skip("Obsoleted since switch to ome-ld ontology")
-    def test_dataset_marshal(self):
-        """ Test query with the marshal prefix and ontology. """
+    def test_dataset_core(self):
+        """ Test query with the core prefix and ontology. """
         
         graph = self._graph
 
         query_string = f"""
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
-        prefix ome_marshal: <http://www.openmicroscopy.org/Schemas/OME/2015-01/>
 
         SELECT distinct ?ds WHERE {{
           SERVICE <{ENDPOINT}> {{
-            ?ds a ome_marshal:Dataset .
+            ?ds a ome_core:Dataset .
           }}
         }}
         limit 10
@@ -209,6 +210,8 @@ select ?n_projects ?n_datasets ?n_images where {{
         
         query_string = f"""
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omekgprops: <https://ld.openmicroscopy.org/omekg#>
 
         SELECT distinct ?ds WHERE {{
             ?ds a ome_core:Dataset .
@@ -247,25 +250,22 @@ select ?n_projects ?n_datasets ?n_images where {{
     def test_project_dataset_image(self):
         """ Test a query for a project-dataset-image hierarchy. """
 
-        graph = self._graph
-
-        query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        query_string = """
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
 
         SELECT distinct ?project ?dataset ?image ?image_name  WHERE {{
-          SERVICE <{ENDPOINT}> {{
-            ?project a ome_core:Project ;
-                     ome_core:dataset ?dataset .
-            ?dataset a ome_core:Dataset ;
-                     ome_core:image ?image .
-            ?image a ome_core:Image ;
+            ?project a omekg:Project ;
+                     omeprop:dataset ?dataset .
+            ?dataset a omekg:Dataset ;
+                     omeprop:image ?image .
+            ?image a omekg:Image ;
                    rdfs:label ?image_name .
-        }}
         }}
         """
 
         # Run the query.
-        response = graph.query(query_string)
+        response = run_query(query_string)
 
         # Should get 10 images.
         self.assertEqual(len(response), 12)
@@ -344,9 +344,10 @@ select ?n_projects ?n_datasets ?n_images where {{
         query = """
 
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix kgprops: <https://ld.openmicroscopy.org/omekg#>
         select distinct * where {
             ?s a ome_core:Dataset;
-               ome_core:tag_annotation_value ?tag.
+               kgprops:tag_annotation_value ?tag.
         }
         """
 
@@ -361,9 +362,10 @@ select ?n_projects ?n_datasets ?n_images where {{
         query = """
 
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix kgprops: <https://ld.openmicroscopy.org/omekg#>
         SELECT distinct ?s ?tag WHERE {
             ?s a ome_core:Image;
-               ome_core:tag_annotation_value ?tag.
+               kgprops:tag_annotation_value ?tag.
         }
         """
         response = run_query(query)
@@ -377,11 +379,14 @@ select ?n_projects ?n_datasets ?n_images where {{
     def test_image_roi(self):
         """ Test querying image with ROI. """
 
-        query = """prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        query = """
+prefix ome_core: <https://ld.openmicroscopy.org/core/>
+prefix kg: <https://ld.openmicroscopy.org/omekg/>
+prefix kgprops: <https://ld.openmicroscopy.org/omekg#>
 SELECT distinct ?img ?roi WHERE {
     ?img a ome_core:Image;
-         ^ome_core:image ?roi .
-      ?roi a ome_core:ROI .
+         ^kgprops:image ?roi .
+    ?roi a kg:ROI .
 }
         order by ?img
 """
@@ -406,9 +411,9 @@ SELECT distinct ?prop WHERE {
         response_df = run_query(query)
 
         expected_properties = [
-            "https://ld.openmicroscopy.org/core/id",
+            "http://purl.org/dc/elements/1.1/identifier",
             "http://www.w3.org/2000/01/rdf-schema#label",
-            "https://ld.openmicroscopy.org/core/tag_annotation_value",
+            "https://ld.openmicroscopy.org/omekg#tag_annotation_value",
             "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
             "http://purl.org/dc/terms/subject",
             "http://purl.org/dc/terms/contributor",
