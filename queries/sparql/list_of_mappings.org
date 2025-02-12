@@ -1,0 +1,1012 @@
+* A list of all OME core classes and their mapping status
+:PROPERTIES:
+:ID:       690b9bb7-ff86-4b0a-b0b1-e2969f5366f2
+:END:
+
+| class                                                      | mapping             | priority (-1: low, 0: mid, 1: high) |
+|------------------------------------------------------------+---------------------+-------------------------------------|
+| Channel                                                    |                     |                                   1 |
+| Experimenter                                               |                     |                                   1 |
+| ExperimenterGroup                                          | partially done      |                                   1 |
+| Microscope                                                 |                     |                                   1 |
+| Plane                                                      |                     |                                   1 |
+| Plate                                                      |                     |                                   1 |
+| Reference                                                  |                     |                                   1 |
+| Rights                                                     |                     |                                   1 |
+| Screen                                                     |                     |                                   1 |
+| OME                                                        | ?                   |                                   0 |
+| Leader                                                     | ?                   |                                   0 |
+| StructuredAnnotations                                      |                     |                                   0 |
+| TagAnnotation                                              |                     |                                   0 |
+| TermAnnotation                                             |                     |                                   0 |
+| TextAnnotation                                             |                     |                                   0 |
+| TimestampAnnotation                                        |                     |                                   0 |
+| TypeAnnotation                                             |                     |                                   0 |
+| Ellipse                                                    |                     |                                   0 |
+| Filter                                                     |                     |                                   0 |
+| ImagingEnvironment                                         |                     |                                   0 |
+| Laser                                                      | ?                   |                                   0 |
+| Mask                                                       |                     |                                   0 |
+| Objective                                                  |                     |                                   0 |
+| PixelsDimensionOrder                                       |                     |                                   0 |
+| Reagent                                                    |                     |                                   0 |
+| Settings                                                   |                     |                                   0 |
+| Detector                                                   |                     |                                  -1 |
+| AffineTransform                                            |                     |                                  -1 |
+| Annotation                                                 |                     |                                  -1 |
+| Arc                                                        |                     |                                  -1 |
+| PlateAcquisition                                           |                     |                                  -1 |
+| Rectangle                                                  |                     |                                  -1 |
+| Shape                                                      |                     |                                  -1 |
+| ArcType                                                    |                     |                                  -1 |
+| ArcType#Hg                                                 |                     |                                  -1 |
+| ArcType#HgXe                                               |                     |                                  -1 |
+| ArcType#Other                                              |                     |                                  -1 |
+| ArcType#Xe                                                 |                     |                                  -1 |
+| BasicAnnotation                                            |                     |                                  -1 |
+| BinData                                                    |                     |                                  -1 |
+| BinDataCompression                                         |                     |                                  -1 |
+| BinDataCompression#bzip2                                   |                     |                                  -1 |
+| BinDataCompression#none                                    |                     |                                  -1 |
+| BinDataCompression#zlib                                    |                     |                                  -1 |
+| BinaryFile                                                 |                     |                                  -1 |
+| BinaryOnly                                                 |                     |                                  -1 |
+| Binning                                                    |                     |                                  -1 |
+| Binning#1x1                                                |                     |                                  -1 |
+| Binning#2x2                                                |                     |                                  -1 |
+| Binning#4x4                                                |                     |                                  -1 |
+| Binning#8x8                                                |                     |                                  -1 |
+| Binning#Other                                              |                     |                                  -1 |
+| BooleanAnnotation                                          |                     |                                  -1 |
+| ChannelAcquisitionMode                                     |                     |                                  -1 |
+| ChannelAcquisitionMode#BrightField                         |                     |                                  -1 |
+| ChannelAcquisitionMode#FSM                                 |                     |                                  -1 |
+| ChannelAcquisitionMode#FluorescenceCorrelationSpectroscopy |                     |                                  -1 |
+| ChannelAcquisitionMode#FluorescenceLifetime                |                     |                                  -1 |
+| ChannelAcquisitionMode#LCM                                 |                     |                                  -1 |
+| ChannelAcquisitionMode#LaserScanningConfocalMicroscopy     |                     |                                  -1 |
+| ChannelAcquisitionMode#MultiPhotonMicroscopy               |                     |                                  -1 |
+| ChannelAcquisitionMode#NearFieldScanningOpticalMicroscopy  |                     |                                  -1 |
+| ChannelAcquisitionMode#Other                               |                     |                                  -1 |
+| ChannelAcquisitionMode#PALM                                |                     |                                  -1 |
+| ChannelAcquisitionMode#SPIM                                |                     |                                  -1 |
+| ChannelAcquisitionMode#STED                                |                     |                                  -1 |
+| ChannelAcquisitionMode#STORM                               |                     |                                  -1 |
+| ChannelAcquisitionMode#SecondHarmonicGenerationImaging     |                     |                                  -1 |
+| ChannelAcquisitionMode#SingleMoleculeImaging               |                     |                                  -1 |
+| ChannelAcquisitionMode#SlitScanConfocal                    |                     |                                  -1 |
+| ChannelAcquisitionMode#SpectralImaging                     |                     |                                  -1 |
+| ChannelAcquisitionMode#SpinningDiskConfocal                |                     |                                  -1 |
+| ChannelAcquisitionMode#StructuredIllumination              |                     |                                  -1 |
+| ChannelAcquisitionMode#SweptFieldConfocal                  |                     |                                  -1 |
+| ChannelAcquisitionMode#TIRF                                |                     |                                  -1 |
+| ChannelAcquisitionMode#TotalInternalReflection             |                     |                                  -1 |
+| ChannelAcquisitionMode#WideField                           |                     |                                  -1 |
+| ChannelContrastMethod                                      |                     |                                  -1 |
+| ChannelContrastMethod#Brightfield                          |                     |                                  -1 |
+| ChannelContrastMethod#DIC                                  |                     |                                  -1 |
+| ChannelContrastMethod#Darkfield                            |                     |                                  -1 |
+| ChannelContrastMethod#Fluorescence                         |                     |                                  -1 |
+| ChannelContrastMethod#HoffmanModulation                    |                     |                                  -1 |
+| ChannelContrastMethod#ObliqueIllumination                  |                     |                                  -1 |
+| ChannelContrastMethod#Other                                |                     |                                  -1 |
+| ChannelContrastMethod#Phase                                |                     |                                  -1 |
+| ChannelContrastMethod#PolarizedLight                       |                     |                                  -1 |
+| ChannelIlluminationType                                    |                     |                                  -1 |
+| ChannelIlluminationType#Epifluorescence                    |                     |                                  -1 |
+| ChannelIlluminationType#NonLinear                          |                     |                                  -1 |
+| ChannelIlluminationType#Oblique                            |                     |                                  -1 |
+| ChannelIlluminationType#Other                              |                     |                                  -1 |
+| ChannelIlluminationType#Transmitted                        |                     |                                  -1 |
+| CommentAnnotation                                          |                     |                                  -1 |
+| Dataset                                                    | done                |                                  -1 |
+| DetectorSettings                                           |                     |                                  -1 |
+| DetectorType                                               |                     |                                  -1 |
+| DetectorType#APD                                           |                     |                                  -1 |
+| DetectorType#AnalogVideo                                   |                     |                                  -1 |
+| DetectorType#CCD                                           |                     |                                  -1 |
+| DetectorType#CMOS                                          |                     |                                  -1 |
+| DetectorType#CorrelationSpectroscopy                       |                     |                                  -1 |
+| DetectorType#EBCCD                                         |                     |                                  -1 |
+| DetectorType#EMCCD                                         |                     |                                  -1 |
+| DetectorType#FTIR                                          |                     |                                  -1 |
+| DetectorType#IntensifiedCCD                                |                     |                                  -1 |
+| DetectorType#LifetimeImaging                               |                     |                                  -1 |
+| DetectorType#Other                                         |                     |                                  -1 |
+| DetectorType#PMT                                           |                     |                                  -1 |
+| DetectorType#Photodiode                                    |                     |                                  -1 |
+| DetectorType#Spectroscopy                                  |                     |                                  -1 |
+| Dichroic                                                   |                     |                                  -1 |
+| DoubleAnnotation                                           |                     |                                  -1 |
+| Experiment                                                 | partially done      |                                  -1 |
+| ExperimentValue                                            |                     |                                  -1 |
+| ExperimentValue#Colocalization                             |                     |                                  -1 |
+| ExperimentValue#Electrophysiology                          |                     |                                  -1 |
+| ExperimentValue#FISH                                       |                     |                                  -1 |
+| ExperimentValue#FP                                         |                     |                                  -1 |
+| ExperimentValue#FRET                                       |                     |                                  -1 |
+| ExperimentValue#FluorescenceLifetime                       |                     |                                  -1 |
+| ExperimentValue#FourDPlus                                  |                     |                                  -1 |
+| ExperimentValue#Immunocytochemistry                        |                     |                                  -1 |
+| ExperimentValue#Immunofluorescence                         |                     |                                  -1 |
+| ExperimentValue#IonImaging                                 |                     |                                  -1 |
+| ExperimentValue#Other                                      |                     |                                  -1 |
+| ExperimentValue#PGIDocumentation                           |                     |                                  -1 |
+| ExperimentValue#Photobleaching                             |                     |                                  -1 |
+| ExperimentValue#SPIM                                       |                     |                                  -1 |
+| ExperimentValue#Screen                                     |                     |                                  -1 |
+| ExperimentValue#SpectralImaging                            |                     |                                  -1 |
+| ExperimentValue#TimeLapse                                  |                     |                                  -1 |
+| External                                                   |                     |                                  -1 |
+| ExternalCompression                                        |                     |                                  -1 |
+| ExternalCompression#bzip2                                  |                     |                                  -1 |
+| ExternalCompression#none                                   |                     |                                  -1 |
+| ExternalCompression#zlib                                   |                     |                                  -1 |
+| Filament                                                   |                     |                                  -1 |
+| FilamentType                                               |                     |                                  -1 |
+| FilamentType#Halogen                                       |                     |                                  -1 |
+| FilamentType#Incandescent                                  |                     |                                  -1 |
+| FilamentType#Other                                         |                     |                                  -1 |
+| FileAnnotation                                             |                     |                                  -1 |
+| FilterSet                                                  |                     |                                  -1 |
+| FilterType                                                 |                     |                                  -1 |
+| FilterType#BandPass                                        |                     |                                  -1 |
+| FilterType#Dichroic                                        |                     |                                  -1 |
+| FilterType#LongPass                                        |                     |                                  -1 |
+| FilterType#MultiPass                                       |                     |                                  -1 |
+| FilterType#NeutralDensity                                  |                     |                                  -1 |
+| FilterType#Other                                           |                     |                                  -1 |
+| FilterType#ShortPass                                       |                     |                                  -1 |
+| FilterType#Tuneable                                        |                     |                                  -1 |
+| Folder                                                     |                     |                                  -1 |
+| GenericExcitationSource                                    |                     |                                  -1 |
+| HasId                                                      |                     |                                  -1 |
+| HasName                                                    |                     |                                  -1 |
+| Image                                                      | done                |                                  -1 |
+| Instrument                                                 |                     |                                  -1 |
+| Label                                                      |                     |                                  -1 |
+| LaserLaserMedium                                           |                     |                                  -1 |
+| LaserLaserMedium#Ag                                        |                     |                                  -1 |
+| LaserLaserMedium#Alexandrite                               |                     |                                  -1 |
+| LaserLaserMedium#Ar                                        |                     |                                  -1 |
+| LaserLaserMedium#ArCl                                      |                     |                                  -1 |
+| LaserLaserMedium#ArFl                                      |                     |                                  -1 |
+| LaserLaserMedium#CO                                        |                     |                                  -1 |
+| LaserLaserMedium#CO2                                       |                     |                                  -1 |
+| LaserLaserMedium#CoumarinC30                               |                     |                                  -1 |
+| LaserLaserMedium#Cu                                        |                     |                                  -1 |
+| LaserLaserMedium#EMinus                                    |                     |                                  -1 |
+| LaserLaserMedium#ErGlass                                   |                     |                                  -1 |
+| LaserLaserMedium#ErYAG                                     |                     |                                  -1 |
+| LaserLaserMedium#GaAlAs                                    |                     |                                  -1 |
+| LaserLaserMedium#GaAs                                      |                     |                                  -1 |
+| LaserLaserMedium#H2O                                       |                     |                                  -1 |
+| LaserLaserMedium#HFl                                       |                     |                                  -1 |
+| LaserLaserMedium#HeCd                                      |                     |                                  -1 |
+| LaserLaserMedium#HeNe                                      |                     |                                  -1 |
+| LaserLaserMedium#HoYAG                                     |                     |                                  -1 |
+| LaserLaserMedium#HoYLF                                     |                     |                                  -1 |
+| LaserLaserMedium#Kr                                        |                     |                                  -1 |
+| LaserLaserMedium#KrCl                                      |                     |                                  -1 |
+| LaserLaserMedium#KrFl                                      |                     |                                  -1 |
+| LaserLaserMedium#N                                         |                     |                                  -1 |
+| LaserLaserMedium#NdGlass                                   |                     |                                  -1 |
+| LaserLaserMedium#NdYAG                                     |                     |                                  -1 |
+| LaserLaserMedium#Other                                     |                     |                                  -1 |
+| LaserLaserMedium#Rhodamine6G                               |                     |                                  -1 |
+| LaserLaserMedium#Ruby                                      |                     |                                  -1 |
+| LaserLaserMedium#TiSapphire                                |                     |                                  -1 |
+| LaserLaserMedium#Xe                                        |                     |                                  -1 |
+| LaserLaserMedium#XeBr                                      |                     |                                  -1 |
+| LaserLaserMedium#XeCl                                      |                     |                                  -1 |
+| LaserLaserMedium#XeFl                                      |                     |                                  -1 |
+| LaserPulse                                                 |                     |                                  -1 |
+| LaserPulse#CW                                              |                     |                                  -1 |
+| LaserPulse#ModeLocked                                      |                     |                                  -1 |
+| LaserPulse#Other                                           |                     |                                  -1 |
+| LaserPulse#QSwitched                                       |                     |                                  -1 |
+| LaserPulse#Repetitive                                      |                     |                                  -1 |
+| LaserPulse#Single                                          |                     |                                  -1 |
+| LaserType                                                  |                     |                                  -1 |
+| LaserType#Dye                                              |                     |                                  -1 |
+| LaserType#Excimer                                          |                     |                                  -1 |
+| LaserType#FreeElectron                                     |                     |                                  -1 |
+| LaserType#Gas                                              |                     |                                  -1 |
+| LaserType#MetalVapor                                       |                     |                                  -1 |
+| LaserType#Other                                            |                     |                                  -1 |
+| LaserType#Semiconductor                                    |                     |                                  -1 |
+| LaserType#SolidState                                       |                     |                                  -1 |
+| LightEmittingDiode                                         |                     |                                  -1 |
+| LightPath                                                  |                     |                                  -1 |
+| LightSource                                                |                     |                                  -1 |
+| LightSourceSettings                                        |                     |                                  -1 |
+| Line                                                       |                     |                                  -1 |
+| ListAnnotation                                             |                     |                                  -1 |
+| LongAnnotation                                             |                     |                                  -1 |
+| M                                                          |                     |                                  -1 |
+| ManufacturerSpec                                           |                     |                                  -1 |
+| Map                                                        |                     |                                  -1 |
+| MapAnnotation                                              |                     |                                  -1 |
+| Marker                                                     |                     |                                  -1 |
+| Marker#Arrow                                               |                     |                                  -1 |
+| MetadataOnly                                               |                     |                                  -1 |
+| MicrobeamManipulation                                      |                     |                                  -1 |
+| MicrobeamManipulationValue                                 |                     |                                  -1 |
+| MicrobeamManipulationValue#FLIP                            |                     |                                  -1 |
+| MicrobeamManipulationValue#FRAP                            |                     |                                  -1 |
+| MicrobeamManipulationValue#InverseFRAP                     |                     |                                  -1 |
+| MicrobeamManipulationValue#OpticalTrapping                 |                     |                                  -1 |
+| MicrobeamManipulationValue#Other                           |                     |                                  -1 |
+| MicrobeamManipulationValue#Photoablation                   |                     |                                  -1 |
+| MicrobeamManipulationValue#Photoactivation                 |                     |                                  -1 |
+| MicrobeamManipulationValue#Uncaging                        |                     |                                  -1 |
+| MicroscopeType                                             |                     |                                  -1 |
+| MicroscopeType#Dissection                                  |                     |                                  -1 |
+| MicroscopeType#Electrophysiology                           |                     |                                  -1 |
+| MicroscopeType#Inverted                                    |                     |                                  -1 |
+| MicroscopeType#Other                                       |                     |                                  -1 |
+| MicroscopeType#Upright                                     |                     |                                  -1 |
+| NamingConvention                                           |                     |                                  -1 |
+| NamingConvention#letter                                    |                     |                                  -1 |
+| NamingConvention#number                                    |                     |                                  -1 |
+| NumericAnnotation                                          |                     |                                  -1 |
+| ObjectiveCorrection                                        |                     |                                  -1 |
+| ObjectiveCorrection#Achro                                  |                     |                                  -1 |
+| ObjectiveCorrection#Achromat                               |                     |                                  -1 |
+| ObjectiveCorrection#Apo                                    |                     |                                  -1 |
+| ObjectiveCorrection#Fl                                     |                     |                                  -1 |
+| ObjectiveCorrection#Fluar                                  |                     |                                  -1 |
+| ObjectiveCorrection#Fluor                                  |                     |                                  -1 |
+| ObjectiveCorrection#Fluotar                                |                     |                                  -1 |
+| ObjectiveCorrection#Neofluar                               |                     |                                  -1 |
+| ObjectiveCorrection#Other                                  |                     |                                  -1 |
+| ObjectiveCorrection#PlanApo                                |                     |                                  -1 |
+| ObjectiveCorrection#PlanFluor                              |                     |                                  -1 |
+| ObjectiveCorrection#PlanNeofluar                           |                     |                                  -1 |
+| ObjectiveCorrection#SuperFluor                             |                     |                                  -1 |
+| ObjectiveCorrection#UV                                     |                     |                                  -1 |
+| ObjectiveCorrection#VioletCorrected                        |                     |                                  -1 |
+| ObjectiveImmersion                                         |                     |                                  -1 |
+| ObjectiveImmersion#Air                                     |                     |                                  -1 |
+| ObjectiveImmersion#Glycerol                                |                     |                                  -1 |
+| ObjectiveImmersion#Multi                                   |                     |                                  -1 |
+| ObjectiveImmersion#Oil                                     |                     |                                  -1 |
+| ObjectiveImmersion#Other                                   |                     |                                  -1 |
+| ObjectiveImmersion#Water                                   |                     |                                  -1 |
+| ObjectiveImmersion#WaterDipping                            |                     |                                  -1 |
+| ObjectiveSettings                                          |                     |                                  -1 |
+| ObjectiveSettingsMedium                                    |                     |                                  -1 |
+| ObjectiveSettingsMedium#Air                                |                     |                                  -1 |
+| ObjectiveSettingsMedium#Glycerol                           |                     |                                  -1 |
+| ObjectiveSettingsMedium#Oil                                |                     |                                  -1 |
+| ObjectiveSettingsMedium#Other                              |                     |                                  -1 |
+| ObjectiveSettingsMedium#Water                              |                     |                                  -1 |
+| PixelType                                                  |                     |                                  -1 |
+| PixelType#bit                                              |                     |                                  -1 |
+| PixelType#complex                                          |                     |                                  -1 |
+| PixelType#double                                           |                     |                                  -1 |
+| PixelType#double-complex                                   |                     |                                  -1 |
+| PixelType#float                                            |                     |                                  -1 |
+| PixelType#int16                                            |                     |                                  -1 |
+| PixelType#int32                                            |                     |                                  -1 |
+| PixelType#int8                                             |                     |                                  -1 |
+| PixelType#uint16                                           |                     |                                  -1 |
+| PixelType#uint32                                           |                     |                                  -1 |
+| PixelType#uint8                                            |                     |                                  -1 |
+| Pixels                                                     |                     |                                  -1 |
+| PixelsDimensionOrder#XYCTZ                                 |                     |                                  -1 |
+| PixelsDimensionOrder#XYCZT                                 |                     |                                  -1 |
+| PixelsDimensionOrder#XYTCZ                                 |                     |                                  -1 |
+| PixelsDimensionOrder#XYTZC                                 |                     |                                  -1 |
+| PixelsDimensionOrder#XYZCT                                 |                     |                                  -1 |
+| PixelsDimensionOrder#XYZTC                                 |                     |                                  -1 |
+| Point                                                      |                     |                                  -1 |
+| Polygon                                                    |                     |                                  -1 |
+| Polyline                                                   |                     |                                  -1 |
+| Project                                                    | done                |                                  -1 |
+| Pump                                                       |                     |                                  -1 |
+| ROI                                                        | done                |                                  -1 |
+| ShapeFillRule                                              |                     |                                  -1 |
+| ShapeFillRule#EvenOdd                                      |                     |                                  -1 |
+| ShapeFillRule#NonZero                                      |                     |                                  -1 |
+| ShapeFontFamily                                            |                     |                                  -1 |
+| ShapeFontFamily#cursive                                    |                     |                                  -1 |
+| ShapeFontFamily#fantasy                                    |                     |                                  -1 |
+| ShapeFontFamily#monospace                                  |                     |                                  -1 |
+| ShapeFontFamily#sans-serif                                 |                     |                                  -1 |
+| ShapeFontFamily#serif                                      |                     |                                  -1 |
+| ShapeFontStyle                                             |                     |                                  -1 |
+| ShapeFontStyle#Bold                                        |                     |                                  -1 |
+| ShapeFontStyle#BoldItalic                                  |                     |                                  -1 |
+| ShapeFontStyle#Italic                                      |                     |                                  -1 |
+| ShapeFontStyle#Normal                                      |                     |                                  -1 |
+| StageLabel                                                 |                     |                                  -1 |
+| TiffData                                                   |                     |                                  -1 |
+| TransmittanceRange                                         |                     |                                  -1 |
+| UUID                                                       | for omero instance? |                                  -1 |
+| UnitsElectricPotential                                     |                     |                                  -1 |
+| UnitsElectricPotential#EV                                  |                     |                                  -1 |
+| UnitsElectricPotential#GV                                  |                     |                                  -1 |
+| UnitsElectricPotential#MV                                  |                     |                                  -1 |
+| UnitsElectricPotential#PV                                  |                     |                                  -1 |
+| UnitsElectricPotential#TV                                  |                     |                                  -1 |
+| UnitsElectricPotential#V                                   |                     |                                  -1 |
+| UnitsElectricPotential#YV                                  |                     |                                  -1 |
+| UnitsElectricPotential#ZV                                  |                     |                                  -1 |
+| UnitsElectricPotential#aV                                  |                     |                                  -1 |
+| UnitsElectricPotential#cV                                  |                     |                                  -1 |
+| UnitsElectricPotential#dV                                  |                     |                                  -1 |
+| UnitsElectricPotential#daV                                 |                     |                                  -1 |
+| UnitsElectricPotential#fV                                  |                     |                                  -1 |
+| UnitsElectricPotential#hV                                  |                     |                                  -1 |
+| UnitsElectricPotential#kV                                  |                     |                                  -1 |
+| UnitsElectricPotential#mV                                  |                     |                                  -1 |
+| UnitsElectricPotential#nV                                  |                     |                                  -1 |
+| UnitsElectricPotential#pV                                  |                     |                                  -1 |
+| UnitsElectricPotential#yV                                  |                     |                                  -1 |
+| UnitsElectricPotential#zV                                  |                     |                                  -1 |
+| UnitsElectricPotential#µV                                  |                     |                                  -1 |
+| UnitsFrequency                                             |                     |                                  -1 |
+| UnitsFrequency#EHz                                         |                     |                                  -1 |
+| UnitsFrequency#GHz                                         |                     |                                  -1 |
+| UnitsFrequency#Hz                                          |                     |                                  -1 |
+| UnitsFrequency#MHz                                         |                     |                                  -1 |
+| UnitsFrequency#PHz                                         |                     |                                  -1 |
+| UnitsFrequency#THz                                         |                     |                                  -1 |
+| UnitsFrequency#YHz                                         |                     |                                  -1 |
+| UnitsFrequency#ZHz                                         |                     |                                  -1 |
+| UnitsFrequency#aHz                                         |                     |                                  -1 |
+| UnitsFrequency#cHz                                         |                     |                                  -1 |
+| UnitsFrequency#dHz                                         |                     |                                  -1 |
+| UnitsFrequency#daHz                                        |                     |                                  -1 |
+| UnitsFrequency#fHz                                         |                     |                                  -1 |
+| UnitsFrequency#hHz                                         |                     |                                  -1 |
+| UnitsFrequency#kHz                                         |                     |                                  -1 |
+| UnitsFrequency#mHz                                         |                     |                                  -1 |
+| UnitsFrequency#nHz                                         |                     |                                  -1 |
+| UnitsFrequency#pHz                                         |                     |                                  -1 |
+| UnitsFrequency#yHz                                         |                     |                                  -1 |
+| UnitsFrequency#zHz                                         |                     |                                  -1 |
+| UnitsFrequency#µHz                                         |                     |                                  -1 |
+| UnitsLength                                                |                     |                                  -1 |
+| UnitsLength#Em                                             |                     |                                  -1 |
+| UnitsLength#Gm                                             |                     |                                  -1 |
+| UnitsLength#Mm                                             |                     |                                  -1 |
+| UnitsLength#Pm                                             |                     |                                  -1 |
+| UnitsLength#Tm                                             |                     |                                  -1 |
+| UnitsLength#Ym                                             |                     |                                  -1 |
+| UnitsLength#Zm                                             |                     |                                  -1 |
+| UnitsLength#am                                             |                     |                                  -1 |
+| UnitsLength#cm                                             |                     |                                  -1 |
+| UnitsLength#dam                                            |                     |                                  -1 |
+| UnitsLength#dm                                             |                     |                                  -1 |
+| UnitsLength#fm                                             |                     |                                  -1 |
+| UnitsLength#ft                                             |                     |                                  -1 |
+| UnitsLength#hm                                             |                     |                                  -1 |
+| UnitsLength#in                                             |                     |                                  -1 |
+| UnitsLength#km                                             |                     |                                  -1 |
+| UnitsLength#li                                             |                     |                                  -1 |
+| UnitsLength#ly                                             |                     |                                  -1 |
+| UnitsLength#m                                              |                     |                                  -1 |
+| UnitsLength#mi                                             |                     |                                  -1 |
+| UnitsLength#mm                                             |                     |                                  -1 |
+| UnitsLength#nm                                             |                     |                                  -1 |
+| UnitsLength#pc                                             |                     |                                  -1 |
+| UnitsLength#pixel                                          |                     |                                  -1 |
+| UnitsLength#pm                                             |                     |                                  -1 |
+| UnitsLength#pt                                             |                     |                                  -1 |
+| UnitsLength#reference+frame                                |                     |                                  -1 |
+| UnitsLength#thou                                           |                     |                                  -1 |
+| UnitsLength#ua                                             |                     |                                  -1 |
+| UnitsLength#yd                                             |                     |                                  -1 |
+| UnitsLength#ym                                             |                     |                                  -1 |
+| UnitsLength#zm                                             |                     |                                  -1 |
+| UnitsLength#µm                                             |                     |                                  -1 |
+| UnitsLength#Å                                              |                     |                                  -1 |
+| UnitsPower                                                 |                     |                                  -1 |
+| UnitsPower#EW                                              |                     |                                  -1 |
+| UnitsPower#GW                                              |                     |                                  -1 |
+| UnitsPower#MW                                              |                     |                                  -1 |
+| UnitsPower#PW                                              |                     |                                  -1 |
+| UnitsPower#TW                                              |                     |                                  -1 |
+| UnitsPower#W                                               |                     |                                  -1 |
+| UnitsPower#YW                                              |                     |                                  -1 |
+| UnitsPower#ZW                                              |                     |                                  -1 |
+| UnitsPower#aW                                              |                     |                                  -1 |
+| UnitsPower#cW                                              |                     |                                  -1 |
+| UnitsPower#dW                                              |                     |                                  -1 |
+| UnitsPower#daW                                             |                     |                                  -1 |
+| UnitsPower#fW                                              |                     |                                  -1 |
+| UnitsPower#hW                                              |                     |                                  -1 |
+| UnitsPower#kW                                              |                     |                                  -1 |
+| UnitsPower#mW                                              |                     |                                  -1 |
+| UnitsPower#nW                                              |                     |                                  -1 |
+| UnitsPower#pW                                              |                     |                                  -1 |
+| UnitsPower#yW                                              |                     |                                  -1 |
+| UnitsPower#zW                                              |                     |                                  -1 |
+| UnitsPower#µW                                              |                     |                                  -1 |
+| UnitsPressure                                              |                     |                                  -1 |
+| UnitsPressure#EPa                                          |                     |                                  -1 |
+| UnitsPressure#GPa                                          |                     |                                  -1 |
+| UnitsPressure#MPa                                          |                     |                                  -1 |
+| UnitsPressure#Mbar                                         |                     |                                  -1 |
+| UnitsPressure#PPa                                          |                     |                                  -1 |
+| UnitsPressure#Pa                                           |                     |                                  -1 |
+| UnitsPressure#TPa                                          |                     |                                  -1 |
+| UnitsPressure#Torr                                         |                     |                                  -1 |
+| UnitsPressure#YPa                                          |                     |                                  -1 |
+| UnitsPressure#ZPa                                          |                     |                                  -1 |
+| UnitsPressure#aPa                                          |                     |                                  -1 |
+| UnitsPressure#atm                                          |                     |                                  -1 |
+| UnitsPressure#bar                                          |                     |                                  -1 |
+| UnitsPressure#cPa                                          |                     |                                  -1 |
+| UnitsPressure#cbar                                         |                     |                                  -1 |
+| UnitsPressure#dPa                                          |                     |                                  -1 |
+| UnitsPressure#daPa                                         |                     |                                  -1 |
+| UnitsPressure#dbar                                         |                     |                                  -1 |
+| UnitsPressure#fPa                                          |                     |                                  -1 |
+| UnitsPressure#hPa                                          |                     |                                  -1 |
+| UnitsPressure#kPa                                          |                     |                                  -1 |
+| UnitsPressure#kbar                                         |                     |                                  -1 |
+| UnitsPressure#mPa                                          |                     |                                  -1 |
+| UnitsPressure#mTorr                                        |                     |                                  -1 |
+| UnitsPressure#mbar                                         |                     |                                  -1 |
+| UnitsPressure#mm+Hg                                        |                     |                                  -1 |
+| UnitsPressure#nPa                                          |                     |                                  -1 |
+| UnitsPressure#pPa                                          |                     |                                  -1 |
+| UnitsPressure#psi                                          |                     |                                  -1 |
+| UnitsPressure#yPa                                          |                     |                                  -1 |
+| UnitsPressure#zPa                                          |                     |                                  -1 |
+| UnitsPressure#µPa                                          |                     |                                  -1 |
+| UnitsTemperature                                           |                     |                                  -1 |
+| UnitsTemperature#K                                         |                     |                                  -1 |
+| UnitsTemperature#°C                                        |                     |                                  -1 |
+| UnitsTemperature#°F                                        |                     |                                  -1 |
+| UnitsTemperature#°R                                        |                     |                                  -1 |
+| UnitsTime                                                  |                     |                                  -1 |
+| UnitsTime#Es                                               |                     |                                  -1 |
+| UnitsTime#Gs                                               |                     |                                  -1 |
+| UnitsTime#Ms                                               |                     |                                  -1 |
+| UnitsTime#Ps                                               |                     |                                  -1 |
+| UnitsTime#Ts                                               |                     |                                  -1 |
+| UnitsTime#Ys                                               |                     |                                  -1 |
+| UnitsTime#Zs                                               |                     |                                  -1 |
+| UnitsTime#as                                               |                     |                                  -1 |
+| UnitsTime#cs                                               |                     |                                  -1 |
+| UnitsTime#d                                                |                     |                                  -1 |
+| UnitsTime#das                                              |                     |                                  -1 |
+| UnitsTime#ds                                               |                     |                                  -1 |
+| UnitsTime#fs                                               |                     |                                  -1 |
+| UnitsTime#h                                                |                     |                                  -1 |
+| UnitsTime#hs                                               |                     |                                  -1 |
+| UnitsTime#ks                                               |                     |                                  -1 |
+| UnitsTime#min                                              |                     |                                  -1 |
+| UnitsTime#ms                                               |                     |                                  -1 |
+| UnitsTime#ns                                               |                     |                                  -1 |
+| UnitsTime#ps                                               |                     |                                  -1 |
+| UnitsTime#s                                                |                     |                                  -1 |
+| UnitsTime#ys                                               |                     |                                  -1 |
+| UnitsTime#zs                                               |                     |                                  -1 |
+| UnitsTime#µs                                               |                     |                                  -1 |
+| Value                                                      | check if needed     |                                  -1 |
+| Well                                                       | done                |                                  -1 |
+| WellSample                                                 | done                |                                  -1 |
+| XMLAnnotation                                              |                     |                                  -1 |
+
+** obtained from this query:
+:PROPERTIES:
+:ID:       09d78431-556f-4029-b603-ef4ebef082a5
+:END:
+#+begin_src python :session rdf :async yes :results output
+  from rdflib import Graph, BNode, URIRef, Literal
+
+  graph = Graph()
+
+  graph.parse("/home/grotec/Repositories/ome-ld/static/core/owl/model.owl.ttl")
+
+  query = """
+  prefix owl: <http://www.w3.org/2002/07/owl#> 
+  select distinct ?cls_name where {
+    ?s a owl:Class .
+  filter(contains(str(?s), "openmicroscopy"))
+  bind(strafter(str(?s), "core/") as ?cls_name)
+  }
+  order by ?cls_name
+  """
+
+  results = graph.query(query)
+
+  for row in results:
+      print(row.cls_name)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+AffineTransform
+Annotation
+Arc
+ArcType
+ArcType#Hg
+ArcType#HgXe
+ArcType#Other
+ArcType#Xe
+BasicAnnotation
+BinData
+BinDataCompression
+BinDataCompression#bzip2
+BinDataCompression#none
+BinDataCompression#zlib
+BinaryFile
+BinaryOnly
+Binning
+Binning#1x1
+Binning#2x2
+Binning#4x4
+Binning#8x8
+Binning#Other
+BooleanAnnotation
+Channel
+ChannelAcquisitionMode
+ChannelAcquisitionMode#BrightField
+ChannelAcquisitionMode#FSM
+ChannelAcquisitionMode#FluorescenceCorrelationSpectroscopy
+ChannelAcquisitionMode#FluorescenceLifetime
+ChannelAcquisitionMode#LCM
+ChannelAcquisitionMode#LaserScanningConfocalMicroscopy
+ChannelAcquisitionMode#MultiPhotonMicroscopy
+ChannelAcquisitionMode#NearFieldScanningOpticalMicroscopy
+ChannelAcquisitionMode#Other
+ChannelAcquisitionMode#PALM
+ChannelAcquisitionMode#SPIM
+ChannelAcquisitionMode#STED
+ChannelAcquisitionMode#STORM
+ChannelAcquisitionMode#SecondHarmonicGenerationImaging
+ChannelAcquisitionMode#SingleMoleculeImaging
+ChannelAcquisitionMode#SlitScanConfocal
+ChannelAcquisitionMode#SpectralImaging
+ChannelAcquisitionMode#SpinningDiskConfocal
+ChannelAcquisitionMode#StructuredIllumination
+ChannelAcquisitionMode#SweptFieldConfocal
+ChannelAcquisitionMode#TIRF
+ChannelAcquisitionMode#TotalInternalReflection
+ChannelAcquisitionMode#WideField
+ChannelContrastMethod
+ChannelContrastMethod#Brightfield
+ChannelContrastMethod#DIC
+ChannelContrastMethod#Darkfield
+ChannelContrastMethod#Fluorescence
+ChannelContrastMethod#HoffmanModulation
+ChannelContrastMethod#ObliqueIllumination
+ChannelContrastMethod#Other
+ChannelContrastMethod#Phase
+ChannelContrastMethod#PolarizedLight
+ChannelIlluminationType
+ChannelIlluminationType#Epifluorescence
+ChannelIlluminationType#NonLinear
+ChannelIlluminationType#Oblique
+ChannelIlluminationType#Other
+ChannelIlluminationType#Transmitted
+CommentAnnotation
+Dataset
+Detector
+DetectorSettings
+DetectorType
+DetectorType#APD
+DetectorType#AnalogVideo
+DetectorType#CCD
+DetectorType#CMOS
+DetectorType#CorrelationSpectroscopy
+DetectorType#EBCCD
+DetectorType#EMCCD
+DetectorType#FTIR
+DetectorType#IntensifiedCCD
+DetectorType#LifetimeImaging
+DetectorType#Other
+DetectorType#PMT
+DetectorType#Photodiode
+DetectorType#Spectroscopy
+Dichroic
+DoubleAnnotation
+Ellipse
+Experiment
+ExperimentValue
+ExperimentValue#Colocalization
+ExperimentValue#Electrophysiology
+ExperimentValue#FISH
+ExperimentValue#FP
+ExperimentValue#FRET
+ExperimentValue#FluorescenceLifetime
+ExperimentValue#FourDPlus
+ExperimentValue#Immunocytochemistry
+ExperimentValue#Immunofluorescence
+ExperimentValue#IonImaging
+ExperimentValue#Other
+ExperimentValue#PGIDocumentation
+ExperimentValue#Photobleaching
+ExperimentValue#SPIM
+ExperimentValue#Screen
+ExperimentValue#SpectralImaging
+ExperimentValue#TimeLapse
+Experimenter
+ExperimenterGroup
+External
+ExternalCompression
+ExternalCompression#bzip2
+ExternalCompression#none
+ExternalCompression#zlib
+Filament
+FilamentType
+FilamentType#Halogen
+FilamentType#Incandescent
+FilamentType#Other
+FileAnnotation
+Filter
+FilterSet
+FilterType
+FilterType#BandPass
+FilterType#Dichroic
+FilterType#LongPass
+FilterType#MultiPass
+FilterType#NeutralDensity
+FilterType#Other
+FilterType#ShortPass
+FilterType#Tuneable
+Folder
+GenericExcitationSource
+HasId
+HasName
+Image
+ImagingEnvironment
+Instrument
+Label
+Laser
+LaserLaserMedium
+LaserLaserMedium#Ag
+LaserLaserMedium#Alexandrite
+LaserLaserMedium#Ar
+LaserLaserMedium#ArCl
+LaserLaserMedium#ArFl
+LaserLaserMedium#CO
+LaserLaserMedium#CO2
+LaserLaserMedium#CoumarinC30
+LaserLaserMedium#Cu
+LaserLaserMedium#EMinus
+LaserLaserMedium#ErGlass
+LaserLaserMedium#ErYAG
+LaserLaserMedium#GaAlAs
+LaserLaserMedium#GaAs
+LaserLaserMedium#H2O
+LaserLaserMedium#HFl
+LaserLaserMedium#HeCd
+LaserLaserMedium#HeNe
+LaserLaserMedium#HoYAG
+LaserLaserMedium#HoYLF
+LaserLaserMedium#Kr
+LaserLaserMedium#KrCl
+LaserLaserMedium#KrFl
+LaserLaserMedium#N
+LaserLaserMedium#NdGlass
+LaserLaserMedium#NdYAG
+LaserLaserMedium#Other
+LaserLaserMedium#Rhodamine6G
+LaserLaserMedium#Ruby
+LaserLaserMedium#TiSapphire
+LaserLaserMedium#Xe
+LaserLaserMedium#XeBr
+LaserLaserMedium#XeCl
+LaserLaserMedium#XeFl
+LaserPulse
+LaserPulse#CW
+LaserPulse#ModeLocked
+LaserPulse#Other
+LaserPulse#QSwitched
+LaserPulse#Repetitive
+LaserPulse#Single
+LaserType
+LaserType#Dye
+LaserType#Excimer
+LaserType#FreeElectron
+LaserType#Gas
+LaserType#MetalVapor
+LaserType#Other
+LaserType#Semiconductor
+LaserType#SolidState
+Leader
+LightEmittingDiode
+LightPath
+LightSource
+LightSourceSettings
+Line
+ListAnnotation
+LongAnnotation
+M
+ManufacturerSpec
+Map
+MapAnnotation
+Marker
+Marker#Arrow
+Mask
+MetadataOnly
+MicrobeamManipulation
+MicrobeamManipulationValue
+MicrobeamManipulationValue#FLIP
+MicrobeamManipulationValue#FRAP
+MicrobeamManipulationValue#InverseFRAP
+MicrobeamManipulationValue#OpticalTrapping
+MicrobeamManipulationValue#Other
+MicrobeamManipulationValue#Photoablation
+MicrobeamManipulationValue#Photoactivation
+MicrobeamManipulationValue#Uncaging
+Microscope
+MicroscopeType
+MicroscopeType#Dissection
+MicroscopeType#Electrophysiology
+MicroscopeType#Inverted
+MicroscopeType#Other
+MicroscopeType#Upright
+NamingConvention
+NamingConvention#letter
+NamingConvention#number
+NumericAnnotation
+OME
+Objective
+ObjectiveCorrection
+ObjectiveCorrection#Achro
+ObjectiveCorrection#Achromat
+ObjectiveCorrection#Apo
+ObjectiveCorrection#Fl
+ObjectiveCorrection#Fluar
+ObjectiveCorrection#Fluor
+ObjectiveCorrection#Fluotar
+ObjectiveCorrection#Neofluar
+ObjectiveCorrection#Other
+ObjectiveCorrection#PlanApo
+ObjectiveCorrection#PlanFluor
+ObjectiveCorrection#PlanNeofluar
+ObjectiveCorrection#SuperFluor
+ObjectiveCorrection#UV
+ObjectiveCorrection#VioletCorrected
+ObjectiveImmersion
+ObjectiveImmersion#Air
+ObjectiveImmersion#Glycerol
+ObjectiveImmersion#Multi
+ObjectiveImmersion#Oil
+ObjectiveImmersion#Other
+ObjectiveImmersion#Water
+ObjectiveImmersion#WaterDipping
+ObjectiveSettings
+ObjectiveSettingsMedium
+ObjectiveSettingsMedium#Air
+ObjectiveSettingsMedium#Glycerol
+ObjectiveSettingsMedium#Oil
+ObjectiveSettingsMedium#Other
+ObjectiveSettingsMedium#Water
+PixelType
+PixelType#bit
+PixelType#complex
+PixelType#double
+PixelType#double-complex
+PixelType#float
+PixelType#int16
+PixelType#int32
+PixelType#int8
+PixelType#uint16
+PixelType#uint32
+PixelType#uint8
+Pixels
+PixelsDimensionOrder
+PixelsDimensionOrder#XYCTZ
+PixelsDimensionOrder#XYCZT
+PixelsDimensionOrder#XYTCZ
+PixelsDimensionOrder#XYTZC
+PixelsDimensionOrder#XYZCT
+PixelsDimensionOrder#XYZTC
+Plane
+Plate
+PlateAcquisition
+Point
+Polygon
+Polyline
+Project
+Pump
+ROI
+Reagent
+Rectangle
+Reference
+Rights
+Screen
+Settings
+Shape
+ShapeFillRule
+ShapeFillRule#EvenOdd
+ShapeFillRule#NonZero
+ShapeFontFamily
+ShapeFontFamily#cursive
+ShapeFontFamily#fantasy
+ShapeFontFamily#monospace
+ShapeFontFamily#sans-serif
+ShapeFontFamily#serif
+ShapeFontStyle
+ShapeFontStyle#Bold
+ShapeFontStyle#BoldItalic
+ShapeFontStyle#Italic
+ShapeFontStyle#Normal
+StageLabel
+StructuredAnnotations
+TagAnnotation
+TermAnnotation
+TextAnnotation
+TiffData
+TimestampAnnotation
+TransmittanceRange
+TypeAnnotation
+UUID
+UnitsElectricPotential
+UnitsElectricPotential#EV
+UnitsElectricPotential#GV
+UnitsElectricPotential#MV
+UnitsElectricPotential#PV
+UnitsElectricPotential#TV
+UnitsElectricPotential#V
+UnitsElectricPotential#YV
+UnitsElectricPotential#ZV
+UnitsElectricPotential#aV
+UnitsElectricPotential#cV
+UnitsElectricPotential#dV
+UnitsElectricPotential#daV
+UnitsElectricPotential#fV
+UnitsElectricPotential#hV
+UnitsElectricPotential#kV
+UnitsElectricPotential#mV
+UnitsElectricPotential#nV
+UnitsElectricPotential#pV
+UnitsElectricPotential#yV
+UnitsElectricPotential#zV
+UnitsElectricPotential#µV
+UnitsFrequency
+UnitsFrequency#EHz
+UnitsFrequency#GHz
+UnitsFrequency#Hz
+UnitsFrequency#MHz
+UnitsFrequency#PHz
+UnitsFrequency#THz
+UnitsFrequency#YHz
+UnitsFrequency#ZHz
+UnitsFrequency#aHz
+UnitsFrequency#cHz
+UnitsFrequency#dHz
+UnitsFrequency#daHz
+UnitsFrequency#fHz
+UnitsFrequency#hHz
+UnitsFrequency#kHz
+UnitsFrequency#mHz
+UnitsFrequency#nHz
+UnitsFrequency#pHz
+UnitsFrequency#yHz
+UnitsFrequency#zHz
+UnitsFrequency#µHz
+UnitsLength
+UnitsLength#Em
+UnitsLength#Gm
+UnitsLength#Mm
+UnitsLength#Pm
+UnitsLength#Tm
+UnitsLength#Ym
+UnitsLength#Zm
+UnitsLength#am
+UnitsLength#cm
+UnitsLength#dam
+UnitsLength#dm
+UnitsLength#fm
+UnitsLength#ft
+UnitsLength#hm
+UnitsLength#in
+UnitsLength#km
+UnitsLength#li
+UnitsLength#ly
+UnitsLength#m
+UnitsLength#mi
+UnitsLength#mm
+UnitsLength#nm
+UnitsLength#pc
+UnitsLength#pixel
+UnitsLength#pm
+UnitsLength#pt
+UnitsLength#reference+frame
+UnitsLength#thou
+UnitsLength#ua
+UnitsLength#yd
+UnitsLength#ym
+UnitsLength#zm
+UnitsLength#µm
+UnitsLength#Å
+UnitsPower
+UnitsPower#EW
+UnitsPower#GW
+UnitsPower#MW
+UnitsPower#PW
+UnitsPower#TW
+UnitsPower#W
+UnitsPower#YW
+UnitsPower#ZW
+UnitsPower#aW
+UnitsPower#cW
+UnitsPower#dW
+UnitsPower#daW
+UnitsPower#fW
+UnitsPower#hW
+UnitsPower#kW
+UnitsPower#mW
+UnitsPower#nW
+UnitsPower#pW
+UnitsPower#yW
+UnitsPower#zW
+UnitsPower#µW
+UnitsPressure
+UnitsPressure#EPa
+UnitsPressure#GPa
+UnitsPressure#MPa
+UnitsPressure#Mbar
+UnitsPressure#PPa
+UnitsPressure#Pa
+UnitsPressure#TPa
+UnitsPressure#Torr
+UnitsPressure#YPa
+UnitsPressure#ZPa
+UnitsPressure#aPa
+UnitsPressure#atm
+UnitsPressure#bar
+UnitsPressure#cPa
+UnitsPressure#cbar
+UnitsPressure#dPa
+UnitsPressure#daPa
+UnitsPressure#dbar
+UnitsPressure#fPa
+UnitsPressure#hPa
+UnitsPressure#kPa
+UnitsPressure#kbar
+UnitsPressure#mPa
+UnitsPressure#mTorr
+UnitsPressure#mbar
+UnitsPressure#mm+Hg
+UnitsPressure#nPa
+UnitsPressure#pPa
+UnitsPressure#psi
+UnitsPressure#yPa
+UnitsPressure#zPa
+UnitsPressure#µPa
+UnitsTemperature
+UnitsTemperature#K
+UnitsTemperature#°C
+UnitsTemperature#°F
+UnitsTemperature#°R
+UnitsTime
+UnitsTime#Es
+UnitsTime#Gs
+UnitsTime#Ms
+UnitsTime#Ps
+UnitsTime#Ts
+UnitsTime#Ys
+UnitsTime#Zs
+UnitsTime#as
+UnitsTime#cs
+UnitsTime#d
+UnitsTime#das
+UnitsTime#ds
+UnitsTime#fs
+UnitsTime#h
+UnitsTime#hs
+UnitsTime#ks
+UnitsTime#min
+UnitsTime#ms
+UnitsTime#ns
+UnitsTime#ps
+UnitsTime#s
+UnitsTime#ys
+UnitsTime#zs
+UnitsTime#µs
+Value
+Well
+WellSample
+XMLAnnotation
+#+end_example
