@@ -189,5 +189,9 @@ source		select
 			_datasetimagelink.child as image_id
 			from dataset as _dataset
 			left join datasetimagelink as _datasetimagelink on _dataset.id = _datasetimagelink.parent
+
+mappingId	MAPID-1c71091abd0f428a83a02cd2ab6fe927
+target		ome_instance:Experimenter/{id} a :Experimenter ; dc:identifier {id} ; foaf:firstName {firstname} ; foaf:lastName {lastname} ; foaf:email {email} . 
+source		select * from experimenter
 ]]
 

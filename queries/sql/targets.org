@@ -320,6 +320,34 @@ ORDER BY table_name;
 :PROPERTIES:
 :ID:       71a91350-a2a8-4479-bfad-19325d02fd25
 :END:
+** All attributes
+:PROPERTIES:
+:ID:       7425289d-e78a-4b06-81eb-855f28abde0a
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select * from image; limit 10
+#+end_src
+
+#+RESULTS:
+| id | acquisitiondate | archived | description | permissions | name                                       | partial | series | version | creation_id | external_id | group_id | owner_id | update_id | experiment | fileset | format | imagingenvironment | instrument | objectivesettings | stagelabel |
+|----+-----------------+----------+-------------+-------------+--------------------------------------------+---------+--------+---------+-------------+-------------+----------+----------+-----------+------------+---------+--------+--------------------+------------+-------------------+------------|
+|  1 |                 |          |             |        -120 | 2024-10-10_14-58-36_screenshot.png         |         |      0 |         |         311 |             |        0 |        0 |       311 |            |       1 |      4 |                    |            |                   |            |
+|  2 |                 |          |             |        -120 | 2024-10-10_14-53-28_screenshot.png         |         |      0 |         |         339 |             |        0 |        0 |       339 |            |       2 |      4 |                    |            |                   |            |
+|  3 |                 |          |             |        -120 | 2024-10-10_15-17-25_screenshot.png         |         |      0 |         |         367 |             |        0 |        0 |       367 |            |       3 |      4 |                    |            |                   |            |
+|  4 |                 |          |             |        -120 | 2024-10-10_15-28-16_screenshot.png         |         |      0 |         |         395 |             |        0 |        0 |       395 |            |       4 |      4 |                    |            |                   |            |
+|  5 |                 |          |             |        -120 | 2024-10-10_15-01-36_screenshot.png         |         |      0 |         |         423 |             |        0 |        0 |       423 |            |       5 |      4 |                    |            |                   |            |
+|  6 |                 |          |             |        -120 | 2024-10-10_15-09-28_screenshot.png         |         |      0 |         |         451 |             |        0 |        0 |       451 |            |       6 |      4 |                    |            |                   |            |
+|  7 |                 |          |             |        -120 | 2024-10-10_15-07-18_screenshot.png         |         |      0 |         |         479 |             |        0 |        0 |       479 |            |       7 |      4 |                    |            |                   |            |
+|  8 |                 |          |             |        -120 | 2024-10-10_16-47-01_screenshot.png         |         |      0 |         |         507 |             |        0 |        0 |       507 |            |       8 |      4 |                    |            |                   |            |
+|  9 |                 |          |             |        -120 | 2024-10-10_16-42-47_screenshot.png         |         |      0 |         |         535 |             |        0 |        0 |       535 |            |       9 |      4 |                    |            |                   |            |
+| 10 |                 |          |             |        -120 | 2024-10-10_16-39-27_screenshot.png         |         |      0 |         |         563 |             |        0 |        0 |       563 |            |      10 |      4 |                    |            |                   |            |
+| 11 |                 |          |             |        -120 | 2024-10-10_15-28-16_screenshot.png.ome.tif |         |      0 |         |         591 |             |        0 |        0 |       591 |            |      11 |    170 |                  1 |            |                   |            |
+| 12 |                 |          |             |        -120 | image_6_with_roi.ome.tif                   |         |      0 |         |         619 |             |        0 |        0 |       619 |            |      12 |    170 |                  2 |            |                   |            |
+
+** Image annotations
+:PROPERTIES:
+:ID:       9b14e702-bc4d-4e75-8ff1-5236c6fa3a2b
+:END:
 #+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
   select image.id, concat(annotation.ns, annotation_mapvalue.name) as key, annotation_mapvalue.value
   from image
@@ -510,3 +538,35 @@ ORDER BY table_name;
 | http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
 
 
+
+* Experimenter and ExperimenterGroups
+:PROPERTIES:
+:ID:       1ee4a685-bff6-4acd-ad06-c96b32be98b5
+:END:
+** Experimenter
+:PROPERTIES:
+:ID:       e0f747e1-c4e7-4a35-b207-1147ce930b8b
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser ontop :dbpassword !ontop$ :database postgres
+  select * from experimenter ;
+  limit 10
+#+end_src
+
+#+RESULTS:
+| id | permissions | email | firstname | institution | lastname | ldap | middlename | omename | version | external_id |
+|----+-------------+-------+-----------+-------------+----------+------+------------+---------+---------+-------------|
+|  0 |           0 |       | root      |             | root     | f    |            | root    |       0 |             |
+|  1 |           0 |       | Guest     |             | Account  | f    |            | guest   |       0 |             |
+
+** Experiment
+:PROPERTIES:
+:ID:       104cf1b6-2322-410e-8089-f53fb6140138
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser ontop :dbpassword !ontop$ :database postgres
+  select * from experiment ;
+  limit 10
+#+end_src
+
+#+RESULTS:
+| id | description | permissions | version | creation_id | external_id | group_id | owner_id | update_id | type |
+|----+-------------+-------------+---------+-------------+-------------+----------+----------+-----------+------|
