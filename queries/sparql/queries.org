@@ -104,6 +104,40 @@
 | https://example.org/site/Dataset/3 | http://purl.org/dc/terms/subject                                      | OMERO Mapping                                              |
 | https://example.org/site/Dataset/3 | http://purl.org/dc/terms/provenance                                   | Screenshots                                                |
 
+* Project Dataset Image hierarchy
+:PROPERTIES:
+:ID:       9a7fae93-80a0-4cf9-b889-a60113b9bf01
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql :async yes
+  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+  SELECT distinct *  WHERE {
+      ?project a omekg:Project ;
+                omeprop:dataset ?dataset .
+      ?dataset a omekg:Dataset ;
+                omeprop:image ?image .
+      ?image a omekg:Image ;
+              rdfs:label ?image_name .
+  }
+#+end_src
+
+#+RESULTS:
+| project                            | dataset                            | image                             | image_name                                 |
+|------------------------------------+------------------------------------+-----------------------------------+--------------------------------------------|
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/7  | 2024-10-10_15-07-18_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/3  | 2024-10-10_15-17-25_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/12 | image_6_with_roi.ome.tif                   |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/11 | 2024-10-10_15-28-16_screenshot.png.ome.tif |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/2  | 2024-10-10_14-53-28_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/5  | 2024-10-10_15-01-36_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/8  | 2024-10-10_16-47-01_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/1  | 2024-10-10_14-58-36_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/10 | 2024-10-10_16-39-27_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/9  | 2024-10-10_16-42-47_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/6  | 2024-10-10_15-09-28_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/4  | 2024-10-10_15-28-16_screenshot.png         |
+
 * Image with owner
 :PROPERTIES:
 :ID:       c856598c-c952-4964-b4b2-40b4a1269afc
