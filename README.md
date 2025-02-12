@@ -14,14 +14,16 @@ bash deploy.sh PREFIX URI
 ```
 Replace `PREFIX` AND `URI` with the prefix name and URL for your OMERO instance, respectively. E.g. for the (hypothetical ) Institute of Bioimaging, running 
 OMERO at `https://ome.iob.net`, a sensible choice could be `bash deploy.sh iob https://ome.iob.net/`.
-This would create a new deployment directory named *iob\/* in the example above,
+This would create a new deployment directory named *iob\/* (in the example above),
 containing these files:
 
-1. *PREFIX.ttl*: The mapping ontology
-1. *PREFIX.obda*: The mappings with adjusted site prefix and URL.
+1. *iob.ttl*: The mapping ontology
+1. *iob.obda*: The mappings with adjusted site prefix and URL.
 1. *catalog-v001.xml*: 3rd party ontologies imported into /omemap.ttl/, in particular the OME core ontology.
-1. *PREFIX.properties*: Properties file containing the database connection parameters.
+1. *iob.properties*: Properties file containing the database connection parameters.
 1. *core.owl.ttl*: A patched version of the OMERO core ontology originally obtained form https://joshmoore.github.io/ome-ld/core . 
+
+
 
 ### Edit properties file
 In the properties file, you need to change the values for `jdbc.user`, `jdbc.password`, and `jdbc.url`. Consider setting up a read-only database user (role)
