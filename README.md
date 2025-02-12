@@ -19,9 +19,9 @@ containing these files:
 
 1. *iob.ttl*: The mapping ontology
 1. *iob.obda*: The mappings with adjusted site prefix and URL.
-1. *catalog-v001.xml*: 3rd party ontologies imported into /omemap.ttl/, in particular the OME core ontology.
 1. *iob.properties*: Properties file containing the database connection parameters.
-1. *core.owl.ttl*: A patched version of the OMERO core ontology originally obtained form https://joshmoore.github.io/ome-ld/core . 
+1. *core.owl.ttl*: A patched version of the OME core ontology originally obtained form https://joshmoore.github.io/ome-ld/core . 
+1. *catalog-v001.xml*: 3rd party ontologies imported into *iob.ttl*, in particular the OME core ontology.
 
 
 
