@@ -12,10 +12,9 @@ In the top level directory, run the command
 ```console
 bash deploy.sh PREFIX URI
 ```
-Replace `PREFIX` AND `URI` with the prefix name and URL for your OMERO instance, respectively. E.g. for the (hypothetical ) Institute of Bioimaging, which 
-runs OMERO at the URL `https://ome.iob.net`, a sensible choice would be `bash deploy.sh iob https://ome.iob.net/`.
-
-    This will create a new deployment directory named after the `PREFIX` (*iob\/* in the example above),
+Replace `PREFIX` AND `URI` with the prefix name and URL for your OMERO instance, respectively. E.g. for the (hypothetical ) Institute of Bioimaging, running 
+OMERO at `https://ome.iob.net`, a sensible choice could be `bash deploy.sh iob https://ome.iob.net/`.
+This would create a new deployment directory named *iob\/* in the example above,
 containing these files:
 
 1. *PREFIX.ttl*: The mapping ontology
