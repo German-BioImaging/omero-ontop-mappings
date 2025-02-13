@@ -19,7 +19,6 @@
 
 <https://ld.openmicroscopy.org/omekg> rdf:type owl:Ontology ;
                                        owl:imports rdfs: ,
-                                                   foaf: ,
                                                    core: ;
                                        dcterms:license "https://creativecommons.org/publicdomain/zero/1.0/" ;
                                        rdfs:label "OMERO VKG Ontology" ;
@@ -543,10 +542,20 @@ xsd:date rdf:type rdfs:Datatype .
 #    Object Properties
 #################################################################
 
+###  https://ld.openmicroscopy.org/core/experimenter
+core:experimenter owl:equivalentProperty this:experimenter .
+
+
 ###  https://ld.openmicroscopy.org/omekg#dataset
 this:dataset rdf:type owl:ObjectProperty ;
              rdfs:range core:Dataset ,
                         omekg:Dataset .
+
+
+###  https://ld.openmicroscopy.org/omekg#experimenter
+this:experimenter rdf:type owl:ObjectProperty ;
+                  rdfs:range omekg:Experimenter ;
+                  rdfs:isDefinedBy core:experimenter .
 
 
 ###  https://ld.openmicroscopy.org/omekg#image
@@ -625,6 +634,18 @@ dcterms:valid rdf:type owl:DatatypeProperty ;
 
 ###  http://xmlns.com/foaf/0.1/email
 foaf:email rdf:type owl:DatatypeProperty .
+
+
+###  http://xmlns.com/foaf/0.1/firstName
+foaf:firstName rdf:type owl:DatatypeProperty .
+
+
+###  http://xmlns.com/foaf/0.1/lastName
+foaf:lastName rdf:type owl:DatatypeProperty .
+
+
+###  http://xmlns.com/foaf/0.1/middleName
+foaf:middleName rdf:type owl:DatatypeProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#acquisition_date
@@ -745,7 +766,8 @@ dcterms:Standard rdf:type owl:Class .
 
 
 ###  http://xmlns.com/foaf/0.1/Person
-foaf:Person owl:equivalentClass omekg:Experimenter .
+foaf:Person rdf:type owl:Class ;
+            owl:equivalentClass omekg:Experimenter .
 
 
 ###  https://ld.openmicroscopy.org/core/Dataset

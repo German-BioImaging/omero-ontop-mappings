@@ -4,6 +4,7 @@ import sys
 import shutil
 import requests
 import pandas
+import pprint
 from urllib import parse
 
 import unittest
@@ -11,13 +12,13 @@ import unittest
 ENDPOINT = "http://localhost:8080/sparql"
 
 # Check if endpoint is reachable.
-try:
-    response = requests.get("/".join(os.path.split(ENDPOINT)[:-1]))
-    assert response.status_code == 200
+def check_endpoint():
+    try:
+        response = requests.get("/".join(os.path.split(ENDPOINT)[:-1]))
+        assert response.status_code == 200
 
-except: 
-    raise RuntimeError("Could not connect to ontop endpoint %s. Is ontop endpoint up and running?" % ENDPOINT)
-
+    except: 
+        raise RuntimeError("Could not connect to ontop endpoint %s. Is ontop endpoint up and running?" % ENDPOINT)
 
 
 # Test helpers
@@ -61,10 +62,16 @@ def response_frame(response):
 class QueriesTest(unittest.TestCase):
     """ :class QueriesTest: Test class hosting all test queries. """
 
+    @classmethod
+    def setUpClass(cls):
+
+        check_endpoint()
+
+        return super().setUpClass()
+
     def setUp(self):
         """ Setup run at the beginning of each test method."""
 
-        # Setup a graph.
         self._graph = Graph()
 
         # Empty list to collect files and dirs created during tests. These will be
@@ -159,8 +166,6 @@ select ?n_projects ?n_datasets ?n_images where {{
         self.assertEqual(int(number_of_objects.n_datasets), 3)
         self.assertEqual(int(number_of_objects.n_projects), 1)
 
-
-
     def test_project(self):
         """ Test number of projects in the VKG. """
 
@@ -185,7 +190,7 @@ select ?n_projects ?n_datasets ?n_images where {{
 
     def test_dataset_core(self):
         """ Test query with the core prefix and ontology. """
-        
+
         graph = self._graph
 
         query_string = f"""
@@ -204,10 +209,10 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Test.
         self.assertEqual(len(response), 3)
- 
+
     def test_dataset(self):
         """ Test that there are 3 datasets in the graph db"""
-        
+
         query_string = f"""
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
         prefix omekg: <https://ld.openmicroscopy.org/omekg/>
@@ -224,10 +229,10 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Test.
         self.assertEqual(len(response_df), 3)
-  
+
     def test_image(self):
         """ Test number of images in VKG. """
-        
+
         graph = self._graph
 
         query_string = f"""
@@ -482,6 +487,32 @@ SELECT DISTINCT * WHERE {
         response_df = run_query(query)
 
         self.assertEqual(response_df.iloc[0,0], 'Bruker')
+
+    def test_experimenter_property(self):
+        """ Test the experimenter property links to the owner in projects, datasets, images. """
+
+        query_string = """
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT distinct ?project ?dataset ?image ?image_name ?project_owner ?dataset_owner ?image_owner WHERE {{
+            ?project a omekg:Project ;
+                     omeprop:dataset ?dataset ;
+                     omeprop:experimenter ?project_owner .
+            ?dataset a omekg:Dataset ;
+                     omeprop:image ?image ;
+                     omeprop:experimenter ?dataset_owner .
+            ?image a omekg:Image ;
+                   rdfs:label ?image_name ;
+                   omeprop:experimenter ?image_owner .
+        }}
+        """
+
+        # Run the query.
+        response = run_query(query_string)
+
+        pprint.pprint(response.to_markdown())
+
 
 
 

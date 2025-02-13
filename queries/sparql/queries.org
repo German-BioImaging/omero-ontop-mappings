@@ -594,3 +594,18 @@ Find all datasets tagged "TestTag".
 | http://purl.org/dc/terms/date                                         | Sat Dec 21 06:08:37 PM CET 2024                          |
 | http://MouseCT/Skyscan/System/Assay                                   | Bruker                                                   |
 
+
+* Image and Experimenter
+:PROPERTIES:
+:ID:       b6fdc8c2-cadf-4241-a9d0-28f49b6efd1c
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+  prefix foaf: <http://xmlns.com/foaf/0.1/>
+  select * where {
+    ?img a omekg:Image;
+         omeprop:experimenter ?owner .
+    ?owner foaf:firstName ?first .
+    ?owner foaf:lastName ?last .
+#+end_src
