@@ -140,9 +140,9 @@ source		select
 			from experiment ;
 
 mappingId	MAPID-well
-target		ome_instance:Well/{well_id} a :Well ; dc:identifier {well_id} ; this:plate ome_instance:Plate/{plate_id} ; this:experimenter ome_instance:Experimenter/{owner_id} . 
-source		select well.id as well_id, owner_id, plate as plate_id
-			from well
+target		ome_instance:Well/{well_id} a :Well ; dc:identifier {well_id}^^xsd:string ; this:plate ome_instance:Plate/{plate_id} ; this:experimenter ome_instance:Experimenter/{owner_id} ; this:reagent ome_instance:Reagent/{reagent_id} . 
+source		select _well.id as well_id, _well.owner_id as owner_id, _well.plate as plate_id, _wellreagentlink.child as reagent_id
+			from well as _well left join wellreagentlink as _wellreagentlink on _well.id = _wellreagentlink.parent
 
 mappingId	MAPID-wellsample
 target		ome_instance:WellSample/{wellsample_id} a :WellSample ; dc:identifier {wellsample_id}^^xsd:string ; this:experimenter ome_instance:Experimenter/{owner_id} ; this:well ome_instance:Well/{well_id} ; this:plate_acquisition ome_instance:PlateAcquisition/{plateacquisition_id} ; this:image ome_instance:Image/{image_id} ; this:well_index {well_index}^^xsd:string . 
@@ -219,8 +219,8 @@ target		ome_instance:Screen/{screen_id} a :Screen ; dc:identifier {screen_id}^^x
 source		select _screen.id as screen_id, _screenplatelink.child as plate_id, _screen.owner_id as screen_owner_id from screen as _screen left join screenplatelink as _screenplatelink on _screen.id = _screenplatelink.parent
 
 mappingId	MAPID-281f9aebe6744a7194389d0fcc967625
-target		ome_instance:Reagent/{reagent_id} a :Reagent ; dc:identifier {reagent_id} . 
-source		select id as reagent_id from reagent
+target		ome_instance:Reagent/{reagent_id} a :Reagent ; dc:identifier {reagent_id}^^xsd:string . 
+source		select _reagent.id as reagent_id, _wellreagentlink.parent as well_id from reagent as _reagent left join wellreagentlink as _wellreagentlink on _reagent.id = _wellreagentlink.parent
 
 mappingId	MAPID-281f9aebe6744a7194389d0fcc967626
 target		ome_instance:PlateAcquisition/{plate_acquisition_id} a :PlateAcquisition ; dc:identifier {plate_acquisition_id} ; this:plate ome_instance:Plate/{plate_id} ; this:experimenter ome_instance:Experimenter/{owner_id} . 
