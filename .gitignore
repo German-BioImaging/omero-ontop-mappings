@@ -7,3 +7,4 @@ __pycache__/
 *.properties
 !omero-ontop-mappings/omero-ontop-mappings.properties
 /mpieb/
+.jupyter/

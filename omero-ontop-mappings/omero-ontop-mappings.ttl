@@ -562,8 +562,35 @@ this:experimenter rdf:type owl:ObjectProperty ;
 this:image rdf:type owl:ObjectProperty .
 
 
+###  https://ld.openmicroscopy.org/omekg#plate
+this:plate rdf:type owl:ObjectProperty ;
+           owl:inverseOf this:screen ;
+           rdfs:range omekg:Plate .
+
+
+###  https://ld.openmicroscopy.org/omekg#plate_acquisition
+this:plate_acquisition rdf:type owl:ObjectProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#reagent
+this:reagent rdf:type owl:ObjectProperty .
+
+
 ###  https://ld.openmicroscopy.org/omekg#roi
 this:roi rdf:type owl:ObjectProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#screen
+this:screen rdf:type owl:ObjectProperty ;
+            rdfs:range omekg:Screen .
+
+
+###  https://ld.openmicroscopy.org/omekg#well
+this:well rdf:type owl:ObjectProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#well_sample
+this:well_sample rdf:type owl:ObjectProperty .
 
 
 #################################################################
@@ -790,12 +817,28 @@ core:ExperimenterGroup owl:equivalentClass omekg:ExperimenterGroup .
 core:Image owl:equivalentClass omekg:Image .
 
 
+###  https://ld.openmicroscopy.org/core/Plate
+core:Plate owl:equivalentClass omekg:Plate .
+
+
+###  https://ld.openmicroscopy.org/core/PlateAcquisition
+core:PlateAcquisition owl:equivalentClass omekg:PlateAcquisition .
+
+
 ###  https://ld.openmicroscopy.org/core/Project
 core:Project owl:equivalentClass omekg:Project .
 
 
 ###  https://ld.openmicroscopy.org/core/ROI
 core:ROI owl:equivalentClass omekg:ROI .
+
+
+###  https://ld.openmicroscopy.org/core/Reagent
+core:Reagent owl:equivalentClass omekg:Reagent .
+
+
+###  https://ld.openmicroscopy.org/core/Screen
+core:Screen owl:equivalentClass omekg:Screen .
 
 
 ###  https://ld.openmicroscopy.org/core/Well
@@ -830,6 +873,14 @@ omekg:Image rdf:type owl:Class ;
             rdfs:isDefinedBy core:Image .
 
 
+###  https://ld.openmicroscopy.org/omekg/Plate
+omekg:Plate rdf:type owl:Class .
+
+
+###  https://ld.openmicroscopy.org/omekg/PlateAcquisition
+omekg:PlateAcquisition rdf:type owl:Class .
+
+
 ###  https://ld.openmicroscopy.org/omekg/Project
 omekg:Project rdf:type owl:Class ;
               rdfs:isDefinedBy core:Project .
@@ -838,6 +889,14 @@ omekg:Project rdf:type owl:Class ;
 ###  https://ld.openmicroscopy.org/omekg/ROI
 omekg:ROI rdf:type owl:Class ;
           rdfs:isDefinedBy core:ROI .
+
+
+###  https://ld.openmicroscopy.org/omekg/Reagent
+omekg:Reagent rdf:type owl:Class .
+
+
+###  https://ld.openmicroscopy.org/omekg/Screen
+omekg:Screen rdf:type owl:Class .
 
 
 ###  https://ld.openmicroscopy.org/omekg/Well

@@ -162,7 +162,7 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Check numbers.
         number_of_objects = [r for r in response][0]
-        self.assertEqual(int(number_of_objects.n_images  ),  12)
+        self.assertEqual(int(number_of_objects.n_images  ),  1548)
         self.assertEqual(int(number_of_objects.n_datasets), 3)
         self.assertEqual(int(number_of_objects.n_projects), 1)
 
@@ -243,14 +243,13 @@ select ?n_projects ?n_datasets ?n_images where {{
             ?s a ome_core:Image .
           }}
         }}
-        limit 100
         """
 
         # Run the query.
         response = graph.query(query_string)
 
         # Test.
-        self.assertEqual(len(response), 12)
+        self.assertEqual(len(response), 1548)
 
     def test_project_dataset_image(self):
         """ Test a query for a project-dataset-image hierarchy. """
@@ -514,8 +513,74 @@ SELECT DISTINCT * WHERE {
         pprint.pprint(response.to_markdown())
 
 
+    def test_screen(self):
+        """ Test query for a screen."""
 
+        query = """
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
 
+        SELECT *
+        where {{
+            ?screen a omekg:Screen .
+        }}
+        """
+
+        results = run_query(query)
+
+        pprint.pprint(results.to_markdown())
+    
+    def test_plate(self):
+        """ Test query for a plate."""
+
+        query = """
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?plate a omekg:Plate .
+        }}
+        """
+
+        results = run_query(query)
+
+        pprint.pprint(results.to_markdown())
+
+    def test_plateAcquisition(self):
+        """ Test query for a PlateAcquisition."""
+
+        query = """
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?plate_acquisition a omekg:PlateAcquisition .
+        }}
+        """
+
+        results = run_query(query)
+
+        pprint.pprint(results.to_markdown())
+
+    def test_reagent(self):
+        """ Test query for a reagent."""
+
+        query = """
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?reagent a omekg:Reagent .
+        }}
+        """
+
+        results = run_query(query)
+
+        pprint.pprint(results.to_markdown())
+    
 
 if __name__ == "__main__":
     unittest.main()

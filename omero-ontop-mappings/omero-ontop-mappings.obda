@@ -205,5 +205,21 @@ source		select id, owner_id from dataset
 mappingId	MAPID-project_experimenter
 target		ome_instance:Project/{id} a :Project ; core:experimenter ome_instance:Experimenter/{owner_id} . 
 source		select id, owner_id from project
+
+mappingId	MAPID-281f9aebe6744a7194389d0fcc967623
+target		ome_instance:Plate/{plate_id} a :Plate ; dc:identifier {plate_id} . 
+source		select id as plate_id from plate
+
+mappingId	MAPID-281f9aebe6744a7194389d0fcc967624
+target		ome_instance:Screen/{screen_id} a :Screen ; dc:identifier {screen_id} . 
+source		select id as screen_id from screen
+
+mappingId	MAPID-281f9aebe6744a7194389d0fcc967625
+target		ome_instance:Reagent/{reagent_id} a :Reagent ; dc:identifier {reagent_id} . 
+source		select id as reagent_id from reagent
+
+mappingId	MAPID-281f9aebe6744a7194389d0fcc967626
+target		ome_instance:PlateAcquisition/{plate_acquisition_id} a :PlateAcquisition ; dc:identifier {plate_acquisition_id} . 
+source		select id as plate_acquisition_id from plateAcquisition
 ]]
 
