@@ -104,7 +104,7 @@ select (count(distinct ?tp) as ?n_types) where {{
 """
         response = run_query(query_string)
 
-        print(response.to_markdown())
+        print(response.to_string())
         self.assertEqual(len(response), 1)
         self.assertEqual(int(response.loc[0, 'n_types']), 2)
 
@@ -510,7 +510,7 @@ SELECT DISTINCT * WHERE {
         # Run the query.
         response = run_query(query_string)
 
-        pprint.pprint(response.to_markdown())
+        print("\n"+response.to_string())
 
 
     def test_screen(self):
@@ -528,7 +528,9 @@ SELECT DISTINCT * WHERE {
 
         results = run_query(query)
 
-        pprint.pprint(results.to_markdown())
+        print("\n"+results.to_string())
+
+        self.assertEqual(1, len(results))
     
     def test_plate(self):
         """ Test query for a plate."""
@@ -545,7 +547,105 @@ SELECT DISTINCT * WHERE {
 
         results = run_query(query)
 
-        pprint.pprint(results.to_markdown())
+        print("\n"+results.to_string())
+
+        self.assertEqual(1, len(results))
+
+    def test_screen_plate(self):
+        """ Test query for screen and related plate."""
+        results = run_query("""
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?plate a omekg:Plate ;
+                   omeprop:screen ?screen .
+            ?screen a omekg:Screen .
+        }}
+        """)
+
+        print("\n"+results.to_string())
+
+        self.assertTupleEqual((1, 2), results.shape)
+
+    def test_plate_acquisition(self):
+        """ Test query for plate and plate acquisition."""
+
+        results = run_query("""
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?plate a omekg:Plate ;
+                   ^omeprop:plate ?acq .
+            ?acq a omekg:PlateAcquisition .
+        }}
+        """)
+
+        print("\n"+results.to_string())
+
+        self.assertTupleEqual( (1,2), results.shape )
+
+    def test_plate_well(self):
+        """ Test query for plate-acquisition and well. """
+
+        results = run_query("""
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?plate a omekg:Plate ;
+                   ^omeprop:plate ?well .
+            ?well a omekg:Well .
+        }}
+        """)
+
+        print("\n"+results.to_string())
+
+        self.assertTupleEqual((384, 2), results.shape)
+
+    def test_well_sample(self):
+        """ Test query for well and well sample."""
+
+        results = run_query("""
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?well a omekg:Well ;
+                   ^omeprop:well ?ws .
+            ?ws a omekg:WellSample .
+        }}
+        """)
+
+        print("\n"+results.to_string())
+
+        # 384 wells x 4 samples per well
+        self.assertTupleEqual((384*4, 2), results.shape)
+
+
+    def test_well_sample_image(self):
+        """ Test query for  well sample and image. """
+
+        results = run_query("""
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?ws a omekg:WellSample ;
+                   omeprop:image ?img .
+            ?img a omekg:Image .
+        }}
+        """)
+
+        print("\n"+results.to_string())
+
+        self.assertTupleEqual((1536, 2), results.shape)
 
     def test_plateAcquisition(self):
         """ Test query for a PlateAcquisition."""
@@ -562,7 +662,9 @@ SELECT DISTINCT * WHERE {
 
         results = run_query(query)
 
-        pprint.pprint(results.to_markdown())
+        print("\n"+results.to_string())
+
+        self.assertEqual(1, len(results))
 
     def test_reagent(self):
         """ Test query for a reagent."""
@@ -579,8 +681,9 @@ SELECT DISTINCT * WHERE {
 
         results = run_query(query)
 
-        pprint.pprint(results.to_markdown())
-    
+        print("\n"+results.to_string())
+
+        self.assertEqual(0, len(results))
 
 if __name__ == "__main__":
     unittest.main()

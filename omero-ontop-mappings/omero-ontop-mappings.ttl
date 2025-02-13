@@ -564,12 +564,12 @@ this:image rdf:type owl:ObjectProperty .
 
 ###  https://ld.openmicroscopy.org/omekg#plate
 this:plate rdf:type owl:ObjectProperty ;
-           owl:inverseOf this:screen ;
            rdfs:range omekg:Plate .
 
 
 ###  https://ld.openmicroscopy.org/omekg#plate_acquisition
-this:plate_acquisition rdf:type owl:ObjectProperty .
+this:plate_acquisition rdf:type owl:ObjectProperty ;
+                       owl:equivalentProperty this:run .
 
 
 ###  https://ld.openmicroscopy.org/omekg#reagent
@@ -578,6 +578,10 @@ this:reagent rdf:type owl:ObjectProperty .
 
 ###  https://ld.openmicroscopy.org/omekg#roi
 this:roi rdf:type owl:ObjectProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#run
+this:run rdf:type owl:ObjectProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#screen
@@ -685,6 +689,10 @@ this:omename rdf:type owl:DatatypeProperty .
 
 ###  https://ld.openmicroscopy.org/omekg#tag_annotation_value
 this:tag_annotation_value rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#well_index
+this:well_index rdf:type owl:DatatypeProperty .
 
 
 #################################################################
