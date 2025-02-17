@@ -543,7 +543,12 @@ xsd:date rdf:type rdfs:Datatype .
 #################################################################
 
 ###  https://ld.openmicroscopy.org/core/experimenter
-core:experimenter owl:equivalentProperty this:experimenter .
+core:experimenter owl:equivalentProperty this:experimenter ;
+                  rdfs:range core:Experimenter .
+
+
+###  https://ld.openmicroscopy.org/core/reagent
+core:reagent owl:equivalentProperty this:reagent .
 
 
 ###  https://ld.openmicroscopy.org/omekg#dataset
