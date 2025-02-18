@@ -686,7 +686,7 @@ SELECT DISTINCT * WHERE {
         self.assertEqual(0, len(results))
 
     def test_plate_key_value(self):
-        """ Test querying for an image property via the mapannotation key."""
+        """ Test querying for plate kv annotations as properties and values. """
 
         query_string = f"""
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
@@ -711,6 +711,77 @@ SELECT DISTINCT * WHERE {
         self.assertTupleEqual((13,1), results.shape)
 
         self.assertIn("CellLineMutation", results['key'].values)
+
+    def test_well_key_value(self):
+        """ Test querying for a well kv-annotations as property value pairs."""
+
+        query_string = f"""
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix dc: <http://purl.org/dc/terms/>
+        prefix omens: <http://www.openmicroscopy.org/ns/default/>
+
+        SELECT distinct ?key ?val WHERE {{
+            ?img a ome_core:Well;
+                 ?kvterm ?val .
+        filter(strstarts(str(?kvterm), str(omens:)))
+        bind(strafter(str(?kvterm), str(omens:)) as ?key)
+        }}
+        order by ?key
+
+        """
+
+        # Run the query.
+        results = run_query(query_string)
+
+        # Convert to Series for easier querying.
+        results = results.set_index('key')['val']
+
+        print("\n"+results.to_string())
+
+        self.assertTupleEqual((39,), results.shape)
+
+        self.assertEqual("NCBITaxon_9606", results['TermSource1Accession'])
+        self.assertEqual('0.610481812', results["nseg.0.m.eccentricity.mean"])
+
+    def test_wellsample(self):
+        """ Test querying for a wellsample. """
+
+        query_string = f"""
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix dc: <http://purl.org/dc/terms/>
+        prefix omens: <http://www.openmicroscopy.org/ns/default/>
+
+        SELECT distinct ?wellsample WHERE {{
+            ?wellsample a ome_core:WellSample.
+        }}
+
+        """
+
+        # Run the query.
+        results = run_query(query_string)
+
+        # There should be 1536 WellSamples.
+        self.assertTupleEqual((1536,1), results.shape)
+
+    def test_reagents(self):
+        """ Test querying for a reagent. """
+
+        query_string = f"""
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix dc: <http://purl.org/dc/terms/>
+        prefix omens: <http://www.openmicroscopy.org/ns/default/>
+
+        SELECT distinct * WHERE {{
+            ?wellsample a ome_core:Reagent.
+        }}
+
+        """
+
+        # Run the query. It should return an empty results set.
+        results = run_query(query_string)
+
+        # There should be 0 Reagents.
+        self.assertTupleEqual((0,0), results.shape)
 
 if __name__ == "__main__":
     unittest.main()
