@@ -626,6 +626,10 @@ Find all datasets tagged "TestTag".
   limit 10
 #+end_src
 
+** Pixels
+:PROPERTIES:
+:ID:       f163b456-8c98-424b-9e8b-8d302642d707
+:END:
 #+RESULTS:
 | prop                                                     | val                |
 |----------------------------------------------------------+--------------------|
@@ -633,3 +637,148 @@ Find all datasets tagged "TestTag".
 | https://ld.openmicroscopy.org/omekg#physical_size_y      | 0.7400001049041748 |
 | https://ld.openmicroscopy.org/omekg#physical_size_x      | 0.7400001049041748 |
 | https://ld.openmicroscopy.org/omekg#physical_size_x_unit | µm                 |
+
+** Channels
+:PROPERTIES:
+:ID:       365db89d-2153-4920-b49c-ed349dca9e29
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+  prefix foaf: <http://xmlns.com/foaf/0.1/>
+  select distinct ?prop where {
+    ?channel a omekg:Channel;
+         ?prop ?val .
+   }
+  limit 100
+#+end_src
+
+#+RESULTS:
+| prop                                            |
+|-------------------------------------------------|
+| http://www.w3.org/1999/02/22-rdf-syntax-ns#type |
+| https://ld.openmicroscopy.org/omekg#pixels      |
+| http://purl.org/dc/elements/1.1/identifier      |
+| https://ld.openmicroscopy.org/omekg#green       |
+| https://ld.openmicroscopy.org/omekg#blue        |
+| https://ld.openmicroscopy.org/omekg#red         |
+
+#+begin_src sparql :url http://localhost:8080/sparql
+    prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+    prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+    prefix foaf: <http://xmlns.com/foaf/0.1/>
+    select ?pixels (min(?red) as ?min_red) (min(?green) as ?min_green) (min(?blue) as ?min_blue) (max(?red) as ?max_red) (max(?green) as ?max_green) (max(?blue) as ?max_blue)
+  where {
+      ?channel a omekg:Channel;
+               omeprop:pixels ?pixels;
+               omeprop:red ?red;
+               omeprop:green ?green;
+               omeprop:blue ?blue .
+     }
+  group by ?pixels
+  limit 100
+#+end_src
+
+#+RESULTS:
+| pixels                              | min_red | min_green | min_blue | max_red | max_green | max_blue |
+|-------------------------------------+---------+-----------+----------+---------+-----------+----------|
+| https://example.org/site/Pixels/1   |       0 |         0 |        0 |     255 |       255 |      255 |
+| https://example.org/site/Pixels/2   |       0 |         0 |        0 |     255 |       255 |      255 |
+| https://example.org/site/Pixels/3   |       0 |         0 |        0 |     255 |       255 |      255 |
+| https://example.org/site/Pixels/4   |       0 |         0 |        0 |     255 |       255 |      255 |
+| https://example.org/site/Pixels/5   |       0 |         0 |        0 |     255 |       255 |      255 |
+| https://example.org/site/Pixels/6   |       0 |         0 |        0 |     255 |       255 |      255 |
+| https://example.org/site/Pixels/7   |       0 |         0 |        0 |     255 |       255 |      255 |
+| https://example.org/site/Pixels/8   |       0 |         0 |        0 |     255 |       255 |      255 |
+| https://example.org/site/Pixels/9   |       0 |         0 |        0 |     255 |       255 |      255 |
+| https://example.org/site/Pixels/10  |       0 |         0 |        0 |     255 |       255 |      255 |
+| https://example.org/site/Pixels/11  |       0 |         0 |        0 |     255 |       255 |      255 |
+| https://example.org/site/Pixels/12  |       0 |         0 |        0 |     255 |       255 |      255 |
+| https://example.org/site/Pixels/244 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/245 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/246 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/247 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/248 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/249 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/250 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/251 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/252 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/253 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/254 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/255 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/256 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/257 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/258 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/259 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/260 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/261 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/262 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/263 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/264 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/265 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/266 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/267 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/268 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/269 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/270 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/271 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/272 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/273 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/274 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/275 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/276 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/277 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/278 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/279 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/280 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/281 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/282 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/283 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/284 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/285 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/286 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/287 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/288 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/289 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/290 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/291 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/292 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/293 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/294 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/295 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/296 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/297 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/298 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/299 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/300 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/301 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/302 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/303 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/304 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/305 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/306 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/307 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/308 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/309 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/310 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/311 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/312 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/313 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/314 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/315 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/316 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/317 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/318 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/319 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/320 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/321 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/322 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/323 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/324 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/325 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/326 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/327 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/328 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/329 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/330 |       0 |         0 |        0 |     255 |         0 |      255 |
+| https://example.org/site/Pixels/331 |       0 |         0 |        0 |     255 |         0 |      255 |

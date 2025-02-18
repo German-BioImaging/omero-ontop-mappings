@@ -805,7 +805,31 @@ SELECT DISTINCT * WHERE {
 
         print('\n' + results.to_string())
 
+    def test_pixels(self):
+        """ Test querying for Channels object. """
 
+        query_string = f"""
+      prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+    prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+    prefix foaf: <http://xmlns.com/foaf/0.1/>
+    select ?pixels (min(?red) as ?min_red) (min(?green) as ?min_green) (min(?blue) as ?min_blue) (max(?red) as ?max_red) (max(?green) as ?max_green) (max(?blue) as ?max_blue)
+  where {{
+      ?channel a omekg:Channel;
+               omeprop:pixels ?pixels;
+               omeprop:red ?red;
+               omeprop:green ?green;
+               omeprop:blue ?blue .
+     }}
+  group by ?pixels
+  limit 100
+        """
+
+        results = run_query(query_string).set_index('pixels').astype(int)
+
+        print("\n" + results.to_string())
+
+        self.assertEqual(results['min_red'].sum(), 0)
+        self.assertTrue(all(results['max_blue'] == 255))
 
 if __name__ == "__main__":
     unittest.main()
