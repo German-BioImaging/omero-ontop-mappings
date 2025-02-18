@@ -609,3 +609,27 @@ Find all datasets tagged "TestTag".
     ?owner foaf:firstName ?first .
     ?owner foaf:lastName ?last .
 #+end_src
+
+* Pixels and channels.
+:PROPERTIES:
+:ID:       b6fdc8c2-cadf-4241-a9d0-28f49b6efd1c
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+  prefix foaf: <http://xmlns.com/foaf/0.1/>
+  select distinct ?prop ?val where {
+    ?img a omekg:Pixels;
+         ?prop ?val .
+    filter(contains(str(?prop), "size"))
+   }
+  limit 10
+#+end_src
+
+#+RESULTS:
+| prop                                                     | val                |
+|----------------------------------------------------------+--------------------|
+| https://ld.openmicroscopy.org/omekg#physical_size_y_unit | µm                 |
+| https://ld.openmicroscopy.org/omekg#physical_size_y      | 0.7400001049041748 |
+| https://ld.openmicroscopy.org/omekg#physical_size_x      | 0.7400001049041748 |
+| https://ld.openmicroscopy.org/omekg#physical_size_x_unit | µm                 |

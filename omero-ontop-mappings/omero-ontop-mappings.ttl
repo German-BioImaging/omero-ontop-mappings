@@ -567,6 +567,11 @@ this:experimenter rdf:type owl:ObjectProperty ;
 this:image rdf:type owl:ObjectProperty .
 
 
+###  https://ld.openmicroscopy.org/omekg#pixels
+this:pixels rdf:type owl:ObjectProperty ;
+            rdfs:range omekg:Pixels .
+
+
 ###  https://ld.openmicroscopy.org/omekg#plate
 this:plate rdf:type owl:ObjectProperty ;
            rdfs:range omekg:Plate .
@@ -688,8 +693,48 @@ foaf:middleName rdf:type owl:DatatypeProperty .
 this:acquisition_date rdf:type owl:DatatypeProperty .
 
 
+###  https://ld.openmicroscopy.org/omekg#alpha
+this:alpha rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#blue
+this:blue rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#green
+this:green rdf:type owl:DatatypeProperty .
+
+
 ###  https://ld.openmicroscopy.org/omekg#omename
 this:omename rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#physical_size_x
+this:physical_size_x rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#physical_size_x_unit
+this:physical_size_x_unit rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#physical_size_y
+this:physical_size_y rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#physical_size_y_unit
+this:physical_size_y_unit rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#physical_size_z
+this:physical_size_z rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#physical_size_z_unit
+this:physical_size_z_unit rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#red
+this:red rdf:type owl:DatatypeProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#tag_annotation_value
@@ -810,6 +855,10 @@ foaf:Person rdf:type owl:Class ;
             owl:equivalentClass omekg:Experimenter .
 
 
+###  https://ld.openmicroscopy.org/core/Channel
+core:Channel owl:equivalentClass omekg:Channel .
+
+
 ###  https://ld.openmicroscopy.org/core/Dataset
 core:Dataset owl:equivalentClass omekg:Dataset .
 
@@ -828,6 +877,10 @@ core:ExperimenterGroup owl:equivalentClass omekg:ExperimenterGroup .
 
 ###  https://ld.openmicroscopy.org/core/Image
 core:Image owl:equivalentClass omekg:Image .
+
+
+###  https://ld.openmicroscopy.org/core/Pixels
+core:Pixels owl:equivalentClass omekg:Pixels .
 
 
 ###  https://ld.openmicroscopy.org/core/Plate
@@ -862,6 +915,10 @@ core:Well owl:equivalentClass omekg:Well .
 core:WellSample owl:equivalentClass omekg:WellSample .
 
 
+###  https://ld.openmicroscopy.org/omekg/Channel
+omekg:Channel rdf:type owl:Class .
+
+
 ###  https://ld.openmicroscopy.org/omekg/Dataset
 omekg:Dataset rdf:type owl:Class ;
               rdfs:isDefinedBy core:Dataset .
@@ -884,6 +941,10 @@ omekg:ExperimenterGroup rdf:type owl:Class ;
 ###  https://ld.openmicroscopy.org/omekg/Image
 omekg:Image rdf:type owl:Class ;
             rdfs:isDefinedBy core:Image .
+
+
+###  https://ld.openmicroscopy.org/omekg/Pixels
+omekg:Pixels rdf:type owl:Class .
 
 
 ###  https://ld.openmicroscopy.org/omekg/Plate
