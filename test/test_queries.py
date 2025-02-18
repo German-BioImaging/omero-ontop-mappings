@@ -685,5 +685,32 @@ SELECT DISTINCT * WHERE {
 
         self.assertEqual(0, len(results))
 
+    def test_plate_key_value(self):
+        """ Test querying for an image property via the mapannotation key."""
+
+        query_string = f"""
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix dc: <http://purl.org/dc/terms/>
+        prefix omens: <http://www.openmicroscopy.org/ns/default/>
+
+        SELECT distinct ?key WHERE {{
+            ?img a ome_core:Plate;
+                 ?kvterm ?val .
+        filter(strstarts(str(?kvterm), str(omens:)))
+        bind(strafter(str(?kvterm), str(omens:)) as ?key)
+        }}
+        order by ?key
+
+        """
+
+        # Run the query.
+        results = run_query(query_string)
+
+        print("\n"+results.to_string())
+
+        self.assertTupleEqual((13,1), results.shape)
+
+        self.assertIn("CellLineMutation", results['key'].values)
+
 if __name__ == "__main__":
     unittest.main()
