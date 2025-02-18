@@ -543,7 +543,8 @@ xsd:date rdf:type rdfs:Datatype .
 #################################################################
 
 ###  https://ld.openmicroscopy.org/core/experimenter
-core:experimenter owl:equivalentProperty this:experimenter ;
+core:experimenter owl:equivalentProperty core:physical_size_x ,
+                                         this:experimenter ;
                   rdfs:range core:Experimenter .
 
 
@@ -565,6 +566,10 @@ this:experimenter rdf:type owl:ObjectProperty ;
 
 ###  https://ld.openmicroscopy.org/omekg#image
 this:image rdf:type owl:ObjectProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#owner
+this:owner rdf:type owl:ObjectProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#pixels
@@ -868,7 +873,8 @@ core:Experiment owl:equivalentClass omekg:Experiment .
 
 
 ###  https://ld.openmicroscopy.org/core/Experimenter
-core:Experimenter owl:equivalentClass omekg:Experimenter .
+core:Experimenter owl:equivalentClass omekg:Experimenter ,
+                                      omekg:Owner .
 
 
 ###  https://ld.openmicroscopy.org/core/ExperimenterGroup
@@ -941,6 +947,10 @@ omekg:ExperimenterGroup rdf:type owl:Class ;
 ###  https://ld.openmicroscopy.org/omekg/Image
 omekg:Image rdf:type owl:Class ;
             rdfs:isDefinedBy core:Image .
+
+
+###  https://ld.openmicroscopy.org/omekg/Owner
+omekg:Owner rdf:type owl:Class .
 
 
 ###  https://ld.openmicroscopy.org/omekg/Pixels
