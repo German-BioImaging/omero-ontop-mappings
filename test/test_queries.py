@@ -166,7 +166,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         self.assertEqual(int(number_of_objects.n_datasets), 3)
         self.assertEqual(int(number_of_objects.n_projects), 1)
 
-    def test_project(self):
+    def test_number_of_project(self):
         """ Test number of projects in the VKG. """
 
         graph = self._graph
@@ -187,6 +187,27 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Test.
         self.assertEqual(len(response), 1)
+
+    def test_project_owner_group(self):
+        """ Test project ownership """
+
+        query_string = f"""
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
+
+
+        SELECT distinct ?project ?owner ?group WHERE {{
+            ?s a ome_core:Project ;
+        omeprop:owner ?owner;
+        omeprop:group ?group .
+        }}
+        """
+
+        # Run the query.
+        response = run_query(query_string)
+
+        print("\n" + response.to_string())
+
 
     def test_dataset_core(self):
         """ Test query with the core prefix and ontology. """

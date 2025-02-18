@@ -543,9 +543,14 @@ xsd:date rdf:type rdfs:Datatype .
 #################################################################
 
 ###  https://ld.openmicroscopy.org/core/experimenter
-core:experimenter owl:equivalentProperty core:physical_size_x ,
-                                         this:experimenter ;
+core:experimenter owl:equivalentProperty this:experimenter ;
                   rdfs:range core:Experimenter .
+
+
+###  https://ld.openmicroscopy.org/core/experimenter_group
+core:experimenter_group owl:equivalentProperty this:experimenter_group ,
+                                               this:group ;
+                        rdfs:range omekg:ExperimenterGroup .
 
 
 ###  https://ld.openmicroscopy.org/core/reagent
@@ -560,8 +565,18 @@ this:dataset rdf:type owl:ObjectProperty ;
 
 ###  https://ld.openmicroscopy.org/omekg#experimenter
 this:experimenter rdf:type owl:ObjectProperty ;
+                  owl:equivalentProperty this:owner ;
                   rdfs:range omekg:Experimenter ;
                   rdfs:isDefinedBy core:experimenter .
+
+
+###  https://ld.openmicroscopy.org/omekg#experimenter_group
+this:experimenter_group rdf:type owl:ObjectProperty ;
+                        owl:equivalentProperty this:group .
+
+
+###  https://ld.openmicroscopy.org/omekg#group
+this:group rdf:type owl:ObjectProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#image
@@ -569,7 +584,8 @@ this:image rdf:type owl:ObjectProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#owner
-this:owner rdf:type owl:ObjectProperty .
+this:owner rdf:type owl:ObjectProperty ;
+           rdfs:range omekg:Owner .
 
 
 ###  https://ld.openmicroscopy.org/omekg#pixels
@@ -878,7 +894,8 @@ core:Experimenter owl:equivalentClass omekg:Experimenter ,
 
 
 ###  https://ld.openmicroscopy.org/core/ExperimenterGroup
-core:ExperimenterGroup owl:equivalentClass omekg:ExperimenterGroup .
+core:ExperimenterGroup owl:equivalentClass omekg:ExperimenterGroup ,
+                                           omekg:Group .
 
 
 ###  https://ld.openmicroscopy.org/core/Image
@@ -941,7 +958,12 @@ omekg:Experimenter rdf:type owl:Class .
 
 ###  https://ld.openmicroscopy.org/omekg/ExperimenterGroup
 omekg:ExperimenterGroup rdf:type owl:Class ;
+                        owl:equivalentClass omekg:Group ;
                         rdfs:isDefinedBy core:ExperimenterGroup .
+
+
+###  https://ld.openmicroscopy.org/omekg/Group
+omekg:Group rdf:type owl:Class .
 
 
 ###  https://ld.openmicroscopy.org/omekg/Image
