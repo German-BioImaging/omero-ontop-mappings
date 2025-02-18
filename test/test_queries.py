@@ -4,6 +4,7 @@ import sys
 import shutil
 import requests
 import pandas
+import pprint
 from urllib import parse
 
 import unittest
@@ -11,13 +12,13 @@ import unittest
 ENDPOINT = "http://localhost:8080/sparql"
 
 # Check if endpoint is reachable.
-try:
-    response = requests.get("/".join(os.path.split(ENDPOINT)[:-1]))
-    assert response.status_code == 200
+def check_endpoint():
+    try:
+        response = requests.get("/".join(os.path.split(ENDPOINT)[:-1]))
+        assert response.status_code == 200
 
-except: 
-    raise RuntimeError("Could not connect to ontop endpoint %s. Is ontop endpoint up and running?" % ENDPOINT)
-
+    except: 
+        raise RuntimeError("Could not connect to ontop endpoint %s. Is ontop endpoint up and running?" % ENDPOINT)
 
 
 # Test helpers
@@ -61,10 +62,16 @@ def response_frame(response):
 class QueriesTest(unittest.TestCase):
     """ :class QueriesTest: Test class hosting all test queries. """
 
+    @classmethod
+    def setUpClass(cls):
+
+        check_endpoint()
+
+        return super().setUpClass()
+
     def setUp(self):
         """ Setup run at the beginning of each test method."""
 
-        # Setup a graph.
         self._graph = Graph()
 
         # Empty list to collect files and dirs created during tests. These will be
@@ -97,7 +104,7 @@ select (count(distinct ?tp) as ?n_types) where {{
 """
         response = run_query(query_string)
 
-        print(response.to_markdown())
+        print(response.to_string())
         self.assertEqual(len(response), 1)
         self.assertEqual(int(response.loc[0, 'n_types']), 2)
 
@@ -155,11 +162,9 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Check numbers.
         number_of_objects = [r for r in response][0]
-        self.assertEqual(int(number_of_objects.n_images  ),  12)
+        self.assertEqual(int(number_of_objects.n_images  ),  1548)
         self.assertEqual(int(number_of_objects.n_datasets), 3)
         self.assertEqual(int(number_of_objects.n_projects), 1)
-
-
 
     def test_project(self):
         """ Test number of projects in the VKG. """
@@ -185,7 +190,7 @@ select ?n_projects ?n_datasets ?n_images where {{
 
     def test_dataset_core(self):
         """ Test query with the core prefix and ontology. """
-        
+
         graph = self._graph
 
         query_string = f"""
@@ -204,10 +209,10 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Test.
         self.assertEqual(len(response), 3)
- 
+
     def test_dataset(self):
         """ Test that there are 3 datasets in the graph db"""
-        
+
         query_string = f"""
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
         prefix omekg: <https://ld.openmicroscopy.org/omekg/>
@@ -224,10 +229,10 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Test.
         self.assertEqual(len(response_df), 3)
-  
+
     def test_image(self):
         """ Test number of images in VKG. """
-        
+
         graph = self._graph
 
         query_string = f"""
@@ -238,14 +243,13 @@ select ?n_projects ?n_datasets ?n_images where {{
             ?s a ome_core:Image .
           }}
         }}
-        limit 100
         """
 
         # Run the query.
         response = graph.query(query_string)
 
         # Test.
-        self.assertEqual(len(response), 12)
+        self.assertEqual(len(response), 1548)
 
     def test_project_dataset_image(self):
         """ Test a query for a project-dataset-image hierarchy. """
@@ -483,8 +487,301 @@ SELECT DISTINCT * WHERE {
 
         self.assertEqual(response_df.iloc[0,0], 'Bruker')
 
+    def test_experimenter_property(self):
+        """ Test the experimenter property links to the owner in projects, datasets, images. """
+
+        query_string = """
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT distinct ?project ?dataset ?image ?image_name ?project_owner ?dataset_owner ?image_owner WHERE {{
+            ?project a omekg:Project ;
+                     omeprop:dataset ?dataset ;
+                     omeprop:experimenter ?project_owner .
+            ?dataset a omekg:Dataset ;
+                     omeprop:image ?image ;
+                     omeprop:experimenter ?dataset_owner .
+            ?image a omekg:Image ;
+                   rdfs:label ?image_name ;
+                   omeprop:experimenter ?image_owner .
+        }}
+        """
+
+        # Run the query.
+        response = run_query(query_string)
+
+        print("\n"+response.to_string())
 
 
+    def test_screen(self):
+        """ Test query for a screen."""
+
+        query = """
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?screen a omekg:Screen .
+        }}
+        """
+
+        results = run_query(query)
+
+        print("\n"+results.to_string())
+
+        self.assertEqual(1, len(results))
+    
+    def test_plate(self):
+        """ Test query for a plate."""
+
+        query = """
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?plate a omekg:Plate .
+        }}
+        """
+
+        results = run_query(query)
+
+        print("\n"+results.to_string())
+
+        self.assertEqual(1, len(results))
+
+    def test_screen_plate(self):
+        """ Test query for screen and related plate."""
+        results = run_query("""
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?plate a omekg:Plate ;
+                   omeprop:screen ?screen .
+            ?screen a omekg:Screen .
+        }}
+        """)
+
+        print("\n"+results.to_string())
+
+        self.assertTupleEqual((1, 2), results.shape)
+
+    def test_plate_acquisition(self):
+        """ Test query for plate and plate acquisition."""
+
+        results = run_query("""
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?plate a omekg:Plate ;
+                   ^omeprop:plate ?acq .
+            ?acq a omekg:PlateAcquisition .
+        }}
+        """)
+
+        print("\n"+results.to_string())
+
+        self.assertTupleEqual( (1,2), results.shape )
+
+    def test_plate_well(self):
+        """ Test query for plate-acquisition and well. """
+
+        results = run_query("""
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?plate a omekg:Plate ;
+                   ^omeprop:plate ?well .
+            ?well a omekg:Well .
+        }}
+        """)
+
+        print("\n"+results.to_string())
+
+        self.assertTupleEqual((384, 2), results.shape)
+
+    def test_well_sample(self):
+        """ Test query for well and well sample."""
+
+        results = run_query("""
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?well a omekg:Well ;
+                   ^omeprop:well ?ws .
+            ?ws a omekg:WellSample .
+        }}
+        """)
+
+        print("\n"+results.to_string())
+
+        # 384 wells x 4 samples per well
+        self.assertTupleEqual((384*4, 2), results.shape)
+
+
+    def test_well_sample_image(self):
+        """ Test query for  well sample and image. """
+
+        results = run_query("""
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?ws a omekg:WellSample ;
+                   omeprop:image ?img .
+            ?img a omekg:Image .
+        }}
+        """)
+
+        print("\n"+results.to_string())
+
+        self.assertTupleEqual((1536, 2), results.shape)
+
+    def test_plateAcquisition(self):
+        """ Test query for a PlateAcquisition."""
+
+        query = """
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?plate_acquisition a omekg:PlateAcquisition .
+        }}
+        """
+
+        results = run_query(query)
+
+        print("\n"+results.to_string())
+
+        self.assertEqual(1, len(results))
+
+    def test_reagent(self):
+        """ Test query for a reagent."""
+
+        query = """
+        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT *
+        where {{
+            ?reagent a omekg:Reagent .
+        }}
+        """
+
+        results = run_query(query)
+
+        print("\n"+results.to_string())
+
+        self.assertEqual(0, len(results))
+
+    def test_plate_key_value(self):
+        """ Test querying for plate kv annotations as properties and values. """
+
+        query_string = f"""
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix dc: <http://purl.org/dc/terms/>
+        prefix omens: <http://www.openmicroscopy.org/ns/default/>
+
+        SELECT distinct ?key WHERE {{
+            ?img a ome_core:Plate;
+                 ?kvterm ?val .
+        filter(strstarts(str(?kvterm), str(omens:)))
+        bind(strafter(str(?kvterm), str(omens:)) as ?key)
+        }}
+        order by ?key
+
+        """
+
+        # Run the query.
+        results = run_query(query_string)
+
+        print("\n"+results.to_string())
+
+        self.assertTupleEqual((13,1), results.shape)
+
+        self.assertIn("CellLineMutation", results['key'].values)
+
+    def test_well_key_value(self):
+        """ Test querying for a well kv-annotations as property value pairs."""
+
+        query_string = f"""
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix dc: <http://purl.org/dc/terms/>
+        prefix omens: <http://www.openmicroscopy.org/ns/default/>
+
+        SELECT distinct ?key ?val WHERE {{
+            ?img a ome_core:Well;
+                 ?kvterm ?val .
+        filter(strstarts(str(?kvterm), str(omens:)))
+        bind(strafter(str(?kvterm), str(omens:)) as ?key)
+        }}
+        order by ?key
+
+        """
+
+        # Run the query.
+        results = run_query(query_string)
+
+        # Convert to Series for easier querying.
+        results = results.set_index('key')['val']
+
+        print("\n"+results.to_string())
+
+        self.assertTupleEqual((39,), results.shape)
+
+        self.assertEqual("NCBITaxon_9606", results['TermSource1Accession'])
+        self.assertEqual('0.610481812', results["nseg.0.m.eccentricity.mean"])
+
+    def test_wellsample(self):
+        """ Test querying for a wellsample. """
+
+        query_string = f"""
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix dc: <http://purl.org/dc/terms/>
+        prefix omens: <http://www.openmicroscopy.org/ns/default/>
+
+        SELECT distinct ?wellsample WHERE {{
+            ?wellsample a ome_core:WellSample.
+        }}
+
+        """
+
+        # Run the query.
+        results = run_query(query_string)
+
+        # There should be 1536 WellSamples.
+        self.assertTupleEqual((1536,1), results.shape)
+
+    def test_reagents(self):
+        """ Test querying for a reagent. """
+
+        query_string = f"""
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix dc: <http://purl.org/dc/terms/>
+        prefix omens: <http://www.openmicroscopy.org/ns/default/>
+
+        SELECT distinct * WHERE {{
+            ?wellsample a ome_core:Reagent.
+        }}
+
+        """
+
+        # Run the query. It should return an empty results set.
+        results = run_query(query_string)
+
+        # There should be 0 Reagents.
+        self.assertTupleEqual((0,0), results.shape)
 
 if __name__ == "__main__":
     unittest.main()

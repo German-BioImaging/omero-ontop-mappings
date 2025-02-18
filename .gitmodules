@@ -4,3 +4,6 @@
 [submodule ".omero"]
 	path = .omero
 	url = https://github.com/openmicroscopy/omero-test-infra
+[submodule "wiki"]
+	path = wiki
+	url = git@github.com:German-BioImaging/omero-ontop-mappings.wiki.git

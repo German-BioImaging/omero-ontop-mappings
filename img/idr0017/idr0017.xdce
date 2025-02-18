@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<ImageStack>
+    <UUID value="1db636ae-addf-40d6-ac10-37193a509160"/>
+    <Application name="IN Cell Analyzer 2000" software_version="3.0.0.5"/>
+    <Creation date="2011-11-18" time="02:03:43"/>
+    <Operator login="Administrator"/>
+    <Computer name="ZBIO049"/>
+    <AutoLeadAcquisitionProtocol name="2011-11-17 X-Man LOPAC" password="689935b988643b7779f765cf46a32d3b" version="99.9">
+        <UserComment/>
+        <Microscopy type="Fluorescence"/>
+        <ObjectiveCalibration focal_length="20.0" id="12111" lineartype="7" magnification="10.0" numerical_aperture="0.45" objective_name="Nikon 10X/0.45, Plan Apo, CFI/60" pixel_height="0.7400001049041748" pixel_width="0.7400001049041748" refractive_index="1.0" unit="µm"/>
+        <Polychroic id="Y" name="QUAD1"/>
+        <Camera apply_ffc="false" name="K4" use_ffc="false" version="1.0">
+            <Description/>
+            <Binning value="1 X 1"/>
+            <Bias value="96.88011"/>
+            <Gain/>
+            <Size height="2048" width="2048"/>
+        </Camera>
+        <Wavelengths>
+            <Wavelength fusion_wave="false" imaging_mode="2-D" index="0" name="DAPI" show="false" z_section="0.0" z_slice="1" z_step="0.0">
+                <ExcitationFilter name="DAPI" unit="nm" wavelength="350"/>
+                <EmissionFilter name="DAPI" unit="nm" wavelength="350"/>
+                <Exposure time="50" unit="ms"/>
+                <HWAFOffset unit="µm" value="0.0"/>
+                <FocusOffset unit="µm" value="-8.0"/>
+                <FusionData/>
+            </Wavelength>
+            <Wavelength fusion_wave="false" imaging_mode="2-D" index="1" show="false" z_section="0.0" z_slice="1" z_step="0.0">
+                <ExcitationFilter name="Cy3" unit="nm" wavelength="543"/>
+                <EmissionFilter name="Cy3" unit="nm" wavelength="605"/>
+                <Exposure time="100" unit="ms"/>
+                <HWAFOffset unit="µm" value="0.0"/>
+                <FocusOffset unit="µm" value="-6.0"/>
+                <FusionData/>
+            </Wavelength>
+        </Wavelengths>
+        <SoftwareAutoFocus enabled="false" focus_wavelength="first" init_stepping="0.0" max_search_range="5000.0" min_stepping="-1500.0" mode_type="Adaptive" mode_value="Large" refocusEachTimePoint="false" show_live_image="false" skip_field="1" skip_well="1"/>
+        <LaserAutoFocus enabled="true"/>
+        <Plate columns="24" name="BD Falcon 384-well plate black clear" rows="16" version="1.0">
+            <PlateHeight unit="mm" value="14.2"/>
+            <BottomThickness unit="µm" value="210.0"/>
+            <BottomInterface name="Plastic"/>
+            <BottomHeight value="2.7"/>
+            <WellVolume value="120.0"/>
+            <WellParameters shape="Square" size="2.7" unit="mm"/>
+            <TopLeftWellCenterOffset horizontal="12.0" unit="mm" vertical="8.8"/>
+            <WellSpacing horizontal="4.5" unit="mm" vertical="4.51"/>
+        </Plate>
+        <Specimen expected_thickness="1.0" on_slide="false" unit="µm"/>
+        <PlateHeater use="false"/>
+        <PlateMap>
+            <AcquisitionMode>
+                <Layout columns="2" rows="2"/>
+                <Spacing spacing_x="0.0" spacing_y="0.0"/>
+                <Shifting shift_x="0.0" shift_y="0.0"/>
+                <FieldOffsets custom_loc_x="0.0" custom_loc_y="0.0" flex_num_fields="false" margin="0.0" mode="formation" number_of_fields="4" weight="user_defined">
+                    <offset_point index="2" x="-757.759765625" y="-757.759765625"/>
+                    <offset_point index="0" x="-757.759765625" y="757.76025390625"/>
+                    <offset_point index="1" x="757.759765625" y="757.76025390625"/>
+                    <offset_point index="3" x="757.759765625" y="-757.759765625"/>
+                </FieldOffsets>
+                <Direction value="Horizontal Snake"/>
+            </AcquisitionMode>
+            <ZDimensionParameters enabled="false" linked="false"/>
+            <TimeSchedule enabled="false" incubate_between_time_points="false" mode="spit and stare" time_unit="sec"/>
+        </PlateMap>
+        <Output image_format="TIFF" save_3d_image_in_dv="false"/>
+        <StackDestination base_path="system_default" current_path="date_time" image_folder=" "/>
+        <Deconvolution camera_intensity_offset="50" method="Enhanced Ratio (aggressive)" normalize_intensity="true" number_cycles="5"/>
+    </AutoLeadAcquisitionProtocol>
+    <SpecimenHolder label="BD Falcon 384-well plate black clear" type="Plate"/>
+    <CorrectionInfo/>
+    <Images image_format="TIFF" number="0" path="E:\2011-11-17 X-Man LOPAC\2011-11-17 X-Man LOPAC_X03_LP_S01_1" version="1.0"/>
+</ImageStack>
