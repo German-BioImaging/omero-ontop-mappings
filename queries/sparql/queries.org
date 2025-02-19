@@ -804,3 +804,18 @@ Find all datasets tagged "TestTag".
  | s                                  | owner                                   | group                                        |
  |------------------------------------+-----------------------------------------+----------------------------------------------|
  | https://example.org/site/Project/1 | https://example.org/site/Experimenter/0 | https://example.org/site/ExperimenterGroup/0 |
+
+#+begin_src sparql :url http://localhost:8080/sparql
+  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+  prefix foaf: <http://xmlns.com/foaf/0.1/>
+
+  SELECT distinct ?group ?name WHERE {
+    ?group a omekg:Group;
+            foaf:name ?name .
+    }
+ #+end_src
+
+ #+RESULTS:
+ | group | name |
+ |-------+------|

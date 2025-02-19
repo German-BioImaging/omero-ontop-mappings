@@ -710,6 +710,10 @@ foaf:lastName rdf:type owl:DatatypeProperty .
 foaf:middleName rdf:type owl:DatatypeProperty .
 
 
+###  http://xmlns.com/foaf/0.1/name
+foaf:name rdf:type owl:DatatypeProperty .
+
+
 ###  https://ld.openmicroscopy.org/omekg#acquisition_date
 this:acquisition_date rdf:type owl:DatatypeProperty .
 

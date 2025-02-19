@@ -568,6 +568,22 @@ ORDER BY table_name;
 | id | description | permissions | version | creation_id | external_id | group_id | owner_id | update_id | type |
 |----+-------------+-------------+---------+-------------+-------------+----------+----------+-----------+------|
 
+** ExperimenterGrous
+:PROPERTIES:
+:ID:       104cf1b6-2322-410e-8089-f53fb6140138
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser ontop :dbpassword !ontop$ :database postgres
+  select * from experimentergroup ;
+  limit 10
+#+end_src
+
+#+RESULTS:
+| id | description | permissions | ldap | name   | version | external_id |
+|----+-------------+-------------+------+--------+---------+-------------|
+|  0 |             |        -120 | f    | system |       0 |             |
+|  1 |             |         -52 | f    | user   |       0 |             |
+|  2 |             |        -120 | f    | guest  |       0 |             |
+
 * HCS
 :PROPERTIES:
 :ID:       dadc3b79-19e0-4b22-bd66-d981870fe444

@@ -212,6 +212,105 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         self.assertTupleEqual((1,3), response.shape)
 
+    def test_owner_aliases(self):
+        """ Test all equivalent properties to owner work alike. """
+
+        query_string = f"""
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omekg:  <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
+
+
+        SELECT ?alias_owner_prop WHERE {{
+            ?project a omekg:Project ;
+                     omeprop:owner ?owner;
+                     ?alias_owner_prop ?owner .
+        }}
+        """
+
+        # Run the query.
+        response = run_query(query_string)
+
+        print("\n" + response.to_string())
+
+        # There should be three equivalent properties.
+        self.assertEqual(len(response), 3)
+
+    def test_group_aliases(self):
+        """ Test all equivalent properties to group work alike. """
+
+        query_string = f"""
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omekg:  <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
+
+
+        SELECT ?alias_group_prop WHERE {{
+            ?project a omekg:Project ;
+                     omeprop:group ?group;
+                     ?alias_group_prop ?group .
+        }}
+        """
+
+        # Run the query.
+        response = run_query(query_string)
+
+        print("\n" + response.to_string())
+
+        # There should be three equivalent properties.
+        self.assertEqual(len(response), 3)
+
+    def test_group_name(self):
+        """ Test the name property on groups. """
+
+        query_string = f"""
+        prefix dc: <http://purl.org/dc/elements/1.1/>
+        prefix foaf: <http://xmlns.com/foaf/0.1/>
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omekg:  <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT * where {{
+            ?group a omekg:Group ;
+                   dc:identifier ?group_id;
+                   foaf:name ?name .
+        }}
+        """
+
+        # Run the query.
+        response = run_query(query_string).set_index('group_id')
+
+        print("\n" + response.to_string())
+
+        self.assertEqual(response.loc['0', 'name'], 'system')
+        self.assertEqual(response.loc['1', 'name'], 'user')
+        self.assertEqual(response.loc['2', 'name'], 'guest')
+
+    def test_owner_name(self):
+        """ Test the name property on owners. """
+
+        query_string = f"""
+        prefix dc: <http://purl.org/dc/elements/1.1/>
+        prefix foaf: <http://xmlns.com/foaf/0.1/>
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omekg:  <https://ld.openmicroscopy.org/omekg/>
+        prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
+
+        SELECT * where {{
+            ?owner a omekg:Experimenter ;
+                   dc:identifier ?owner_id;
+                   foaf:name ?name .
+        }}
+        """
+
+        # Run the query.
+        response = run_query(query_string).set_index('owner_id')
+
+        print("\n" + response.to_string())
+
+        self.assertEqual(response.loc['0', 'name'], 'root root')
+        self.assertEqual(response.loc['1', 'name'], 'Guest Account')
+
     def test_dataset_core(self):
         """ Test query with the core prefix and ontology. """
 
