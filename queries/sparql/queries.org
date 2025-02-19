@@ -782,3 +782,25 @@ Find all datasets tagged "TestTag".
 | https://example.org/site/Pixels/329 |       0 |         0 |        0 |     255 |         0 |      255 |
 | https://example.org/site/Pixels/330 |       0 |         0 |        0 |     255 |         0 |      255 |
 | https://example.org/site/Pixels/331 |       0 |         0 |        0 |     255 |         0 |      255 |
+
+* Owners and Groups
+:PROPERTIES:
+:ID:       83f91f9d-a78e-44a0-ae4c-f24046beaa26
+:END:
+
+#+begin_src sparql :url http://localhost:8080/sparql
+  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+  prefix foaf: <http://xmlns.com/foaf/0.1/>
+
+  SELECT distinct * WHERE {
+      ?s a omekg:Project ;
+  omeprop:owner ?owner;
+  omeprop:group ?group .
+  }
+ #+end_src
+
+ #+RESULTS:
+ | s                                  | owner                                   | group                                        |
+ |------------------------------------+-----------------------------------------+----------------------------------------------|
+ | https://example.org/site/Project/1 | https://example.org/site/Experimenter/0 | https://example.org/site/ExperimenterGroup/0 |

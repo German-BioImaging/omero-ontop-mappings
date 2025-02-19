@@ -193,11 +193,12 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         query_string = f"""
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omekg:  <https://ld.openmicroscopy.org/omekg/>
         prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
 
 
         SELECT distinct ?project ?owner ?group WHERE {{
-            ?s a ome_core:Project ;
+            ?project a omekg:Project ;
         omeprop:owner ?owner;
         omeprop:group ?group .
         }}
@@ -208,6 +209,8 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         print("\n" + response.to_string())
 
+
+        self.assertTupleEqual((1,3), response.shape)
 
     def test_dataset_core(self):
         """ Test query with the core prefix and ontology. """

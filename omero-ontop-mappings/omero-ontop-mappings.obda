@@ -19,11 +19,13 @@ ome_instance:	https://example.org/site/
 
 [MappingDeclaration] @collection [[
 mappingId	MAPID-project-0
-target		ome_instance:Project/{project_id} a :Project ; dc:identifier {project_id}^^xsd:integer ; rdfs:label {project_name}^^xsd:integer ; rdfs:comment {project_description} . 
+target		ome_instance:Project/{project_id} a :Project ; dc:identifier {project_id}^^xsd:integer ; rdfs:label {project_name}^^xsd:integer ; rdfs:comment {project_description} ; this:owner ome_instance:Experimenter/{owner_id} ; this:group ome_instance:ExperimenterGroup/{group_id} . 
 source		select
 			_project.id as project_id,
 			_project.name as project_name,
-			_project.description as project_description
+			_project.description as project_description,
+			_project.owner_id as owner_id,
+			_project.group_id as group_id
 			from project as _project
 
 mappingId	MAPID-project-1
