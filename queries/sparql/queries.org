@@ -819,3 +819,151 @@ Find all datasets tagged "TestTag".
  #+RESULTS:
  | group | name |
  |-------+------|
+
+* Federated query against ome and taxonomy database with HCS objects
+:PROPERTIES:
+:ID:       94881a24-726a-40ee-b931-d46a8e31a2f1
+:END:
+
+#+begin_src sparql :url http://localhost:8080/sparql
+  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+  prefix foaf: <http://xmlns.com/foaf/0.1/>
+  prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+  SELECT distinct * WHERE {
+    ?well a omekg:Well ;
+    <http://www.openmicroscopy.org/ns/default/TermSource1Accession> ?taxid.
+
+    bind(strafter(?taxid, 'NCBITaxon_') as ?taxon_id)
+    bind(iri(concat("http://purl.uniprot.org/taxonomy/", ?taxon_id)) as ?up_taxon)
+
+  # service <https://sparql.uniprot.org/sparql> {
+  #   ?up_taxon ?prop ?val .
+  # }
+  }
+  limit 10
+ #+end_src
+
+ #+RESULTS:
+ | well                              | taxid          | taxon_id | up_taxon                              |
+ |-----------------------------------+----------------+----------+---------------------------------------|
+ | https://example.org/site/Well/351 | NCBITaxon_9606 |     9606 | http://purl.uniprot.org/taxonomy/9606 |
+#+begin_src sparql :url https://sparql.uniprot.org/sparql :async yes
+  PREFIX up: <http://purl.uniprot.org/core/>
+  prefix foaf: <http://xmlns.com/foaf/0.1/>
+  SELECT *
+  FROM <http://sparql.uniprot.org/taxonomy>
+  WHERE
+  {
+     <http://purl.uniprot.org/taxonomy/9606> up:mnemonic ?mnemonic;
+                                             ^up:host ?parasite .
+    ?parasite up:scientificName ?parasite_name .
+  }
+  limit 100
+#+end_src
+
+#+RESULTS:
+| mnemonic | parasite                                 | parasite_name                                                                                 |
+|----------+------------------------------------------+-----------------------------------------------------------------------------------------------|
+| HUMAN    | http://purl.uniprot.org/taxonomy/59300   | Getah virus                                                                                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10632   | JC polyomavirus                                                                               |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10335   | Human herpesvirus 3                                                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11086   | Louping ill virus                                                                             |
+| HUMAN    | http://purl.uniprot.org/taxonomy/231473  | Coxsackievirus B2 (strain Ohio-1)                                                             |
+| HUMAN    | http://purl.uniprot.org/taxonomy/1001061 | Ljunganvirus 1                                                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10252   | Vaccinia virus (strain Lister)                                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103913  | Echovirus 6 (strain Charles)                                                                  |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10615   | Human papillomavirus 40                                                                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11064   | Dengue virus type 2 (strain Jamaica/1409/1983)                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11688   | Human immunodeficiency virus type 1 group M subtype B (isolate JRCSF)                         |
+| HUMAN    | http://purl.uniprot.org/taxonomy/31642   | Hepatitis C virus genotype 1b (isolate HC-JT)                                                 |
+| HUMAN    | http://purl.uniprot.org/taxonomy/31768   | Hepatitis E virus genotype 2 (isolate Human/Mexico)                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/33728   | Lake Victoria marburgvirus (strain Popp-67)                                                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/356416  | Hepatitis C virus genotype 3a (isolate k3a)                                                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/356422  | Hepatitis C virus genotype 6d (isolate VN235)                                                 |
+| HUMAN    | http://purl.uniprot.org/taxonomy/356425  | Hepatitis C virus genotype 6k (isolate VN405)                                                 |
+| HUMAN    | http://purl.uniprot.org/taxonomy/357355  | Hepatitis C virus genotype 3b (isolate Tr-Kj)                                                 |
+| HUMAN    | http://purl.uniprot.org/taxonomy/374596  | Eastern equine encephalitis virus (strain PE-0.0155)                                          |
+| HUMAN    | http://purl.uniprot.org/taxonomy/383568  | Influenza A virus (strain A/Shanghai/11/1987 H3N2)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/386032  | Reston ebolavirus (strain Reston-89)                                                          |
+| HUMAN    | http://purl.uniprot.org/taxonomy/388905  | Human immunodeficiency virus type 1 group M subtype J (isolate SE9280)                        |
+| HUMAN    | http://purl.uniprot.org/taxonomy/407137  | Yellow fever virus (strain Trinidad/TRINID79A/1979)                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/407140  | Yellow fever virus (isolate Angola/14FA/1971)                                                 |
+| HUMAN    | http://purl.uniprot.org/taxonomy/443239  | Human coronavirus HKU1 (isolate N1)                                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/489488  | Hepatitis B virus genotype D subtype ayw (isolate Australia/AustKW/1991)                      |
+| HUMAN    | http://purl.uniprot.org/taxonomy/88776   | Influenza A virus (strain A/Brevig Mission/1/1918 H1N1)                                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11709   | Human immunodeficiency virus 2                                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/132475  | Yaba-like disease virus                                                                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/284218  | Influenza A virus (strain A/Vietnam/1203/2004 H5N1)                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/445791  | Rabies virus (strain China/MRV)                                                               |
+| HUMAN    | http://purl.uniprot.org/taxonomy/489503  | Hepatitis B virus genotype F2 subtype adw4q (isolate Senegal/9203)                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11074   | Japanese encephalitis virus (strain SA(v))                                                    |
+| HUMAN    | http://purl.uniprot.org/taxonomy/12099   | Human hepatitis A virus genotype IA (isolate LA)                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/37130   | Human astrovirus-6                                                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/384525  | Influenza A virus (strain A/Fort Warren/1/1950 H1N1)                                          |
+| HUMAN    | http://purl.uniprot.org/taxonomy/482134  | Hepatitis B virus genotype A2 subtype adw (isolate Japan/Nishioka/1983)                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10524   | Human adenovirus F serotype 41                                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10942   | Rotavirus B (isolate RVB/Human/China/ADRV/1982)                                               |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11587   | Punta toro phlebovirus                                                                        |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11701   | Human immunodeficiency virus type 1 group M subtype B (isolate RF/HAT3)                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/1263720 | Middle East respiratory syndrome-related coronavirus (isolate United Kingdom/H123990006/2012) |
+| HUMAN    | http://purl.uniprot.org/taxonomy/1671798 | Human papillomavirus type 54                                                                  |
+| HUMAN    | http://purl.uniprot.org/taxonomy/333761  | Human papillomavirus type 18                                                                  |
+| HUMAN    | http://purl.uniprot.org/taxonomy/401671  | Human immunodeficiency virus type 1 group M subtype B (strain 89.6)                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/40538   | Human papillomavirus type 48                                                                  |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10522   | Human adenovirus B serotype 35                                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/392809  | Influenza A virus (strain A/Victoria/3/1975 H3N2)                                             |
+| HUMAN    | http://purl.uniprot.org/taxonomy/1980456 | Andes orthohantavirus                                                                         |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10515   | Human adenovirus C serotype 2                                                                 |
+| HUMAN    | http://purl.uniprot.org/taxonomy/3052225 | Nipah virus                                                                                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/3052299 | Sabia mammarenavirus (isolate Human/Brasil/SPH114202/1990)                                    |
+| HUMAN    | http://purl.uniprot.org/taxonomy/3052300 | Pichinde mammarenavirus                                                                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/3052302 | Chapare mammarenavirus (isolate Human/Bolivia/810419/2003)                                    |
+| HUMAN    | http://purl.uniprot.org/taxonomy/3052307 | Guanarito mammarenavirus (isolate Human/Venezuela/NH-95551/1990)                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/3052310 | Mammarenavirus lassaense                                                                      |
+| HUMAN    | http://purl.uniprot.org/taxonomy/3052317 | Machupo virus                                                                                 |
+| HUMAN    | http://purl.uniprot.org/taxonomy/3052490 | Black Creek Canal orthohantavirus                                                             |
+| HUMAN    | http://purl.uniprot.org/taxonomy/3052499 | Sin Nombre orthohantavirus                                                                    |
+| HUMAN    | http://purl.uniprot.org/taxonomy/3052503 | Tula orthohantavirus                                                                          |
+| HUMAN    | http://purl.uniprot.org/taxonomy/3052514 | Dugbe virus                                                                                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10298   | Human herpesvirus 1                                                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10359   | Human cytomegalovirus                                                                         |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10533   | Human adenovirus C serotype 1                                                                 |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11039   | Western equine encephalitis virus                                                             |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11105   | Hepatitis C virus genotype 1b (isolate BK)                                                    |
+| HUMAN    | http://purl.uniprot.org/taxonomy/12132   | Human rhinovirus 89                                                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/172148  | Alkhumra hemorrhagic fever virus                                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/37296   | Human herpesvirus 8                                                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/434309  | Saffold virus                                                                                 |
+| HUMAN    | http://purl.uniprot.org/taxonomy/489469  | Hepatitis B virus genotype C subtype ayw (isolate China/Tibet127/2002)                        |
+| HUMAN    | http://purl.uniprot.org/taxonomy/64286   | Usutu virus                                                                                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/638313  | Human bocavirus 3                                                                             |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10281   | Molluscum contagiosum virus subtype 2                                                         |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11028   | O'nyong-nyong virus (strain Gulu)                                                             |
+| HUMAN    | http://purl.uniprot.org/taxonomy/12088   | Poliovirus type 3 (strains P3/Leon/37 and P3/Leon 12A[1]B)                                    |
+| HUMAN    | http://purl.uniprot.org/taxonomy/2169991 | Junin mammarenavirus                                                                          |
+| HUMAN    | http://purl.uniprot.org/taxonomy/37121   | Human papillomavirus 69                                                                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/37129   | Southampton virus (strain GI/Human/United Kingdom/Southampton/1991)                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/39008   | Tick-borne powassan virus (strain LB)                                                         |
+| HUMAN    | http://purl.uniprot.org/taxonomy/408870  | Dengue virus type 3 (strain Philippines/H87/1956)                                             |
+| HUMAN    | http://purl.uniprot.org/taxonomy/638299  | Rotavirus A (isolate RVA/Human/India/116E/1986/G9P8[11])                                      |
+| HUMAN    | http://purl.uniprot.org/taxonomy/12440   | Non-A non-B hepatitis virus                                                                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/488241  | Influenza A virus (strain A/Korea/426/1968 H2N2)                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/3052477 | Dobrava-Belgrade orthohantavirus                                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10585   | Human papillomavirus 31                                                                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11689   | Human immunodeficiency virus type 1 group M subtype D (isolate ELI)                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/277944  | Human coronavirus NL63                                                                        |
+| HUMAN    | http://purl.uniprot.org/taxonomy/28282   | Human adenovirus A serotype 12                                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/31548   | Human papillomavirus 21                                                                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/31631   | Human coronavirus OC43                                                                        |
+| HUMAN    | http://purl.uniprot.org/taxonomy/687345  | Torque teno virus (isolate Human/Germany/KAV/2001)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/489463  | Hepatitis B virus genotype B2 subtype adw (isolate China/patient4/1996)                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10600   | Human papillomavirus type 6b                                                                  |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11038   | Venezuelan equine encephalitis virus (strain Trinidad donkey)                                 |
+| HUMAN    | http://purl.uniprot.org/taxonomy/145856  | Human picobirnavirus                                                                          |
+| HUMAN    | http://purl.uniprot.org/taxonomy/356415  | Hepatitis C virus genotype 3a (isolate NZL1)                                                  |
+| HUMAN    | http://purl.uniprot.org/taxonomy/489461  | Hepatitis B virus genotype B2 (isolate Vietnam/9873/1997)                                     |
+| HUMAN    | http://purl.uniprot.org/taxonomy/11020   | Barmah forest virus                                                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/37119   | Human papillomavirus 66                                                                       |
