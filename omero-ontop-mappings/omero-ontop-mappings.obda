@@ -131,8 +131,8 @@ source		select
 
 mappingId	MAPID-experimentergroup
 target		ome_instance:ExperimenterGroup/{experimentergroup_id} a :ExperimenterGroup ; dc:identifier {experimentergroup_id}^^xsd:integer ; foaf:name {name}^^xsd:string . 
-source		select 
-			experimentergroup.name as name, 
+source		select
+			experimentergroup.name as name,
 			experimentergroup.id as experimentergroup_id
 			from experimentergroup ;
 
