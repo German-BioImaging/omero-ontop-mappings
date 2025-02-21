@@ -967,3 +967,133 @@ Find all datasets tagged "TestTag".
 | HUMAN    | http://purl.uniprot.org/taxonomy/489461  | Hepatitis B virus genotype B2 (isolate Vietnam/9873/1997)                                     |
 | HUMAN    | http://purl.uniprot.org/taxonomy/11020   | Barmah forest virus                                                                           |
 | HUMAN    | http://purl.uniprot.org/taxonomy/37119   | Human papillomavirus 66                                                                       |
+
+* Federated query against locally running qlever and uniprot
+:PROPERTIES:
+:ID:       deea35fd-873a-4a43-983e-6497a8a04163
+:END:
+#+begin_src sparql :url http://localhost:8888/sparql 
+
+PREFIX omekg: <https://ld.openmicroscopy.org/omekg/>
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX well: <http://ome.evolbio.mpg.de/Well/>
+PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
+PREFIX up: <http://purl.uniprot.org/core/>
+PREFIX uptaxon: <http://purl.uniprot.org/taxonomy/>
+
+SELECT DISTINCT ?well ?taxon ?host_scientific_name ?guest_organism_scientificname WHERE {
+  ?well a omekg:Well ;
+        omens:TermSource1Accession ?taxon .
+  BIND (IRI(CONCAT(STR(uptaxon:), STRAFTER(?taxon,"NCBITaxon_"))) AS ?host)
+  SERVICE <https://sparql.uniprot.org/sparql> {
+    ?host up:scientificName ?host_scientific_name;
+	^up:host ?guest_organism .
+    ?guest_organism up:scientificName ?guest_organism_scientificname .
+  }
+}
+LIMIT 100
+#+end_src
+
+#+RESULTS:
+| well                              | taxon          | host_scientific_name | guest_organism_scientificname                                           |
+|-----------------------------------+----------------+----------------------+-------------------------------------------------------------------------|
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Aichi virus                                                             |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Aichi virus (strain Human/A846/88/1989)                                 |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Alkhumra hemorrhagic fever virus                                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Andes orthohantavirus                                                   |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Australian bat lyssavirus (isolate Bat/AUS/1996)                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Australian bat lyssavirus (isolate Human/AUS/1998)                      |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Banna virus (strain Indonesia/JKT-6423/1980)                            |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Banzi virus                                                             |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Barmah forest virus                                                     |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bhanja virus                                                            |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | BK polyomavirus                                                         |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | BK polyomavirus (strain AS)                                             |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Black Creek Canal orthohantavirus                                       |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bunyamwera virus                                                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bunyavirus La Crosse                                                    |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bunyavirus La Crosse (isolate Aedes triseriatus/United States/L74/1974) |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bunyavirus La Crosse (isolate Human/United States/L78/1978)             |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bunyavirus snowshoe hare                                                |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bussuquara virus                                                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Cercopithecine herpesvirus 1                                            |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Cercopithecine herpesvirus 16                                           |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chandipura virus (strain I653514)                                       |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chapare mammarenavirus (isolate Human/Bolivia/810419/2003)              |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chiba virus (strain GI/Human/Japan/Chiba 407/1987)                      |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chikungunya virus                                                       |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chikungunya virus (strain 37997)                                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chikungunya virus (strain Nagpur)                                       |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chikungunya virus (strain S27-African prototype)                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Colorado tick fever virus                                               |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Colorado tick fever virus (strain USA/Florio N-7180)                    |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Cosavirus A (isolate Human/Pakistan/0553/-)                             |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Cowpox virus                                                            |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Cowpox virus (strain Brighton Red)                                      |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Cowpox virus (strain GRI-90 / Grishak)                                  |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus A16 (strain G-10)                                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus A16 (strain Tainan/5079/98)                              |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus A21 (strain Coe)                                         |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus A24 (strain EH24/70)                                     |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus A9 (strain Griggs)                                       |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B1 (strain Japan)                                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B2 (strain Ohio-1)                                       |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B3 (strain Nancy)                                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B3 (strain Woodruff)                                     |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B4 (strain E2)                                           |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B4 (strain JVB / Benschoten / New York/51)               |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B5 (strain Peterborough / 1954/UK/85)                    |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B6 (strain Schmitt)                                      |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Crimean-Congo hemorrhagic fever virus (isolate C68031)                  |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Crimean-Congo hemorrhagic fever virus (strain Nigeria/IbAr10200/1970)   |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 1 (strain Brazil/97-11/1997)                          |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 1 (strain Jamaica/CV1636/1977)                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 1 (strain Nauru/West Pac/1974)                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 1 (strain Singapore/S275/1990)                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 1 (strain Thailand/AHF 82-80/1980)                    |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (isolate Malaysia M2)                               |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (isolate Malaysia M3)                               |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (isolate Thailand/0168/1979)                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain 16681-PDK53)                                |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain China/D2-04)                                |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Jamaica/1409/1983)                          |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Peru/IQT2913/1996)                          |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Puerto Rico/PR159-S1/1969)                  |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Thailand/16681/1984)                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Thailand/NGS-C/1944)                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Thailand/PUO-218/1980)                      |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Thailand/TH-36/1958)                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Tonga/EKB194/1974)                          |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 3 (strain China/80-2/1980)                            |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 3 (strain Martinique/1243/1999)                       |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 3 (strain Philippines/H87/1956)                       |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 3 (strain Singapore/8120/1995)                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 3 (strain Sri Lanka/1266/2000)                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 4 (strain Dominica/814669/1981)                       |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 4 (strain Philippines/H241/1956)                      |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 4 (strain Singapore/8976/1995)                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 4 (strain Thailand/0348/1991)                         |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 4 (strain Thailand/0476/1997)                         |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dhori virus (strain Indian/1313/61)                                     |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dobrava-Belgrade orthohantavirus                                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dugbe virus                                                             |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dugbe virus (isolate ArD44313)                                          |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Duvenhage virus                                                         |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Eastern equine encephalitis virus                                       |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Eastern equine encephalitis virus (strain Florida 91-469)               |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Eastern equine encephalitis virus (strain PE-0.0155)                    |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Eastern equine encephalitis virus (strain PE-3.0815)                    |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Eastern equine encephalitis virus (strain va33[ten broeck])             |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echo 9 virus                                                            |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 1 (strain Human/Egypt/Farouk/1951)                            |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 11 (strain Gregory)                                           |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 12 (strain Travis)                                            |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 16 (strain Harrington)                                        |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 30 (strain Bastianni)                                         |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 5 (strain Noyce)                                              |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 6 (strain Charles)                                            |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 9 (strain Barty)                                              |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 9 (strain Hill)                                               |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Encephalomyocarditis virus                                              |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Encephalomyocarditis virus (strain emc-b nondiabetogenic)               |
+| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Encephalomyocarditis virus (strain emc-d diabetogenic)                  |
