@@ -19,7 +19,7 @@ ome_instance:	https://example.org/site/
 
 [MappingDeclaration] @collection [[
 mappingId	MAPID-project-0
-target		ome_instance:Project/{project_id} a :Project ; dc:identifier {project_id}^^xsd:integer ; rdfs:label {project_name}^^xsd:integer ; rdfs:comment {project_description} ; this:owner ome_instance:Experimenter/{owner_id} ; this:group ome_instance:ExperimenterGroup/{group_id} . 
+target		ome_instance:Project/{project_id} a :Project ; dc:identifier {project_id}^^xsd:integer ; rdfs:label {project_name}^^xsd:string ; rdfs:comment {project_description}^^xsd:string ; this:owner ome_instance:Experimenter/{owner_id} ; this:group ome_instance:ExperimenterGroup/{group_id} . 
 source		select
 			_project.id as project_id,
 			_project.name as project_name,
@@ -62,7 +62,7 @@ source		select
 			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
 mappingId	MAPID-dataset-0
-target		ome_instance:Dataset/{dataset_id} a :Dataset ; dc:identifier {dataset_id}^^xsd:string ; rdfs:label {dataset_name} ; rdfs:comment {dataset_description} . 
+target		ome_instance:Dataset/{dataset_id} a :Dataset ; dc:identifier {dataset_id}^^xsd:string ; rdfs:label {dataset_name}^^xsd:string ; rdfs:comment {dataset_description}^^xsd:string . 
 source		select
 			_dataset.id as dataset_id,
 			_dataset.name as dataset_name,
@@ -96,7 +96,7 @@ source		select
 			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
 mappingId	MAPID-Image-0
-target		ome_instance:Image/{image_id} a :Image ; rdfs:label {image_name} ; rdfs:comment {image_description}^^xsd:string ; this:acquisition_date {image_acquisitiondate}^^xsd:dateTime ; dc:identifier {image_id}^^xsd:integer . 
+target		ome_instance:Image/{image_id} a :Image ; rdfs:label {image_name}^^xsd:string ; rdfs:comment {image_description}^^xsd:string ; this:acquisition_date {image_acquisitiondate}^^xsd:dateTime ; dc:identifier {image_id}^^xsd:integer . 
 source		select
 			_image.id as image_id,
 			_image.acquisitiondate as image_acquisitiondate,
