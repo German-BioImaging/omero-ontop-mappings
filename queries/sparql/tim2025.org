@@ -1,0 +1,259 @@
+
+* TIM2025 omero ontop sparql queries
+:PROPERTIES:
+:ID:       e7f334ca-08b3-4324-9bba-c732adf73b6c
+:header-args:sparql: :url https://omero.tim2025.de/ontop/sparql :async true :noweb yes :results value replace
+:END:
+** Common prefixes
+:PROPERTIES:
+:ID:       32846f3b-4dda-4a99-8644-4a0b66a6b7d0
+:END:
+#+name: prefixes
+#+begin_src sparql
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+  prefix omens: <http://www.openmicroscopy.org/ns/default/>
+  prefix dc: <http://purl.org/dc/elements/1.1/>
+  prefix tim: <https://omero.tim2025.de/>
+  prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+#+end_src
+** Projects, datasets, images
+:PROPERTIES:
+:ID:       07b625bb-b2b2-40dd-ac9c-6326db0fa012
+:END:
+#+name: proj.ds.img
+#+begin_src sparql
+  <<prefixes>>
+  select * where {
+    ?proj a omecore:Project;
+          rdfs:label ?proj_name;
+          omekg:dataset ?ds .
+    ?ds a omecore:Dataset;
+        rdfs:label ?ds_name;
+        omekg:image ?img .
+    ?img a omecore:Image;
+         rdfs:label ?img_name ;
+         ?img_prop ?img_val .
+    }
+  order by (concat(?proj_name,?ds_name,?img_name))
+  limit 10
+#+end_src
+
+#+RESULTS: proj.ds.img
+| proj                                  | proj_name         | ds                                     | ds_name          | img                                   | img_name           | img_prop                                                 | img_val                                    |
+|---------------------------------------+-------------------+----------------------------------------+------------------+---------------------------------------+--------------------+----------------------------------------------------------+--------------------------------------------|
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | http://purl.org/dc/elements/1.1/identifier               | 104520                                     |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/core/experimenter          | https://omero.tim2025.de/Experimenter/1087 |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#experimenter         | https://omero.tim2025.de/Experimenter/1087 |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#owner                | https://omero.tim2025.de/Experimenter/1087 |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#tag_annotation_value | 2 cell                                     |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#tag_annotation_value | AB                                         |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Arivis-Cropped                             |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#tag_annotation_value | C. elegans                                 |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Exp42                                      |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#tag_annotation_value | TMR31                                      |
+
+** Number of images per dataset
+:PROPERTIES:
+:ID:       746c082d-67e3-4469-805e-026fef27834b
+:END:
+
+#+name: number_of_image_per_dataset
+#+begin_src sparql
+  <<prefixes>>
+  SELECT distinct ?ds (count(?img) as ?number_of_images) WHERE {
+      ?ds a omecore:Dataset;
+          omekg:image ?img
+   }
+  group by ?ds
+  order by desc(?number_of_images)
+  limit 10
+#+end_src
+
+#+RESULTS: number_of_image_per_dataset
+| ds                                     | number_of_images |
+|----------------------------------------+------------------|
+| https://omero.tim2025.de/Dataset/25758 |             1728 |
+| https://omero.tim2025.de/Dataset/25851 |             1728 |
+| https://omero.tim2025.de/Dataset/25757 |               64 |
+| https://omero.tim2025.de/Dataset/25746 |               40 |
+| https://omero.tim2025.de/Dataset/24981 |               40 |
+| https://omero.tim2025.de/Dataset/24843 |               39 |
+| https://omero.tim2025.de/Dataset/25501 |               36 |
+| https://omero.tim2025.de/Dataset/24942 |               32 |
+| https://omero.tim2025.de/Dataset/25764 |               31 |
+| https://omero.tim2025.de/Dataset/25767 |               26 |
+
+** List of all image properties
+:PROPERTIES:
+:ID:       e547286e-aadb-4734-8184-4d6229ceb95c
+:END:
+
+#+name: image properties
+#+begin_src sparql
+  <<prefixes>>
+  select distinct ?prop where {
+    ?img a omecore:Image ;
+         ?prop ?val .
+    }
+  limit 10
+#+end_src
+
+#+RESULTS: image properties
+| prop                                                      |
+|-----------------------------------------------------------|
+| http://purl.org/dc/elements/1.1/identifier                |
+| https://ld.openmicroscopy.org/core/experimenter           |
+| https://ld.openmicroscopy.org/omekg#acquisition_date      |
+| https://ld.openmicroscopy.org/omekg#experimenter          |
+| https://ld.openmicroscopy.org/omekg#owner                 |
+| https://ld.openmicroscopy.org/omekg#tag_annotation_value  |
+| http://www.openmicroscopy.org/ns/default/405Power-Delay   |
+| http://www.openmicroscopy.org/ns/default/405Shutter-Delay |
+| http://www.openmicroscopy.org/ns/default/488Power-Delay   |
+| http://www.openmicroscopy.org/ns/default/488Shutter-Delay |
+
+** Image tags
+:PROPERTIES:
+:ID:       e547286e-aadb-4734-8184-4d6229ceb95c
+:END:
+
+#+name: image tags
+#+begin_src sparql
+  <<prefixes>>
+  select distinct ?img ?tag where {
+    ?img a omecore:Image ;
+         omekg:tag_annotation_value ?tag .
+    }
+  limit 10
+#+end_src
+
+#+RESULTS: image tags
+| img                                   |
+|---------------------------------------|
+| https://omero.tim2025.de/Image/105932 |
+| https://omero.tim2025.de/Image/9540   |
+| https://omero.tim2025.de/Image/9541   |
+| https://omero.tim2025.de/Image/104632 |
+| https://omero.tim2025.de/Image/105034 |
+| https://omero.tim2025.de/Image/105037 |
+| https://omero.tim2025.de/Image/105038 |
+| https://omero.tim2025.de/Image/105039 |
+| https://omero.tim2025.de/Image/105040 |
+| https://omero.tim2025.de/Image/105041 |
+
+Hm, what's going on here?
+
+
+** Image MapAnnotations
+:PROPERTIES:
+:ID:       e547286e-aadb-4734-8184-4d6229ceb95c
+:END:
+
+#+name: image mapannotations
+#+begin_src sparql
+  <<prefixes>>
+  select * where {
+    ?img a omecore:Image ;
+         ?key ?val .
+    filter(strstarts(str(?key), str(omens:)))
+    }
+  limit 10
+#+end_src
+
+#+RESULTS: image mapannotations
+| img                                   | key                                                               | val             |
+|---------------------------------------+-------------------------------------------------------------------+-----------------|
+| https://omero.tim2025.de/Image/104631 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | FRET            |
+| https://omero.tim2025.de/Image/104632 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+| https://omero.tim2025.de/Image/104633 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+| https://omero.tim2025.de/Image/104634 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+| https://omero.tim2025.de/Image/104635 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+| https://omero.tim2025.de/Image/104636 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | FRET            |
+| https://omero.tim2025.de/Image/104637 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | FRET            |
+| https://omero.tim2025.de/Image/104638 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+| https://omero.tim2025.de/Image/104639 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+| https://omero.tim2025.de/Image/104640 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+
+** Unique keys
+:PROPERTIES:
+:ID:       e547286e-aadb-4734-8184-4d6229ceb95c
+:END:
+
+#+name: unique keys
+#+begin_src sparql
+  <<prefixes>>
+  select distinct ?key where {
+    ?img a omecore:Image ;
+         ?key ?val .
+    filter(strstarts(str(?key), str(omens:)))
+    }
+  limit 10
+#+end_src
+
+#+RESULTS: unique keys
+| key                                                                    |
+|------------------------------------------------------------------------|
+| http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism      |
+| http://www.openmicroscopy.org/ns/default/Organism                      |
+| http://www.openmicroscopy.org/ns/default/Experimentalstatus            |
+| http://www.openmicroscopy.org/ns/default/Excitation                    |
+| http://www.openmicroscopy.org/ns/default/Channel0-content              |
+| http://www.openmicroscopy.org/ns/default/biologicalentity              |
+| http://www.openmicroscopy.org/ns/default/Channel0-biologicalentity     |
+| http://www.openmicroscopy.org/ns/default/Kinetix-FRAMEAVERAGINGENABLED |
+| http://www.openmicroscopy.org/ns/default/Kinetix-MetadataEnabled       |
+| http://www.openmicroscopy.org/ns/default/Maico-IMAGEPIXELTYPE          |
+
+** Unique organisms
+:PROPERTIES:
+:ID:       7b9abc4b-bc19-40ff-8c6a-ba3643fba4d6
+:END:
+
+#+name: unique_organisms
+
+#+begin_src sparql
+  <<prefixes>>
+  select distinct ?organism where {
+    ?img a omecore:Image;
+         omens:Organism ?organism .
+    }
+#+end_src
+
+#+RESULTS:
+| organism     |
+|--------------|
+| Homo sapiens |
+** Federated query uniprot <-> omero joining on organism annotation
+:PROPERTIES:
+:ID:       e547286e-aadb-4734-8184-4d6229ceb95c
+:END:
+
+Note the different sparql endpoint. Ontop does not support federation, so we have to make it the secondary endpoint
+in this federated query. The primary is the uniprot endpoint at https://sparql.uniprot.org/sparql.
+#+name: uniprot-organism
+#+begin_src sparql :url https://sparql.uniprot.org/sparql
+  <<prefixes>>
+  prefix up: <http://purl.uniprot.org/core/>
+  prefix uptax: <http://purl.uniprot.org/taxonomy/>
+
+  select ?tx ?comname ?sciname (count(distinct ?img_id) as ?images) where {
+    service <https://omero.tim2025.de/ontop/sparql> {
+      ?img a omecore:Image;
+           dc:identifier ?img_id;
+           omens:Organism ?sciname .
+    }
+    ?tx a up:Taxon;
+        up:scientificName ?sciname;
+        up:commonName ?comname .
+  }
+  group by ?sciname ?comname ?tx
+  limit 10
+#+end_src
+
+#+RESULTS: uniprot-organism
+| tx                                    | comname | sciname      | images                                      |
+|---------------------------------------+---------+--------------+---------------------------------------------|
+| http://purl.uniprot.org/taxonomy/9606 | Human   | Homo sapiens | 272^^<http://www.w3.org/2001/XMLSchema#int> |
