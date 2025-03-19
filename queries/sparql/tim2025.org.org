@@ -1,0 +1,262 @@
+# Created 2025-03-19 Wed 17:25
+#+title: 
+#+author: Carsten Fortmann-Grote
+* TIM2025 omero ontop sparql queries
+** Projects, datasets, images
+#+name: proj.ds.img
+#+begin_src sparql
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+  prefix omens: <http://www.openmicroscopy.org/ns/default/>
+  prefix dc: <http://purl.org/dc/elements/1.1/>
+  prefix tim: <https://omero.tim2025.de/>
+  prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+  select * where {
+    ?proj a omecore:Project;
+          rdfs:label ?proj_name;
+          omekg:dataset ?ds .
+    ?ds a omecore:Dataset;
+        rdfs:label ?ds_name;
+        omekg:image ?img .
+    ?img a omecore:Image;
+         rdfs:label ?img_name ;
+         ?img_prop ?img_val .
+    }
+  order by (concat(?proj_name,?ds_name,?img_name))
+  limit 10
+#+end_src
+
+#+results: proj.ds.img
+| proj                                  | proj_name         | ds                                     | ds_name          | img                                   | img_name           | img_prop                                                 | img_val                                    |
+|---------------------------------------+-------------------+----------------------------------------+------------------+---------------------------------------+--------------------+----------------------------------------------------------+--------------------------------------------|
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | http://purl.org/dc/elements/1.1/identifier               | 104520                                     |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/core/experimenter          | https://omero.tim2025.de/Experimenter/1087 |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#experimenter         | https://omero.tim2025.de/Experimenter/1087 |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#owner                | https://omero.tim2025.de/Experimenter/1087 |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#tag_annotation_value | 2 cell                                     |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#tag_annotation_value | AB                                         |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Arivis-Cropped                             |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#tag_annotation_value | C. elegans                                 |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Exp42                                      |
+| https://omero.tim2025.de/Project/2755 | C-elegans_WT_LLSM | https://omero.tim2025.de/Dataset/24983 | DATE_Exp42_TMR31 | https://omero.tim2025.de/Image/104520 | 20161114_C7-00.tif | https://ld.openmicroscopy.org/omekg#tag_annotation_value | TMR31                                      |
+** Number of images per dataset
+#+name: number_of_image_per_dataset
+#+begin_src sparql
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+  prefix omens: <http://www.openmicroscopy.org/ns/default/>
+  prefix dc: <http://purl.org/dc/elements/1.1/>
+  prefix tim: <https://omero.tim2025.de/>
+  prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+  SELECT distinct ?ds (count(?img) as ?number_of_images) WHERE {
+      ?ds a omecore:Dataset;
+          omekg:image ?img
+   }
+  group by ?ds
+  order by desc(?number_of_images)
+  limit 10
+#+end_src
+
+#+results: number_of_image_per_dataset
+| ds                                     | number_of_images |
+|----------------------------------------+------------------|
+| https://omero.tim2025.de/Dataset/25758 |             1728 |
+| https://omero.tim2025.de/Dataset/25851 |             1728 |
+| https://omero.tim2025.de/Dataset/25757 |               64 |
+| https://omero.tim2025.de/Dataset/25746 |               40 |
+| https://omero.tim2025.de/Dataset/24981 |               40 |
+| https://omero.tim2025.de/Dataset/24843 |               39 |
+| https://omero.tim2025.de/Dataset/25501 |               36 |
+| https://omero.tim2025.de/Dataset/24942 |               32 |
+| https://omero.tim2025.de/Dataset/25764 |               31 |
+| https://omero.tim2025.de/Dataset/25767 |               26 |
+** List of all image properties
+#+name: image properties
+#+begin_src sparql
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+  prefix omens: <http://www.openmicroscopy.org/ns/default/>
+  prefix dc: <http://purl.org/dc/elements/1.1/>
+  prefix tim: <https://omero.tim2025.de/>
+  prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+  select distinct ?prop where {
+    ?img a omecore:Image ;
+         ?prop ?val .
+    }
+  limit 10
+#+end_src
+
+#+results: image properties
+| prop                                                      |
+|-----------------------------------------------------------|
+| http://purl.org/dc/elements/1.1/identifier                |
+| https://ld.openmicroscopy.org/core/experimenter           |
+| https://ld.openmicroscopy.org/omekg#acquisition_date      |
+| https://ld.openmicroscopy.org/omekg#experimenter          |
+| https://ld.openmicroscopy.org/omekg#owner                 |
+| https://ld.openmicroscopy.org/omekg#tag_annotation_value  |
+| http://www.openmicroscopy.org/ns/default/405Power-Delay   |
+| http://www.openmicroscopy.org/ns/default/405Shutter-Delay |
+| http://www.openmicroscopy.org/ns/default/488Power-Delay   |
+| http://www.openmicroscopy.org/ns/default/488Shutter-Delay |
+** Image tags
+#+name: image tags
+#+begin_src sparql
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+  prefix omens: <http://www.openmicroscopy.org/ns/default/>
+  prefix dc: <http://purl.org/dc/elements/1.1/>
+  prefix tim: <https://omero.tim2025.de/>
+  prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+  select distinct ?img ?tag where {
+    ?img a omecore:Image ;
+         omekg:tag_annotation_value ?tag .
+    }
+  limit 10
+#+end_src
+
+#+results: image tags
+| img                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | tag                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| https://omero.tim2025.de/Image/105039                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | NucLabel                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| https://omero.tim2025.de/Image/104933                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | CytoLabel                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| https://omero.tim2025.de/Image/106081                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | <Modulo namespace="http://www.openmicroscopy.org/Schemas/Additions/2011-09"><ModuloAlongT End="8" Start="0" Step="1" Type="tile"/></Modulo>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| https://omero.tim2025.de/Image/104521                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Analyzed_Fiji                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| https://omero.tim2025.de/Image/104949                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | CytoLabel                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| https://omero.tim2025.de/Image/104520                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | C. elegans                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| https://omero.tim2025.de/Image/104524                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | 2 cell                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| https://omero.tim2025.de/Image/109940                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | <Offset Offset_0="-13548.521484" Offset_1="-45438.226563" Offset_2="2087.375000" Offset_3="2087.375000"/><Length Length_0="958.750000" Length_1="3328.000000" Length_2="-654.000000" Length_3="1.000000"/><AxesLabels FirstAxis="xyz-Table Z" FirstAxis-Unit="&amp;#181;m" SecondAxis="NONE" SecondAxis-Unit="" X="Blaze X" X-Unit="&amp;#181;m" Y="Blaze Y" Y-Unit="&amp;#181;m"/><dSel T0="0" T1="-1" X0="0" X1="-1" Y0="0" Y1="-1" Z0="0" Z1="-1"/><dStampJmp dStampJmp0="0" dStampJmp1="0" dStampJmp2="0" dStampJmp3="0"/><dStampRes dStampRes0="0" dStampRes1="0" dStampRes2="0" dStampRes3="0"/><sDeviceKey sDeviceKey="Blaze:0:0:1:1"/><dDisplayMode dDisplayMode="0"/><dHideMode dHideMode="0"/><dHideAxis dHideAxis="3"/><ColorMap ColorMap="2"/><ExcitationWL ExcitationWL="405"/><EmissionWL EmissionWL="460"/><InstrumentMode InstrumentMode="Ultramicroscope Expert"/><MeasurementMode MeasurementMode="Multi Color Mosaic Acquisition"/><Axis0 AxisName="xyz-Table Z" Offset="2087.375000" PhysicalUnit="-3.000000" Steps="219"/><Rating Rating="0"/><UseMetaDataGlobal UseMetaDataGlobal="1"/><ImspectorVersion ImspectorVersion="Imspector Pro 7.8.1"/><SerialNumber SerialNumber="UM-3148"/><ObjectiveID ObjectiveID="LVBT 4x"/><ObjectiveNA ObjectiveNA="0.350000"/><ObjectiveMedium ObjectiveMedium="H2O"/><ActiveFilterIdx ActiveFilterIdx="8"/><FilterExpTime FilterExpTime="20.000000"/><IsPartOfMosaic IsPartOfMosaic="1"/><TileConfiguration TileConfiguration="3  17-59-45_organoid_Blaze[00 x 00]_C00.ome.tif;;(-14411.396484, -45438.226563)  17-59-45_organoid_Blaze[00 x 01]_C00.ome.tif;;(-13548.521484, -45438.226563)  17-59-45_organoid_Blaze[00 x 02]_C00.ome.tif;;(-12685.646484, -45438.226563)  17-59-45_organoid_Blaze[00 x 03]_C00.ome.tif;;(-11822.771484, -45438.226563)"/><FilenameAxesMap FilenameAxesMap="17-59-45_organoid_Blaze[00 x 00]_C00.ome.tif?0,0,0/17-59-45_organoid_Blaze[00 x 01]_C00.ome.tif?0,1,0/17-59-45_organoid_Blaze[00 x 02]_C00.ome.tif?0,2,0/17-59-45_organoid_Blaze[00 x 03]_C00.ome.tif?0,3,0/"/><DataAxis0 AxisName="X" Offset="-479.375000" PhysicalUnit="1.625000" Steps="590"/><DataAxis1 AxisName="Y" Offset="-1664.000000" PhysicalUnit="1.625000" Steps="2048"/><DataAxis2 AxisName="C" Offset="0.000000" PhysicalUnit="1.000000" Steps="1"/><DataAxis3 AxisName="xyz-Table Z" Offset="2087.375000" PhysicalUnit="-3.000000" Steps="219"/><DataAxis4 AxisName="xyz-Table X" Offset="-13117.083984" PhysicalUnit="862.875000" Steps="4"/><DataAxis5 AxisName="xyz-Table Y" Offset="-45438.226563" PhysicalUnit="1.000000" Steps="1"/><FilterAxis Axis="DataAxis2""> |
+| <Filter0 EmissionWL=""460"" ExcitationWL=""405"" ExposureTime=""20.000000""/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| </FilterAxis><ZAxis Axis=""DataAxis3""/><SplitAxis m_sSplitAxis0=""None"" m_sSplitAxis1=""None"" m_sSplitAxis2=""None"" m_sSplitAxis3=""None"" m_sSplitAxis4=""None"" m_sSplitAxis5=""None"" m_sSplitAxis6=""None"" m_sSplitAxis7=""None""/><SplitAxisRes m_dSplitAxisRes0=""1"" m_dSplitAxisRes1=""1"" m_dSplitAxisRes2=""1"" m_dSplitAxisRes3=""1"" m_dSplitAxisRes4=""1"" m_dSplitAxisRes5=""1"" m_dSplitAxisRes6=""1"" m_dSplitAxisRes7=""1""/><SplitAxisStep m_dSplitAxisStep0=""0"" m_dSplitAxisStep1=""0"" m_dSplitAxisStep2=""0"" m_dSplitAxisStep3=""0"" m_dSplitAxisStep4=""0"" m_dSplitAxisStep5=""0"" m_dSplitAxisStep6=""0"" m_dSplitAxisStep7=""0""/><SplitAxisStepPos m_fSplitAxisStepPos0=""0.000000"" m_fSplitAxisStepPos1=""0.000000"" m_fSplitAxisStepPos2=""0.000000"" m_fSplitAxisStepPos3=""0.000000"" m_fSplitAxisStepPos4=""0.000000"" m_fSplitAxisStepPos5=""0.000000"" m_fSplitAxisStepPos6=""0.000000"" m_fSplitAxisStepPos7=""0.000000""/><NumInternalSplit NumInternalSplit=""0""/>" |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| https://omero.tim2025.de/Image/104521                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | TMR31                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| https://omero.tim2025.de/Image/104523                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | C. elegans                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+
+Hm, what's going on here?
+** Image MapAnnotations
+#+name: image mapannotations
+#+begin_src sparql
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+  prefix omens: <http://www.openmicroscopy.org/ns/default/>
+  prefix dc: <http://purl.org/dc/elements/1.1/>
+  prefix tim: <https://omero.tim2025.de/>
+  prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+  select * where {
+    ?img a omecore:Image ;
+         ?key ?val .
+    filter(strstarts(str(?key), str(omens:)))
+    }
+  limit 10
+#+end_src
+
+#+results: image mapannotations
+| img                                   | key                                                               | val             |
+|---------------------------------------+-------------------------------------------------------------------+-----------------|
+| https://omero.tim2025.de/Image/104631 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | FRET            |
+| https://omero.tim2025.de/Image/104632 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+| https://omero.tim2025.de/Image/104633 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+| https://omero.tim2025.de/Image/104634 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+| https://omero.tim2025.de/Image/104635 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+| https://omero.tim2025.de/Image/104636 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | FRET            |
+| https://omero.tim2025.de/Image/104637 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | FRET            |
+| https://omero.tim2025.de/Image/104638 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+| https://omero.tim2025.de/Image/104639 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+| https://omero.tim2025.de/Image/104640 | http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism | fluorescent dye |
+** Unique keys
+#+name: unique keys
+#+begin_src sparql
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+  prefix omens: <http://www.openmicroscopy.org/ns/default/>
+  prefix dc: <http://purl.org/dc/elements/1.1/>
+  prefix tim: <https://omero.tim2025.de/>
+  prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+  select distinct ?key where {
+    ?img a omecore:Image ;
+         ?key ?val .
+    filter(strstarts(str(?key), str(omens:)))
+    }
+  limit 10
+#+end_src
+
+#+results: unique keys
+| key                                                                    |
+|------------------------------------------------------------------------|
+| http://www.openmicroscopy.org/ns/default/Signal/contrastmechanism      |
+| http://www.openmicroscopy.org/ns/default/Organism                      |
+| http://www.openmicroscopy.org/ns/default/Experimentalstatus            |
+| http://www.openmicroscopy.org/ns/default/Excitation                    |
+| http://www.openmicroscopy.org/ns/default/Channel0-content              |
+| http://www.openmicroscopy.org/ns/default/biologicalentity              |
+| http://www.openmicroscopy.org/ns/default/Channel0-biologicalentity     |
+| http://www.openmicroscopy.org/ns/default/Kinetix-FRAMEAVERAGINGENABLED |
+| http://www.openmicroscopy.org/ns/default/Kinetix-MetadataEnabled       |
+| http://www.openmicroscopy.org/ns/default/Maico-IMAGEPIXELTYPE          |
+** Unique organisms
+#+name: unique_organisms
+
+#+begin_src sparql
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+  prefix omens: <http://www.openmicroscopy.org/ns/default/>
+  prefix dc: <http://purl.org/dc/elements/1.1/>
+  prefix tim: <https://omero.tim2025.de/>
+  prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+  select distinct ?organism where {
+    ?img a omecore:Image;
+         omens:Organism ?organism .
+    }
+#+end_src
+
+#+results: 
+| organism     |
+|--------------|
+| Homo sapiens |
+** Federated query uniprot <-> omero joining on organism annotation
+Note the different sparql endpoint. Ontop does not support federation, so we have to make it the secondary endpoint
+in this federated query. The primary is the uniprot endpoint at https://sparql.uniprot.org/sparql.
+#+name: uniprot-organism
+#+begin_src sparql :url https://sparql.uniprot.org/sparql
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+  prefix omens: <http://www.openmicroscopy.org/ns/default/>
+  prefix dc: <http://purl.org/dc/elements/1.1/>
+  prefix tim: <https://omero.tim2025.de/>
+  prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+  prefix up: <http://purl.uniprot.org/core/>
+  prefix uptax: <http://purl.uniprot.org/taxonomy/>
+
+  select ?tx ?comname ?sciname (count(distinct ?img_id) as ?images) where {
+    service <https://omero.tim2025.de/ontop/sparql> {
+      ?img a omecore:Image;
+           dc:identifier ?img_id;
+           omens:Organism ?sciname .
+    }
+    ?tx a up:Taxon;
+        up:scientificName ?sciname;
+        up:commonName ?comname .
+  }
+  group by ?sciname ?comname ?tx
+  limit 10
+#+end_src
+
+#+results: uniprot-organism
+| tx                                    | comname | sciname      | images                                      |
+|---------------------------------------+---------+--------------+---------------------------------------------|
+| http://purl.uniprot.org/taxonomy/9606 | Human   | Homo sapiens | 272^^<http://www.w3.org/2001/XMLSchema#int> |
