@@ -497,6 +497,8 @@
 :PROPERTIES:
 :ID:       09d78431-556f-4029-b603-ef4ebef082a5
 :END:
+Note: This query is outdated as it is based on the ome_core ontology. Should rewrite with ome-marshal derived ontology.
+
 #+begin_src python :session rdf :async yes :results output
   from rdflib import Graph, BNode, URIRef, Literal
 
