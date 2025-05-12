@@ -308,8 +308,9 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         print("\n" + response.to_string())
 
-        self.assertEqual(response.loc['0', 'name'], 'root root')
-        self.assertEqual(response.loc['1', 'name'], 'Guest Account')
+        self.assertEqual(response.loc['0', 'name'], 'Guest Account')
+        self.assertEqual(response.loc['0', 'name'], 'Guest Account')
+        self.assertEqual(response.loc['1', 'name'], 'root root')
 
     def test_dataset_core(self):
         """ Test query with the core prefix and ontology. """

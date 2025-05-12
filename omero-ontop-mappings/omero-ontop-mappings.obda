@@ -19,9 +19,11 @@ ome_instance:	https://example.org/site/
 
 [MappingDeclaration] @collection [[
 mappingId	MAPID-project-0
-target		ome_instance:Project/{project_id} a :Project ; dc:identifier {project_id}^^xsd:integer ; rdfs:label {project_name}^^xsd:string ; rdfs:comment {project_description}^^xsd:string ; this:owner ome_instance:Experimenter/{owner_id} ; this:group ome_instance:ExperimenterGroup/{group_id} . 
+target		ome_instance:Project/{project_id} a :Project ; dc:identifier {project_id}^^xsd:integer ; rdfs:label {project_name}^^xsd:string ; rdfs:comment {project_description}^^xsd:string ; this:owner ome_instance:Experimenter/{owner_id} ; this:group ome_instance:ExperimenterGroup/{group_id} ; this:update_id {update_id}^^xsd:integer ; this:creation_id {creation_id}^^xsd:integer . 
 source		select
 			_project.id as project_id,
+			_project.creation_id as creation_id,
+			_project.update_id as update_id,
 			_project.name as project_name,
 			_project.description as project_description,
 			_project.owner_id as owner_id,
@@ -340,48 +342,47 @@ source		select _plateacquisition.id as plateacquisition_id, regexp_replace(
 mappingId	MAPID-screen-tag
 target		ome_instance:Screen/{screen_id} this:tag_annotation_value {tag_text}^^xsd:string . 
 source		select
-          screen.id as screen_id,
-          annotation.textvalue as tag_text
-          from screen
-          join screenannotationlink on screenannotationlink.parent = screen.id
-          join annotation on screenannotationlink.child = annotation.id where annotation.textvalue is not NULL;
+			screen.id as screen_id,
+			annotation.textvalue as tag_text
+			from screen
+			join screenannotationlink on screenannotationlink.parent = screen.id
+			join annotation on screenannotationlink.child = annotation.id where annotation.textvalue is not NULL;
 
 mappingId	MAPID-plate-tag
 target		ome_instance:Plate/{plate_id} this:tag_annotation_value {tag_text}^^xsd:string . 
 source		select
-          plate.id as plate_id,
-          annotation.textvalue as tag_text
-          from plate
-          join plateannotationlink on plateannotationlink.parent = plate.id
-          join annotation on plateannotationlink.child = annotation.id where annotation.textvalue is not NULL;
+			plate.id as plate_id,
+			annotation.textvalue as tag_text
+			from plate
+			join plateannotationlink on plateannotationlink.parent = plate.id
+			join annotation on plateannotationlink.child = annotation.id where annotation.textvalue is not NULL;
 
 mappingId	MAPID-plateacquisition-tag
 target		ome_instance:PlateAcquisition/{plateacquisition_id} this:tag_annotation_value {tag_text}^^xsd:string . 
 source		select
-          plateacquisition.id as plateacquisition_id,
-          annotation.textvalue as tag_text
-          from plateacquisition
-          join plateacquisitionannotationlink on plateacquisitionannotationlink.parent = plateacquisition.id
-          join annotation on plateacquisitionannotationlink.child = annotation.id where annotation.textvalue is not NULL;
+			plateacquisition.id as plateacquisition_id,
+			annotation.textvalue as tag_text
+			from plateacquisition
+			join plateacquisitionannotationlink on plateacquisitionannotationlink.parent = plateacquisition.id
+			join annotation on plateacquisitionannotationlink.child = annotation.id where annotation.textvalue is not NULL;
 
 mappingId	MAPID-reagent-tag
 target		ome_instance:Reagent/{reagent_id} this:tag_annotation_value {tag_text}^^xsd:string . 
 source		select
-          reagent.id as reagent_id,
-          annotation.textvalue as tag_text
-          from reagent
-          join reagentannotationlink on reagentannotationlink.parent = reagent.id
-          join annotation on reagentannotationlink.child = annotation.id where annotation.textvalue is not NULL;
+			reagent.id as reagent_id,
+			annotation.textvalue as tag_text
+			from reagent
+			join reagentannotationlink on reagentannotationlink.parent = reagent.id
+			join annotation on reagentannotationlink.child = annotation.id where annotation.textvalue is not NULL;
 
 mappingId	MAPID-well-tag
 target		ome_instance:Well/{well_id} this:tag_annotation_value {tag_text}^^xsd:string . 
 source		select
-          well.id as well_id,
-          annotation.textvalue as tag_text
-          from well
-          join wellannotationlink on wellannotationlink.parent = well.id
-          join annotation on wellannotationlink.child = annotation.id where annotation.textvalue is not NULL;
-
+			well.id as well_id,
+			annotation.textvalue as tag_text
+			from well
+			join wellannotationlink on wellannotationlink.parent = well.id
+			join annotation on wellannotationlink.child = annotation.id where annotation.textvalue is not NULL;
 
 mappingId	MAPID-dcf5779a40a44cc4859c65a52285ae28
 target		ome_instance:Channel/{id} a :Channel ; dc:identifier {id}^^xsd:integer ; this:blue {blue}^^xsd:integer ; this:red {red}^^xsd:integer ; this:green {green}^^xsd:integer ; this:pixels ome_instance:Pixels/{pixels_id} . 

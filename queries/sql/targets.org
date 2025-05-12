@@ -757,3 +757,27 @@ ORDER BY table_name;
 
 #+RESULTS:
 |---|
+event                                            
+eventlog                                        
+eventtype                                      |
+* Events
+:PROPERTIES:
+:ID:       f534f360-c0b3-4da3-a19b-9cbe6ef6f343
+:END:
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser ontop :dbpassword !ontop$ :database postgres
+  select * from eventlog ;
+#+end_src
+
+#+RESULTS:
+| id | permissions | value      | external_id |
+|----+-------------+------------+-------------|
+|  0 |         -52 | Bootstrap  |             |
+|  1 |         -52 | Import     |             |
+|  2 |         -52 | Internal   |             |
+|  3 |         -52 | Shoola     |             |
+|  4 |         -52 | User       |             |
+|  5 |         -52 | Task       |             |
+|  6 |         -52 | Test       |             |
+|  7 |         -52 | Processing |             |
+|  8 |         -52 | FullText   |             |
+|  9 |         -52 | Sessions   |             |

@@ -726,6 +726,10 @@ this:alpha rdf:type owl:DatatypeProperty .
 this:blue rdf:type owl:DatatypeProperty .
 
 
+###  https://ld.openmicroscopy.org/omekg#creation_id
+this:creation_id rdf:type owl:DatatypeProperty .
+
+
 ###  https://ld.openmicroscopy.org/omekg#green
 this:green rdf:type owl:DatatypeProperty .
 
@@ -764,6 +768,10 @@ this:red rdf:type owl:DatatypeProperty .
 
 ###  https://ld.openmicroscopy.org/omekg#tag_annotation_value
 this:tag_annotation_value rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/omekg#update_id
+this:update_id rdf:type owl:DatatypeProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#well_index
