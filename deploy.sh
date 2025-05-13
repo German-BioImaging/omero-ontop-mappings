@@ -24,7 +24,6 @@ mkdir -vp $PREFIX
 cp -v omero-ontop-mappings/omero-ontop-mappings.properties ${PREFIX}/${PREFIX}.properties
 cp -v omero-ontop-mappings/omero-ontop-mappings.ttl ${PREFIX}/${PREFIX}.ttl
 cp -v omero-ontop-mappings/catalog-v001.xml ${PREFIX}/.
-cp -v omero-ontop-mappings/core.owl.ttl ${PREFIX}/.
 
 # Replace site prefix and URL
 cat omero-ontop-mappings/omero-ontop-mappings.obda | sed "s/ome_instance/${PREFIX}/g" | sed "s/https:\/\/example\.org\/site\//${ESCSITE}/g" > ${PREFIX}/${PREFIX}.obda
