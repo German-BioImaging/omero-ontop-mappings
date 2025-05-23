@@ -13,9 +13,9 @@
   PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
   PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
 
-  select distinct  ?ds ?tp where {
-  ?ds a ome_core:Project ;
-      rdf:type ?tp ;
+  select distinct  ?project ?typ where {
+  ?project a ome_core:Project ;
+      rdf:type ?typ ;
   }
   limit 10
 #+end_src
@@ -24,6 +24,91 @@
 | ds                                 | tp                                                         |
 |------------------------------------+------------------------------------------------------------|
 | https://example.org/site/Project/1 | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Project |
+
+* Project remote host
+:PROPERTIES:
+:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
+:END:
+#+begin_src sparql :url http://micropop046:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
+
+  select distinct  ?project ?typ where {
+  ?project a ome_core:Project ;
+      rdf:type ?typ ;
+  }
+  limit 10
+#+end_src
+
+#+RESULTS:
+| project                            | typ                                         |
+|------------------------------------+---------------------------------------------|
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg/Project |
+| https://example.org/site/Project/1 | https://ld.openmicroscopy.org/omekg/Project |
+| https://example.org/site/Project/1 | https://ld.openmicroscopy.org/core/Project  |
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/core/Project  |
+
+** Project ownership
+:PROPERTIES:
+:ID:       e44a31a1-42f2-48a7-a7f4-bf396911a5e4
+:END:
+#+begin_src sparql :url http://micropop046:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
+
+  select distinct ?project  ?prop ?val where {
+  ?project a ome_core:Project ;
+      ?prop ?val
+  }
+  limit 100
+#+end_src
+
+#+RESULTS:
+| project                            | prop                                                   | val                                          |
+|------------------------------------+--------------------------------------------------------+----------------------------------------------|
+| https://example.org/site/Project/1 | https://ld.openmicroscopy.org/omekg#dataset            | https://example.org/site/Dataset/1           |
+| https://example.org/site/Project/2 | http://purl.org/dc/elements/1.1/identifier             | 2                                            |
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#update_id          | 820                                          |
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#dataset            | https://example.org/site/Dataset/6           |
+| https://example.org/site/Project/1 | https://ld.openmicroscopy.org/omekg#dataset            | https://example.org/site/Dataset/3           |
+| https://example.org/site/Project/1 | http://purl.org/dc/terms/subject                       | OMERO Ontology                               |
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#experimenter       | https://example.org/site/Experimenter/2      |
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/core/experimenter_group  | https://example.org/site/ExperimenterGroup/3 |
+| https://example.org/site/Project/1 | https://ld.openmicroscopy.org/omekg#experimenter       | https://example.org/site/Experimenter/0      |
+| https://example.org/site/Project/1 | https://ld.openmicroscopy.org/omekg#dataset            | https://example.org/site/Dataset/2           |
+| https://example.org/site/Project/2 | http://purl.org/dc/terms/provenance                    | Test Data                                    |
+| https://example.org/site/Project/1 | https://ld.openmicroscopy.org/core/experimenter        | https://example.org/site/Experimenter/0      |
+| https://example.org/site/Project/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type        | https://ld.openmicroscopy.org/core/Project   |
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#owner              | https://example.org/site/Experimenter/2      |
+| https://example.org/site/Project/1 | https://ld.openmicroscopy.org/omekg#owner              | https://example.org/site/Experimenter/0      |
+| https://example.org/site/Project/1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type        | https://ld.openmicroscopy.org/core/Project   |
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#creation_id        | 738                                          |
+| https://example.org/site/Project/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type        | https://ld.openmicroscopy.org/omekg/Project  |
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#dataset            | https://example.org/site/Dataset/4           |
+| https://example.org/site/Project/1 | http://purl.org/dc/terms/provenance                    | Test Data                                    |
+| https://example.org/site/Project/1 | http://purl.org/dc/terms/contributor                   | Nophretete                                   |
+| https://example.org/site/Project/2 | http://purl.org/dc/terms/contributor                   | Nophretete                                   |
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#experimenter_group | https://example.org/site/ExperimenterGroup/3 |
+| https://example.org/site/Project/1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type        | https://ld.openmicroscopy.org/omekg/Project  |
+| https://example.org/site/Project/2 | http://purl.org/dc/terms/subject                       | OMERO Ontology                               |
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#group              | https://example.org/site/ExperimenterGroup/3 |
+| https://example.org/site/Project/2 | http://www.w3.org/2000/01/rdf-schema#label             | Public Project                               |
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#dataset            | https://example.org/site/Dataset/5           |
+| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/core/experimenter        | https://example.org/site/Experimenter/2      |
 
 * Dataset 
 :PROPERTIES:
