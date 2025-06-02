@@ -114,7 +114,11 @@
 :PROPERTIES:
 :ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
 :END:
-#+begin_src sparql :url http://localhost:8080/sparql
+** List all datasets
+:PROPERTIES:
+:ID:       eda1ed27-583d-4637-bc2b-c8795a408c9b
+:END:
+#+begin_src sparql :url http://micropop046:8080/sparql
   PREFIX : <https://www.openmicroscopy.org/omemap/>
   PREFIX owl: <http://www.w3.org/2002/07/owl#>
   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -123,7 +127,7 @@
   PREFIX obda: <https://w3id.org/obda/vocabulary#>
   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
   PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+  prefix ome_core: <https://ld.openmicroscopy.org/core/>
 
   select ?ds where {
   ?ds a ome_core:Dataset .
@@ -134,9 +138,45 @@
 #+RESULTS:
 | ds                                 |
 |------------------------------------|
-| https://example.org/site/Dataset/3 |
-| https://example.org/site/Dataset/2 |
 | https://example.org/site/Dataset/1 |
+| https://example.org/site/Dataset/2 |
+| https://example.org/site/Dataset/3 |
+| https://example.org/site/Dataset/4 |
+| https://example.org/site/Dataset/5 |
+| https://example.org/site/Dataset/6 |
+
+** datasets and properties
+:PROPERTIES:
+:ID:       ffeb2f65-35a2-40b6-af88-820caf58ffa8
+:END:
+#+begin_src sparql :url http://localhost:8080/sparql
+  PREFIX : <https://www.openmicroscopy.org/omemap/>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  prefix ome_core: <https://ld.openmicroscopy.org/core/>
+  prefix omekg: <https://ld.openmicroscopy.org/omekg#>
+
+  select * where {
+  ?ds a ome_core:Dataset ;
+      omekg:owner ?owner .
+  }
+  order by ?owner
+#+end_src
+
+#+RESULTS:
+| ds                                          | owner                                            |
+|---------------------------------------------+--------------------------------------------------|
+| http://micropop046.evolbio.mpg.de/Dataset/1 | http://micropop046.evolbio.mpg.de/Experimenter/0 |
+| http://micropop046.evolbio.mpg.de/Dataset/3 | http://micropop046.evolbio.mpg.de/Experimenter/0 |
+| http://micropop046.evolbio.mpg.de/Dataset/2 | http://micropop046.evolbio.mpg.de/Experimenter/0 |
+| http://micropop046.evolbio.mpg.de/Dataset/5 | http://micropop046.evolbio.mpg.de/Experimenter/2 |
+| http://micropop046.evolbio.mpg.de/Dataset/4 | http://micropop046.evolbio.mpg.de/Experimenter/2 |
+| http://micropop046.evolbio.mpg.de/Dataset/6 | http://micropop046.evolbio.mpg.de/Experimenter/2 |
 
 * Dataset II
 :PROPERTIES:

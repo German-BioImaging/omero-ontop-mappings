@@ -10,6 +10,7 @@ from urllib import parse
 import unittest
 
 ENDPOINT = "http://localhost:8080/sparql"
+ENDPOINT = "http://micropop046:8080/sparql"
 
 # Check if endpoint is reachable.
 def check_endpoint():
