@@ -965,5 +965,23 @@ SELECT DISTINCT * WHERE {
         self.assertEqual(results['min_red'].sum(), 0)
         self.assertTrue(all(results['max_blue'] == 255))
 
+
+    def test_public_private(self):
+        """ Test we cannot access a non-public image"""
+
+
+        query_string = f"""
+    prefix omekg: <https://ld.openmicroscopy.org/omekg/>
+    prefix exoimg: <https://example.org/Image/>
+    select * where {{
+        exoimg:1 ?prop ?val .
+        }}
+        """
+
+        results = run_query(query_string)
+
+        self.assertEqual(len(results), 0)
+
+
 if __name__ == "__main__":
     unittest.main()
