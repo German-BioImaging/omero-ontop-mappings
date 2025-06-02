@@ -101,10 +101,10 @@
 #+end_src
 
 #+RESULTS:
-| project                      | typ                                         |
-|------------------------------+---------------------------------------------|
-| http://micropop046/Project/2 | https://ld.openmicroscopy.org/core/Project  |
-| http://micropop046/Project/2 | https://ld.openmicroscopy.org/omekg/Project |
+| project                       | typ                                         |
+|-------------------------------+---------------------------------------------|
+| http://micropop046/Project/52 | https://ld.openmicroscopy.org/core/Project  |
+| http://micropop046/Project/52 | https://ld.openmicroscopy.org/omekg/Project |
 
 ** Dataset
 :PROPERTIES:
@@ -267,7 +267,7 @@
 | https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/6  | 2024-10-10_15-09-28_screenshot.png         |
 | https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/4  | 2024-10-10_15-28-16_screenshot.png         |
 
-** Image with owner
+** Image with ROI
 :PROPERTIES:
 :ID:       c856598c-c952-4964-b4b2-40b4a1269afc
 :END:
@@ -290,8 +290,20 @@
   #+end_src
 
 #+RESULTS:
-| img | roi |
-|-----+-----|
+| img                         | roi |
+|-----------------------------+-----|
+| http://micropop046/Image/51 |     |
+| http://micropop046/Image/52 |     |
+| http://micropop046/Image/53 |     |
+| http://micropop046/Image/54 |     |
+| http://micropop046/Image/55 |     |
+| http://micropop046/Image/56 |     |
+| http://micropop046/Image/57 |     |
+| http://micropop046/Image/58 |     |
+| http://micropop046/Image/59 |     |
+| http://micropop046/Image/60 |     |
+| http://micropop046/Image/61 |     |
+| http://micropop046/Image/62 |     |
 
 ** Image with owner
 :PROPERTIES:
@@ -306,17 +318,133 @@
   PREFIX obda: <https://w3id.org/obda/vocabulary#>
   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
   PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+  PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
   prefix vcard: <https://www.w3.org/2006/vcard/ns#>
   select distinct * where {
   ?ds a ome_core:Image .
-  ?ds ome_core:experimenterGroup ?owner .
   }
 #+end_src
 
 #+RESULTS:
-| ds | owner |
-|----+-------|
+| ds                          |
+|-----------------------------|
+| http://micropop046/Image/51 |
+| http://micropop046/Image/52 |
+| http://micropop046/Image/53 |
+| http://micropop046/Image/54 |
+| http://micropop046/Image/55 |
+| http://micropop046/Image/56 |
+| http://micropop046/Image/57 |
+| http://micropop046/Image/58 |
+| http://micropop046/Image/59 |
+| http://micropop046/Image/60 |
+| http://micropop046/Image/61 |
+| http://micropop046/Image/62 |
+
+** Image and properties
+:PROPERTIES:
+:ID:       f9c6719d-7aad-460a-8200-def2533884dd
+:END:
+#+begin_src sparql
+  prefix ome_core: <https://ld.openmicroscopy.org/core/>
+  prefix dc: <http://purl.org/dc/terms/>
+
+  SELECT distinct ?img ?prop ?val WHERE {
+    ?img a ome_core:Image;
+         ?prop ?val .
+    }
+      #+end_src
+
+#+RESULTS:
+| img                         | prop                                                     | val                                        |
+|-----------------------------+----------------------------------------------------------+--------------------------------------------|
+| http://micropop046/Image/51 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://micropop046/Image/52 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://micropop046/Image/53 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://micropop046/Image/54 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://micropop046/Image/55 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://micropop046/Image/56 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://micropop046/Image/57 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://micropop046/Image/58 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://micropop046/Image/59 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://micropop046/Image/60 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://micropop046/Image/61 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://micropop046/Image/62 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://micropop046/Image/51 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://micropop046/Image/52 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://micropop046/Image/53 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://micropop046/Image/54 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://micropop046/Image/55 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://micropop046/Image/56 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://micropop046/Image/57 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://micropop046/Image/58 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://micropop046/Image/59 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://micropop046/Image/60 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://micropop046/Image/61 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://micropop046/Image/62 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://micropop046/Image/51 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/52 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/53 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/54 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/55 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/56 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/57 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/58 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/59 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/60 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/61 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/62 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/51 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/52 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/53 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/54 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/55 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/56 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/57 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/58 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/59 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/60 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/61 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/62 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/51 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/52 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/53 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/54 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/55 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/56 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/57 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/58 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/59 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/60 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/61 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/62 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2          |
+| http://micropop046/Image/61 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Screenshot                                 |
+| http://micropop046/Image/62 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Screenshot                                 |
+| http://micropop046/Image/51 | http://purl.org/dc/elements/1.1/identifier               | 51                                         |
+| http://micropop046/Image/52 | http://purl.org/dc/elements/1.1/identifier               | 52                                         |
+| http://micropop046/Image/53 | http://purl.org/dc/elements/1.1/identifier               | 53                                         |
+| http://micropop046/Image/54 | http://purl.org/dc/elements/1.1/identifier               | 54                                         |
+| http://micropop046/Image/55 | http://purl.org/dc/elements/1.1/identifier               | 55                                         |
+| http://micropop046/Image/56 | http://purl.org/dc/elements/1.1/identifier               | 56                                         |
+| http://micropop046/Image/57 | http://purl.org/dc/elements/1.1/identifier               | 57                                         |
+| http://micropop046/Image/58 | http://purl.org/dc/elements/1.1/identifier               | 58                                         |
+| http://micropop046/Image/59 | http://purl.org/dc/elements/1.1/identifier               | 59                                         |
+| http://micropop046/Image/60 | http://purl.org/dc/elements/1.1/identifier               | 60                                         |
+| http://micropop046/Image/61 | http://purl.org/dc/elements/1.1/identifier               | 61                                         |
+| http://micropop046/Image/62 | http://purl.org/dc/elements/1.1/identifier               | 62                                         |
+| http://micropop046/Image/51 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_14-58-36_screenshot.png         |
+| http://micropop046/Image/52 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_14-53-28_screenshot.png         |
+| http://micropop046/Image/53 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-01-36_screenshot.png         |
+| http://micropop046/Image/54 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-09-28_screenshot.png         |
+| http://micropop046/Image/55 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-28-16_screenshot.png         |
+| http://micropop046/Image/56 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-07-18_screenshot.png         |
+| http://micropop046/Image/57 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-17-25_screenshot.png         |
+| http://micropop046/Image/58 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_16-39-27_screenshot.png         |
+| http://micropop046/Image/59 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_16-47-01_screenshot.png         |
+| http://micropop046/Image/60 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_16-42-47_screenshot.png         |
+| http://micropop046/Image/61 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-28-16_screenshot.png.ome.tif |
+| http://micropop046/Image/62 | http://www.w3.org/2000/01/rdf-schema#label               | image_6_with_roi.ome.tif                   |
+
 
 ** Dataset number of type relations
 :PROPERTIES:
