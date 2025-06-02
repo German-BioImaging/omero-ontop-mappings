@@ -407,7 +407,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
         prefix dc: <http://purl.org/dc/terms/>
 
-        SELECT distinct ?img ?author ?subject ?provenance WHERE {{
+        SELECT distinct ?img ?author ?subject WHERE {{
           SERVICE <{ENDPOINT}> {{
             ?img a ome_core:Image;
                  dc:contributor ?author;
@@ -523,10 +523,10 @@ SELECT distinct ?img ?roi WHERE {
         results = run_query(query)
 
         # Check return values.
-        self.assertEqual(results.loc[0, "img"], "https://example.org/site/Image/11")
-        self.assertEqual(results.loc[0, "roi"], "https://example.org/site/ROI/1")
-        self.assertEqual(results.loc[1, "img"], "https://example.org/site/Image/12")
-        self.assertEqual(results.loc[1, "roi"], "https://example.org/site/ROI/2")
+        self.assertEqual(results.loc[0, "img"], "https://example.org/site/Image/23")
+        self.assertEqual(results.loc[0, "roi"], "https://example.org/site/ROI/3")
+        self.assertEqual(results.loc[1, "img"], "https://example.org/site/Image/24")
+        self.assertEqual(results.loc[1, "roi"], "https://example.org/site/ROI/4")
 
     def test_image_properties(self):
         """ Check Image instances have all expected properties. """

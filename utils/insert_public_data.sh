@@ -75,7 +75,7 @@ omero obj map-set $ann mapValue annotator "Public MrX"
 
 # Add another mapannotation with namespace that is not a valid URI
 ann=$(omero obj new MapAnnotation ns="www.openmicroscopy.org/ns/default")
-omero obj new ImageAnnotationLink parent=Image:25 child=$ann
+omero obj new ImageAnnotationLink parent=Image:23 child=$ann
 omero obj map-set $ann mapValue sampletype "Public screen"
 
 # Add another mapannotation with namespace that is not a valid URI (issue #16).
