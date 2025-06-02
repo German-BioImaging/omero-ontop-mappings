@@ -10,7 +10,6 @@ from urllib import parse
 import unittest
 
 ENDPOINT = "http://localhost:8080/sparql"
-ENDPOINT = "http://micropop046:8080/sparql"
 
 # Check if endpoint is reachable.
 def check_endpoint():
@@ -374,7 +373,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         response = graph.query(query_string)
 
         # Test.
-        self.assertEqual(len(response), 1548)
+        self.assertEqual(len(response), 12)
 
     def test_project_dataset_image(self):
         """ Test a query for a project-dataset-image hierarchy. """

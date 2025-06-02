@@ -203,7 +203,7 @@ source		select id, owner_id from image where image.owner_id=2
 
 mappingId	MAPID-dataset_experimenter
 target		ome_instance:Dataset/{id} a :Dataset ; dc:identifier {id}^^xsd:integer ; core:experimenter ome_instance:Experimenter/{owner_id} . 
-source		select id, owner_id from dataset
+source		select id, owner_id from dataset where owner_id=2
 
 mappingId	MAPID-project_experimenter
 target		ome_instance:Project/{id} a :Project ; core:experimenter ome_instance:Experimenter/{owner_id} . 

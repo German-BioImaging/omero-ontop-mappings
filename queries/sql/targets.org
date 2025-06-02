@@ -1,8 +1,13 @@
-* All tables
+* SQL Target queries
+:PROPERTIES:
+:ID:       8f0ff23b-35e3-424d-8c4d-57a186d2c9fb
+:header-args:sql: :engine postgres :dbhost micropop046 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+:END:
+** All tables
 :PROPERTIES:
 :ID:       1833555d-5364-4fe1-aab7-d088644b0e87
 :END:
-#+begin_src  sql :engine postgres :dbhost micropop046 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+#+begin_src  sql :dbhost micropop046 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
 SELECT table_name FROM information_schema.tables where table_schema='public'
 ORDER BY table_name;
 #+end_src
@@ -222,7 +227,7 @@ ORDER BY table_name;
 | wellreagentlink                                  |
 | wellsample                                       |
 
-* All in columns in roi
+** All in columns in roi
 :PROPERTIES:
 :ID:       7ba37cb7-5374-4702-a8e4-9002f4af62ef
 :END:
@@ -246,7 +251,7 @@ ORDER BY table_name;
 | image       |
 | source      |
 
-* Image and ROI
+** Image and ROI
 :PROPERTIES:
 :ID:       5c84a6e2-b418-4c21-b455-ee4a76475e60
 :END:
@@ -268,7 +273,7 @@ ORDER BY table_name;
 |        9 |        |
 |        7 |        |
 
-* All in columns in image
+** All in columns in image
 :PROPERTIES:
 :ID:       cd51a3b2-086b-44c8-a129-284dea4d5306
 :END:
@@ -301,7 +306,7 @@ ORDER BY table_name;
 | objectivesettings  |
 | stagelabel         |
 
-* Projects
+** Projects
 :PROPERTIES:
 :ID:       466e7663-27d9-48e6-b10c-4bcaa238d145
 :END:
@@ -314,12 +319,32 @@ ORDER BY table_name;
 |----+-------------+-------------+-----------+---------+-------------+-------------+----------+----------+-----------+----+-------------+---------+-------+-------------+-------------+----------+----------+-----------+--------|
 | 51 |             |          -8 | TFLM      |         |        5865 |             |       53 |       52 |      5865 |    |             |         |       |             |             |          |          |           |        |
 |  1 |             |         -40 | project01 |         |        1162 |             |        3 |        2 |      1162 |    |             |         |       |             |             |          |          |           |        |
+** Dataset
+:PROPERTIES:
+:ID:       c48e7dd2-6a61-41ea-b7c7-7816efd7d2cf
+:END:
+#+begin_src  sql :engine postgres :dbhost micropop046 :dbport 15432 :dbuser ontop :dbpassword '!ontop$' :database postgres
+select
+          		_dataset.id as dataset_id,
+			_dataset.name as dataset_name,
+			_dataset.description as dataset_description
+			from dataset as _dataset
+      where _dataset.owner_id=2
 
-* Image
+#+end_src
+
+#+RESULTS:
+| dataset_id | dataset_name | dataset_description |
+|------------+--------------+---------------------|
+|          4 | Dataset 1    |                     |
+|          5 | Dataset 2    |                     |
+|          6 | Dataset 3    |                     |
+
+** Image
 :PROPERTIES:
 :ID:       71a91350-a2a8-4479-bfad-19325d02fd25
 :END:
-** All attributes
+*** All attributes
 :PROPERTIES:
 :ID:       7425289d-e78a-4b06-81eb-855f28abde0a
 :END:
@@ -343,7 +368,7 @@ ORDER BY table_name;
 | 11 |                 |          |             |        -120 | 2024-10-10_15-28-16_screenshot.png.ome.tif |         |      0 |         |         591 |             |        0 |        0 |       591 |            |      11 |    170 |                  1 |            |                   |            |
 | 12 |                 |          |             |        -120 | image_6_with_roi.ome.tif                   |         |      0 |         |         619 |             |        0 |        0 |       619 |            |      12 |    170 |                  2 |            |                   |            |
 
-** Image annotations
+*** Image annotations
 :PROPERTIES:
 :ID:       9b14e702-bc4d-4e75-8ff1-5236c6fa3a2b
 :END:
@@ -358,7 +383,7 @@ ORDER BY table_name;
 #+RESULTS:
 |---|
 
-* Folder
+** Folder
 :PROPERTIES:
 :ID:       62965f07-a737-4050-b2ee-6418baff21f3
 :END:
@@ -370,7 +395,7 @@ ORDER BY table_name;
 | id | description | permissions | name | version | creation_id | external_id | group_id | owner_id | update_id | parentfolder |
 |----+-------------+-------------+------+---------+-------------+-------------+----------+----------+-----------+--------------|
 
-* Folderannotationlink
+** Folderannotationlink
 :PROPERTIES:
 :ID:       12bc20b2-9037-4f1b-9612-0fa8c36aaabc
 :END:
@@ -382,7 +407,7 @@ ORDER BY table_name;
 | id | permissions | version | child | creation_id | external_id | group_id | owner_id | update_id | parent |
 |----+-------------+---------+-------+-------------+-------------+----------+----------+-----------+--------|
 
-* datasets in separate joins
+** datasets in separate joins
 :PROPERTIES:
 :ID:       c254b55f-6517-4782-a09a-f38c937e5231
 :END:
@@ -401,7 +426,7 @@ ORDER BY table_name;
 #+RESULTS:
 |---|
 
-* Annotations
+** Annotations
 :PROPERTIES:
 :ID:       c163c7b2-d0be-4894-bfb4-ebce24817c0e
 :END:
@@ -434,7 +459,7 @@ ORDER BY table_name;
       | /map/            | 18 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         679 |             |        0 |        0 |       683 |      |
       | /map/            | 19 |             |        -120 |      | http://purl.org/dc/terms/ |       3 |           |            |             |           |           |           |         685 |             |        0 |        0 |       689 |      |
 
-* namespace string check and set
+** namespace string check and set
 :PROPERTIES:
 :ID:       ed9d6bf8-7e22-4e3d-b168-f0002e86ac59
 :END:
@@ -485,7 +510,7 @@ ORDER BY table_name;
 | http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
 | http://purl.org/dc/terms/                                  | http://purl.org/dc/terms/                           |
 
-* namespace regex replace
+** namespace regex replace
 :PROPERTIES:
 :ID:       ed9d6bf8-7e22-4e3d-b168-f0002e86ac59
 :END:
@@ -535,12 +560,11 @@ ORDER BY table_name;
 | http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
 | http://purl.org/dc/terms/                 | http://purl.org/dc/terms/                           |
 
-
-* Experimenter and ExperimenterGroups
+** Experimenter and ExperimenterGroups
 :PROPERTIES:
 :ID:       1ee4a685-bff6-4acd-ad06-c96b32be98b5
 :END:
-** Experimenter
+*** Experimenter
 :PROPERTIES:
 :ID:       e0f747e1-c4e7-4a35-b207-1147ce930b8b
 :END:
@@ -555,7 +579,7 @@ ORDER BY table_name;
 |  0 |           0 |       | root      |             | root     | f    |            | root    |       0 |             |
 |  1 |           0 |       | Guest     |             | Account  | f    |            | guest   |       0 |             |
 
-** Experiment
+*** Experiment
 :PROPERTIES:
 :ID:       104cf1b6-2322-410e-8089-f53fb6140138
 :END:
@@ -568,7 +592,7 @@ ORDER BY table_name;
 | id | description | permissions | version | creation_id | external_id | group_id | owner_id | update_id | type |
 |----+-------------+-------------+---------+-------------+-------------+----------+----------+-----------+------|
 
-** ExperimenterGrous
+*** ExperimenterGrous
 :PROPERTIES:
 :ID:       104cf1b6-2322-410e-8089-f53fb6140138
 :END:
@@ -584,11 +608,11 @@ ORDER BY table_name;
 |  1 |             |         -52 | f    | user   |       0 |             |
 |  2 |             |        -120 | f    | guest  |       0 |             |
 
-* HCS
+** HCS
 :PROPERTIES:
 :ID:       dadc3b79-19e0-4b22-bd66-d981870fe444
 :END:
-** Screens
+*** Screens
 :PROPERTIES:
 :ID:       df1a9716-ab75-4b52-8d72-8f1d513dd2f4
 :END:
@@ -702,7 +726,7 @@ ORDER BY table_name;
 |  99 |        -120 | reference frame | -757.759765625 | reference frame |    757.759765625 |           |         |       11414 |             |        0 |        0 |     11414 |   343 |                1 |   25 |          2 |
 | 100 |        -120 | reference frame |  757.759765625 | reference frame |    757.759765625 |           |         |       11414 |             |        0 |        0 |     11414 |   344 |                1 |   25 |          3 |
 
-* Channel
+** Channel
 :PROPERTIES:
 :ID:       f24c3f74-96ea-426d-9fac-29a94d1e92be
 :END:
@@ -745,7 +769,7 @@ ORDER BY table_name;
 | 753 |        -120 |             | µm                | 0.7400001049041748 | µm                | 0.7400001049041748 |                   |               | 6eea4b837163791320e53838e375a1a1dcbc7f1c |              16 |     2 |     1 |  2048 |  2048 |     1 |                   |               |         |               |           |       11414 |             |        0 |        0 |     14604 |              1 |   753 |          6 |           |           0 | root_0/2025-02/13/11-28-21.117 | 2011-11-17 X-Man LOPAC_X03_LP_S01_1.xdce   | 34a716b6-d4f9-4cea-861b-4229819e82d8 |
 | 754 |        -120 |             | µm                | 0.7400001049041748 | µm                | 0.7400001049041748 |                   |               | 6eea4b837163791320e53838e375a1a1dcbc7f1c |              16 |     2 |     1 |  2048 |  2048 |     1 |                   |               |         |               |           |       11414 |             |        0 |        0 |     14604 |              1 |   754 |          6 |           |           0 | root_0/2025-02/13/11-28-21.117 | 2011-11-17 X-Man LOPAC_X03_LP_S01_1.xdce   | 34a716b6-d4f9-4cea-861b-4229819e82d8 |
 | 755 |        -120 |             | µm                | 0.7400001049041748 | µm                | 0.7400001049041748 |                   |               | 6eea4b837163791320e53838e375a1a1dcbc7f1c |              16 |     2 |     1 |  2048 |  2048 |     1 |                   |               |         |               |           |       11414 |             |        0 |        0 |     14604 |              1 |   755 |          6 |           |           0 | root_0/2025-02/13/11-28-21.117 | 2011-11-17 X-Man LOPAC_X03_LP_S01_1.xdce   | 34a716b6-d4f9-4cea-861b-4229819e82d8 |
-* PixelsDimensionsOrder
+** PixelsDimensionsOrder
 :PROPERTIES:
 :ID:       c896882f-d257-4234-8191-1c7a84ad780d
 :END:
@@ -760,7 +784,7 @@ ORDER BY table_name;
 event                                            
 eventlog                                        
 eventtype                                      |
-* Events
+** Events
 :PROPERTIES:
 :ID:       f534f360-c0b3-4da3-a19b-9cbe6ef6f343
 :END:
