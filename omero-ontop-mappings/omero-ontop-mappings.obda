@@ -304,7 +304,7 @@ source		select _screen.id as screen_id, regexp_replace(
 
 mappingId	MAPID-281f9aebe6744a7194389d0fcc967625
 target		ome_instance:Reagent/{reagent_id} a :Reagent ; dc:identifier {reagent_id}^^xsd:integer . 
-source		select _reagent.id as reagent_id, _wellreagentlink.parent as well_id from reagent as _reagent left join wellreagentlink as _wellreagentlink on _reagent.id = _wellreagentlink.parent where reagent.owner_id=2
+source		select _reagent.id as reagent_id, _wellreagentlink.parent as well_id from reagent as _reagent left join wellreagentlink as _wellreagentlink on _reagent.id = _wellreagentlink.parent where _reagent.owner_id=2
 
 mappingId	MAPID-reagent-kvannotations
 target		ome_instance:Reagent/{reagent_id} <{map_key}> {map_value}^^xsd:string . 
@@ -384,11 +384,11 @@ source		select
 mappingId	MAPID-reagent-tag
 target		ome_instance:Reagent/{reagent_id} this:tag_annotation_value {tag_text}^^xsd:string . 
 source		select
-			reagent.id as reagent_id,
+			_reagent.id as reagent_id,
 			annotation.textvalue as tag_text
-			from reagent
-			join reagentannotationlink on reagentannotationlink.parent = reagent.id
-			join annotation on reagentannotationlink.child = annotation.id where annotation.textvalue is not NULL and reagent.owner_id=2
+			from reagent as _reagent
+			join reagentannotationlink on reagentannotationlink.parent = _reagent.id
+			join annotation on reagentannotationlink.child = annotation.id where annotation.textvalue is not NULL and _reagent.owner_id=2
 
 mappingId	MAPID-well-tag
 target		ome_instance:Well/{well_id} this:tag_annotation_value {tag_text}^^xsd:string . 
