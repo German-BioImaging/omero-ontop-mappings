@@ -326,20 +326,32 @@
 #+end_src
 
 #+RESULTS:
-| ds                          |
-|-----------------------------|
-| http://micropop046/Image/51 |
-| http://micropop046/Image/52 |
-| http://micropop046/Image/53 |
-| http://micropop046/Image/54 |
-| http://micropop046/Image/55 |
-| http://micropop046/Image/56 |
-| http://micropop046/Image/57 |
-| http://micropop046/Image/58 |
-| http://micropop046/Image/59 |
-| http://micropop046/Image/60 |
-| http://micropop046/Image/61 |
-| http://micropop046/Image/62 |
+| ds                           |
+|------------------------------|
+| https://example.org/Image/1  |
+| https://example.org/Image/2  |
+| https://example.org/Image/3  |
+| https://example.org/Image/4  |
+| https://example.org/Image/5  |
+| https://example.org/Image/6  |
+| https://example.org/Image/7  |
+| https://example.org/Image/8  |
+| https://example.org/Image/9  |
+| https://example.org/Image/10 |
+| https://example.org/Image/11 |
+| https://example.org/Image/12 |
+| https://example.org/Image/13 |
+| https://example.org/Image/14 |
+| https://example.org/Image/15 |
+| https://example.org/Image/16 |
+| https://example.org/Image/17 |
+| https://example.org/Image/18 |
+| https://example.org/Image/19 |
+| https://example.org/Image/20 |
+| https://example.org/Image/21 |
+| https://example.org/Image/22 |
+| https://example.org/Image/23 |
+| https://example.org/Image/24 |
 
 ** Image and properties
 :PROPERTIES:
@@ -356,148 +368,148 @@
       #+end_src
 
 #+RESULTS:
-| img                               | prop                                                     | val                                        |
-|-----------------------------------+----------------------------------------------------------+--------------------------------------------|
-| https://example.org/site/Image/13 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
-| https://example.org/site/Image/14 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
-| https://example.org/site/Image/15 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
-| https://example.org/site/Image/16 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
-| https://example.org/site/Image/17 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
-| https://example.org/site/Image/18 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
-| https://example.org/site/Image/19 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
-| https://example.org/site/Image/20 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
-| https://example.org/site/Image/21 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
-| https://example.org/site/Image/22 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
-| https://example.org/site/Image/23 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
-| https://example.org/site/Image/24 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
-| https://example.org/site/Image/13 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
-| https://example.org/site/Image/14 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
-| https://example.org/site/Image/15 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
-| https://example.org/site/Image/16 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
-| https://example.org/site/Image/17 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
-| https://example.org/site/Image/18 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
-| https://example.org/site/Image/19 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
-| https://example.org/site/Image/20 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
-| https://example.org/site/Image/21 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
-| https://example.org/site/Image/22 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
-| https://example.org/site/Image/23 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
-| https://example.org/site/Image/24 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
-| https://example.org/site/Image/13 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/14 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/15 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/16 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/17 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/18 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/19 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/20 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/21 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/22 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/23 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/24 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/13 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/14 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/15 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/16 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/17 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/18 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/19 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/20 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/21 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/22 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/23 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/24 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/13 | https://ld.openmicroscopy.org/omekg#owner                | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/14 | https://ld.openmicroscopy.org/omekg#owner                | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/15 | https://ld.openmicroscopy.org/omekg#owner                | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/16 | https://ld.openmicroscopy.org/omekg#owner                | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/17 | https://ld.openmicroscopy.org/omekg#owner                | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/18 | https://ld.openmicroscopy.org/omekg#owner                | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/19 | https://ld.openmicroscopy.org/omekg#owner                | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/20 | https://ld.openmicroscopy.org/omekg#owner                | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/21 | https://ld.openmicroscopy.org/omekg#owner                | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/22 | https://ld.openmicroscopy.org/omekg#owner                | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/23 | https://ld.openmicroscopy.org/omekg#owner                | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/24 | https://ld.openmicroscopy.org/omekg#owner                | https://example.org/site/Experimenter/2    |
-| https://example.org/site/Image/13 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:57:45 PM CEST 2025           |
-| https://example.org/site/Image/14 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:57:55 PM CEST 2025           |
-| https://example.org/site/Image/15 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:58:05 PM CEST 2025           |
-| https://example.org/site/Image/16 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:58:15 PM CEST 2025           |
-| https://example.org/site/Image/17 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:58:26 PM CEST 2025           |
-| https://example.org/site/Image/18 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:58:36 PM CEST 2025           |
-| https://example.org/site/Image/19 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:58:46 PM CEST 2025           |
-| https://example.org/site/Image/20 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:58:56 PM CEST 2025           |
-| https://example.org/site/Image/21 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:59:06 PM CEST 2025           |
-| https://example.org/site/Image/22 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:59:17 PM CEST 2025           |
-| https://example.org/site/Image/23 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:59:28 PM CEST 2025           |
-| https://example.org/site/Image/23 | http://purl.org/dc/terms/date                            | Sat Nov  9 11:31:47 PM CET 2024            |
-| https://example.org/site/Image/24 | http://purl.org/dc/terms/date                            | Sat Nov  9 11:31:57 PM CET 2024            |
-| https://example.org/site/Image/13 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
-| https://example.org/site/Image/14 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
-| https://example.org/site/Image/15 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
-| https://example.org/site/Image/16 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
-| https://example.org/site/Image/17 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
-| https://example.org/site/Image/18 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
-| https://example.org/site/Image/19 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
-| https://example.org/site/Image/20 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
-| https://example.org/site/Image/21 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
-| https://example.org/site/Image/22 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
-| https://example.org/site/Image/23 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
-| https://example.org/site/Image/23 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Screenshot                                 |
-| https://example.org/site/Image/24 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Screenshot                                 |
-| https://example.org/site/Image/13 | http://purl.org/dc/elements/1.1/identifier               | 13                                         |
-| https://example.org/site/Image/14 | http://purl.org/dc/elements/1.1/identifier               | 14                                         |
-| https://example.org/site/Image/15 | http://purl.org/dc/elements/1.1/identifier               | 15                                         |
-| https://example.org/site/Image/16 | http://purl.org/dc/elements/1.1/identifier               | 16                                         |
-| https://example.org/site/Image/17 | http://purl.org/dc/elements/1.1/identifier               | 17                                         |
-| https://example.org/site/Image/18 | http://purl.org/dc/elements/1.1/identifier               | 18                                         |
-| https://example.org/site/Image/19 | http://purl.org/dc/elements/1.1/identifier               | 19                                         |
-| https://example.org/site/Image/20 | http://purl.org/dc/elements/1.1/identifier               | 20                                         |
-| https://example.org/site/Image/21 | http://purl.org/dc/elements/1.1/identifier               | 21                                         |
-| https://example.org/site/Image/22 | http://purl.org/dc/elements/1.1/identifier               | 22                                         |
-| https://example.org/site/Image/23 | http://purl.org/dc/elements/1.1/identifier               | 23                                         |
-| https://example.org/site/Image/24 | http://purl.org/dc/elements/1.1/identifier               | 24                                         |
-| https://example.org/site/Image/13 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_14-58-36_screenshot.png         |
-| https://example.org/site/Image/14 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_14-53-28_screenshot.png         |
-| https://example.org/site/Image/15 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-01-36_screenshot.png         |
-| https://example.org/site/Image/16 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-09-28_screenshot.png         |
-| https://example.org/site/Image/17 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-28-16_screenshot.png         |
-| https://example.org/site/Image/18 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-07-18_screenshot.png         |
-| https://example.org/site/Image/19 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-17-25_screenshot.png         |
-| https://example.org/site/Image/20 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_16-39-27_screenshot.png         |
-| https://example.org/site/Image/21 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_16-47-01_screenshot.png         |
-| https://example.org/site/Image/22 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_16-42-47_screenshot.png         |
-| https://example.org/site/Image/23 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-28-16_screenshot.png.ome.tif |
-| https://example.org/site/Image/24 | http://www.w3.org/2000/01/rdf-schema#label               | image_6_with_roi.ome.tif                   |
-| https://example.org/site/Image/13 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
-| https://example.org/site/Image/14 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
-| https://example.org/site/Image/15 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
-| https://example.org/site/Image/16 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
-| https://example.org/site/Image/17 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
-| https://example.org/site/Image/18 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
-| https://example.org/site/Image/19 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
-| https://example.org/site/Image/20 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
-| https://example.org/site/Image/21 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
-| https://example.org/site/Image/22 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
-| https://example.org/site/Image/23 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
-| https://example.org/site/Image/23 | http://purl.org/dc/terms/contributor                     | Test User                                  |
-| https://example.org/site/Image/24 | http://purl.org/dc/terms/contributor                     | Test User                                  |
-| https://example.org/site/Image/13 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
-| https://example.org/site/Image/14 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
-| https://example.org/site/Image/15 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
-| https://example.org/site/Image/16 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
-| https://example.org/site/Image/17 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
-| https://example.org/site/Image/18 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
-| https://example.org/site/Image/19 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
-| https://example.org/site/Image/20 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
-| https://example.org/site/Image/21 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
-| https://example.org/site/Image/22 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
-| https://example.org/site/Image/23 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
-| https://example.org/site/Image/23 | http://purl.org/dc/terms/subject                         | Unittest                                   |
-| https://example.org/site/Image/24 | http://purl.org/dc/terms/subject                         | Unittest                                   |
-| https://example.org/site/Image/24 | http://www.openmicroscopy.org/ns/default/annotator       | Public MrX                                 |
-| https://example.org/site/Image/21 | http://www.openmicroscopy.org/ns/default/Assay           | Bruker                                     |
-| https://example.org/site/Image/22 | http://www.openmicroscopy.org/ns/default/Assay           | PRTSC                                      |
-| https://example.org/site/Image/23 | http://www.openmicroscopy.org/ns/default/sampletype      | Public screen                              |
+| img                      | prop                                                     | val                                        |
+|--------------------------+----------------------------------------------------------+--------------------------------------------|
+| http://test.com/Image/13 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://test.com/Image/14 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://test.com/Image/15 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://test.com/Image/16 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://test.com/Image/17 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://test.com/Image/18 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://test.com/Image/19 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://test.com/Image/20 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://test.com/Image/21 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://test.com/Image/22 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://test.com/Image/23 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://test.com/Image/24 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image   |
+| http://test.com/Image/13 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://test.com/Image/14 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://test.com/Image/15 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://test.com/Image/16 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://test.com/Image/17 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://test.com/Image/18 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://test.com/Image/19 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://test.com/Image/20 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://test.com/Image/21 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://test.com/Image/22 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://test.com/Image/23 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://test.com/Image/24 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image  |
+| http://test.com/Image/13 | https://ld.openmicroscopy.org/core/experimenter          | http://test.com/Experimenter/2             |
+| http://test.com/Image/14 | https://ld.openmicroscopy.org/core/experimenter          | http://test.com/Experimenter/2             |
+| http://test.com/Image/15 | https://ld.openmicroscopy.org/core/experimenter          | http://test.com/Experimenter/2             |
+| http://test.com/Image/16 | https://ld.openmicroscopy.org/core/experimenter          | http://test.com/Experimenter/2             |
+| http://test.com/Image/17 | https://ld.openmicroscopy.org/core/experimenter          | http://test.com/Experimenter/2             |
+| http://test.com/Image/18 | https://ld.openmicroscopy.org/core/experimenter          | http://test.com/Experimenter/2             |
+| http://test.com/Image/19 | https://ld.openmicroscopy.org/core/experimenter          | http://test.com/Experimenter/2             |
+| http://test.com/Image/20 | https://ld.openmicroscopy.org/core/experimenter          | http://test.com/Experimenter/2             |
+| http://test.com/Image/21 | https://ld.openmicroscopy.org/core/experimenter          | http://test.com/Experimenter/2             |
+| http://test.com/Image/22 | https://ld.openmicroscopy.org/core/experimenter          | http://test.com/Experimenter/2             |
+| http://test.com/Image/23 | https://ld.openmicroscopy.org/core/experimenter          | http://test.com/Experimenter/2             |
+| http://test.com/Image/24 | https://ld.openmicroscopy.org/core/experimenter          | http://test.com/Experimenter/2             |
+| http://test.com/Image/13 | https://ld.openmicroscopy.org/omekg#experimenter         | http://test.com/Experimenter/2             |
+| http://test.com/Image/14 | https://ld.openmicroscopy.org/omekg#experimenter         | http://test.com/Experimenter/2             |
+| http://test.com/Image/15 | https://ld.openmicroscopy.org/omekg#experimenter         | http://test.com/Experimenter/2             |
+| http://test.com/Image/16 | https://ld.openmicroscopy.org/omekg#experimenter         | http://test.com/Experimenter/2             |
+| http://test.com/Image/17 | https://ld.openmicroscopy.org/omekg#experimenter         | http://test.com/Experimenter/2             |
+| http://test.com/Image/18 | https://ld.openmicroscopy.org/omekg#experimenter         | http://test.com/Experimenter/2             |
+| http://test.com/Image/19 | https://ld.openmicroscopy.org/omekg#experimenter         | http://test.com/Experimenter/2             |
+| http://test.com/Image/20 | https://ld.openmicroscopy.org/omekg#experimenter         | http://test.com/Experimenter/2             |
+| http://test.com/Image/21 | https://ld.openmicroscopy.org/omekg#experimenter         | http://test.com/Experimenter/2             |
+| http://test.com/Image/22 | https://ld.openmicroscopy.org/omekg#experimenter         | http://test.com/Experimenter/2             |
+| http://test.com/Image/23 | https://ld.openmicroscopy.org/omekg#experimenter         | http://test.com/Experimenter/2             |
+| http://test.com/Image/24 | https://ld.openmicroscopy.org/omekg#experimenter         | http://test.com/Experimenter/2             |
+| http://test.com/Image/13 | https://ld.openmicroscopy.org/omekg#owner                | http://test.com/Experimenter/2             |
+| http://test.com/Image/14 | https://ld.openmicroscopy.org/omekg#owner                | http://test.com/Experimenter/2             |
+| http://test.com/Image/15 | https://ld.openmicroscopy.org/omekg#owner                | http://test.com/Experimenter/2             |
+| http://test.com/Image/16 | https://ld.openmicroscopy.org/omekg#owner                | http://test.com/Experimenter/2             |
+| http://test.com/Image/17 | https://ld.openmicroscopy.org/omekg#owner                | http://test.com/Experimenter/2             |
+| http://test.com/Image/18 | https://ld.openmicroscopy.org/omekg#owner                | http://test.com/Experimenter/2             |
+| http://test.com/Image/19 | https://ld.openmicroscopy.org/omekg#owner                | http://test.com/Experimenter/2             |
+| http://test.com/Image/20 | https://ld.openmicroscopy.org/omekg#owner                | http://test.com/Experimenter/2             |
+| http://test.com/Image/21 | https://ld.openmicroscopy.org/omekg#owner                | http://test.com/Experimenter/2             |
+| http://test.com/Image/22 | https://ld.openmicroscopy.org/omekg#owner                | http://test.com/Experimenter/2             |
+| http://test.com/Image/23 | https://ld.openmicroscopy.org/omekg#owner                | http://test.com/Experimenter/2             |
+| http://test.com/Image/24 | https://ld.openmicroscopy.org/omekg#owner                | http://test.com/Experimenter/2             |
+| http://test.com/Image/13 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:57:45 PM CEST 2025           |
+| http://test.com/Image/14 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:57:55 PM CEST 2025           |
+| http://test.com/Image/15 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:58:05 PM CEST 2025           |
+| http://test.com/Image/16 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:58:15 PM CEST 2025           |
+| http://test.com/Image/17 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:58:26 PM CEST 2025           |
+| http://test.com/Image/18 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:58:36 PM CEST 2025           |
+| http://test.com/Image/19 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:58:46 PM CEST 2025           |
+| http://test.com/Image/20 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:58:56 PM CEST 2025           |
+| http://test.com/Image/21 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:59:06 PM CEST 2025           |
+| http://test.com/Image/22 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:59:17 PM CEST 2025           |
+| http://test.com/Image/23 | http://purl.org/dc/terms/date                            | Mon Jun  2 03:59:28 PM CEST 2025           |
+| http://test.com/Image/23 | http://purl.org/dc/terms/date                            | Sat Nov  9 11:31:47 PM CET 2024            |
+| http://test.com/Image/24 | http://purl.org/dc/terms/date                            | Sat Nov  9 11:31:57 PM CET 2024            |
+| http://test.com/Image/13 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
+| http://test.com/Image/14 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
+| http://test.com/Image/15 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
+| http://test.com/Image/16 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
+| http://test.com/Image/17 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
+| http://test.com/Image/18 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
+| http://test.com/Image/19 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
+| http://test.com/Image/20 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
+| http://test.com/Image/21 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
+| http://test.com/Image/22 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
+| http://test.com/Image/23 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Public Screenshot                          |
+| http://test.com/Image/23 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Screenshot                                 |
+| http://test.com/Image/24 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | Screenshot                                 |
+| http://test.com/Image/13 | http://purl.org/dc/elements/1.1/identifier               | 13                                         |
+| http://test.com/Image/14 | http://purl.org/dc/elements/1.1/identifier               | 14                                         |
+| http://test.com/Image/15 | http://purl.org/dc/elements/1.1/identifier               | 15                                         |
+| http://test.com/Image/16 | http://purl.org/dc/elements/1.1/identifier               | 16                                         |
+| http://test.com/Image/17 | http://purl.org/dc/elements/1.1/identifier               | 17                                         |
+| http://test.com/Image/18 | http://purl.org/dc/elements/1.1/identifier               | 18                                         |
+| http://test.com/Image/19 | http://purl.org/dc/elements/1.1/identifier               | 19                                         |
+| http://test.com/Image/20 | http://purl.org/dc/elements/1.1/identifier               | 20                                         |
+| http://test.com/Image/21 | http://purl.org/dc/elements/1.1/identifier               | 21                                         |
+| http://test.com/Image/22 | http://purl.org/dc/elements/1.1/identifier               | 22                                         |
+| http://test.com/Image/23 | http://purl.org/dc/elements/1.1/identifier               | 23                                         |
+| http://test.com/Image/24 | http://purl.org/dc/elements/1.1/identifier               | 24                                         |
+| http://test.com/Image/13 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_14-58-36_screenshot.png         |
+| http://test.com/Image/14 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_14-53-28_screenshot.png         |
+| http://test.com/Image/15 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-01-36_screenshot.png         |
+| http://test.com/Image/16 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-09-28_screenshot.png         |
+| http://test.com/Image/17 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-28-16_screenshot.png         |
+| http://test.com/Image/18 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-07-18_screenshot.png         |
+| http://test.com/Image/19 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-17-25_screenshot.png         |
+| http://test.com/Image/20 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_16-39-27_screenshot.png         |
+| http://test.com/Image/21 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_16-47-01_screenshot.png         |
+| http://test.com/Image/22 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_16-42-47_screenshot.png         |
+| http://test.com/Image/23 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_15-28-16_screenshot.png.ome.tif |
+| http://test.com/Image/24 | http://www.w3.org/2000/01/rdf-schema#label               | image_6_with_roi.ome.tif                   |
+| http://test.com/Image/13 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
+| http://test.com/Image/14 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
+| http://test.com/Image/15 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
+| http://test.com/Image/16 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
+| http://test.com/Image/17 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
+| http://test.com/Image/18 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
+| http://test.com/Image/19 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
+| http://test.com/Image/20 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
+| http://test.com/Image/21 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
+| http://test.com/Image/22 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
+| http://test.com/Image/23 | http://purl.org/dc/terms/contributor                     | Public Test User                           |
+| http://test.com/Image/23 | http://purl.org/dc/terms/contributor                     | Test User                                  |
+| http://test.com/Image/24 | http://purl.org/dc/terms/contributor                     | Test User                                  |
+| http://test.com/Image/13 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
+| http://test.com/Image/14 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
+| http://test.com/Image/15 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
+| http://test.com/Image/16 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
+| http://test.com/Image/17 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
+| http://test.com/Image/18 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
+| http://test.com/Image/19 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
+| http://test.com/Image/20 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
+| http://test.com/Image/21 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
+| http://test.com/Image/22 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
+| http://test.com/Image/23 | http://purl.org/dc/terms/subject                         | Public Unittest                            |
+| http://test.com/Image/23 | http://purl.org/dc/terms/subject                         | Unittest                                   |
+| http://test.com/Image/24 | http://purl.org/dc/terms/subject                         | Unittest                                   |
+| http://test.com/Image/24 | http://www.openmicroscopy.org/ns/default/annotator       | Public MrX                                 |
+| http://test.com/Image/21 | http://www.openmicroscopy.org/ns/default/Assay           | Bruker                                     |
+| http://test.com/Image/22 | http://www.openmicroscopy.org/ns/default/Assay           | PRTSC                                      |
+| http://test.com/Image/23 | http://www.openmicroscopy.org/ns/default/sampletype      | Public screen                              |
 
 ** Image and DC metadata terms
 :PROPERTIES:
@@ -506,32 +518,31 @@
 #+begin_src sparql
   prefix ome_core: <https://ld.openmicroscopy.org/core/>
   prefix dc: <http://purl.org/dc/terms/>
+  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
 
   SELECT distinct ?img ?author ?subject WHERE {
     ?img a ome_core:Image;
-         dc:contributor ?author;
-         dc:subject ?subject .
+         # omekg:owner ?owner;
+         # dc:contributor ?author;
+         # dc:subject ?subject .
     }
       #+end_src
 
 #+RESULTS:
-| img                               | author           | subject         |
-|-----------------------------------+------------------+-----------------|
-| https://example.org/site/Image/13 | Public Test User | Public Unittest |
-| https://example.org/site/Image/14 | Public Test User | Public Unittest |
-| https://example.org/site/Image/15 | Public Test User | Public Unittest |
-| https://example.org/site/Image/16 | Public Test User | Public Unittest |
-| https://example.org/site/Image/17 | Public Test User | Public Unittest |
-| https://example.org/site/Image/18 | Public Test User | Public Unittest |
-| https://example.org/site/Image/19 | Public Test User | Public Unittest |
-| https://example.org/site/Image/20 | Public Test User | Public Unittest |
-| https://example.org/site/Image/21 | Public Test User | Public Unittest |
-| https://example.org/site/Image/22 | Public Test User | Public Unittest |
-| https://example.org/site/Image/23 | Public Test User | Public Unittest |
-| https://example.org/site/Image/23 | Public Test User | Unittest        |
-| https://example.org/site/Image/23 | Test User        | Public Unittest |
-| https://example.org/site/Image/23 | Test User        | Unittest        |
-| https://example.org/site/Image/24 | Test User        | Unittest        |
+| img                      | author | subject |
+|--------------------------+--------+---------|
+| http://test.com/Image/13 |        |         |
+| http://test.com/Image/14 |        |         |
+| http://test.com/Image/15 |        |         |
+| http://test.com/Image/16 |        |         |
+| http://test.com/Image/17 |        |         |
+| http://test.com/Image/18 |        |         |
+| http://test.com/Image/19 |        |         |
+| http://test.com/Image/20 |        |         |
+| http://test.com/Image/21 |        |         |
+| http://test.com/Image/22 |        |         |
+| http://test.com/Image/23 |        |         |
+| http://test.com/Image/24 |        |         |
 
 ** Dataset number of type relations
 :PROPERTIES:
