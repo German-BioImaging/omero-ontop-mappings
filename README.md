@@ -10,18 +10,19 @@ To deploy your own OMERO-VKG, follow these steps:
 ### Generate site configuration directory
 In the top level directory, run the command
 ```console
-bash deploy.sh PREFIX URI
+bash deploy.sh PREFIX URI USERIDFILTER
 ```
 Replace `PREFIX` AND `URI` with the prefix name and URL for your OMERO instance, respectively. E.g. for the (hypothetical ) Institute of Bioimaging, running 
 OMERO at `https://ome.iob.net`, a sensible choice could be `bash deploy.sh iob https://ome.iob.net/`.
-This would create a new deployment directory named *iob\/* (in the example above),
+`USERIDFILTER` is a filter condition on the user_id property. E.g. "=2" declares that only objects owned by the user with ID 2 are mapped and can hence be queried via SPARQL. You can write any valid SQL (Postgresql) condition here including the operator "=, <, >, ..." and the right hand side of the comparison.
+
+`deploy.sh`  creates a new deployment directory named *iob\/* (in the example above),
 containing these files:
 
 1. *iob.ttl*: The mapping ontology
 1. *iob.obda*: The mappings with adjusted site prefix and URL.
 1. *iob.properties*: Properties file containing the database connection parameters.
 1. *catalog-v001.xml*: 3rd party ontologies imported into *iob.ttl*, in particular the OME core ontology.
-
 
 
 ### Edit properties file
@@ -31,7 +32,6 @@ the postgresql daemon accepts requests. Leave the `jdbc.driver` value as it is.
 
 #### Create read-only OMERO DB user
 Consult *utils/setup_ontop_dbuser.sh* and *queries/sql/ontop_user.sql* to setup the read-only DB user.
-
 
 ### Test setup
 Run
@@ -129,8 +129,12 @@ Don't forget to restart it according to [above](#populate-omero-with-test-data).
 
 ## Acknowledgments
 
-This project was developed with support from the Biohackathon 2024.
-
 <img src="https://2024.biohackathon.org/images/bh24-logo.png" alt="Biohackathon 2024" width="200">
+
+This project was developed with support from the Biohackathon 2024 
+
+This work is further supported by the Deutsche
+Forschungsgemeinschaft (DFG, German Research Foundation) – 501864659
+(NFDI4BIOIMAGE).
 
 
