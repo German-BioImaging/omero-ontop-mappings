@@ -1,0 +1,44 @@
+title="OMERO Virtual Knowledge Graph"
+
+[[tabGroups]]
+
+name="Basic Queries"
+
+[[tabGroups.tabs]]
+
+name="All projects"
+query="""
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+
+SELECT *
+WHERE {
+  ?project a omecore:Project .
+}
+LIMIT 10
+"""
+
+[[tabGroups.tabs]]
+name="Proj of lodging businesses"
+query="""
+PREFIX schema: <http://schema.org/>
+
+SELECT (COUNT(?h) AS ?c)
+WHERE {
+  ?h a schema:LodgingBusiness
+}
+"""
+
+[[tabGroups]]
+
+name="Others Queries"
+
+[[tabGroups.tabs]]
+
+name="Query 1"
+query="""
+SELECT *
+WHERE {
+  ?s ?p ?o
+}
+LIMIT 100
+"""
