@@ -1,5 +1,25 @@
 title="OMERO Virtual Knowledge Graph"
 
+[defaultTab]
+query="""
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX dc: <http://purl.org/dc/elements/1.1>
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+PREFIX obda: <https://w3id.org/obda/vocabulary#>
+PREFIX xml: <http://www.w3.org/XML/1998/namespace/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?subject ?predicate ?object
+WHERE {
+  ?subject ?predicate ?object
+}
+limit 10
+"""
+
 [[tabGroups]]
 
 name="Basic Queries"
@@ -9,6 +29,7 @@ name="Basic Queries"
 name="All projects"
 query="""
 PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
 
 SELECT *
 WHERE {
@@ -18,27 +39,114 @@ LIMIT 10
 """
 
 [[tabGroups.tabs]]
-name="Proj of lodging businesses"
+name="Project/Dataset/Image hierarchy"
 query="""
-PREFIX schema: <http://schema.org/>
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT (COUNT(?h) AS ?c)
-WHERE {
-  ?h a schema:LodgingBusiness
+select distinct * where {
+  ?proj a omecore:Project ;
+    omekg:dataset ?dataset .
+  ?dataset a omecore:Dataset ;
+    omekg:image ?image .
+  ?image a omecore:Image ;
+    rdfs:label ?name .
 }
+order by ?image ?dataset ?proj
+limit 20
+"""
+
+[[tabGroups.tabs]]
+name="Image annotations (from key-value pairs)"
+query="""
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
+SELECT distinct ?investigation ?study ?assay ?img_name WHERE {
+    ?img a omecore:Image;
+         omens:Investigation ?investigation ;
+         omens:Study ?study;
+         omens:Assay ?assay .
+    }
+"""
+
+[[tabsGroups.tabs]]
+name="Images and (optional) tags"
+query="""
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+
+  SELECT distinct ?img ?tag WHERE {
+      ?img a ome_core:Image.
+      OPTIONAL {
+        ?img omecore:tagAnnotationValue ?tag .
+      }
+   }
+  order by ?img
+  limit 10
 """
 
 [[tabGroups]]
-
-name="Others Queries"
+name="Aggregations"
 
 [[tabGroups.tabs]]
-
-name="Query 1"
+name="Number of images"
 query="""
-SELECT *
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
+SELECT (count(?img) as ?Nimg)
 WHERE {
-  ?s ?p ?o
+  ?img a omecore:Image .
 }
-LIMIT 100
+"""
+
+[[tabGroups.tabs]]
+name="Number of images grouped by dataset"
+query="""
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
+
+SELECT ?dataset (count(distinct ?img) as ?Nimg)
+WHERE {
+  ?img a omecore:Image ;
+       ^omekg:image ?dataset . # Uses inverse property.
+  ?dataset a omecore:Dataset .
+
+
+}
+group by ?dataset
+order by desc(?Nimg) # Descending sort by number of images.
+"""
+
+[[tabGroups]]
+name="Graph exploration"
+
+[[tabGroups.tabs]]
+name="Types/Classes"
+query="""
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?class
+WHERE {
+  ?subject a ?class .
+}
+order by ?class
+"""
+
+[[tabGroups.tabs]]
+name="Distinct properties per class/type"
+query="""
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?class ?property
+WHERE {
+  ?subject a ?class ;
+           ?property ?val .
+}
+order by ?class
 """
