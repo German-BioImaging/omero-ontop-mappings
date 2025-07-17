@@ -1,0 +1,415 @@
+[PrefixDeclaration]
+:		https://ld.openmicroscopy.org/omekg/
+dc:		http://purl.org/dc/elements/1.1/
+owl:		http://www.w3.org/2002/07/owl#
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+xml:		http://www.w3.org/XML/1998/namespace
+xsd:		http://www.w3.org/2001/XMLSchema#
+core:		https://ld.openmicroscopy.org/core/
+foaf:		http://xmlns.com/foaf/0.1/
+obda:		https://w3id.org/obda/vocabulary#
+rdfs:		http://www.w3.org/2000/01/rdf-schema#
+skos:		http://www.w3.org/2004/02/skos/core#
+this:		https://ld.openmicroscopy.org/omekg#
+omekg:		https://ld.openmicroscopy.org/omekg/
+vcard:		http://www.w3.org/2006/vcard/ns#
+linkml:		https://w3id.org/linkml/
+dcterms:		http://purl.org/dc/terms/
+test:	http://test.me/
+
+[MappingDeclaration] @collection [[
+mappingId	MAPID-project-0
+target		test:Project/{project_id} a :Project ; dc:identifier {project_id}^^xsd:integer ; rdfs:label {project_name}^^xsd:string ; rdfs:comment {project_description}^^xsd:string ; this:owner test:Experimenter/{owner_id} ; this:group test:ExperimenterGroup/{group_id} ; this:update_id {update_id}^^xsd:integer ; this:creation_id {creation_id}^^xsd:integer . 
+source		select
+			_project.id as project_id,
+			_project.creation_id as creation_id,
+			_project.update_id as update_id,
+			_project.name as project_name,
+			_project.description as project_description,
+			_project.owner_id as owner_id,
+			_project.group_id as group_id
+			from project as _project
+			where _project.owner_id>=0
+
+mappingId	MAPID-project-1
+target		test:Project/{project_id} a :Project ; this:dataset test:Dataset/{dataset_id} . 
+source		select
+			_project.id as project_id,
+			_projectdatasetlink.child as dataset_id
+			from project as _project
+			left join projectdatasetlink as _projectdatasetlink on _project.id = _projectdatasetlink.parent
+			where _project.owner_id>=0
+
+mappingId	MAPID-project-2
+target		test:Project/{project_id} a :Project ; <{map_key}> {map_value}^^xsd:string . 
+source		select
+			_project.id as project_id,
+			concat(
+			regexp_replace(
+			case
+			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+			else
+			case
+			when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
+			else 'http://www.openmicroscopy.org/ns/default/'
+			end
+			end,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
+			_annotation_mapvalue.value as map_value
+			from project as _project
+			join projectannotationlink as _projectannotationlink on _projectannotationlink.parent = _project.id
+			join annotation as _annotation on _projectannotationlink.child = _annotation.id
+			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
+			where _project.owner_id>=0
+
+mappingId	MAPID-dataset-0
+target		test:Dataset/{dataset_id} a :Dataset ; dc:identifier {dataset_id}^^xsd:string ; rdfs:label {dataset_name}^^xsd:string ; rdfs:comment {dataset_description}^^xsd:string . 
+source		select
+			_dataset.id as dataset_id,
+			_dataset.name as dataset_name,
+			_dataset.description as dataset_description
+			from dataset as _dataset
+			where _dataset.owner_id>=0
+
+mappingId	MAPID-dataset-2
+target		test:Dataset/{dataset_id} <{map_key}> {map_value}^^xsd:string . 
+source		select
+			_dataset.id as dataset_id,
+			concat(
+			regexp_replace(
+			case
+			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+			else
+			case
+			when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
+			else 'http://www.openmicroscopy.org/ns/default/'
+			end
+			end,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
+			_annotation_mapvalue.value as map_value
+			from dataset as _dataset
+			join datasetannotationlink as _datasetannotationlink on _datasetannotationlink.parent = _dataset.id
+			join annotation as _annotation on _datasetannotationlink.child = _annotation.id
+			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
+			where _dataset.owner_id>=0
+
+mappingId	MAPID-Image-0
+target		test:Image/{image_id} a :Image ; rdfs:label {image_name}^^xsd:string ; rdfs:comment {image_description}^^xsd:string ; this:acquisition_date {image_acquisitiondate}^^xsd:dateTime ; dc:identifier {image_id}^^xsd:integer . 
+source		select
+			_image.id as image_id,
+			_image.acquisitiondate as image_acquisitiondate,
+			_image.name as image_name,
+			_image.description as image_description
+			from image as _image
+			where _image.owner_id>=0
+
+mappingId	MAPID-Image-1
+target		test:Image/{image_id} a :Image ; <{map_key}> {map_value}^^xsd:string . 
+source		select
+			_image.id as image_id,
+			concat(
+			regexp_replace(
+			case
+			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+			else
+			case
+			when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
+			else 'http://www.openmicroscopy.org/ns/default/'
+			end
+			end,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
+			_annotation_mapvalue.value as map_value
+			from image as _image
+			join imageannotationlink as _imageannotationlink on _imageannotationlink.parent = _image.id
+			join annotation as _annotation on _imageannotationlink.child = _annotation.id
+			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
+			where _image.owner_id>=0
+
+mappingId	MAPID-experimentergroup
+target		test:ExperimenterGroup/{experimentergroup_id} a :ExperimenterGroup ; dc:identifier {experimentergroup_id}^^xsd:integer ; foaf:name {name}^^xsd:string . 
+source		select
+			experimentergroup.name as name,
+			experimentergroup.id as experimentergroup_id
+			from experimentergroup ;
+
+mappingId	MAPID-experiment
+target		test:Experiment/{experiment_id} a :Experiment ; dc:identifier {experiment_id}^^xsd:integer . 
+source		select
+			experiment.id as experiment_id
+			from experiment ;
+
+mappingId	MAPID-dataset_tag
+target		test:Dataset/{dataset_id} this:tag_annotation_value {tag_text}^^xsd:string . 
+source		select
+			dataset.id as dataset_id,
+			annotation.textvalue as tag_text
+			from dataset
+			join datasetannotationlink on datasetannotationlink.parent = dataset.id
+			join annotation on datasetannotationlink.child = annotation.id where annotation.textvalue is not NULL
+			and dataset.owner_id>=0
+
+mappingId	MAPID-image_tag
+target		test:Image/{image_id} this:tag_annotation_value {tag_text}^^xsd:string . 
+source		select
+			image.id as image_id,
+			annotation.textvalue as tag_text
+			from image
+			join imageannotationlink on imageannotationlink.parent = image.id
+			join annotation on imageannotationlink.child = annotation.id where annotation.textvalue is not NULL
+			and image.owner_id>=0
+
+mappingId	MAPID-project-3
+target		test:Project/{project_id} this:tag_annotation_value {tag_text}^^xsd:string . 
+source		select
+			_project.id as project_id,
+			annotation.textvalue as tag_text
+			from project as _project
+			join projectannotationlink on projectannotationlink.parent = _project.id
+			join annotation on projectannotationlink.child = annotation.id where annotation.textvalue is not NULL and _project.owner_id>=0
+
+mappingId	MAPID-roi
+target		test:ROI/{roi_id} a :ROI ; dc:identifier {roi_id}^^xsd:integer ; this:image test:Image/{roi_image_id} ; this:experimenter test:Experimenter/{owner_id} . 
+source		select id as roi_id, image as roi_image_id, owner_id from roi where roi.owner_id>=0
+
+mappingId	MAPID-dataset-image
+target		test:Dataset/{dataset_id} a :Dataset ; this:image test:Image/{image_id} ; dc:identifier {image_id}^^xsd:integer . 
+source		select
+			_dataset.id as dataset_id,
+			_datasetimagelink.child as image_id
+			from dataset as _dataset
+			left join datasetimagelink as _datasetimagelink on _dataset.id = _datasetimagelink.parent
+			where _dataset.owner_id>=0
+
+mappingId	MAPID-1c71091abd0f428a83a02cd2ab6fe927
+target		test:Experimenter/{id} a :Experimenter ; dc:identifier {id}^^xsd:integer ; foaf:firstName {firstname}^^xsd:string ; foaf:lastName {lastname}^^xsd:string ; foaf:email {email}^^xsd:string ; foaf:name {name}^^xsd:string . 
+source		select id, email, firstname, middlename, lastname, institution, concat("firstname", ' ', "lastname") as name from experimenter
+
+mappingId	MAPID-image_experimenter
+target		test:Image/{id} a :Image ; dc:identifier {id}^^xsd:integer ; core:experimenter test:Experimenter/{owner_id} . 
+source		select id, owner_id from image where image.owner_id>=0
+
+mappingId	MAPID-dataset_experimenter
+target		test:Dataset/{id} a :Dataset ; dc:identifier {id}^^xsd:integer ; core:experimenter test:Experimenter/{owner_id} . 
+source		select id, owner_id from dataset where owner_id>=0
+
+mappingId	MAPID-project_experimenter
+target		test:Project/{id} a :Project ; core:experimenter test:Experimenter/{owner_id} . 
+source		select id, owner_id from project where owner_id>=0
+
+mappingId	MAPID-well
+target		test:Well/{well_id} a :Well ; dc:identifier {well_id}^^xsd:integer ; this:experimenter test:Experimenter/{owner_id} ; this:plate test:Plate/{plate_id} . 
+source		select _well.id as well_id, _well.owner_id as owner_id, _well.plate as plate_id from well as _well where owner_id>=0
+
+mappingId	MAPID-well_properties
+target		test:Well/{well_id} this:reagent test:Reagent/{reagent_id} . 
+source		select _well.id as well_id, _wellreagentlink.child as reagent_id from well as _well left join wellreagentlink as _wellreagentlink on _well.id = _wellreagentlink.parent where _well.owner_id>=0
+
+mappingId	MAPID-well-kvannotations
+target		test:Well/{well_id} <{map_key}> {map_value}^^xsd:string . 
+source		select _well.id as well_id,
+			concat(
+			regexp_replace(
+			case
+			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+			else
+			case
+			when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
+			else 'http://www.openmicroscopy.org/ns/default/'
+			end
+			end,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
+			_annotation_mapvalue.value as map_value
+			from well as _well
+			left join wellannotationlink as _wellannotationlink on _wellannotationlink.parent = _well.id
+			left join annotation as _annotation on _wellannotationlink.child = _annotation.id
+			left join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id where _well.owner_id>=0
+
+mappingId	MAPID-wellsample
+target		test:WellSample/{wellsample_id} a :WellSample ; dc:identifier {wellsample_id}^^xsd:integer ; this:experimenter test:Experimenter/{owner_id} ; this:well test:Well/{well_id} ; this:plate_acquisition test:PlateAcquisition/{plateacquisition_id} ; this:image test:Image/{image_id} ; this:well_index {well_index}^^xsd:integer . 
+source		select
+			wellsample.id as wellsample_id,
+			owner_id,
+			image as image_id,
+			plateacquisition as plateacquisition_id,
+			well as well_id,
+			well_index
+			from wellsample where wellsample.owner_id>=0 ;
+
+mappingId	MAPID-281f9aebe6744a7194389d0fcc967623
+target		test:Plate/{plate_id} a :Plate ; dc:identifier {plate_id}^^xsd:integer ; this:experimenter test:Experimenter/{plate_owner_id} ; this:screen test:Screen/{screen_id} . 
+source		select _plate.id as plate_id, _screenplatelink.parent as screen_id, _plate.owner_id as plate_owner_id from plate as _plate left join screenplatelink as _screenplatelink on _plate.id = _screenplatelink.child where _plate.owner_id>=0
+
+mappingId	MAPID-plate-kvannotations
+target		test:Plate/{plate_id} <{map_key}> {map_value}^^xsd:string . 
+source		select _plate.id as plate_id,
+			concat(
+			regexp_replace(
+			case
+			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+			else
+			case
+			when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
+			else 'http://www.openmicroscopy.org/ns/default/'
+			end
+			end,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
+			_annotation_mapvalue.value as map_value
+			from plate as _plate
+			left join plateannotationlink as _plateannotationlink on _plateannotationlink.parent = _plate.id
+			left join annotation as _annotation on _plateannotationlink.child = _annotation.id
+			left join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
+			where _plate.owner_id>=0
+
+mappingId	MAPID-281f9aebe6744a7194389d0fcc967624
+target		test:Screen/{screen_id} a :Screen ; dc:identifier {screen_id}^^xsd:integer ; this:plate test:Plate/{plate_id} ; this:experimenter test:Experimenter/{screen_owner_id} . 
+source		select _screen.id as screen_id, _screenplatelink.child as plate_id, _screen.owner_id as screen_owner_id from screen as _screen left join screenplatelink as _screenplatelink on _screen.id = _screenplatelink.parent
+			where _screen.owner_id>=0
+
+mappingId	MAPID-screen-kvannotations
+target		test:Screen/{screen_id} <{map_key}> {map_value}^^xsd:string . 
+source		select _screen.id as screen_id,
+			concat(
+			regexp_replace(
+			case
+			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+			else
+			case
+			when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
+			else 'http://www.openmicroscopy.org/ns/default/'
+			end
+			end,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
+			_annotation_mapvalue.value as map_value
+			from screen as _screen
+			left join screenannotationlink as _screenannotationlink on _screenannotationlink.parent = _screen.id
+			left join annotation as _annotation on _screenannotationlink.child = _annotation.id
+			left join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
+			where _screen.owner_id>=0
+
+mappingId	MAPID-281f9aebe6744a7194389d0fcc967625
+target		test:Reagent/{reagent_id} a :Reagent ; dc:identifier {reagent_id}^^xsd:integer . 
+source		select _reagent.id as reagent_id, _wellreagentlink.parent as well_id from reagent as _reagent left join wellreagentlink as _wellreagentlink on _reagent.id = _wellreagentlink.parent where _reagent.owner_id>=0
+
+mappingId	MAPID-reagent-kvannotations
+target		test:Reagent/{reagent_id} <{map_key}> {map_value}^^xsd:string . 
+source		select _reagent.id as reagent_id,
+			concat(
+			regexp_replace(
+			case
+			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+			else
+			case
+			when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
+			else 'http://www.openmicroscopy.org/ns/default/'
+			end
+			end,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
+			_annotation_mapvalue.value as map_value
+			from reagent as _reagent
+			left join reagentannotationlink as _reagentannotationlink on _reagentannotationlink.parent = _reagent.id
+			left join annotation as _annotation on _reagentannotationlink.child = _annotation.id
+			left join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
+			where _reagent.owner_id>=0
+
+mappingId	MAPID-281f9aebe6744a7194389d0fcc967626
+target		test:PlateAcquisition/{plate_acquisition_id} a :PlateAcquisition ; dc:identifier {plate_acquisition_id}^^xsd:integer ; this:plate test:Plate/{plate_id} ; this:experimenter test:Experimenter/{owner_id} . 
+source		select id as plate_acquisition_id, plate as plate_id, owner_id from plateAcquisition where owner_id>=0
+
+mappingId	MAPID-PlateAcquisition-kvannotations
+target		test:PlateAcquisition/{plateacquisition_id} <{map_key}> {map_value}^^xsd:string . 
+source		select _plateacquisition.id as plateacquisition_id, concat(
+			regexp_replace(
+			case
+			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+			else
+			case
+			when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
+			else 'http://www.openmicroscopy.org/ns/default/'
+			end
+			end,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
+			_annotation_mapvalue.value as map_value
+			from plateacquisition as _plateacquisition
+			left join plateacquisitionannotationlink as _plateacquisitionannotationlink on _plateacquisitionannotationlink.parent = _plateacquisition.id
+			left join annotation as _annotation on _plateacquisitionannotationlink.child = _annotation.id
+			left join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
+			where _plateacquisition.owner_id>=0
+
+mappingId	MAPID-screen-tag
+target		test:Screen/{screen_id} this:tag_annotation_value {tag_text}^^xsd:string . 
+source		select
+			screen.id as screen_id,
+			annotation.textvalue as tag_text
+			from screen
+			join screenannotationlink on screenannotationlink.parent = screen.id
+			join annotation on screenannotationlink.child = annotation.id where annotation.textvalue is not NULL and screen.owner_id>=0
+
+mappingId	MAPID-plate-tag
+target		test:Plate/{plate_id} this:tag_annotation_value {tag_text}^^xsd:string . 
+source		select
+			plate.id as plate_id,
+			annotation.textvalue as tag_text
+			from plate
+			join plateannotationlink on plateannotationlink.parent = plate.id
+			join annotation on plateannotationlink.child = annotation.id where annotation.textvalue is not NULL and plate.owner_id>=0
+
+mappingId	MAPID-plateacquisition-tag
+target		test:PlateAcquisition/{plateacquisition_id} this:tag_annotation_value {tag_text}^^xsd:string . 
+source		select
+			plateacquisition.id as plateacquisition_id,
+			annotation.textvalue as tag_text
+			from plateacquisition
+			join plateacquisitionannotationlink on plateacquisitionannotationlink.parent = plateacquisition.id
+			join annotation on plateacquisitionannotationlink.child = annotation.id where annotation.textvalue is not NULL and plateacquisition.owner_id>=0
+
+mappingId	MAPID-reagent-tag
+target		test:Reagent/{reagent_id} this:tag_annotation_value {tag_text}^^xsd:string . 
+source		select
+			_reagent.id as reagent_id,
+			annotation.textvalue as tag_text
+			from reagent as _reagent
+			join reagentannotationlink on reagentannotationlink.parent = _reagent.id
+			join annotation on reagentannotationlink.child = annotation.id where annotation.textvalue is not NULL and _reagent.owner_id>=0
+
+mappingId	MAPID-well-tag
+target		test:Well/{well_id} this:tag_annotation_value {tag_text}^^xsd:string . 
+source		select
+			well.id as well_id,
+			annotation.textvalue as tag_text
+			from well
+			join wellannotationlink on wellannotationlink.parent = well.id
+			join annotation on wellannotationlink.child = annotation.id where annotation.textvalue is not NULL and well.owner_id>=0
+
+mappingId	MAPID-dcf5779a40a44cc4859c65a52285ae28
+target		test:Channel/{id} a :Channel ; dc:identifier {id}^^xsd:integer ; this:blue {blue}^^xsd:integer ; this:red {red}^^xsd:integer ; this:green {green}^^xsd:integer ; this:pixels test:Pixels/{pixels_id} . 
+source		select id, alpha, red, green, blue, pixels as pixels_id from channel where channel.owner_id>=0
+
+mappingId	MAPID-ada4e8268d2e4546a2578e6aae8ccea6
+target		test:Pixels/{id} a :Pixels ; this:image test:Image/{image_id} ; this:physical_size_x {physicalsizex}^^xsd:float ; this:physical_size_x_unit {physicalsizexunit}^^xsd:string ; this:physical_size_y {physicalsizey}^^xsd:float ; this:physical_size_y_unit {physicalsizeyunit}^^xsd:string ; this:physical_size_z {physicalsizez}^^xsd:float ; this:physical_size_z_unit {physicalsizezunit}^^xsd:string . 
+source		select id, image as image_id, physicalsizex, physicalsizexunit, physicalsizey, physicalsizeyunit, physicalsizez, physicalsizezunit from pixels where pixels.owner_id>=0
+]]
+
