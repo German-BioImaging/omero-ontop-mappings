@@ -12,4 +12,6 @@ $ONTOPBIN endpoint --mapping $MAPPING \
                    --ontology $ONTOLOGY \
                    --properties $PROPERTIES \
                    --xml-catalog $CATALOG \
+                   --cors-allowed-origins=* \
+                   --portal portal.toml
                    $@

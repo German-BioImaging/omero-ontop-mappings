@@ -44,8 +44,8 @@ mappingId	MAPID-project-2
 target		ome_instance:Project/{project_id} a :Project ; <{map_key}> {map_value}^^xsd:string . 
 source		select
 			_project.id as project_id,
+			concat(
 			regexp_replace(
-			concat(regexp_replace(
 			case
 			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
 			else
@@ -54,11 +54,10 @@ source		select
 			else 'http://www.openmicroscopy.org/ns/default/'
 			end
 			end,
-			'([^\/,#])$',
-			'\1/'
+			'([^\/,#])$','\1/'
 			),
-			_annotation_mapvalue.name),
-			'[\s,\[,\],\{,\},\<,\>, \(,\),%,\^]', '', 'g') as map_key,
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from project as _project
 			join projectannotationlink as _projectannotationlink on _projectannotationlink.parent = _project.id
@@ -79,9 +78,8 @@ mappingId	MAPID-dataset-2
 target		ome_instance:Dataset/{dataset_id} <{map_key}> {map_value}^^xsd:string . 
 source		select
 			_dataset.id as dataset_id,
-			_datasetannotationlink.child as annotation_id,
+			concat(
 			regexp_replace(
-			concat(regexp_replace(
 			case
 			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
 			else
@@ -90,11 +88,10 @@ source		select
 			else 'http://www.openmicroscopy.org/ns/default/'
 			end
 			end,
-			'([^\/,#])$',
-			'\1/'
+			'([^\/,#])$','\1/'
 			),
-			_annotation_mapvalue.name),
-			'[\s,\[,\],\{,\},\<,\>, \(,\),%,\^]', '', 'g') as map_key,
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from dataset as _dataset
 			join datasetannotationlink as _datasetannotationlink on _datasetannotationlink.parent = _dataset.id
@@ -116,8 +113,8 @@ mappingId	MAPID-Image-1
 target		ome_instance:Image/{image_id} a :Image ; <{map_key}> {map_value}^^xsd:string . 
 source		select
 			_image.id as image_id,
+			concat(
 			regexp_replace(
-			concat(regexp_replace(
 			case
 			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
 			else
@@ -126,11 +123,10 @@ source		select
 			else 'http://www.openmicroscopy.org/ns/default/'
 			end
 			end,
-			'([^\/,#])$',
-			'\1/'
+			'([^\/,#])$','\1/'
 			),
-			_annotation_mapvalue.name),
-			'[\s,\[,\],\{,\},\<,\>, \(,\),%,\^]', '', 'g') as map_key,
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from image as _image
 			join imageannotationlink as _imageannotationlink on _imageannotationlink.parent = _image.id
@@ -219,8 +215,9 @@ source		select _well.id as well_id, _wellreagentlink.child as reagent_id from we
 
 mappingId	MAPID-well-kvannotations
 target		ome_instance:Well/{well_id} <{map_key}> {map_value}^^xsd:string . 
-source		select _well.id as well_id, regexp_replace(
-			concat(regexp_replace(
+source		select _well.id as well_id,
+			concat(
+			regexp_replace(
 			case
 			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
 			else
@@ -229,9 +226,10 @@ source		select _well.id as well_id, regexp_replace(
 			else 'http://www.openmicroscopy.org/ns/default/'
 			end
 			end,
-			'([^\/,#])$', '\1/'),
-			_annotation_mapvalue.name),
-			'[\s,\[,\],\{,\},\<,\>, \(,\),%,\^]', '', 'g') as map_key,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from well as _well
 			left join wellannotationlink as _wellannotationlink on _wellannotationlink.parent = _well.id
@@ -255,8 +253,9 @@ source		select _plate.id as plate_id, _screenplatelink.parent as screen_id, _pla
 
 mappingId	MAPID-plate-kvannotations
 target		ome_instance:Plate/{plate_id} <{map_key}> {map_value}^^xsd:string . 
-source		select _plate.id as plate_id, regexp_replace(
-			concat(regexp_replace(
+source		select _plate.id as plate_id,
+			concat(
+			regexp_replace(
 			case
 			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
 			else
@@ -265,9 +264,10 @@ source		select _plate.id as plate_id, regexp_replace(
 			else 'http://www.openmicroscopy.org/ns/default/'
 			end
 			end,
-			'([^\/,#])$', '\1/'),
-			_annotation_mapvalue.name),
-			'[\s,\[,\],\{,\},\<,\>, \(,\),%,\^]', '', 'g') as map_key,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from plate as _plate
 			left join plateannotationlink as _plateannotationlink on _plateannotationlink.parent = _plate.id
@@ -282,8 +282,9 @@ source		select _screen.id as screen_id, _screenplatelink.child as plate_id, _scr
 
 mappingId	MAPID-screen-kvannotations
 target		ome_instance:Screen/{screen_id} <{map_key}> {map_value}^^xsd:string . 
-source		select _screen.id as screen_id, regexp_replace(
-			concat(regexp_replace(
+source		select _screen.id as screen_id,
+			concat(
+			regexp_replace(
 			case
 			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
 			else
@@ -292,9 +293,10 @@ source		select _screen.id as screen_id, regexp_replace(
 			else 'http://www.openmicroscopy.org/ns/default/'
 			end
 			end,
-			'([^\/,#])$', '\1/'),
-			_annotation_mapvalue.name),
-			'[\s,\[,\],\{,\},\<,\>, \(,\),%,\^]', '', 'g') as map_key,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from screen as _screen
 			left join screenannotationlink as _screenannotationlink on _screenannotationlink.parent = _screen.id
@@ -308,8 +310,9 @@ source		select _reagent.id as reagent_id, _wellreagentlink.parent as well_id fro
 
 mappingId	MAPID-reagent-kvannotations
 target		ome_instance:Reagent/{reagent_id} <{map_key}> {map_value}^^xsd:string . 
-source		select _reagent.id as reagent_id, regexp_replace(
-			concat(regexp_replace(
+source		select _reagent.id as reagent_id,
+			concat(
+			regexp_replace(
 			case
 			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
 			else
@@ -318,9 +321,10 @@ source		select _reagent.id as reagent_id, regexp_replace(
 			else 'http://www.openmicroscopy.org/ns/default/'
 			end
 			end,
-			'([^\/,#])$', '\1/'),
-			_annotation_mapvalue.name),
-			'[\s,\[,\],\{,\},\<,\>, \(,\),%,\^]', '', 'g') as map_key,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from reagent as _reagent
 			left join reagentannotationlink as _reagentannotationlink on _reagentannotationlink.parent = _reagent.id
@@ -334,8 +338,8 @@ source		select id as plate_acquisition_id, plate as plate_id, owner_id from plat
 
 mappingId	MAPID-PlateAcquisition-kvannotations
 target		ome_instance:PlateAcquisition/{plateacquisition_id} <{map_key}> {map_value}^^xsd:string . 
-source		select _plateacquisition.id as plateacquisition_id, regexp_replace(
-			concat(regexp_replace(
+source		select _plateacquisition.id as plateacquisition_id, concat(
+			regexp_replace(
 			case
 			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
 			else
@@ -344,9 +348,10 @@ source		select _plateacquisition.id as plateacquisition_id, regexp_replace(
 			else 'http://www.openmicroscopy.org/ns/default/'
 			end
 			end,
-			'([^\/,#])$', '\1/'),
-			_annotation_mapvalue.name),
-			'[\s,\[,\],\{,\},\<,\>, \(,\),%,\^]', '', 'g') as map_key,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-z,A-Z,0-9,\.,\/,_,\-]', '', 'g')
+			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from plateacquisition as _plateacquisition
 			left join plateacquisitionannotationlink as _plateacquisitionannotationlink on _plateacquisitionannotationlink.parent = _plateacquisition.id
