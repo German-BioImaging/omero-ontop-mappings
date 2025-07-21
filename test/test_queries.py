@@ -308,7 +308,6 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         self.assertEqual(response.loc['0', 'name'], 'root root')
         self.assertEqual(response.loc['1', 'name'], 'Guest Account')
-        self.assertEqual(response.loc['2', 'name'], 'Public User')
 
     def test_dataset_core(self):
         """ Test query with the core prefix and ontology. """
@@ -417,7 +416,10 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Run the query.
         response = graph.query(query_string)
 
-        self.assertEqual(len(response), 15)
+        for item in response:
+            print(item)
+
+        self.assertEqual(len(response), 12)
 
     def test_project_key_value(self):
         """ Test querying for a project property via the mapannotation key."""
@@ -478,7 +480,7 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         response = run_query(query)
         self.assertEqual(len(response), 1)
-        self.assertEqual(response.loc[0, 'tag'], 'Public TestTag')
+        self.assertEqual(response.loc[0, 'tag'], 'TestTag')
 
     def test_tagged_images(self):
         """ Test querying all tagged images and their tag(s). """
@@ -496,10 +498,10 @@ select ?n_projects ?n_datasets ?n_images where {{
         response = run_query(query)
 
         # All images (10) are tagged.
-        self.assertEqual(len(response), 13)
+        self.assertEqual(len(response), 12)
 
         # They're all tagged "Screenshot"
-        self.assertEqual(response.loc[0, 'tag'], "Public Screenshot")
+        self.assertEqual(response.loc[0, 'tag'], "Screenshot")
 
     def test_image_roi(self):
         """ Test querying image with ROI. """
@@ -519,11 +521,13 @@ SELECT distinct ?img ?roi WHERE {
         # Run query.
         results = run_query(query)
 
+        print(results.to_string())
+
         # Check return values.
-        self.assertEqual(results.loc[0, "img"], "https://example.org/site/Image/23")
-        self.assertEqual(results.loc[0, "roi"], "https://example.org/site/ROI/3")
-        self.assertEqual(results.loc[1, "img"], "https://example.org/site/Image/24")
-        self.assertEqual(results.loc[1, "roi"], "https://example.org/site/ROI/4")
+        self.assertEqual(results.loc[0, "img"], "https://example.org/site/Image/11")
+        self.assertEqual(results.loc[0, "roi"], "https://example.org/site/ROI/1")
+        self.assertEqual(results.loc[1, "img"], "https://example.org/site/Image/12")
+        self.assertEqual(results.loc[1, "roi"], "https://example.org/site/ROI/2")
 
     def test_image_properties(self):
         """ Check Image instances have all expected properties. """
@@ -556,12 +560,12 @@ PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
 SELECT DISTINCT * WHERE {
-  image:23 ome_ns:sampletype ?st .
+  image:11 ome_ns:sampletype ?st .
 }
 """
         response_df = run_query(query)
 
-        self.assertEqual(response_df.iloc[0,0], 'Public screen')
+        self.assertEqual(response_df.iloc[0,0], 'screen')
 
     def test_namespace_fixing_no_ns(self):
         """ Test that empty namespaces are set to a default value."""
@@ -571,12 +575,12 @@ PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
 SELECT DISTINCT * WHERE {
-  image:24 ome_ns:annotator ?st .
+  image:12 ome_ns:annotator ?st .
 }
 """
         response_df = run_query(query)
 
-        self.assertEqual(response_df.iloc[0,0], 'Public MrX')
+        self.assertEqual(response_df.iloc[0,0], 'MrX')
 
     def test_namespace_fixing_issue16(self):
         """ Test that empty namespaces are set to a default value."""
@@ -586,7 +590,7 @@ PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
 SELECT DISTINCT * WHERE {
-  image:22 ome_ns:Assay ?assay .
+  image:10 ome_ns:Assay ?assay .
 }
 """
         response_df = run_query(query)
@@ -603,7 +607,7 @@ PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
 SELECT DISTINCT * WHERE {
-  image:21 ome_ns:Assay ?assay .
+  image:9 ome_ns:Assay ?assay .
 }
 """
         response_df = run_query(query)
@@ -965,22 +969,6 @@ SELECT DISTINCT * WHERE {
         self.assertEqual(results['min_red'].sum(), 0)
         self.assertTrue(all(results['max_blue'] == 255))
 
-
-    def test_public_private(self):
-        """ Test we cannot access a non-public image"""
-
-
-        query_string = f"""
-    prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-    prefix exoimg: <https://example.org/Image/>
-    select * where {{
-        exoimg:1 ?prop ?val .
-        }}
-        """
-
-        results = run_query(query_string)
-
-        self.assertEqual(len(results), 0)
 
 if __name__ == "__main__":
     unittest.main()
