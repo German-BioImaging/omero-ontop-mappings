@@ -56,7 +56,7 @@ source		select
 			end,
 			'([^\/,#])$','\1/'
 			),
-			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./\_-]', 'ZZ', 'g')
+			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./_-]', 'ZZ', 'g')
 			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from project as _project
@@ -90,7 +90,7 @@ source		select
 			end,
 			'([^\/,#])$','\1/'
 			),
-			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./\_-]', 'ZZ', 'g')
+			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./_-]', 'ZZ', 'g')
 			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from dataset as _dataset
@@ -125,7 +125,7 @@ source		select
 			end,
 			'([^\/,#])$','\1/'
 			),
-			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./\_-]', 'ZZ', 'g')
+			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./_-]', 'ZZ', 'g')
 			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from image as _image
@@ -228,7 +228,7 @@ source		select _well.id as well_id,
 			end,
 			'([^\/,#])$','\1/'
 			),
-			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./\_-]', 'ZZ', 'g')
+			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./_-]', 'ZZ', 'g')
 			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from well as _well
@@ -266,7 +266,7 @@ source		select _plate.id as plate_id,
 			end,
 			'([^\/,#])$','\1/'
 			),
-			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./\_-]', 'ZZ', 'g')
+			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./_-]', 'ZZ', 'g')
 			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from plate as _plate
@@ -295,7 +295,7 @@ source		select _screen.id as screen_id,
 			end,
 			'([^\/,#])$','\1/'
 			),
-			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./\_-]', 'ZZ', 'g')
+			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./_-]', 'ZZ', 'g')
 			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from screen as _screen
@@ -323,7 +323,7 @@ source		select _reagent.id as reagent_id,
 			end,
 			'([^\/,#])$','\1/'
 			),
-			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./\_-]', 'ZZ', 'g')
+			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./_-]', 'ZZ', 'g')
 			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from reagent as _reagent
@@ -350,7 +350,7 @@ source		select _plateacquisition.id as plateacquisition_id, concat(
 			end,
 			'([^\/,#])$','\1/'
 			),
-			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./\_-]', 'ZZ', 'g')
+			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./_-]', 'ZZ', 'g')
 			) as map_key,
 			_annotation_mapvalue.value as map_value
 			from plateacquisition as _plateacquisition
