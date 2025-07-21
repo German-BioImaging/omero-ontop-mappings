@@ -8,3 +8,8 @@ __pycache__/
 !omero-ontop-mappings/omero-ontop-mappings.properties
 /mpieb/
 .jupyter/
+test_proto.ipynb
+test/test.obda
+test/test.ttl
+test/test.properties
+test-ontop.sh
