@@ -8,8 +8,13 @@ ONTOLOGY=omero-ontop-mappings.ttl
 PROPERTIES=omero-ontop-mappings.properties
 CATALOG=catalog-v001.xml
 
-$ONTOPBIN endpoint --mapping $MAPPING \
-                   --ontology $ONTOLOGY \
-                   --properties $PROPERTIES \
-                   --xml-catalog $CATALOG \
-                   $@
+cmd="$ONTOPBIN endpoint \
+--mapping $MAPPING \
+--ontology $ONTOLOGY \
+--properties $PROPERTIES \
+--xml-catalog $CATALOG \
+--cors-allowed-origins=* \
+--portal portal.toml $@"
+
+echo $cmd
+eval $cmd

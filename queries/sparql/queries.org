@@ -579,18 +579,8 @@ order by ?class
 #+end_src
 
 #+RESULTS:
-| img                                          | i                     | s                                                                                   | a    |
-|----------------------------------------------+-----------------------+-------------------------------------------------------------------------------------+------|
-| https://omero-nfdi.uni-muenster.de/Image/113 | Deep Learning for MPB | Segmentation and Classification of Pseudomonas fluorescens SBW25 colony morphotypes | wspF |
-| https://omero-nfdi.uni-muenster.de/Image/115 | Deep Learning for MPB | Segmentation and Classification of Pseudomonas fluorescens SBW25 colony morphotypes | awsX |
-| https://omero-nfdi.uni-muenster.de/Image/116 | Deep Learning for MPB | Segmentation and Classification of Pseudomonas fluorescens SBW25 colony morphotypes | wspF |
-| https://omero-nfdi.uni-muenster.de/Image/118 | Deep Learning for MPB | Segmentation and Classification of Pseudomonas fluorescens SBW25 colony morphotypes | awsX |
-| https://omero-nfdi.uni-muenster.de/Image/119 | Deep Learning for MPB | Segmentation and Classification of Pseudomonas fluorescens SBW25 colony morphotypes | wspF |
-| https://omero-nfdi.uni-muenster.de/Image/120 | Deep Learning for MPB | Segmentation and Classification of Pseudomonas fluorescens SBW25 colony morphotypes | 0085 |
-| https://omero-nfdi.uni-muenster.de/Image/122 | Deep Learning for MPB | Segmentation and Classification of Pseudomonas fluorescens SBW25 colony morphotypes | awsX |
-| https://omero-nfdi.uni-muenster.de/Image/125 | Deep Learning for MPB | Segmentation and Classification of Pseudomonas fluorescens SBW25 colony morphotypes | wspF |
-| https://omero-nfdi.uni-muenster.de/Image/127 | Deep Learning for MPB | Segmentation and Classification of Pseudomonas fluorescens SBW25 colony morphotypes | awsX |
-| https://omero-nfdi.uni-muenster.de/Image/130 | Deep Learning for MPB | Segmentation and Classification of Pseudomonas fluorescens SBW25 colony morphotypes | awsX |
+| img | i | s | a |
+|-----+---+---+---|
 
 ** Image and DC metadata terms
 :PROPERTIES:
@@ -610,98 +600,72 @@ order by ?class
       #+end_src
 
 #+RESULTS:
-| img                                          | author | subject |
-|----------------------------------------------+--------+---------|
-| https://omero-nfdi.uni-muenster.de/Image/145 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/146 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/153 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/113 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/114 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/115 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/116 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/117 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/118 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/119 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/120 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/121 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/122 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/123 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/124 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/125 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/126 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/127 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/128 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/129 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/130 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/131 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/132 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/133 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/134 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/135 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/136 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/137 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/138 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/139 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/140 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/141 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/142 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/143 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/144 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/147 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/148 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/149 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/150 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/151 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/152 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/154 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/155 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/156 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/157 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/158 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/159 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/160 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/161 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/162 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/163 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/164 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/165 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/166 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/167 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/168 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/169 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/170 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/171 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/172 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/173 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/174 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/175 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/176 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/177 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/178 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/179 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/180 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/181 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/182 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/183 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/184 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/185 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/186 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/187 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/188 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/189 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/190 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/191 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/192 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/193 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/194 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/195 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/196 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/197 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/198 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/199 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/200 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/201 |        |         |
-| https://omero-nfdi.uni-muenster.de/Image/202 |        |         |
+| img                     | author | subject |
+|-------------------------+--------+---------|
+| http://test.me/Image/1  |        |         |
+| http://test.me/Image/2  |        |         |
+| http://test.me/Image/3  |        |         |
+| http://test.me/Image/4  |        |         |
+| http://test.me/Image/5  |        |         |
+| http://test.me/Image/6  |        |         |
+| http://test.me/Image/7  |        |         |
+| http://test.me/Image/8  |        |         |
+| http://test.me/Image/9  |        |         |
+| http://test.me/Image/10 |        |         |
+| http://test.me/Image/11 |        |         |
+| http://test.me/Image/12 |        |         |
+| http://test.me/Image/13 |        |         |
+| http://test.me/Image/14 |        |         |
+| http://test.me/Image/15 |        |         |
+| http://test.me/Image/16 |        |         |
+| http://test.me/Image/17 |        |         |
+| http://test.me/Image/18 |        |         |
+| http://test.me/Image/19 |        |         |
+| http://test.me/Image/20 |        |         |
+| http://test.me/Image/21 |        |         |
+| http://test.me/Image/22 |        |         |
+| http://test.me/Image/23 |        |         |
+| http://test.me/Image/24 |        |         |
+
+** Image properties
+:PROPERTIES:
+:ID:       5fd7fb92-7286-4fb7-bb0b-e34962e20957
+:END:
+#+begin_src sparql :cache no :results replace
+  prefix ome_core: <https://ld.openmicroscopy.org/core/>
+  prefix imgs: <http://test.me/Image/>
+
+  SELECT distinct ?prop ?val WHERE {
+    imgs:1 ?prop ?val .
+    }
+  order by ?val
+#+end_src
+
+#+RESULTS:
+| prop                                                     | val                                       |
+|----------------------------------------------------------+-------------------------------------------|
+| http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image  |
+| http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image |
+| https://ld.openmicroscopy.org/omekg#owner                | http://test.me/Experimenter/0             |
+| https://ld.openmicroscopy.org/omekg#experimenter         | http://test.me/Experimenter/0             |
+| https://ld.openmicroscopy.org/core/experimenter          | http://test.me/Experimenter/0             |
+| http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_14-58-36_screenshot.png        |
+| http://www.openmicroscopy.org/ns/default/fooZZbaZZr      | bar                                       |
+| http://www.openmicroscopy.org/ns/default/ZZZZfooZZZZbar  | cool                                      |
+| https://ld.openmicroscopy.org/omekg#tag_annotation_value | Screenshot                                |
+| http://www.openmicroscopy.org/ns/default/ZZfooZZbarZZba  | some**thing                               |
+| http://purl.org/dc/terms/contributor                     | Test User                                 |
+| http://purl.org/dc/terms/date                            | Thu Jul 17 04:31:12 PM CEST 2025          |
+| http://purl.org/dc/terms/subject                         | Unittest                                  |
+| http://purl.org/dc/elements/1.1/identifier               | 1                                         |
+
+
+
+
+
+
+
+
 
 ** Dataset number of type relations
 :PROPERTIES:

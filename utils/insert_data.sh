@@ -88,7 +88,12 @@ ann=$(omero obj new MapAnnotation ns="/MouseCT/Skyscan/System")
 omero obj new ImageAnnotationLink parent=Image:9 child=$ann
 omero obj map-set $ann mapValue Assay "Bruker"
 
-
+# Add map annotations with special characters to image 1
+ann=$(omero obj new MapAnnotation)
+omero obj new ImageAnnotationLink parent=Image:1 child=$ann
+omero obj map-set $ann mapValue "foo^bar" "bar"
+omero obj map-set $ann mapValue "$foo*bar#ba" "some**thing"
+omero obj map-set $ann mapValue "&*foo&^bar" "cool"
 
 # List all objects
 today=$(date +%Y-%m-%d)
