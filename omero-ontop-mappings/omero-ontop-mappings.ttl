@@ -8,7 +8,9 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix obda: <https://w3id.org/obda/vocabulary#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix site: <http://example.org/> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix test: <http://test.me/> .
 @prefix this: <https://ld.openmicroscopy.org/omekg#> .
 @prefix omekg: <https://ld.openmicroscopy.org/omekg/> .
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
@@ -18,7 +20,7 @@
 @base <https://ld.openmicroscopy.org/omekg/> .
 
 <https://ld.openmicroscopy.org/omekg> rdf:type owl:Ontology ;
-    owl:imports rdfs: ,
+                                       owl:imports rdfs: ,
                                                    core: ;
                                        dcterms:license "https://creativecommons.org/publicdomain/zero/1.0/" ;
                                        rdfs:label "OMERO VKG Ontology" ;
@@ -43,7 +45,7 @@ dc:contributor rdf:type owl:AnnotationProperty ;
                rdfs:comment "An entity responsible for making contributions to the resource."@en ;
                rdfs:isDefinedBy dc: ;
                rdfs:label "Contributor"@en ;
-    skos:note "A [second property](/specifications/dublin-core/dcmi-terms/#http://purl.org/dc/terms/contributor) with the same name as this property has been declared in the [dcterms: namespace](http://purl.org/dc/terms/).  See the Introduction to the document [DCMI Metadata Terms](/specifications/dublin-core/dcmi-terms/) for an explanation."@en .
+               skos:note "A [second property](/specifications/dublin-core/dcmi-terms/#http://purl.org/dc/terms/contributor) with the same name as this property has been declared in the [dcterms: namespace](http://purl.org/dc/terms/).  See the Introduction to the document [DCMI Metadata Terms](/specifications/dublin-core/dcmi-terms/) for an explanation."@en .
 
 
 ###  http://purl.org/dc/elements/1.1/coverage
@@ -542,50 +544,64 @@ xsd:date rdf:type rdfs:Datatype .
 #    Object Properties
 #################################################################
 
+###  https://ld.openmicroscopy.org/core/dataset
+core:dataset rdf:type owl:ObjectProperty ;
+             rdfs:range core:Dataset ,
+                        omekg:Dataset .
+
+
 ###  https://ld.openmicroscopy.org/core/experimenter
 core:experimenter owl:equivalentProperty this:experimenter ;
                   rdfs:range core:Experimenter .
 
 
 ###  https://ld.openmicroscopy.org/core/experimenter_group
-core:experimenter_group owl:equivalentProperty this:experimenter_group ,
-                                               this:group ;
+core:experimenter_group owl:equivalentProperty core:group ,
+                                               this:experimenter_group ;
                         rdfs:range omekg:ExperimenterGroup .
+
+
+###  https://ld.openmicroscopy.org/core/group
+core:group rdf:type owl:ObjectProperty ;
+           owl:equivalentProperty this:experimenter_group .
+
+
+###  https://ld.openmicroscopy.org/core/owner
+core:owner rdf:type owl:ObjectProperty ;
+           owl:equivalentProperty this:experimenter ;
+           rdfs:range omekg:Owner .
+
+
+###  https://ld.openmicroscopy.org/core/plate
+core:plate rdf:type owl:ObjectProperty ;
+           rdfs:range omekg:Plate .
 
 
 ###  https://ld.openmicroscopy.org/core/reagent
 core:reagent owl:equivalentProperty this:reagent .
 
 
-###  https://ld.openmicroscopy.org/omekg#dataset
-this:dataset rdf:type owl:ObjectProperty ;
-             rdfs:range core:Dataset ,
-                        omekg:Dataset .
+###  https://ld.openmicroscopy.org/core/run
+core:run rdf:type owl:ObjectProperty ;
+         owl:equivalentProperty this:plate_acquisition .
+
+
+###  https://ld.openmicroscopy.org/core/well
+core:well rdf:type owl:ObjectProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#experimenter
 this:experimenter rdf:type owl:ObjectProperty ;
-                  owl:equivalentProperty this:owner ;
                   rdfs:range omekg:Experimenter ;
                   rdfs:isDefinedBy core:experimenter .
 
 
 ###  https://ld.openmicroscopy.org/omekg#experimenter_group
-this:experimenter_group rdf:type owl:ObjectProperty ;
-                        owl:equivalentProperty this:group .
-
-
-###  https://ld.openmicroscopy.org/omekg#group
-this:group rdf:type owl:ObjectProperty .
+this:experimenter_group rdf:type owl:ObjectProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#image
 this:image rdf:type owl:ObjectProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#owner
-this:owner rdf:type owl:ObjectProperty ;
-           rdfs:range omekg:Owner .
 
 
 ###  https://ld.openmicroscopy.org/omekg#pixels
@@ -593,14 +609,8 @@ this:pixels rdf:type owl:ObjectProperty ;
             rdfs:range omekg:Pixels .
 
 
-###  https://ld.openmicroscopy.org/omekg#plate
-this:plate rdf:type owl:ObjectProperty ;
-           rdfs:range omekg:Plate .
-
-
 ###  https://ld.openmicroscopy.org/omekg#plate_acquisition
-this:plate_acquisition rdf:type owl:ObjectProperty ;
-                       owl:equivalentProperty this:run .
+this:plate_acquisition rdf:type owl:ObjectProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#reagent
@@ -611,17 +621,9 @@ this:reagent rdf:type owl:ObjectProperty .
 this:roi rdf:type owl:ObjectProperty .
 
 
-###  https://ld.openmicroscopy.org/omekg#run
-this:run rdf:type owl:ObjectProperty .
-
-
 ###  https://ld.openmicroscopy.org/omekg#screen
 this:screen rdf:type owl:ObjectProperty ;
             rdfs:range omekg:Screen .
-
-
-###  https://ld.openmicroscopy.org/omekg#well
-this:well rdf:type owl:ObjectProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#well_sample

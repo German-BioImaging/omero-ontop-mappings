@@ -1,7 +1,7 @@
 * SQL Target queries
 :PROPERTIES:
 :ID:       8f0ff23b-35e3-424d-8c4d-57a186d2c9fb
-:header-args:sql: :engine postgres :dbhost micropop046 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+:header-args:sql: :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
 :END:
 ** All tables
 :PROPERTIES:
@@ -273,38 +273,130 @@ ORDER BY table_name;
 |        9 |        |
 |        7 |        |
 
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+  select id, cls from ((select id,tableoid::regclass::text as cls from image) union (select id,tableoid::regclass::text as cls from project)) as objects;
+
+#+end_src
+
+#+RESULTS:
+| id | cls     |
+|----+---------|
+| 12 | image   |
+|  6 | image   |
+|  8 | image   |
+| 10 | image   |
+| 11 | image   |
+|  3 | image   |
+|  4 | image   |
+|  2 | image   |
+|  1 | image   |
+|  5 | image   |
+|  1 | project |
+|  7 | image   |
+|  9 | image   |
+
+
+
+** Get all groups that public user is a member of
+:PROPERTIES:
+:ID:       9fdce8c6-ceeb-4e4d-8481-8c86cf2dbb87
+:END:
+#+begin_src sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+select * from groupexperimentermap where child_index=0;
+#+end_src
+
+#+RESULTS:
+| id | permissions | owner | version | child | external_id | parent | child_index |
+|----+-------------+-------+---------+-------+-------------+--------+-------------|
+|  0 |         -52 | t     |       0 |     0 |             |      0 |           0 |
+|  2 |         -52 | f     |       0 |     1 |             |      2 |           0 |
+|  3 |        -120 | f     |       0 |     2 |             |      3 |           0 |
+
+#+begin_src sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+select id, cls, initcap(cls) as Cls from (
+			(select id,tableoid::regclass::text as cls, group_id from image)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from project)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from dataset)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from well)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from plate)
+			) as object where group_id in (select parent as group_id from groupexperimentermap where child=2) ;
+#+end_src
+
+#+RESULTS:
+| id | cls     | cls     |
+|----+---------+---------|
+|  4 | dataset | Dataset |
+| 22 | image   | Image   |
+| 21 | image   | Image   |
+| 13 | image   | Image   |
+|  6 | dataset | Dataset |
+| 15 | image   | Image   |
+| 19 | image   | Image   |
+|  5 | dataset | Dataset |
+| 14 | image   | Image   |
+| 17 | image   | Image   |
+| 18 | image   | Image   |
+| 24 | image   | Image   |
+| 23 | image   | Image   |
+| 16 | image   | Image   |
+| 20 | image   | Image   |
+|  2 | project | Project |
+
+#+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
+#+end_src
+
+#+RESULTS:
+|---|
+
 ** All in columns in image
 :PROPERTIES:
 :ID:       cd51a3b2-086b-44c8-a129-284dea4d5306
 :END:
 #+begin_src  sql :engine postgres :dbhost localhost :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres
-  select column_name from information_schema.columns where table_name='image';
+  select column_name from information_schema.columns where table_name='pixels';
 #+end_src
 
 #+RESULTS:
-| column_name        |
-|--------------------|
-| id                 |
-| acquisitiondate    |
-| archived           |
-| description        |
-| permissions        |
-| name               |
-| partial            |
-| series             |
-| version            |
-| creation_id        |
-| external_id        |
-| group_id           |
-| owner_id           |
-| update_id          |
-| experiment         |
-| fileset            |
-| format             |
-| imagingenvironment |
-| instrument         |
-| objectivesettings  |
-| stagelabel         |
+| column_name       |
+|-------------------|
+| id                |
+| permissions       |
+| methodology       |
+| physicalsizexunit |
+| physicalsizex     |
+| physicalsizeyunit |
+| physicalsizey     |
+| physicalsizezunit |
+| physicalsizez     |
+| sha1              |
+| significantbits   |
+| sizec             |
+| sizet             |
+| sizex             |
+| sizey             |
+| sizez             |
+| timeincrementunit |
+| timeincrement     |
+| version           |
+| waveincrement     |
+| wavestart         |
+| creation_id       |
+| external_id       |
+| group_id          |
+| owner_id          |
+| update_id         |
+| dimensionorder    |
+| image             |
+| pixelstype        |
+| relatedto         |
+| image_index       |
+| path              |
+| name              |
+| repo              |
 
 ** Projects
 :PROPERTIES:
@@ -810,3 +902,108 @@ eventtype                                      |
 :PROPERTIES:
 :ID:       6658058e-8998-42a5-8f7a-78d0ffc5e43b
 :END:
+
+** Generic source queries
+:PROPERTIES:
+:ID:       ffa497f7-dcf9-4fc9-a0e3-c35438005d54
+:END:
+#+begin_src sql
+select id, cls, initcap(cls) as Cls, owner_id, group_id, description, name from (
+			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, NULL as description, name from pixels)
+			union
+			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, description, name from image)
+			union
+			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, description, name from project)
+			union
+			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, description, name from dataset)
+			union
+			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, NULL as description, NULL as name from well)
+			union
+			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, description, name from plate)
+			union
+			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, description, name from screen)
+			union
+			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, description, name from roi)
+			union
+			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, description, name from plateacquisition)
+			union
+			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, NULL as description, NULL as name from channel)
+			union
+			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, NULL as description, NULL as name from wellsample)
+			) as object
+			where group_id in (
+			select parent as group_id from groupexperimentermap
+			where child=0
+			)
+#+end_src
+
+#+RESULTS:
+| id | cls     | cls     | owner_id | group_id | description | name                                       |
+|----+---------+---------+----------+----------+-------------+--------------------------------------------|
+| 28 | channel | Channel |        0 |        0 |             |                                            |
+|  1 | roi     | Roi     |        0 |        0 |             |                                            |
+|  1 | dataset | Dataset |        0 |        0 |             | Dataset 1                                  |
+| 26 | channel | Channel |        0 |        0 |             |                                            |
+|  3 | dataset | Dataset |        0 |        0 |             | Dataset 3                                  |
+| 24 | channel | Channel |        0 |        0 |             |                                            |
+| 12 | channel | Channel |        0 |        0 |             |                                            |
+|  2 | roi     | Roi     |        0 |        0 |             |                                            |
+|  6 | image   | Image   |        0 |        0 |             | 2024-10-10_15-09-28_screenshot.png         |
+|  7 | channel | Channel |        0 |        0 |             |                                            |
+|  5 | pixels  | Pixels  |        0 |        0 |             | 2024-10-10_15-01-36_screenshot.png         |
+|  1 | project | Project |        0 |        0 |             | Project                                    |
+| 34 | channel | Channel |        0 |        0 |             |                                            |
+| 21 | channel | Channel |        0 |        0 |             |                                            |
+| 33 | channel | Channel |        0 |        0 |             |                                            |
+| 29 | channel | Channel |        0 |        0 |             |                                            |
+| 20 | channel | Channel |        0 |        0 |             |                                            |
+| 30 | channel | Channel |        0 |        0 |             |                                            |
+| 12 | pixels  | Pixels  |        0 |        0 |             | image_6_with_roi.ome.tif                   |
+|  8 | channel | Channel |        0 |        0 |             |                                            |
+|  2 | dataset | Dataset |        0 |        0 |             | Dataset 2                                  |
+| 13 | channel | Channel |        0 |        0 |             |                                            |
+| 37 | channel | Channel |        0 |        0 |             |                                            |
+|  3 | image   | Image   |        0 |        0 |             | 2024-10-10_15-17-25_screenshot.png         |
+|  5 | channel | Channel |        0 |        0 |             |                                            |
+|  2 | pixels  | Pixels  |        0 |        0 |             | 2024-10-10_14-53-28_screenshot.png         |
+|  6 | pixels  | Pixels  |        0 |        0 |             | 2024-10-10_15-09-28_screenshot.png         |
+|  4 | channel | Channel |        0 |        0 |             |                                            |
+|  1 | channel | Channel |        0 |        0 |             |                                            |
+|  4 | pixels  | Pixels  |        0 |        0 |             | 2024-10-10_15-28-16_screenshot.png         |
+| 12 | image   | Image   |        0 |        0 |             | image_6_with_roi.ome.tif                   |
+|  3 | pixels  | Pixels  |        0 |        0 |             | 2024-10-10_15-17-25_screenshot.png         |
+|  5 | image   | Image   |        0 |        0 |             | 2024-10-10_15-01-36_screenshot.png         |
+| 11 | channel | Channel |        0 |        0 |             |                                            |
+| 35 | channel | Channel |        0 |        0 |             |                                            |
+|  6 | channel | Channel |        0 |        0 |             |                                            |
+|  3 | channel | Channel |        0 |        0 |             |                                            |
+|  7 | image   | Image   |        0 |        0 |             | 2024-10-10_15-07-18_screenshot.png         |
+| 32 | channel | Channel |        0 |        0 |             |                                            |
+|  1 | pixels  | Pixels  |        0 |        0 |             | 2024-10-10_14-58-36_screenshot.png         |
+| 11 | image   | Image   |        0 |        0 |             | 2024-10-10_15-28-16_screenshot.png.ome.tif |
+|  7 | pixels  | Pixels  |        0 |        0 |             | 2024-10-10_15-07-18_screenshot.png         |
+| 31 | channel | Channel |        0 |        0 |             |                                            |
+|  2 | image   | Image   |        0 |        0 |             | 2024-10-10_14-53-28_screenshot.png         |
+| 22 | channel | Channel |        0 |        0 |             |                                            |
+| 10 | channel | Channel |        0 |        0 |             |                                            |
+|  8 | pixels  | Pixels  |        0 |        0 |             | 2024-10-10_16-47-01_screenshot.png         |
+| 11 | pixels  | Pixels  |        0 |        0 |             | 2024-10-10_15-28-16_screenshot.png.ome.tif |
+| 14 | channel | Channel |        0 |        0 |             |                                            |
+|  8 | image   | Image   |        0 |        0 |             | 2024-10-10_16-47-01_screenshot.png         |
+| 10 | pixels  | Pixels  |        0 |        0 |             | 2024-10-10_16-39-27_screenshot.png         |
+| 17 | channel | Channel |        0 |        0 |             |                                            |
+|  4 | image   | Image   |        0 |        0 |             | 2024-10-10_15-28-16_screenshot.png         |
+| 10 | image   | Image   |        0 |        0 |             | 2024-10-10_16-39-27_screenshot.png         |
+| 18 | channel | Channel |        0 |        0 |             |                                            |
+| 27 | channel | Channel |        0 |        0 |             |                                            |
+|  9 | image   | Image   |        0 |        0 |             | 2024-10-10_16-42-47_screenshot.png         |
+|  9 | channel | Channel |        0 |        0 |             |                                            |
+| 23 | channel | Channel |        0 |        0 |             |                                            |
+|  1 | image   | Image   |        0 |        0 |             | 2024-10-10_14-58-36_screenshot.png         |
+| 15 | channel | Channel |        0 |        0 |             |                                            |
+| 16 | channel | Channel |        0 |        0 |             |                                            |
+| 36 | channel | Channel |        0 |        0 |             |                                            |
+| 19 | channel | Channel |        0 |        0 |             |                                            |
+|  2 | channel | Channel |        0 |        0 |             |                                            |
+|  9 | pixels  | Pixels  |        0 |        0 |             | 2024-10-10_16-42-47_screenshot.png         |
+| 25 | channel | Channel |        0 |        0 |             |                                            |
