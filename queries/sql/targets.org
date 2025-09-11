@@ -14,6 +14,7 @@ ORDER BY table_name;
 
 #+RESULTS:
 | table_name                                       |
+|                                                  |
 |--------------------------------------------------|
 | _current_admin_privileges                        |
 | _fs_deletelog                                    |
@@ -262,9 +263,11 @@ ORDER BY table_name;
 #+RESULTS:
 | image_id | roi_id |
 |----------+--------|
-|        5 |      1 |
+|       11 |      1 |
+|       12 |      2 |
 |       10 |        |
 |        2 |        |
+|        5 |        |
 |        8 |        |
 |        6 |        |
 |        4 |        |

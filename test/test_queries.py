@@ -198,9 +198,9 @@ select ?n_projects ?n_datasets ?n_images where {{
 
 
         SELECT distinct ?project ?owner ?group WHERE {{
-            ?project a omekg:Project ;
-        omeprop:owner ?owner;
-        omeprop:group ?group .
+            ?project a ome_core:Project ;
+        ome_core:experimenter ?owner;
+        ome_core:experimenter_group ?group .
         }}
         """
 
@@ -217,13 +217,11 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         query_string = f"""
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
-        prefix omekg:  <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
 
 
         SELECT ?alias_owner_prop WHERE {{
-            ?project a omekg:Project ;
-                     omeprop:owner ?owner;
+            ?project a ome_core:Project ;
+                     ome_core:experimenter ?owner;
                      ?alias_owner_prop ?owner .
         }}
         """
@@ -241,13 +239,11 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         query_string = f"""
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
-        prefix omekg:  <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
 
 
         SELECT ?alias_group_prop WHERE {{
-            ?project a omekg:Project ;
-                     omeprop:group ?group;
+            ?project a ome_core:Project ;
+                     ome_core:experimenter_group ?group;
                      ?alias_group_prop ?group .
         }}
         """
@@ -374,15 +370,16 @@ select ?n_projects ?n_datasets ?n_images where {{
         """ Test a query for a project-dataset-image hierarchy. """
 
         query_string = """
+        prefix ome_core: <https://ld.openmicroscopy.org/core/>
         prefix omekg: <https://ld.openmicroscopy.org/omekg/>
         prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
 
         SELECT distinct ?project ?dataset ?image ?image_name  WHERE {{
-            ?project a omekg:Project ;
-                     omeprop:dataset ?dataset .
-            ?dataset a omekg:Dataset ;
-                     omeprop:image ?image .
-            ?image a omekg:Image ;
+            ?project a ome_core:Project ;
+                     ome_core:dataset ?dataset .
+            ?dataset a ome_core:Dataset ;
+                     ome_core:image ?image .
+            ?image a ome_core:Image ;
                    rdfs:label ?image_name .
         }}
         """
@@ -508,12 +505,11 @@ select ?n_projects ?n_datasets ?n_images where {{
 prefix ome_core: <https://ld.openmicroscopy.org/core/>
 prefix kg: <https://ld.openmicroscopy.org/omekg/>
 prefix kgprops: <https://ld.openmicroscopy.org/omekg#>
-SELECT distinct ?img ?roi WHERE {
+select ?img ?roi where {
+    ?roi a ome_core:ROI .
     ?img a ome_core:Image;
-         ^kgprops:image ?roi .
-    ?roi a kg:ROI .
+         ^ome_core:image ?roi .
 }
-        order by ?img
 """
 
         # Run query.
