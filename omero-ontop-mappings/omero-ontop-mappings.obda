@@ -20,9 +20,39 @@ dcterms:		http://purl.org/dc/terms/
 ome_instance:	https://example.org/site/
 
 [MappingDeclaration] @collection [[
+mappingId	MAPID-classes
+target		ome_instance:{Cls}/{id} a core:{Cls} . 
+source		select id, concat(upper(left(cls,1)), right(cls, -1)) as Cls from (
+			(select id,tableoid::regclass::text as cls, group_id from pixels)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from image)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from project)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from dataset)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from well)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from plate)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from screen)
+			union
+			(select id,upper(tableoid::regclass::text) as cls, group_id from roi)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from plateacquisition)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from channel)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from wellsample)
+			) as object
+			where group_id in (
+			select parent as group_id from groupexperimentermap
+			where child=0
+			)
+
 mappingId	MAPID-a82bd3b7cfc1481d9bfb00ff145016a8
 target		ome_instance:{Cls}/{id} a core:{Cls} ; dc:identifier {id}^^xsd:integer ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; core:owner ome_instance:Experimenter/{owner_id} ; core:group ome_instance:ExperimenterGroup/{group_id} ; this:update_id {update_id}^^xsd:integer ; this:creation_id {creation_id}^^xsd:integer . 
-source		select id, initcap(cls) as Cls, owner_id, group_id, description, name, update_id, creation_id from (
+source		select id, concat(upper(left(cls,1)), right(cls, -1)) as Cls, owner_id, group_id, description, name, update_id, creation_id from (
 			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, NULL as description, name from pixels)
 			union
 			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, description, name from image)
@@ -37,7 +67,7 @@ source		select id, initcap(cls) as Cls, owner_id, group_id, description, name, u
 			union
 			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, description, name from screen)
 			union
-			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, description, name from roi)
+			(select id,upper(tableoid::regclass::text) as cls, owner_id, group_id, update_id, creation_id, description, name from roi)
 			union
 			(select id,tableoid::regclass::text as cls, owner_id, group_id, update_id, creation_id, description, name from plateacquisition)
 			union
@@ -386,5 +416,13 @@ source		select id, alpha, red, green, blue, pixels as pixels_id from channel
 mappingId	MAPID-ada4e8268d2e4546a2578e6aae8ccea6
 target		ome_instance:Pixels/{id} a :Pixels ; this:image ome_instance:Image/{image_id} ; this:physical_size_x {physicalsizex}^^xsd:float ; this:physical_size_x_unit {physicalsizexunit}^^xsd:string ; this:physical_size_y {physicalsizey}^^xsd:float ; this:physical_size_y_unit {physicalsizeyunit}^^xsd:string ; this:physical_size_z {physicalsizez}^^xsd:float ; this:physical_size_z_unit {physicalsizezunit}^^xsd:string . 
 source		select id, image as image_id, physicalsizex, physicalsizexunit, physicalsizey, physicalsizeyunit, physicalsizez, physicalsizezunit from pixels
+
+mappingId	MAPID-roi-image
+target		ome_instance:ROI/{roi_id} core:image ome_instance:Image/{image_id} . 
+source		select
+			_image.id as image_id,
+			_roi.id as roi_id
+			from roi as _roi
+			left join image as _image on _roi.image = _image.id
 ]]
 

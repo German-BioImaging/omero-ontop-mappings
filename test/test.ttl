@@ -8,7 +8,9 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix obda: <https://w3id.org/obda/vocabulary#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix site: <http://example.org/> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix test: <http://test.me/> .
 @prefix this: <https://ld.openmicroscopy.org/omekg#> .
 @prefix omekg: <https://ld.openmicroscopy.org/omekg/> .
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
@@ -18,7 +20,7 @@
 @base <https://ld.openmicroscopy.org/omekg/> .
 
 <https://ld.openmicroscopy.org/omekg> rdf:type owl:Ontology ;
-    owl:imports rdfs: ,
+                                       owl:imports rdfs: ,
                                                    core: ;
                                        dcterms:license "https://creativecommons.org/publicdomain/zero/1.0/" ;
                                        rdfs:label "OMERO VKG Ontology" ;
@@ -43,7 +45,7 @@ dc:contributor rdf:type owl:AnnotationProperty ;
                rdfs:comment "An entity responsible for making contributions to the resource."@en ;
                rdfs:isDefinedBy dc: ;
                rdfs:label "Contributor"@en ;
-    skos:note "A [second property](/specifications/dublin-core/dcmi-terms/#http://purl.org/dc/terms/contributor) with the same name as this property has been declared in the [dcterms: namespace](http://purl.org/dc/terms/).  See the Introduction to the document [DCMI Metadata Terms](/specifications/dublin-core/dcmi-terms/) for an explanation."@en .
+               skos:note "A [second property](/specifications/dublin-core/dcmi-terms/#http://purl.org/dc/terms/contributor) with the same name as this property has been declared in the [dcterms: namespace](http://purl.org/dc/terms/).  See the Introduction to the document [DCMI Metadata Terms](/specifications/dublin-core/dcmi-terms/) for an explanation."@en .
 
 
 ###  http://purl.org/dc/elements/1.1/coverage
