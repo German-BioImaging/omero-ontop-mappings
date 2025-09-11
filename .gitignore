@@ -14,3 +14,4 @@ test/test.ttl
 test/test.properties
 test-ontop.sh
 test/test.ttl
+*.q
