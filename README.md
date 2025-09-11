@@ -74,13 +74,6 @@ cd .omero
 patch -p1 < portmapping.patch
 cd ..
 ```
-
-### Add ontop database user
-This step must be redone every time after resetting the test infrastructure.
-```console
-utils/setup_ontop_dbuser.sh
-```
-
 ### Get omero-py
 Install omero-py via pip or from conda-forge. The script /utils\/install_omero-py.sh/ downloads and installs miniconda to the user's home directory and install omero-py as well as pytest and rdflib into the base environment.
 
@@ -92,6 +85,12 @@ source utils/install_omero-py.sh
 ```console
 .omero/docker dev start_up
 ```
+### Add ontop database user
+This step must be redone every time after resetting the test infrastructure.
+```console
+utils/setup_ontop_dbuser.sh
+```
+
 
 ### Populate omero with test data.
 We need something to play with, so let's create some projects and datasets, import a few images and annotate 
