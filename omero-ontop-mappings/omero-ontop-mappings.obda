@@ -20,6 +20,36 @@ dcterms:		http://purl.org/dc/terms/
 ome_instance:	https://example.org/site/
 
 [MappingDeclaration] @collection [[
+mappingId	MAPID-classes
+target		ome_instance:{Cls}/{id} a core:{Cls} .
+source		select id, initcap(cls) as Cls from (
+			(select id,tableoid::regclass::text as cls, group_id from pixels)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from image)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from project)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from dataset)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from well)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from plate)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from screen)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from roi)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from plateacquisition)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from channel)
+			union
+			(select id,tableoid::regclass::text as cls, group_id from wellsample)
+			) as object
+			where group_id in (
+			select parent as group_id from groupexperimentermap
+			where child=0
+			)
+
 mappingId	MAPID-a82bd3b7cfc1481d9bfb00ff145016a8
 target		ome_instance:{Cls}/{id} a core:{Cls} ; dc:identifier {id}^^xsd:integer ; rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; core:owner ome_instance:Experimenter/{owner_id} ; core:group ome_instance:ExperimenterGroup/{group_id} ; this:update_id {update_id}^^xsd:integer ; this:creation_id {creation_id}^^xsd:integer . 
 source		select id, initcap(cls) as Cls, owner_id, group_id, description, name, update_id, creation_id from (

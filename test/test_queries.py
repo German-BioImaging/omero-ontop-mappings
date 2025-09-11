@@ -312,21 +312,19 @@ select ?n_projects ?n_datasets ?n_images where {{
     def test_dataset_core(self):
         """ Test query with the core prefix and ontology. """
 
-        graph = self._graph
-
         query_string = f"""
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
 
         SELECT distinct ?ds WHERE {{
-          SERVICE <{ENDPOINT}> {{
             ?ds a ome_core:Dataset .
-          }}
         }}
         limit 10
         """
 
         # Run the query.
-        response = graph.query(query_string)
+        response = run_query(query_string)
+
+        print(response.to_string())
 
         # Test.
         self.assertEqual(len(response), 3)
