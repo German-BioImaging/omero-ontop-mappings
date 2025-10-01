@@ -20,186 +20,85 @@ dcterms:		http://purl.org/dc/terms/
 ome_instance:	https://example.org/site/
 
 [MappingDeclaration] @collection [[
-mappingID image-id
-target    ome_instance:Image/{id} a core:Image; dc:identifier {id}^^xsd:integer .
-source select id, group_id
-from image
-where group_id in (
-select parent as group_id from groupexperimentermap
-where child=0
-)
+mappingId	image-id
+target		ome_instance:Image/{id} a core:Image ; dc:identifier {id}^^xsd:integer . 
+source		select id, group_id from image where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingID dataset-id
-target    ome_instance:Dataset/{id} a core:Dataset; dc:identifier {id}^^xsd:integer .
-source select id, group_id
-from dataset
-where group_id in (
-select parent as group_id from groupexperimentermap
-where child=0
-)
-mappingID project-id
-target    ome_instance:Project/{id} a core:Project; dc:identifier {id}^^xsd:integer .
-source select id, group_id
-from project
-where group_id in (
-select parent as group_id from groupexperimentermap
-where child=0
-)
+mappingId	dataset-id
+target		ome_instance:Dataset/{id} a core:Dataset ; dc:identifier {id}^^xsd:integer . 
+source		select id, group_id from dataset where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingID well-id
-target    ome_instance:Well/{id} a core:Image; dc:identifier {id}^^xsd:integer .
-source select id, group_id
-from well
-where group_id in (
-select parent as group_id from groupexperimentermap
-where child=0
-)
+mappingId	project-id
+target		ome_instance:Project/{id} a core:Project ; dc:identifier {id}^^xsd:integer . 
+source		select id, group_id from project where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingID plate-id
-target    ome_instance:Plate/{id} a core:Plate; dc:identifier {id}^^xsd:integer .
-source select id, group_id
-from plate
-where group_id in (
-select parent as group_id from groupexperimentermap
-where child=0
-)
+mappingId	well-id
+target		ome_instance:Well/{id} a core:Image ; dc:identifier {id}^^xsd:integer . 
+source		select id, group_id from well where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingID screen-id
-target    ome_instance:Screen/{id} a core:Screen; dc:identifier {id}^^xsd:integer .
-source select id, group_id
-from screen
-where group_id in (
-select parent as group_id from groupexperimentermap
-where child=0
-)
+mappingId	plate-id
+target		ome_instance:Plate/{id} a core:Plate ; dc:identifier {id}^^xsd:integer . 
+source		select id, group_id from plate where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingID roi-id
-target    ome_instance:Roi/{id} a core:Image; dc:identifier {id}^^xsd:integer .
-source select id, group_id
-from roi
-where group_id in (
-select parent as group_id from groupexperimentermap
-where child=0
-)
+mappingId	screen-id
+target		ome_instance:Screen/{id} a core:Screen ; dc:identifier {id}^^xsd:integer . 
+source		select id, group_id from screen where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingID plateacquisition-id
-target    ome_instance:Plateacquisition/{id} a core:Plateacquisition; dc:identifier {id}^^xsd:integer .
-source select id, group_id
-from plateacquisition
-where group_id in (
-select parent as group_id from groupexperimentermap
-where child=0
-)
+mappingId	roi-id
+target		ome_instance:ROI/{id} a core:Image ; dc:identifier {id}^^xsd:integer . 
+source		select id, group_id from roi where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingID channel-id
-target    ome_instance:Channel/{id} a core:Channel; dc:identifier {id}^^xsd:integer .
-source select id, group_id
-from channel
-where group_id in (
-select parent as group_id from groupexperimentermap
-where child=0
-)
+mappingId	plateacquisition-id
+target		ome_instance:Plateacquisition/{id} a core:PlateAcquisition ; dc:identifier {id}^^xsd:integer . 
+source		select id, group_id from plateacquisition where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingID wellsample-id
-target    ome_instance:Wellsample/{id} a core:Wellsample; dc:identifier {id}^^xsd:integer .
-source select id, group_id
-from wellsample
-where group_id in (
-select parent as group_id from groupexperimentermap
-where child=0
-)
+mappingId	channel-id
+target		ome_instance:Channel/{id} a core:Channel ; dc:identifier {id}^^xsd:integer . 
+source		select id, group_id from channel where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingId image-attributes
-target ome_instance:Image/{id} rdfs:label {name}^^xsd:string; rdfs:comment {description}^^xsd:string; core:owner ome_instance:Experimenter/{owner_id} ; core_group ome_instance:ExperimenterGroup/{group_id} .
-source select id, name, description, owner_id, group_id
-       from image
-       where group_id in (
-             select parent_as group_id from groupexperimentermap
-             where child=0
-       )
-mappingId image-attributes
-target ome_instance:Dataset/{id} rdfs:label {name}^^xsd:string; rdfs:comment {description}^^xsd:string; core:owner ome_instance:Experimenter/{owner_id} ; core_group ome_instance:ExperimenterGroup/{group_id} .
-source select id, name, description, owner_id, group_id
-       from dataset
-       where group_id in (
-             select parent_as group_id from groupexperimentermap
-             where child=0
-       )
+mappingId	wellsample-id
+target		ome_instance:WellSample/{id} a core:WellSample ; dc:identifier {id}^^xsd:integer . 
+source		select id, group_id from wellsample where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingId project-attributes
-target ome_instance:Project/{id} rdfs:label {name}^^xsd:string; rdfs:comment {description}^^xsd:string; core:owner ome_instance:Experimenter/{owner_id} ; core_group ome_instance:ExperimenterGroup/{group_id} .
-source select id, name, description, owner_id, group_id
-       from project
-       where group_id in (
-             select parent_as group_id from groupexperimentermap
-             where child=0
-       )
+mappingId	image-attributes
+target		ome_instance:Image/{id} rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; core:owner ome_instance:Experimenter/{owner_id} ; core:group ome_instance:ExperimenterGroup/{group_id} . 
+source		select id, name, description, owner_id, group_id from image where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingId screen-attributes
-target ome_instance:Screen/{id} rdfs:label {name}^^xsd:string; rdfs:comment {description}^^xsd:string; core:owner ome_instance:Experimenter/{owner_id} ; core_group ome_instance:ExperimenterGroup/{group_id} .
-source select id, name, description, owner_id, group_id
-       from screen
-       where group_id in (
-             select parent_as group_id from groupexperimentermap
-             where child=0
-       )
+mappingId	dataset-attributes
+target		ome_instance:Dataset/{id} rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; core:owner ome_instance:Experimenter/{owner_id} ; core:group ome_instance:ExperimenterGroup/{group_id} . 
+source		select id, name, description, owner_id, group_id from dataset where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingId well-attributes
-target ome_instance:Well/{id} rdfs:label {name}^^xsd:string; rdfs:comment {description}^^xsd:string; core:owner ome_instance:Experimenter/{owner_id} ; core_group ome_instance:ExperimenterGroup/{group_id} .
-source select id, name, description, owner_id, group_id
-       from well
-       where group_id in (
-             select parent_as group_id from groupexperimentermap
-             where child=0
-       )
+mappingId	project-attributes
+target		ome_instance:Project/{id} rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; core:owner ome_instance:Experimenter/{owner_id} ; core:group ome_instance:ExperimenterGroup/{group_id} . 
+source		select id, name, description, owner_id, group_id from project where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingId plate-attributes
-target ome_instance:Plate/{id} rdfs:label {name}^^xsd:string; rdfs:comment {description}^^xsd:string; core:owner ome_instance:Experimenter/{owner_id} ; core_group ome_instance:ExperimenterGroup/{group_id} .
-source select id, name, description, owner_id, group_id
-       from plate
-       where group_id in (
-             select parent_as group_id from groupexperimentermap
-             where child=0
-       )
+mappingId	screen-attributes
+target		ome_instance:Screen/{id} rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; core:owner ome_instance:Experimenter/{owner_id} ; core:group ome_instance:ExperimenterGroup/{group_id} . 
+source		select id, name, description, owner_id, group_id from screen where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingId plateacquisition-attributes
-target ome_instance:Plateacquisition/{id} rdfs:label {name}^^xsd:string; rdfs:comment {description}^^xsd:string; core:owner ome_instance:Experimenter/{owner_id} ; core_group ome_instance:ExperimenterGroup/{group_id} .
-source select id, name, description, owner_id, group_id
-       from plateacquisition
-       where group_id in (
-             select parent_as group_id from groupexperimentermap
-             where child=0
-       )
+mappingId	well-attributes
+target		ome_instance:Well/{id} core:owner ome_instance:Experimenter/{owner_id} ; core:group ome_instance:ExperimenterGroup/{group_id} . 
+source		select id, owner_id, group_id from well where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingId roi-attributes
-target ome_instance:Roi/{id} rdfs:label {name}^^xsd:string; rdfs:comment {description}^^xsd:string; core:owner ome_instance:Experimenter/{owner_id} ; core_group ome_instance:ExperimenterGroup/{group_id} .
-source select id, name, description, owner_id, group_id
-       from image
-       where group_id in (
-             select parent_as group_id from groupexperimentermap
-             where child=0
-       )
+mappingId	plate-attributes
+target		ome_instance:Plate/{id} rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; core:owner ome_instance:Experimenter/{owner_id} ; core:group ome_instance:ExperimenterGroup/{group_id} . 
+source		select id, name, description, owner_id, group_id from plate where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingId channel-attributes
-target ome_instance:Channel/{id} rdfs:label {name}^^xsd:string; rdfs:comment {description}^^xsd:string; core:owner ome_instance:Experimenter/{owner_id} ; core_group ome_instance:ExperimenterGroup/{group_id} .
-source select id, owner_id, group_id
-       from channel
-       where group_id in (
-             select parent_as group_id from groupexperimentermap
-             where child=0
-       )
+mappingId	plateacquisition-attributes
+target		ome_instance:PlateAcquisition/{id} rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; core:owner ome_instance:Experimenter/{owner_id} ; core:group ome_instance:ExperimenterGroup/{group_id} . 
+source		select id, name, description, owner_id, group_id from plateacquisition where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingId wellsample-attributes
-target ome_instance:Wellsample/{id} rdfs:label {name}^^xsd:string;
-                               rdfs:comment {description}^^xsd:string;
-                               core:owner ome_instance:Experimenter/{owner_id} ;
-                               core_group ome_instance:ExperimenterGroup/{group_id} .
-source select id, owner_id, group_id
-       from wellsample
-       where group_id in (
-             select parent_as group_id from groupexperimentermap
-             where child=0
-       )
+mappingId	roi-attributes
+target		ome_instance:ROI/{id} rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; core:owner ome_instance:Experimenter/{owner_id} ; core:group ome_instance:ExperimenterGroup/{group_id} . 
+source		select id, name, description, owner_id, group_id from image where group_id in (select parent as group_id from groupexperimentermap where child=0)
+
+mappingId	channel-attributes
+target		ome_instance:Channel/{id} core:owner ome_instance:Experimenter/{owner_id} ; core:group ome_instance:ExperimenterGroup/{group_id} . 
+source		select id, owner_id, group_id from channel where group_id in (select parent as group_id from groupexperimentermap where child=0)
+
+mappingId	wellsample-attributes
+target		ome_instance:WellSample/{id} core:owner ome_instance:Experimenter/{owner_id} ; core:group ome_instance:ExperimenterGroup/{group_id} . 
+source		select id, owner_id, group_id from wellsample where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
 mappingId	MAPID-project-1
 target		ome_instance:Project/{project_id} core:dataset ome_instance:Dataset/{dataset_id} . 

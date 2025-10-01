@@ -294,8 +294,70 @@ order by ?class
 * Queries against localhost
 :PROPERTIES:
 :ID:       059e06f4-bd2b-4ec1-8280-7c25d62a66fa
-:header-args:sparql: :url http://localhost:8080/sparql :cache nil
+:header-args:sparql: :url http://localhost:8080/sparql :cache nil :noweb yes
+:mappings: omero-ontop-mappings
 :END:
+
+#+name prefixes
+#+begin_src sparql :noweb yes
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+PREFIX obda: <https://w3id.org/obda/vocabulary#>
+PREFIX xml: <http://www.w3.org/XML/1998/namespace/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix site: <https://example.org/site/>
+prefix image: <https://example.org/site/Image/>
+#+end_src
+
+#+RESULTS:
+| HTTP/1.1 400                           |                          |
+|----------------------------------------+--------------------------|
+| Vary: Origin                           |                          |
+| Vary: Access-Control-Request-Method    |                          |
+| Vary: Access-Control-Request-Headers   |                          |
+| Content-Type: text/plain;charset=UTF-8 |                          |
+| Content-Length: 171                    |                          |
+| Date: Wed                              | 01 Oct 2025 13:47:36 GMT |
+| Connection: close                      |                          |
+|                                        |                          |
+| Encountered "<EOF>" at line 12         | column 47.               |
+| Was expecting one of:                  |                          |
+| base ...                               |                          |
+| prefix ...                             |                          |
+| select ...                             |                          |
+| construct ...                          |                          |
+| describe ...                           |                          |
+| ask ...                                |                          |
+|                                        |                          |
+
+** SPO
+:PROPERTIES:
+:ID:       641a4dbb-2590-4db8-a64d-2173554690fd
+:END:
+#+begin_src sparql
+  select * where {
+    ?s ?p ?o .
+    }
+  limit 10
+#+end_src
+
+#+RESULTS:
+| s                                                           | p                                               | o                                      |
+|-------------------------------------------------------------+-------------------------------------------------+----------------------------------------|
+| https://ld.openmicroscopy.org/core/binary_only              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/interleaved              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/font_family              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/column_naming_convention | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/contrast_method          | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/microscope               | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/experiment               | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/stage_label              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/id                       | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/experimenter_group       | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
 
 ** Project
 :PROPERTIES:
@@ -456,16 +518,26 @@ order by ?class
 :PROPERTIES:
 :ID:       9a7fae93-80a0-4cf9-b889-a60113b9bf01
 :END:
-#+begin_src sparql :url http://localhost:8080/sparql :async yes
-  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+#+begin_src sparql
+  <<prefixes>>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+PREFIX obda: <https://w3id.org/obda/vocabulary#>
+PREFIX xml: <http://www.w3.org/XML/1998/namespace/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix site: <https://example.org/site/>
+prefix image: <https://example.org/site/Image/>
 
   SELECT distinct *  WHERE {
-      ?project a omekg:Project ;
-                omeprop:dataset ?dataset .
-      ?dataset a omekg:Dataset ;
-                omeprop:image ?image .
-      ?image a omekg:Image ;
+      ?project a omecore:Project ;
+                omecore:dataset ?dataset .
+      ?dataset a omecore:Dataset ;
+                omecore:image ?image .
+      ?image a omecore:Image ;
               rdfs:label ?image_name .
   }
 #+end_src
@@ -473,18 +545,18 @@ order by ?class
 #+RESULTS:
 | project                            | dataset                            | image                             | image_name                                 |
 |------------------------------------+------------------------------------+-----------------------------------+--------------------------------------------|
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/7  | 2024-10-10_15-07-18_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/3  | 2024-10-10_15-17-25_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/12 | image_6_with_roi.ome.tif                   |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/11 | 2024-10-10_15-28-16_screenshot.png.ome.tif |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/2  | 2024-10-10_14-53-28_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/5  | 2024-10-10_15-01-36_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/8  | 2024-10-10_16-47-01_screenshot.png         |
 | https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/1  | 2024-10-10_14-58-36_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/10 | 2024-10-10_16-39-27_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/9  | 2024-10-10_16-42-47_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/6  | 2024-10-10_15-09-28_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/4  | 2024-10-10_15-28-16_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/2  | 2024-10-10_14-53-28_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/11 | 2024-10-10_15-28-16_screenshot.png.ome.tif |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/12 | image_6_with_roi.ome.tif                   |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/3  | 2024-10-10_15-28-16_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/4  | 2024-10-10_15-09-28_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/5  | 2024-10-10_15-07-18_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/6  | 2024-10-10_15-01-36_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/7  | 2024-10-10_15-17-25_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/10 | 2024-10-10_16-42-47_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/8  | 2024-10-10_16-47-01_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/9  | 2024-10-10_16-39-27_screenshot.png         |
 
 ** Image with ROI
 :PROPERTIES:
@@ -1588,3 +1660,4 @@ LIMIT 100
 | https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Encephalomyocarditis virus                                              |
 | https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Encephalomyocarditis virus (strain emc-b nondiabetogenic)               |
 | https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Encephalomyocarditis virus (strain emc-d diabetogenic)                  |
+
