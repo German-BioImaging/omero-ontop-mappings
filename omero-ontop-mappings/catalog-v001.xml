@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <uri id="Imports Wizard Entry" name="http://xmlns.com/foaf/0.1/" uri="http://xmlns.com/foaf/spec/"/>
+    <uri id="Imports Wizard Entry" name="http://xmlns.com/foaf/0.1/" uri="http://xmlns.com/foaf/spec/index.rdf"/>
     <uri id="User Edited Redirect" name="dcat" uri="https://github.com/w3c/dxwg/tree/gh-pages/dcat/rdf/dcat3.ttl"/>
     <uri id="ome_core" name="https://ld.openmicroscopy.org/core/" uri="https://joshmoore.github.io/ome-ld/_downloads/17de156c24f8ac1033e1c1979ab43646/model.owl.ttl"/>
     <uri id="DC elements" name="http://purl.org/dc/elements/1.1/" uri="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_elements.ttl"/>

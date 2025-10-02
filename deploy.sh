@@ -35,7 +35,7 @@ cp -v omero-ontop-mappings/portal.toml ${PREFIX}/.
 cat omero-ontop-mappings/omero-ontop-mappings.obda | \
     sed "s/ome_instance/${PREFIX}/g" | \
     sed "s/https:\/\/example\.org\/site\//${ESCSITE}/g" | \
-    sed "s/owner_id=0/owner_id${PUBLICCOND}/" > \
+    sed "s/select parent as group_id from groupexperimentermap where child=0/select parent as group_id from groupexperimentermap where child${PUBLICCOND}/" > \
     ${PREFIX}/${PREFIX}.obda
 
 # Adjust ontop launch script
