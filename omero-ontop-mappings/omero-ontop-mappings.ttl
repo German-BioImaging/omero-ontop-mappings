@@ -21,6 +21,7 @@
 
 <https://ld.openmicroscopy.org/omekg> rdf:type owl:Ontology ;
                                        owl:imports rdfs: ,
+                                                   foaf: ,
                                                    core: ;
                                        dcterms:license "https://creativecommons.org/publicdomain/zero/1.0/" ;
                                        rdfs:label "OMERO VKG Ontology" ;

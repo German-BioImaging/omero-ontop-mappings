@@ -444,5 +444,25 @@ source		select
 			_roi.id as roi_id
 			from roi as _roi
 			left join image as _image on _roi.image = _image.id
+
+mappingId	experimenter-id
+target		ome_instance:Experimenter/{id} a core:Experimenter ; dc:identifier {id}^^xsd:integer . 
+source		select id from experimenter
+
+mappingId	experimentergroup-id
+target		ome_instance:ExperimenterGroup/{id} a core:ExperimenterGroup ; dc:identifier {id}^^xsd:integer . 
+source		select id from experimentergroup
+
+mappingId	experimenter-props
+target		ome_instance:Experimenter/{id} foaf:firstName {firstname} ; foaf:lastName {lastname} ; foaf:middleName {middlename} . 
+source		select id, firstname, middlename, lastname from experimenter
+
+mappingId	experimentergroup-props
+target		ome_instance:ExperimenterGroup/{id} rdfs:label {name} . 
+source		select id, name from experimentergroup
+
+mappingId	MAPID-46c04d4dc2634ed7ac794eb82be9820a
+target		ome_instance:Experimenter/{child} core:group ome_instance:ExperimenterGroup/{parent} . 
+source		select child, parent from groupexperimentermap
 ]]
 
