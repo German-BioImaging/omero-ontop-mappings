@@ -1,344 +1,42 @@
-* Queries against micropop046
-:PROPERTIES:
-:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
-:END:
-#+begin_src sparql :url http://micropop046:8080/sparql
-  PREFIX : <https://www.openmicroscopy.org/omemap/>
-  PREFIX owl: <http://www.w3.org/2002/07/owl#>
-  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-  PREFIX obda: <https://w3id.org/obda/vocabulary#>
-  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
-
-  select distinct  ?project ?typ where {
-  ?project a ome_core:Project ;
-      rdf:type ?typ ;
-  }
-  limit 10
-#+end_src
-
-#+RESULTS:
-| project                            | typ                                         |
-|------------------------------------+---------------------------------------------|
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg/Project |
-| https://example.org/site/Project/1 | https://ld.openmicroscopy.org/omekg/Project |
-| https://example.org/site/Project/1 | https://ld.openmicroscopy.org/core/Project  |
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/core/Project  |
-
-** Project ownership
-:PROPERTIES:
-:ID:       e44a31a1-42f2-48a7-a7f4-bf396911a5e4
-:END:
-#+begin_src sparql :url http://micropop046:8080/sparql
-  PREFIX : <https://www.openmicroscopy.org/omemap/>
-  PREFIX owl: <http://www.w3.org/2002/07/owl#>
-  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-  PREFIX obda: <https://w3id.org/obda/vocabulary#>
-  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
-
-  select distinct ?project  ?prop ?val where {
-  ?project a ome_core:Project ;
-      ?prop ?val
-  }
-  limit 100
-#+end_src
-
-#+RESULTS:
-| project                            | prop                                                   | val                                          |
-|------------------------------------+--------------------------------------------------------+----------------------------------------------|
-| https://example.org/site/Project/2 | http://purl.org/dc/elements/1.1/identifier             | 2                                            |
-| https://example.org/site/Project/2 | http://purl.org/dc/terms/contributor                   | Nophretete                                   |
-| https://example.org/site/Project/2 | http://purl.org/dc/terms/provenance                    | Test Data                                    |
-| https://example.org/site/Project/2 | http://purl.org/dc/terms/subject                       | OMERO Ontology                               |
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/core/experimenter        | https://example.org/site/Experimenter/2      |
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/core/experimenter_group  | https://example.org/site/ExperimenterGroup/3 |
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#creation_id        | 738                                          |
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#dataset            | https://example.org/site/Dataset/4           |
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#dataset            | https://example.org/site/Dataset/5           |
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#dataset            | https://example.org/site/Dataset/6           |
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#experimenter       | https://example.org/site/Experimenter/2      |
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#experimenter_group | https://example.org/site/ExperimenterGroup/3 |
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#group              | https://example.org/site/ExperimenterGroup/3 |
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#owner              | https://example.org/site/Experimenter/2      |
-| https://example.org/site/Project/2 | https://ld.openmicroscopy.org/omekg#update_id          | 820                                          |
-| https://example.org/site/Project/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type        | https://ld.openmicroscopy.org/core/Project   |
-| https://example.org/site/Project/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type        | https://ld.openmicroscopy.org/omekg/Project  |
-| https://example.org/site/Project/2 | http://www.w3.org/2000/01/rdf-schema#label             | Public Project                               |
-#+begin_src sparql :url http://localhost:8080/sparql
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-SELECT DISTINCT ?class ?property
-WHERE {
-  ?subject a ?class ;
-           ?property ?val .
-}
-order by ?class
-#+end_src
-
-#+RESULTS:
-| class                                                         | property                                                            |                |
-|---------------------------------------------------------------+---------------------------------------------------------------------+----------------|
-| http://purl.org/dc/dcam/VocabularyEncodingScheme              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| http://purl.org/dc/terms/AgentClass                           | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| http://www.w3.org/2000/01/rdf-schema#Class                    | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| http://www.w3.org/2000/01/rdf-schema#Resource                 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| http://xmlns.com/foaf/0.1/Person                              | http://purl.org/dc/elements/1.1/identifier                          |                |
-| http://xmlns.com/foaf/0.1/Person                              | http://xmlns.com/foaf/0.1/lastName                                  |                |
-| http://xmlns.com/foaf/0.1/Person                              | http://xmlns.com/foaf/0.1/firstName                                 |                |
-| http://xmlns.com/foaf/0.1/Person                              | http://xmlns.com/foaf/0.1/email                                     |                |
-| http://xmlns.com/foaf/0.1/Person                              | http://xmlns.com/foaf/0.1/name                                      |                |
-| http://xmlns.com/foaf/0.1/Person                              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/ArcType                    | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/BinDataCompression         | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Binning                    | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Channel                    | https://ld.openmicroscopy.org/omekg#green                           |                |
-| https://ld.openmicroscopy.org/core/Channel                    | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/core/Channel                    | https://ld.openmicroscopy.org/omekg#pixels                          |                |
-| https://ld.openmicroscopy.org/core/Channel                    | https://ld.openmicroscopy.org/omekg#red                             |                |
-| https://ld.openmicroscopy.org/core/Channel                    | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Channel                    | https://ld.openmicroscopy.org/omekg#blue                            |                |
-| https://ld.openmicroscopy.org/core/ChannelAcquisitionMode     | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/ChannelContrastMethod      | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/ChannelIlluminationType    | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.openmicroscopy.org/ns/default/Study                      |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.openmicroscopy.org/ns/default/Phenotype                  |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.openmicroscopy.org/ns/default/Investigation              |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.openmicroscopy.org/ns/default/MPB                        |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | https://ld.openmicroscopy.org/omekg#owner                           |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.openmicroscopy.org/ns/default/Assay                      |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | https://ld.openmicroscopy.org/core/experimenter                     |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | https://ld.openmicroscopy.org/omekg#experimenter                    |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.openmicroscopy.org/ns/default/Parent                     |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.w3.org/2000/01/rdf-schema#label                          |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.openmicroscopy.org/ns/default/Organism                   |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.w3.org/2000/01/rdf-schema#comment                        |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.openmicroscopy.org/ns/default/Type                       |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.openmicroscopy.org/ns/default/Genotype                   |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | http://www.openmicroscopy.org/ns/default/Strain                     |                |
-| https://ld.openmicroscopy.org/core/Dataset                    | https://ld.openmicroscopy.org/omekg#image                           |                |
-| https://ld.openmicroscopy.org/core/DetectorType               | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/ExperimentValue            | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Experimenter               | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Experimenter               | http://xmlns.com/foaf/0.1/email                                     |                |
-| https://ld.openmicroscopy.org/core/Experimenter               | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/core/Experimenter               | http://xmlns.com/foaf/0.1/firstName                                 |                |
-| https://ld.openmicroscopy.org/core/Experimenter               | http://xmlns.com/foaf/0.1/lastName                                  |                |
-| https://ld.openmicroscopy.org/core/Experimenter               | http://xmlns.com/foaf/0.1/name                                      |                |
-| https://ld.openmicroscopy.org/core/ExperimenterGroup          | http://xmlns.com/foaf/0.1/name                                      |                |
-| https://ld.openmicroscopy.org/core/ExperimenterGroup          | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/ExperimenterGroup          | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/core/ExternalCompression        | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/FilamentType               | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/FilterType                 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/core/Image                      | https://ld.openmicroscopy.org/core/experimenter                     |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/original_user              |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/origin_hostname            |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/MPB                        |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/md5                        |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/packing_timestamp          |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/version                    |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/OME-Model0#OME:Experiment0 | ExperimentType |
-| https://ld.openmicroscopy.org/core/Image                      | https://ld.openmicroscopy.org/omekg#owner                           |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/Organism                   |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/Type                       |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/software                   |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/Phenotype                  |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.w3.org/2000/01/rdf-schema#label                          |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/Investigation              |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/Genotype                   |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/Study                      |                |
-| https://ld.openmicroscopy.org/core/Image                      | https://ld.openmicroscopy.org/omekg#experimenter                    |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/origin_image_id            |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/Assay                      |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/Strain                     |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/original_group             |                |
-| https://ld.openmicroscopy.org/core/Image                      | http://www.openmicroscopy.org/ns/default/Parent                     |                |
-| https://ld.openmicroscopy.org/core/Image                      | https://ld.openmicroscopy.org/omekg#acquisition_date                |                |
-| https://ld.openmicroscopy.org/core/LaserLaserMedium           | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/LaserPulse                 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/LaserType                  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Marker                     | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/MicrobeamManipulationValue | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/MicroscopeType             | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/NamingConvention           | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/ObjectiveCorrection        | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/ObjectiveImmersion         | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/ObjectiveSettingsMedium    | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/PixelType                  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Pixels                     | https://ld.openmicroscopy.org/omekg#image                           |                |
-| https://ld.openmicroscopy.org/core/Pixels                     | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/PixelsDimensionOrder       | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Project                    | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/Project                    | https://ld.openmicroscopy.org/omekg#experimenter_group              |                |
-| https://ld.openmicroscopy.org/core/Project                    | https://ld.openmicroscopy.org/omekg#creation_id                     |                |
-| https://ld.openmicroscopy.org/core/Project                    | http://www.w3.org/2000/01/rdf-schema#label                          |                |
-| https://ld.openmicroscopy.org/core/Project                    | https://ld.openmicroscopy.org/core/experimenter                     |                |
-| https://ld.openmicroscopy.org/core/Project                    | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/core/Project                    | https://ld.openmicroscopy.org/omekg#owner                           |                |
-| https://ld.openmicroscopy.org/core/Project                    | https://ld.openmicroscopy.org/omekg#dataset                         |                |
-| https://ld.openmicroscopy.org/core/Project                    | https://ld.openmicroscopy.org/core/experimenter_group               |                |
-| https://ld.openmicroscopy.org/core/Project                    | http://www.w3.org/2000/01/rdf-schema#comment                        |                |
-| https://ld.openmicroscopy.org/core/Project                    | https://ld.openmicroscopy.org/omekg#experimenter                    |                |
-| https://ld.openmicroscopy.org/core/Project                    | https://ld.openmicroscopy.org/omekg#group                           |                |
-| https://ld.openmicroscopy.org/core/Project                    | https://ld.openmicroscopy.org/omekg#update_id                       |                |
-| https://ld.openmicroscopy.org/core/ShapeFillRule              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/ShapeFontFamily            | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/ShapeFontStyle             | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/UnitsElectricPotential     | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/UnitsFrequency             | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/UnitsLength                | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/UnitsPower                 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/UnitsPressure              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/UnitsTemperature           | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/core/UnitsTime                  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/omekg/Channel                   | https://ld.openmicroscopy.org/omekg#blue                            |                |
-| https://ld.openmicroscopy.org/omekg/Channel                   | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/omekg/Channel                   | https://ld.openmicroscopy.org/omekg#pixels                          |                |
-| https://ld.openmicroscopy.org/omekg/Channel                   | https://ld.openmicroscopy.org/omekg#green                           |                |
-| https://ld.openmicroscopy.org/omekg/Channel                   | https://ld.openmicroscopy.org/omekg#red                             |                |
-| https://ld.openmicroscopy.org/omekg/Channel                   | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.openmicroscopy.org/ns/default/Phenotype                  |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.openmicroscopy.org/ns/default/Parent                     |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | https://ld.openmicroscopy.org/core/experimenter                     |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.w3.org/2000/01/rdf-schema#label                          |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.openmicroscopy.org/ns/default/Assay                      |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.openmicroscopy.org/ns/default/Strain                     |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | https://ld.openmicroscopy.org/omekg#owner                           |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.w3.org/2000/01/rdf-schema#comment                        |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | https://ld.openmicroscopy.org/omekg#image                           |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.openmicroscopy.org/ns/default/Investigation              |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.openmicroscopy.org/ns/default/Genotype                   |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.openmicroscopy.org/ns/default/MPB                        |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.openmicroscopy.org/ns/default/Study                      |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.openmicroscopy.org/ns/default/Type                       |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | https://ld.openmicroscopy.org/omekg#experimenter                    |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.openmicroscopy.org/ns/default/Organism                   |                |
-| https://ld.openmicroscopy.org/omekg/Dataset                   | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/omekg/Experimenter              | http://xmlns.com/foaf/0.1/firstName                                 |                |
-| https://ld.openmicroscopy.org/omekg/Experimenter              | http://xmlns.com/foaf/0.1/name                                      |                |
-| https://ld.openmicroscopy.org/omekg/Experimenter              | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/omekg/Experimenter              | http://xmlns.com/foaf/0.1/email                                     |                |
-| https://ld.openmicroscopy.org/omekg/Experimenter              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/omekg/Experimenter              | http://xmlns.com/foaf/0.1/lastName                                  |                |
-| https://ld.openmicroscopy.org/omekg/ExperimenterGroup         | http://xmlns.com/foaf/0.1/name                                      |                |
-| https://ld.openmicroscopy.org/omekg/ExperimenterGroup         | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/omekg/ExperimenterGroup         | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/omekg/Group                     | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/omekg/Group                     | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/omekg/Group                     | http://xmlns.com/foaf/0.1/name                                      |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/Assay                      |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | https://ld.openmicroscopy.org/omekg#owner                           |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/Type                       |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/packing_timestamp          |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/original_group             |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/Investigation              |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/software                   |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/origin_image_id            |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/MPB                        |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/Phenotype                  |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/Parent                     |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.w3.org/2000/01/rdf-schema#label                          |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/Study                      |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/Genotype                   |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/original_user              |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/Strain                     |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | https://ld.openmicroscopy.org/omekg#experimenter                    |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/version                    |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | https://ld.openmicroscopy.org/core/experimenter                     |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/OME-Model0#OME:Experiment0 | ExperimentType |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/origin_hostname            |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/md5                        |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | http://www.openmicroscopy.org/ns/default/Organism                   |                |
-| https://ld.openmicroscopy.org/omekg/Image                     | https://ld.openmicroscopy.org/omekg#acquisition_date                |                |
-| https://ld.openmicroscopy.org/omekg/Owner                     | http://xmlns.com/foaf/0.1/email                                     |                |
-| https://ld.openmicroscopy.org/omekg/Owner                     | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/omekg/Owner                     | http://xmlns.com/foaf/0.1/lastName                                  |                |
-| https://ld.openmicroscopy.org/omekg/Owner                     | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/omekg/Owner                     | http://xmlns.com/foaf/0.1/firstName                                 |                |
-| https://ld.openmicroscopy.org/omekg/Owner                     | http://xmlns.com/foaf/0.1/name                                      |                |
-| https://ld.openmicroscopy.org/omekg/Pixels                    | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/omekg/Pixels                    | https://ld.openmicroscopy.org/omekg#image                           |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | https://ld.openmicroscopy.org/core/experimenter                     |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | https://ld.openmicroscopy.org/omekg#group                           |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | https://ld.openmicroscopy.org/omekg#creation_id                     |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | https://ld.openmicroscopy.org/omekg#experimenter_group              |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | https://ld.openmicroscopy.org/core/experimenter_group               |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | https://ld.openmicroscopy.org/omekg#experimenter                    |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | http://www.w3.org/2000/01/rdf-schema#comment                        |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | https://ld.openmicroscopy.org/omekg#dataset                         |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | http://purl.org/dc/elements/1.1/identifier                          |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | https://ld.openmicroscopy.org/omekg#update_id                       |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | https://ld.openmicroscopy.org/omekg#owner                           |                |
-| https://ld.openmicroscopy.org/omekg/Project                   | http://www.w3.org/2000/01/rdf-schema#label                          |                |
-| https://w3id.org/linkml/ClassDefinition                       | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://w3id.org/linkml/EnumDefinition                        | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-| https://w3id.org/linkml/SlotDefinition                        | http://www.w3.org/1999/02/22-rdf-syntax-ns#type                     |                |
-
-* Queries against localhost
+* Queries against localhost running omero-ontop-mappings
 :PROPERTIES:
 :ID:       059e06f4-bd2b-4ec1-8280-7c25d62a66fa
 :header-args:sparql: :url http://localhost:8080/sparql :cache nil :noweb yes
 :mappings: omero-ontop-mappings
 :END:
-
-#+name prefixes
+** Prefixes
+:PROPERTIES:
+:ID:       446e434f-dc84-4edd-b69a-7d96824b853b
+:END:
+#+name: prefixes
 #+begin_src sparql :noweb yes
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX dcterms: <http://purl.org/dc/terms/>
-PREFIX omecore: <https://ld.openmicroscopy.org/core/>
-PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
-PREFIX obda: <https://w3id.org/obda/vocabulary#>
-PREFIX xml: <http://www.w3.org/XML/1998/namespace/>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-prefix site: <https://example.org/site/>
-prefix image: <https://example.org/site/Image/>
+  PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+  PREFIX image: <https://example.org/site/Image/>
+  PREFIX dc: <http://purl.org/dc/terms/>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+  PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
+  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX site: <https://example.org/site/>
+  PREFIX up: <http://purl.uniprot.org/core/>
+  PREFIX uptaxon: <http://purl.uniprot.org/taxonomy/>
+  PREFIX vcard: <https://www.w3.org/2006/vcard/ns#>
+  PREFIX well: <http://ome.evolbio.mpg.de/Well/>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #+end_src
 
-#+RESULTS:
-| HTTP/1.1 400                           |                          |
-|----------------------------------------+--------------------------|
-| Vary: Origin                           |                          |
-| Vary: Access-Control-Request-Method    |                          |
-| Vary: Access-Control-Request-Headers   |                          |
-| Content-Type: text/plain;charset=UTF-8 |                          |
-| Content-Length: 171                    |                          |
-| Date: Wed                              | 01 Oct 2025 13:47:36 GMT |
-| Connection: close                      |                          |
-|                                        |                          |
-| Encountered "<EOF>" at line 12         | column 47.               |
-| Was expecting one of:                  |                          |
-| base ...                               |                          |
-| prefix ...                             |                          |
-| select ...                             |                          |
-| construct ...                          |                          |
-| describe ...                           |                          |
-| ask ...                                |                          |
-|                                        |                          |
 
 ** SPO
 :PROPERTIES:
 :ID:       641a4dbb-2590-4db8-a64d-2173554690fd
 :END:
 #+begin_src sparql
+  <<prefixes>>
   select * where {
     ?s ?p ?o .
     }
@@ -346,46 +44,38 @@ prefix image: <https://example.org/site/Image/>
 #+end_src
 
 #+RESULTS:
-| s                                                           | p                                               | o                                      |
-|-------------------------------------------------------------+-------------------------------------------------+----------------------------------------|
-| https://ld.openmicroscopy.org/core/binary_only              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/interleaved              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/font_family              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/column_naming_convention | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/contrast_method          | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/microscope               | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/experiment               | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/stage_label              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/id                       | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/experimenter_group       | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| s                                                      | p                                               | o                                      |
+|--------------------------------------------------------+-------------------------------------------------+----------------------------------------|
+| https://ld.openmicroscopy.org/core/last_name           | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/laser_medium        | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/type                | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/uuid                | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/pockel_cell_setting | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/k                   | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/metadata_only       | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/reagent_identifier  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/font_size           | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/temperature         | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+
 
 ** Project
 :PROPERTIES:
 :ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
 :END:
-#+begin_src sparql :url http://localhost:8080/sparql
-  PREFIX : <https://www.openmicroscopy.org/omemap/>
-  PREFIX owl: <http://www.w3.org/2002/07/owl#>
-  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-  PREFIX xml: <http://www.w3.org/XML/1998/namespace/>
-  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-  PREFIX obda: <https://w3id.org/obda/vocabulary#>
-  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
-
+#+begin_src sparql
+  <<prefixes>>
   select distinct  ?project ?typ where {
-  ?project a ome_core:Project ;
+  ?project a omecore:Project ;
       rdf:type ?typ ;
   }
   limit 10
 #+end_src
 
 #+RESULTS:
-| project                                       | typ                                         |
-|-----------------------------------------------+---------------------------------------------|
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://ld.openmicroscopy.org/core/Project  |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://ld.openmicroscopy.org/omekg/Project |
+| project                            | typ                                        |
+|------------------------------------+--------------------------------------------|
+| https://example.org/site/Project/1 | https://ld.openmicroscopy.org/core/Project |
+
 
 ** Dataset
 :PROPERTIES:
@@ -396,142 +86,124 @@ prefix image: <https://example.org/site/Image/>
 :ID:       eda1ed27-583d-4637-bc2b-c8795a408c9b
 :END:
 #+begin_src sparql
-  PREFIX : <https://www.openmicroscopy.org/omemap/>
-  PREFIX owl: <http://www.w3.org/2002/07/owl#>
-  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-  PREFIX obda: <https://w3id.org/obda/vocabulary#>
-  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  prefix ome_core: <https://ld.openmicroscopy.org/core/>
-
+  <<prefixes>>
   select ?ds where {
-  ?ds a ome_core:Dataset .
+  ?ds a omecore:Dataset .
   }
   limit 10
 #+end_src
 
 #+RESULTS:
-| ds                           |
-|------------------------------|
-| http://micropop046/Dataset/1 |
-| http://micropop046/Dataset/2 |
-| http://micropop046/Dataset/3 |
-| http://micropop046/Dataset/4 |
-| http://micropop046/Dataset/5 |
-| http://micropop046/Dataset/6 |
+| ds                                 |
+|------------------------------------|
+| https://example.org/site/Dataset/2 |
+| https://example.org/site/Dataset/3 |
+| https://example.org/site/Dataset/1 |
+
 
 *** datasets and properties
 :PROPERTIES:
 :ID:       ffeb2f65-35a2-40b6-af88-820caf58ffa8
 :END:
 #+begin_src sparql
-  PREFIX : <https://www.openmicroscopy.org/omemap/>
-  PREFIX owl: <http://www.w3.org/2002/07/owl#>
-  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-  PREFIX obda: <https://w3id.org/obda/vocabulary#>
-  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  prefix ome_core: <https://ld.openmicroscopy.org/core/>
-  prefix omekg: <https://ld.openmicroscopy.org/omekg#>
-
+  <<prefixes>>
   select * where {
-  ?ds a ome_core:Dataset ;
-      omekg:owner ?owner .
+  ?ds a omecore:Dataset ;
+      omecore:experimenter ?owner .
   }
   order by ?owner
 #+end_src
 
 #+RESULTS:
-| ds                           | owner                             |
-|------------------------------+-----------------------------------|
-| http://micropop046/Dataset/2 | http://micropop046/Experimenter/0 |
-| http://micropop046/Dataset/3 | http://micropop046/Experimenter/0 |
-| http://micropop046/Dataset/1 | http://micropop046/Experimenter/0 |
-| http://micropop046/Dataset/5 | http://micropop046/Experimenter/2 |
-| http://micropop046/Dataset/4 | http://micropop046/Experimenter/2 |
-| http://micropop046/Dataset/6 | http://micropop046/Experimenter/2 |
+| ds                                 | owner                                   |
+|------------------------------------+-----------------------------------------|
+| https://example.org/site/Dataset/1 | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Dataset/2 | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Dataset/3 | https://example.org/site/Experimenter/0 |
+
 
 ** Dataset II
 :PROPERTIES:
 :ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
 :END:
-#+begin_src sparql :url http://localhost:8080/sparql
-  PREFIX : <https://www.openmicroscopy.org/omemap/>
-  PREFIX owl: <http://www.w3.org/2002/07/owl#>
-  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-  PREFIX obda: <https://w3id.org/obda/vocabulary#>
-  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
+#+begin_src sparql
 
+  <<prefixes>>
   select distinct * where {
-  ?ds a ome_core:Dataset .
+  ?ds a omecore:Dataset .
   ?ds ?prop ?value .
   }
 #+end_src
 
 #+RESULTS:
-| ds                           | prop                                                     | value                                       |
-|------------------------------+----------------------------------------------------------+---------------------------------------------|
-| http://micropop046/Dataset/4 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset  |
-| http://micropop046/Dataset/5 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset  |
-| http://micropop046/Dataset/6 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset  |
-| http://micropop046/Dataset/4 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Dataset |
-| http://micropop046/Dataset/5 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Dataset |
-| http://micropop046/Dataset/6 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Dataset |
-| http://micropop046/Dataset/4 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2           |
-| http://micropop046/Dataset/5 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2           |
-| http://micropop046/Dataset/6 | https://ld.openmicroscopy.org/core/experimenter          | http://micropop046/Experimenter/2           |
-| http://micropop046/Dataset/4 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2           |
-| http://micropop046/Dataset/5 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2           |
-| http://micropop046/Dataset/6 | https://ld.openmicroscopy.org/omekg#experimenter         | http://micropop046/Experimenter/2           |
-| http://micropop046/Dataset/4 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2           |
-| http://micropop046/Dataset/5 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2           |
-| http://micropop046/Dataset/6 | https://ld.openmicroscopy.org/omekg#owner                | http://micropop046/Experimenter/2           |
-| http://micropop046/Dataset/4 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | TestTag                                     |
-| http://micropop046/Dataset/4 | http://purl.org/dc/elements/1.1/identifier               | 4                                           |
-| http://micropop046/Dataset/5 | http://purl.org/dc/elements/1.1/identifier               | 5                                           |
-| http://micropop046/Dataset/6 | http://purl.org/dc/elements/1.1/identifier               | 6                                           |
-| http://micropop046/Dataset/4 | http://purl.org/dc/elements/1.1/identifier               | 4                                           |
-| http://micropop046/Dataset/5 | http://purl.org/dc/elements/1.1/identifier               | 5                                           |
-| http://micropop046/Dataset/6 | http://purl.org/dc/elements/1.1/identifier               | 6                                           |
-| http://micropop046/Dataset/4 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 1                                   |
-| http://micropop046/Dataset/5 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 2                                   |
-| http://micropop046/Dataset/6 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 3                                   |
-| http://micropop046/Dataset/4 | http://purl.org/dc/terms/contributor                     | Public User                                 |
-| http://micropop046/Dataset/5 | http://purl.org/dc/terms/contributor                     | Public User                                 |
-| http://micropop046/Dataset/6 | http://purl.org/dc/terms/contributor                     | Caligula                                    |
-| http://micropop046/Dataset/4 | http://purl.org/dc/terms/provenance                      | Public Screenshots                          |
-| http://micropop046/Dataset/5 | http://purl.org/dc/terms/provenance                      | Public Screenshots                          |
-| http://micropop046/Dataset/6 | http://purl.org/dc/terms/provenance                      | Screenshots                                 |
-| http://micropop046/Dataset/4 | http://purl.org/dc/terms/subject                         | Public Test images                          |
-| http://micropop046/Dataset/5 | http://purl.org/dc/terms/subject                         | Public Test images                          |
-| http://micropop046/Dataset/6 | http://purl.org/dc/terms/subject                         | OMERO Mapping                               |
+| ds                                 | prop                                                     | value                                        |
+|------------------------------------+----------------------------------------------------------+----------------------------------------------|
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/6             |
+| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/subject                         | Test images                                  |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/provenance                      | Screenshots                                  |
+| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/omekg#experimenter_group   | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/10            |
+| https://example.org/site/Dataset/1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset   |
+| https://example.org/site/Dataset/1 | http://purl.org/dc/elements/1.1/identifier               | 2                                            |
+| https://example.org/site/Dataset/3 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset   |
+| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/0      |
+| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/omekg#experimenter_group   | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset   |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/11            |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/elements/1.1/identifier               | 3                                            |
+| https://example.org/site/Dataset/3 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 3                                    |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/3             |
+| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/experimenter_group    | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/2             |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 4                                            |
+| https://example.org/site/Dataset/1 | http://purl.org/dc/elements/1.1/identifier               | 1                                            |
+| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/contributor                     | Test User                                    |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/contributor                     | Caligula                                     |
+| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/group                 | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 2                                            |
+| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/0      |
+| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/contributor                     | Test User                                    |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/0      |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/experimenter_group    | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/provenance                      | Screenshots                                  |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 3                                            |
+| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
+| https://example.org/site/Dataset/1 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 1                                    |
+| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/9             |
+| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | TestTag                                      |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/7             |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/omekg#experimenter_group   | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/provenance                      | Screenshots                                  |
+| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/1             |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 5                                            |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 7                                            |
+| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/8             |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 6                                            |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 12                                           |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/5             |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/subject                         | Test images                                  |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/elements/1.1/identifier               | 8                                            |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/group                 | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/4             |
+| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/core/group                 | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/elements/1.1/identifier               | 9                                            |
+| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/core/experimenter_group    | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/2 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 2                                    |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/subject                         | OMERO Mapping                                |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/elements/1.1/identifier               | 10                                           |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 11                                           |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/12            |
+
 
 ** Project Dataset Image hierarchy
 :PROPERTIES:
 :ID:       9a7fae93-80a0-4cf9-b889-a60113b9bf01
 :END:
 #+begin_src sparql
-  <<prefixes>>
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX dcterms: <http://purl.org/dc/terms/>
-PREFIX omecore: <https://ld.openmicroscopy.org/core/>
-PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
-PREFIX obda: <https://w3id.org/obda/vocabulary#>
-PREFIX xml: <http://www.w3.org/XML/1998/namespace/>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-prefix site: <https://example.org/site/>
-prefix image: <https://example.org/site/Image/>
 
+  <<prefixes>>
   SELECT distinct *  WHERE {
       ?project a omecore:Project ;
                 omecore:dataset ?dataset .
@@ -545,328 +217,200 @@ prefix image: <https://example.org/site/Image/>
 #+RESULTS:
 | project                            | dataset                            | image                             | image_name                                 |
 |------------------------------------+------------------------------------+-----------------------------------+--------------------------------------------|
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/1  | 2024-10-10_14-58-36_screenshot.png         |
 | https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/2  | 2024-10-10_14-53-28_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/11 | 2024-10-10_15-28-16_screenshot.png.ome.tif |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/12 | image_6_with_roi.ome.tif                   |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/3  | 2024-10-10_15-28-16_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/4  | 2024-10-10_15-09-28_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/5  | 2024-10-10_15-07-18_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/1  | 2024-10-10_14-58-36_screenshot.png         |
 | https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/6  | 2024-10-10_15-01-36_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/5  | 2024-10-10_15-07-18_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/4  | 2024-10-10_15-09-28_screenshot.png         |
 | https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/7  | 2024-10-10_15-17-25_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/3  | 2024-10-10_15-28-16_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/11 | 2024-10-10_15-28-16_screenshot.png.ome.tif |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/9  | 2024-10-10_16-39-27_screenshot.png         |
 | https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/10 | 2024-10-10_16-42-47_screenshot.png         |
 | https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/8  | 2024-10-10_16-47-01_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/9  | 2024-10-10_16-39-27_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/12 | image_6_with_roi.ome.tif                   |
 
-** Image with ROI
-:PROPERTIES:
-:ID:       c856598c-c952-4964-b4b2-40b4a1269afc
-:END:
-#+begin_src sparql
-  PREFIX : <https://www.openmicroscopy.org/omemap/>
-  PREFIX owl: <http://www.w3.org/2002/07/owl#>
-  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-  PREFIX obda: <https://w3id.org/obda/vocabulary#>
-  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  prefix vcard: <https://www.w3.org/2006/vcard/ns#>
-  PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
-  SELECT distinct ?img ?roi WHERE {
-      ?img a ome_core:Image.
-          # ^ome_core:image ?roi .
-      # ?roi a ome_core:RegionOfInterest .
-  }
-  #+end_src
-
-#+RESULTS:
-| img                         | roi |
-|-----------------------------+-----|
-| http://micropop046/Image/51 |     |
-| http://micropop046/Image/52 |     |
-| http://micropop046/Image/53 |     |
-| http://micropop046/Image/54 |     |
-| http://micropop046/Image/55 |     |
-| http://micropop046/Image/56 |     |
-| http://micropop046/Image/57 |     |
-| http://micropop046/Image/58 |     |
-| http://micropop046/Image/59 |     |
-| http://micropop046/Image/60 |     |
-| http://micropop046/Image/61 |     |
-| http://micropop046/Image/62 |     |
 
 ** Image with owner
 :PROPERTIES:
 :ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
 :END:
-#+begin_src sparql :url http://localhost:8080/sparql
-  PREFIX : <https://www.openmicroscopy.org/omemap/>
-  PREFIX owl: <http://www.w3.org/2002/07/owl#>
-  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-  PREFIX obda: <https://w3id.org/obda/vocabulary#>
-  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
-  prefix vcard: <https://www.w3.org/2006/vcard/ns#>
+#+begin_src sparql
+  <<prefixes>>
   select distinct * where {
-  ?ds a ome_core:Image .
+  ?ds a omecore:Image ;
+      omecore:experimenter ?owner .
   }
 #+end_src
 
 #+RESULTS:
-| ds                                |
-|-----------------------------------|
-| https://example.org/site/Image/13 |
-| https://example.org/site/Image/14 |
-| https://example.org/site/Image/15 |
-| https://example.org/site/Image/16 |
-| https://example.org/site/Image/17 |
-| https://example.org/site/Image/18 |
-| https://example.org/site/Image/19 |
-| https://example.org/site/Image/20 |
-| https://example.org/site/Image/21 |
-| https://example.org/site/Image/22 |
-| https://example.org/site/Image/23 |
-| https://example.org/site/Image/24 |
+| ds                                | owner                                   |
+|-----------------------------------+-----------------------------------------|
+| https://example.org/site/Image/1  | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Image/10 | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Image/11 | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Image/12 | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Image/2  | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Image/3  | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Image/4  | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Image/5  | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Image/6  | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Image/7  | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Image/8  | https://example.org/site/Experimenter/0 |
+| https://example.org/site/Image/9  | https://example.org/site/Experimenter/0 |
+| https://example.org/site/ROI/1    | https://example.org/site/Experimenter/0 |
+| https://example.org/site/ROI/2    | https://example.org/site/Experimenter/0 |
 
-** Image and properties
-:PROPERTIES:
-:ID:       f9c6719d-7aad-460a-8200-def2533884dd
-:END:
-#+begin_src sparql :url http://localhost:8080/sparql
-  prefix omecore: <https://ld.openmicroscopy.org/core/>
-  prefix dc: <http://purl.org/dc/terms/>
-  PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
 
-  SELECT distinct * WHERE {
-    ?img a omecore:Image;
-         omens:Investigation ?i;
-         omens:Study ?s;
-         omens:Assay ?a .
-    }
-  limit 10
-#+end_src
-
-#+RESULTS:
-| img | i | s | a |
-|-----+---+---+---|
 
 ** Image and DC metadata terms
 :PROPERTIES:
 :ID:       f9c6719d-7aad-460a-8200-def2533884dd
 :END:
 #+begin_src sparql
-  prefix ome_core: <https://ld.openmicroscopy.org/core/>
-  prefix dc: <http://purl.org/dc/terms/>
-  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
 
+  <<prefixes>>
   SELECT distinct ?img ?author ?subject WHERE {
-    ?img a ome_core:Image;
-         # omekg:owner ?owner;
-         # dc:contributor ?author;
-         # dc:subject ?subject .
+    ?img a omecore:Image;
+         dc:contributor ?author;
+         dc:subject ?subject .
     }
-      #+end_src
+#+end_src
 
 #+RESULTS:
-| img                     | author | subject |
-|-------------------------+--------+---------|
-| http://test.me/Image/1  |        |         |
-| http://test.me/Image/2  |        |         |
-| http://test.me/Image/3  |        |         |
-| http://test.me/Image/4  |        |         |
-| http://test.me/Image/5  |        |         |
-| http://test.me/Image/6  |        |         |
-| http://test.me/Image/7  |        |         |
-| http://test.me/Image/8  |        |         |
-| http://test.me/Image/9  |        |         |
-| http://test.me/Image/10 |        |         |
-| http://test.me/Image/11 |        |         |
-| http://test.me/Image/12 |        |         |
-| http://test.me/Image/13 |        |         |
-| http://test.me/Image/14 |        |         |
-| http://test.me/Image/15 |        |         |
-| http://test.me/Image/16 |        |         |
-| http://test.me/Image/17 |        |         |
-| http://test.me/Image/18 |        |         |
-| http://test.me/Image/19 |        |         |
-| http://test.me/Image/20 |        |         |
-| http://test.me/Image/21 |        |         |
-| http://test.me/Image/22 |        |         |
-| http://test.me/Image/23 |        |         |
-| http://test.me/Image/24 |        |         |
+| img                               | author    | subject  |
+|-----------------------------------+-----------+----------|
+| https://example.org/site/Image/1  | Test User | Unittest |
+| https://example.org/site/Image/2  | Test User | Unittest |
+| https://example.org/site/Image/3  | Test User | Unittest |
+| https://example.org/site/Image/4  | Test User | Unittest |
+| https://example.org/site/Image/5  | Test User | Unittest |
+| https://example.org/site/Image/6  | Test User | Unittest |
+| https://example.org/site/Image/7  | Test User | Unittest |
+| https://example.org/site/Image/8  | Test User | Unittest |
+| https://example.org/site/Image/9  | Test User | Unittest |
+| https://example.org/site/Image/10 | Test User | Unittest |
+| https://example.org/site/Image/11 | Test User | Unittest |
+| https://example.org/site/Image/12 | Test User | Unittest |
+
+
 
 ** Image properties
 :PROPERTIES:
 :ID:       5fd7fb92-7286-4fb7-bb0b-e34962e20957
 :END:
-#+begin_src sparql :cache no :results replace
-  prefix ome_core: <https://ld.openmicroscopy.org/core/>
-  prefix imgs: <http://test.me/Image/>
-
+#+begin_src sparql
+  <<prefixes>>
   SELECT distinct ?prop ?val WHERE {
-    imgs:1 ?prop ?val .
+    image:1 ?prop ?val .
     }
   order by ?val
 #+end_src
 
 #+RESULTS:
-| prop                                                     | val                                       |
-|----------------------------------------------------------+-------------------------------------------|
-| http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image  |
-| http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/omekg/Image |
-| https://ld.openmicroscopy.org/omekg#owner                | http://test.me/Experimenter/0             |
-| https://ld.openmicroscopy.org/omekg#experimenter         | http://test.me/Experimenter/0             |
-| https://ld.openmicroscopy.org/core/experimenter          | http://test.me/Experimenter/0             |
-| http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_14-58-36_screenshot.png        |
-| http://www.openmicroscopy.org/ns/default/fooZZbaZZr      | bar                                       |
-| http://www.openmicroscopy.org/ns/default/ZZZZfooZZZZbar  | cool                                      |
-| https://ld.openmicroscopy.org/omekg#tag_annotation_value | Screenshot                                |
-| http://www.openmicroscopy.org/ns/default/ZZfooZZbarZZba  | some**thing                               |
-| http://purl.org/dc/terms/contributor                     | Test User                                 |
-| http://purl.org/dc/terms/date                            | Thu Jul 17 04:31:12 PM CEST 2025          |
-| http://purl.org/dc/terms/subject                         | Unittest                                  |
-| http://purl.org/dc/elements/1.1/identifier               | 1                                         |
-
-
-
-
-
-
-
-
-
-** Dataset number of type relations
-:PROPERTIES:
-:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
-:END:
-#+begin_src sparql :url http://localhost:8080/sparql
-  PREFIX : <https://www.openmicroscopy.org/omemap/>
-  PREFIX owl: <http://www.w3.org/2002/07/owl#>
-  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-  PREFIX obda: <https://w3id.org/obda/vocabulary#>
-  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-
-
-    select (count(distinct ?tp) as ?n_types) where {
-        ?s a ome_core:Dataset;
-            a ?tp .
-}
-
-#+end_src
-
-#+RESULTS:
-| n_types |
-|---------|
-|       0 |
-#+begin_src sparql
-    PREFIX omecore: <https://ld.openmicroscopy.org/core/>
-    PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
-  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
-
-    SELECT ?dataset (count(distinct ?img) as ?Nimg) 
-    WHERE {
-      ?img a omecore:Image ;
-           ^omekg:image ?dataset . # Uses inverse property.
-      ?dataset a omecore:Dataset .
-    }
-    group by ?dataset
-    order by desc(?Nimg) # Descending sort by number of images.
-#+end_src
-
-#+RESULTS:
-| dataset                                        | Nimg |
-|------------------------------------------------+------|
-| https://omero-nfdi.uni-muenster.de/Dataset/106 |   29 |
-| https://omero-nfdi.uni-muenster.de/Dataset/109 |   19 |
-| https://omero-nfdi.uni-muenster.de/Dataset/107 |   18 |
-| https://omero-nfdi.uni-muenster.de/Dataset/108 |   17 |
-| https://omero-nfdi.uni-muenster.de/Dataset/110 |    4 |
-| https://omero-nfdi.uni-muenster.de/Dataset/105 |    3 |
+| prop                                                     | val                                          |
+|----------------------------------------------------------+----------------------------------------------|
+| https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/0      |
+| https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
+| https://ld.openmicroscopy.org/core/group                 | https://example.org/site/ExperimenterGroup/0 |
+| https://ld.openmicroscopy.org/omekg#experimenter_group   | https://example.org/site/ExperimenterGroup/0 |
+| https://ld.openmicroscopy.org/core/experimenter_group    | https://example.org/site/ExperimenterGroup/0 |
+| http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image     |
+| http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_14-58-36_screenshot.png           |
+| http://www.openmicroscopy.org/ns/default/fooZZbar        | bar                                          |
+| http://www.openmicroscopy.org/ns/default/ZZZZfooZZZZbar  | cool                                         |
+| https://ld.openmicroscopy.org/omekg#tag_annotation_value | Screenshot                                   |
+| http://www.openmicroscopy.org/ns/default/ZZbarZZba       | some**thing                                  |
+| http://purl.org/dc/terms/contributor                     | Test User                                    |
+| http://purl.org/dc/terms/date                            | Thu Sep 11 11:49:01 AM CEST 2025             |
+| http://purl.org/dc/terms/subject                         | Unittest                                     |
+| http://purl.org/dc/elements/1.1/identifier               | 1                                            |
 
 ** Dataset type relations
 :PROPERTIES:
 :ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
 :END:
 #+begin_src sparql
-    PREFIX : <https://www.openmicroscopy.org/omemap/>
-    PREFIX owl: <http://www.w3.org/2002/07/owl#>
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-    PREFIX obda: <https://w3id.org/obda/vocabulary#>
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-    PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-    PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-
-
+  <<prefixes>>
       select ?s ?tp  where {
-          ?s a ome_core:Dataset;
+          ?s a omecore:Dataset;
               a ?tp .
   }
   order by ?tp
-
 #+end_src
 
 #+RESULTS:
-| s | tp |
-|---+----|
+| s                                  | tp                                         |
+|------------------------------------+--------------------------------------------|
+| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/core/Dataset |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/Dataset |
+| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/Dataset |
 
-** Image properties
+
+** Dataset number of type relations
 :PROPERTIES:
-:ID:       7452daa7-4c93-448f-9c35-6a9efd910cb1
+:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
 :END:
 #+begin_src sparql
+  <<prefixes>>
+      select (count(distinct ?tp) as ?n_types) where {
+          ?s a omecore:Dataset;
+              a ?tp .
+  }
 
-   PREFIX : <https://www.openmicroscopy.org/omemap/>
-   PREFIX owl: <http://www.w3.org/2002/07/owl#>
-   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-   PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-   PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-   PREFIX obda: <https://w3id.org/obda/vocabulary#>
-   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-   PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-   PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-   prefix dc: <http://purl.org/dc/terms/>
-
-  SELECT distinct ?prop WHERE {
-      ?img a ome_core:Image;
-           ?prop ?val .
-   }
 #+end_src
 
 #+RESULTS:
-| prop |
-|------|
+| n_types |
+|---------|
+|       1 |
+
+** Count number of images in datasets.
+:PROPERTIES:
+:ID:       9f3ccdc1-85b7-4cf4-a3fb-8a34401b96b5
+:END:
+#+begin_src sparql
+  <<prefixes>>
+  SELECT ?dataset (count(distinct ?img) as ?Nimg) 
+  WHERE {
+    ?img a omecore:Image ;
+         ^omecore:image ?dataset . # Uses inverse property.
+    ?dataset a omecore:Dataset .
+  }
+  group by ?dataset
+  order by desc(?Nimg) # Descending sort by number of images.
+#+end_src
+
+#+RESULTS:
+| dataset                            | Nimg |
+|------------------------------------+------|
+| https://example.org/site/Dataset/2 |    7 |
+| https://example.org/site/Dataset/3 |    3 |
+| https://example.org/site/Dataset/1 |    2 |
+
+
 
 ** Number of projects, datasets, images
 :PROPERTIES:
 :ID:       b8d9a7e6-cb6f-46a3-a198-f8a57a3e81ba
 :END:
-#+begin_src sparql :url http://localhost:8080/sparql
-  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+#+begin_src sparql
 
+  <<prefixes>>
   select ?n_projects ?n_datasets ?n_images where {
     {
       select (count(?project) as ?n_projects) where {
-        ?project a ome_core:Project .
+        ?project a omecore:Project .
       }
     }
     {
       select (count(?dataset) as ?n_datasets) where {
-        ?dataset a ome_core:Dataset .
+        ?dataset a omecore:Dataset .
       }
     }
     {
       select (count(?image) as ?n_images) where {
-        ?image a ome_core:Image .
+        ?image a omecore:Image .
       }
     }
   }
@@ -875,59 +419,45 @@ prefix image: <https://example.org/site/Image/>
 #+RESULTS:
 | n_projects | n_datasets | n_images |
 |------------+------------+----------|
-|          1 |          3 |       10 |
+|          1 |          3 |       14 |
+
 
 ** Project and contained datasets
 :PROPERTIES:
 :ID:       9114c7b4-6367-43f6-a8d2-9583999e554f
 :END:
-#+begin_src sparql :url http://localhost:8080/sparql
-  PREFIX : <https://www.openmicroscopy.org/omemap/>
-  PREFIX owl: <http://www.w3.org/2002/07/owl#>
-  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-  PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-  PREFIX obda: <https://w3id.org/obda/vocabulary#>
-  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+#+begin_src sparql
 
-  select * where {
-  ?proj a ome_core:Project ;
-           rdfs:label ?lbl .
-  ?ds a ome_core:Dataset .
-  ?proj ome_core:dataset ?ds .
-  }
-limit 20
+  <<prefixes>>
+    select * where {
+    ?proj a omecore:Project ;
+             rdfs:label ?lbl .
+    ?ds a omecore:Dataset .
+    ?proj omecore:dataset ?ds .
+    }
+  limit 20
 #+end_src
 
 #+RESULTS:
 | proj                               | lbl     | ds                                 |
 |------------------------------------+---------+------------------------------------|
 | https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/1 |
-| https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/3 |
 | https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/2 |
+| https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/3 |
+
 
 ** Project with datasets and images
 :PROPERTIES:
 :ID:       9114c7b4-6367-43f6-a8d2-9583999e554f
 :END:
-#+begin_src sparql :url http://localhost:8080/sparql
-    PREFIX : <https://www.openmicroscopy.org/omemap/>
-    PREFIX owl: <http://www.w3.org/2002/07/owl#>
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-    PREFIX obda: <https://w3id.org/obda/vocabulary#>
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-    PREFIX omecore: <https://ld.openmicroscopy.org/core/>
-    PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+#+begin_src sparql
 
+  <<prefixes>>
     select distinct * where {
     ?proj a omecore:Project ;
-      omekg:dataset ?dataset .
+      omecore:dataset ?dataset .
     ?dataset a omecore:Dataset ;
-      omekg:image ?image .
+      omecore:image ?image .
     ?image a omecore:Image ;
       rdfs:label ?name .
     }
@@ -937,56 +467,42 @@ limit 20
 #+end_src
 
 #+RESULTS:
-| proj                                          | dataset                                        | image                                        | name        |
-|-----------------------------------------------+------------------------------------------------+----------------------------------------------+-------------|
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/113 | wspF-07.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/114 | MIX-19.jpg  |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/115 | awsX-08.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/116 | wspF-18.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/117 | MIX-16.jpg  |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/118 | awsX-14.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/119 | wspF-08.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/105 | https://omero-nfdi.uni-muenster.de/Image/120 | 0085-02.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/121 | mwsR-07.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/122 | awsX-01.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/123 | MIX-09.jpg  |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/124 | MIX-12.jpg  |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/125 | wspF-01.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/126 | mwsR-12.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/127 | awsX-20.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/128 | mwsR-14.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/129 | MIX-02.jpg  |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/130 | awsX-12.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/131 | awsX-11.jpg |
-| https://omero-nfdi.uni-muenster.de/Project/53 | https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/132 | MIX-01.jpg  |
+| proj                               | dataset                            | image                             | name                                       |
+|------------------------------------+------------------------------------+-----------------------------------+--------------------------------------------|
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/1  | 2024-10-10_14-58-36_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/10 | 2024-10-10_16-42-47_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/11 | 2024-10-10_15-28-16_screenshot.png.ome.tif |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/12 | image_6_with_roi.ome.tif                   |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/2  | 2024-10-10_14-53-28_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/3  | 2024-10-10_15-28-16_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/4  | 2024-10-10_15-09-28_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/5  | 2024-10-10_15-07-18_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/6  | 2024-10-10_15-01-36_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/7  | 2024-10-10_15-17-25_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/8  | 2024-10-10_16-47-01_screenshot.png         |
+| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/9  | 2024-10-10_16-39-27_screenshot.png         |
+
 
 ** Dataset subject as per map annotation, queried by namespace:key concatenation (dc:subject)
 :PROPERTIES:
 :ID:       39bce638-19c5-4ed5-9428-7bfdbdc64b72
 :END:
-#+begin_src sparql :url http://localhost:8080/sparql
-
-   PREFIX : <https://www.openmicroscopy.org/omemap/>
-
-   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-   PREFIX xml: <http://www.w3.org/XML/1998/namespace>
-   PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-   PREFIX obda: <https://w3id.org/obda/vocabulary#>
-   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-   PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
-   PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-   prefix dc: <http://purl.org/dc/terms/>
-
+#+begin_src sparql
+  <<prefixes>>
   SELECT distinct ?ds ?subject WHERE {
-      ?ds a ome_core:Dataset;
+      ?ds a omecore:Dataset;
            dc:subject ?subject .
    }
   order by ?img
 #+end_src
 
 #+RESULTS:
-| ds | subject |
-|----+---------|
+| ds                                 | subject       |
+|------------------------------------+---------------|
+| https://example.org/site/Dataset/1 | Test images   |
+| https://example.org/site/Dataset/2 | Test images   |
+| https://example.org/site/Dataset/3 | OMERO Mapping |
+
 
 ** Images and (optional) tags
 :PROPERTIES:
@@ -995,31 +511,30 @@ limit 20
 
 #+begin_src sparql
 
-  PREFIX omecore: <https://ld.openmicroscopy.org/core/>
-  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
 
-  SELECT distinct ?img WHERE {
+  <<prefixes>>
+  SELECT distinct ?img ?tag WHERE {
       ?img a omecore:Image.
-    optional {
-      ?img omekg:tagAnnotationValue ?tag .
-      }
+      ?img omekg:tag_annotation_value ?tag .
    }
-  limit 10
 #+end_src
 
 #+RESULTS:
-| img                                          |
-|----------------------------------------------|
-| https://omero-nfdi.uni-muenster.de/Image/145 |
-| https://omero-nfdi.uni-muenster.de/Image/146 |
-| https://omero-nfdi.uni-muenster.de/Image/153 |
-| https://omero-nfdi.uni-muenster.de/Image/113 |
-| https://omero-nfdi.uni-muenster.de/Image/114 |
-| https://omero-nfdi.uni-muenster.de/Image/115 |
-| https://omero-nfdi.uni-muenster.de/Image/116 |
-| https://omero-nfdi.uni-muenster.de/Image/117 |
-| https://omero-nfdi.uni-muenster.de/Image/118 |
-| https://omero-nfdi.uni-muenster.de/Image/119 |
+| img                               | tag        |
+|-----------------------------------+------------|
+| https://example.org/site/Image/1  | Screenshot |
+| https://example.org/site/Image/2  | Screenshot |
+| https://example.org/site/Image/3  | Screenshot |
+| https://example.org/site/Image/4  | Screenshot |
+| https://example.org/site/Image/5  | Screenshot |
+| https://example.org/site/Image/6  | Screenshot |
+| https://example.org/site/Image/7  | Screenshot |
+| https://example.org/site/Image/8  | Screenshot |
+| https://example.org/site/Image/9  | Screenshot |
+| https://example.org/site/Image/10 | Screenshot |
+| https://example.org/site/Image/11 | Screenshot |
+| https://example.org/site/Image/12 | Screenshot |
+
 
 ** Tagged dataset
 :PROPERTIES:
@@ -1028,13 +543,13 @@ limit 20
 
 Find all datasets tagged "TestTag".
 
-#+begin_src sparql :url http://localhost:8080/sparql
+#+begin_src sparql
 
-  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
 
-  SELECT distinct ?ds ?name WHERE {
-      ?ds a ome_core:Dataset;
-           ome_core:tagAnnotationValue ?tag .
+  <<prefixes>>
+  SELECT distinct ?ds ?name ?tag WHERE {
+    ?ds a omecore:Dataset;
+        omekg:tag_annotation_value ?tag .
     filter(regex(?tag, "^TestTag$"))
     ?ds rdfs:label ?name .
    }
@@ -1042,88 +557,24 @@ Find all datasets tagged "TestTag".
 #+end_src
 
 #+RESULTS:
-| ds | name |
-|----+------|
+| ds                                 | name      | tag     |
+|------------------------------------+-----------+---------|
+| https://example.org/site/Dataset/1 | Dataset 1 | TestTag |
 
-** Number of contained images per dataset (by aggregation)
-:PROPERTIES:
-:ID:       5ccad4e1-5090-438e-b90c-ede0bd3356bc
-:END:
 
-Find all datasets tagged "TestTag".
 
-#+begin_src sparql :url http://localhost:8080/sparql
 
-  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
 
-  SELECT distinct ?ds (count(?img) as ?number_of_images) WHERE {
-      ?ds a ome_core:Dataset;
-          ome_core:image ?img
-   }
-  group by ?ds
-#+end_src
-
-#+RESULTS:
-| ds | number_of_images |
-|----+------------------|
-
-** Folder 
-:PROPERTIES:
-:ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
-:END:
-#+begin_src sparql :url http://localhost:8080/sparql
-  PREFIX : <https://www.openmicroscopy.org/omemap/>
-  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-
-  select ?s where {
-  ?s a ome_core:Folder 
-  }
-  limit 10
-#+end_src
-
-#+RESULTS:
-| s |
-|---|
-
-** MPIEB
-:PROPERTIES:
-:ID:       1bdfaf0a-1483-44e0-b216-f97a319293b5
-:END:
-*** SPO
-:PROPERTIES:
-:ID:       b11378ed-b938-4bb9-ad4b-b9cd0df59f75
-:END:
-
-#+begin_src sparql :url http://localhost:8080/sparql
-
-  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-
-  SELECT distinct ?ds (count(?img) as ?number_of_images) WHERE {
-      ?ds a ome_core:Dataset;
-          ome_core:image ?img
-   }
-  group by ?ds
-#+end_src
-
-#+RESULTS:
-| ds                                 | number_of_images |
-|------------------------------------+------------------|
-| https://example.org/site/Dataset/3 |                3 |
-| https://example.org/site/Dataset/2 |                7 |
-| https://example.org/site/Dataset/1 |                2 |
-
-** Namespace fixed
+** Property with default namespace
 :PROPERTIES:
 :ID:       f538ab93-67f7-4a3e-aa6e-9b6d82e2f99c
 :END:
 
-#+begin_src sparql :url http://localhost:8080/sparql
-  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-  PREFIX image: <https://example.org/site/Image/>
-  PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
+#+begin_src sparql
 
+  <<prefixes>>
   SELECT DISTINCT * WHERE {
-    image:11 ome_ns:sampletype ?val.
+    image:11 omens:sampletype ?val.
    }
 #+end_src
 
@@ -1132,256 +583,64 @@ Find all datasets tagged "TestTag".
 |--------|
 | screen |
 
+
 ** Image 9 MouseCT/Skyscan/System namespace
 :PROPERTIES:
 :ID:       d2ec4a2a-806a-45ae-95a0-3b36d16aa030
 :END:
-#+begin_src sparql :url http://localhost:8080/sparql
-  PREFIX ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
-  PREFIX image: <https://example.org/site/Image/>
-  PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
+#+begin_src sparql
 
+  <<prefixes>>
   SELECT DISTINCT * WHERE {
     image:9 ?prop ?val .
    }
 #+end_src
 
 #+RESULTS:
-| prop                                                                  | val                                                      |
-|-----------------------------------------------------------------------+----------------------------------------------------------|
-| http://www.w3.org/1999/02/22-rdf-syntax-ns#type                       | http://www.openmicroscopy.org/rdf/2016-06/ome_core/Image |
-| http://www.openmicroscopy.org/rdf/2016-06/ome_core/tagAnnotationValue | Screenshot                                               |
-| http://purl.org/dc/elements/1.1/identifier                            | 9                                                        |
-| http://www.w3.org/2000/01/rdf-schema#label                            | 2024-10-10_16-42-47_screenshot.png                       |
-| http://purl.org/dc/terms/contributor                                  | Test User                                                |
-| http://purl.org/dc/terms/subject                                      | Unittest                                                 |
-| http://purl.org/dc/terms/date                                         | Sat Dec 21 06:08:37 PM CET 2024                          |
-| http://MouseCT/Skyscan/System/Assay                                   | Bruker                                                   |
+| prop                                                     | val                                          |
+|----------------------------------------------------------+----------------------------------------------|
+| http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image     |
+| https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
+| http://purl.org/dc/terms/date                            | Thu Sep 11 11:49:26 AM CEST 2025             |
+| http://purl.org/dc/elements/1.1/identifier               | 9                                            |
+| http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_16-39-27_screenshot.png           |
+| https://ld.openmicroscopy.org/core/group                 | https://example.org/site/ExperimenterGroup/0 |
+| https://ld.openmicroscopy.org/omekg#tag_annotation_value | Screenshot                                   |
+| http://purl.org/dc/terms/contributor                     | Test User                                    |
+| http://purl.org/dc/terms/subject                         | Unittest                                     |
+| http://www.openmicroscopy.org/ns/default/Assay           | Bruker                                       |
 
-** Image and Experimenter
-:PROPERTIES:
-:ID:       b6fdc8c2-cadf-4241-a9d0-28f49b6efd1c
-:END:
-#+begin_src sparql :url http://localhost:8080/sparql
-  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-  prefix foaf: <http://xmlns.com/foaf/0.1/>
-  select * where {
-    ?img a omekg:Image;
-         omeprop:experimenter ?owner .
-    ?owner foaf:firstName ?first .
-    ?owner foaf:lastName ?last .
-#+end_src
 
-** Pixels and channels.
-:PROPERTIES:
-:ID:       b6fdc8c2-cadf-4241-a9d0-28f49b6efd1c
-:END:
-#+begin_src sparql :url http://localhost:8080/sparql
-  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-  prefix foaf: <http://xmlns.com/foaf/0.1/>
-  select distinct ?prop ?val where {
-    ?img a omekg:Pixels;
-         ?prop ?val .
-    filter(contains(str(?prop), "size"))
-   }
-  limit 10
-#+end_src
-
-*** Pixels
-:PROPERTIES:
-:ID:       f163b456-8c98-424b-9e8b-8d302642d707
-:END:
-#+RESULTS:
-| prop                                                     | val                |
-|----------------------------------------------------------+--------------------|
-| https://ld.openmicroscopy.org/omekg#physical_size_y_unit | µm                 |
-| https://ld.openmicroscopy.org/omekg#physical_size_y      | 0.7400001049041748 |
-| https://ld.openmicroscopy.org/omekg#physical_size_x      | 0.7400001049041748 |
-| https://ld.openmicroscopy.org/omekg#physical_size_x_unit | µm                 |
-
-*** Channels
-:PROPERTIES:
-:ID:       365db89d-2153-4920-b49c-ed349dca9e29
-:END:
-#+begin_src sparql :url http://localhost:8080/sparql
-  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-  prefix foaf: <http://xmlns.com/foaf/0.1/>
-  select distinct ?prop where {
-    ?channel a omekg:Channel;
-         ?prop ?val .
-   }
-  limit 100
-#+end_src
-
-#+RESULTS:
-| prop                                            |
-|-------------------------------------------------|
-| http://www.w3.org/1999/02/22-rdf-syntax-ns#type |
-| https://ld.openmicroscopy.org/omekg#pixels      |
-| http://purl.org/dc/elements/1.1/identifier      |
-| https://ld.openmicroscopy.org/omekg#green       |
-| https://ld.openmicroscopy.org/omekg#blue        |
-| https://ld.openmicroscopy.org/omekg#red         |
-
-#+begin_src sparql :url http://localhost:8080/sparql
-    prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-    prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-    prefix foaf: <http://xmlns.com/foaf/0.1/>
-    select ?pixels (min(?red) as ?min_red) (min(?green) as ?min_green) (min(?blue) as ?min_blue) (max(?red) as ?max_red) (max(?green) as ?max_green) (max(?blue) as ?max_blue)
-  where {
-      ?channel a omekg:Channel;
-               omeprop:pixels ?pixels;
-               omeprop:red ?red;
-               omeprop:green ?green;
-               omeprop:blue ?blue .
-     }
-  group by ?pixels
-  limit 100
-#+end_src
-
-#+RESULTS:
-| pixels                              | min_red | min_green | min_blue | max_red | max_green | max_blue |
-|-------------------------------------+---------+-----------+----------+---------+-----------+----------|
-| https://example.org/site/Pixels/1   |       0 |         0 |        0 |     255 |       255 |      255 |
-| https://example.org/site/Pixels/2   |       0 |         0 |        0 |     255 |       255 |      255 |
-| https://example.org/site/Pixels/3   |       0 |         0 |        0 |     255 |       255 |      255 |
-| https://example.org/site/Pixels/4   |       0 |         0 |        0 |     255 |       255 |      255 |
-| https://example.org/site/Pixels/5   |       0 |         0 |        0 |     255 |       255 |      255 |
-| https://example.org/site/Pixels/6   |       0 |         0 |        0 |     255 |       255 |      255 |
-| https://example.org/site/Pixels/7   |       0 |         0 |        0 |     255 |       255 |      255 |
-| https://example.org/site/Pixels/8   |       0 |         0 |        0 |     255 |       255 |      255 |
-| https://example.org/site/Pixels/9   |       0 |         0 |        0 |     255 |       255 |      255 |
-| https://example.org/site/Pixels/10  |       0 |         0 |        0 |     255 |       255 |      255 |
-| https://example.org/site/Pixels/11  |       0 |         0 |        0 |     255 |       255 |      255 |
-| https://example.org/site/Pixels/12  |       0 |         0 |        0 |     255 |       255 |      255 |
-| https://example.org/site/Pixels/244 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/245 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/246 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/247 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/248 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/249 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/250 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/251 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/252 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/253 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/254 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/255 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/256 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/257 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/258 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/259 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/260 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/261 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/262 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/263 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/264 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/265 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/266 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/267 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/268 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/269 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/270 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/271 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/272 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/273 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/274 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/275 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/276 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/277 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/278 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/279 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/280 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/281 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/282 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/283 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/284 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/285 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/286 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/287 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/288 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/289 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/290 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/291 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/292 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/293 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/294 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/295 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/296 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/297 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/298 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/299 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/300 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/301 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/302 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/303 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/304 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/305 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/306 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/307 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/308 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/309 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/310 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/311 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/312 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/313 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/314 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/315 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/316 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/317 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/318 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/319 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/320 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/321 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/322 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/323 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/324 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/325 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/326 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/327 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/328 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/329 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/330 |       0 |         0 |        0 |     255 |         0 |      255 |
-| https://example.org/site/Pixels/331 |       0 |         0 |        0 |     255 |         0 |      255 |
 
 ** Owners and Groups
 :PROPERTIES:
 :ID:       83f91f9d-a78e-44a0-ae4c-f24046beaa26
 :END:
 
-#+begin_src sparql :url http://localhost:8080/sparql
-  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-  prefix foaf: <http://xmlns.com/foaf/0.1/>
+#+begin_src sparql
 
+  <<prefixes>>
   SELECT distinct * WHERE {
-      ?s a omekg:Project ;
-  omeprop:owner ?owner;
-  omeprop:group ?group .
+      ?s a omecore:Project ;
+  omecore:experimenter ?owner;
+  omecore:experimenter_group ?group .
   }
  #+end_src
 
  #+RESULTS:
- | s                                  | owner                                   | group                                        |
- |------------------------------------+-----------------------------------------+----------------------------------------------|
- | https://example.org/site/Project/1 | https://example.org/site/Experimenter/0 | https://example.org/site/ExperimenterGroup/0 |
+ | s | owner | group |
+ |---+-------+-------|
+
 
 #+begin_src sparql :url http://localhost:8080/sparql
-  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-  prefix foaf: <http://xmlns.com/foaf/0.1/>
 
+  <<prefixes>>
   SELECT distinct ?group ?name WHERE {
     ?group a omekg:Group;
             foaf:name ?name .
     }
  #+end_src
 
- #+RESULTS:
- | group | name |
- |-------+------|
 
 ** Federated query against ome and taxonomy database with HCS objects
 :PROPERTIES:
@@ -1389,12 +648,8 @@ Find all datasets tagged "TestTag".
 :END:
 
 #+begin_src sparql :url http://localhost:8080/sparql
-  prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-  prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-  prefix foaf: <http://xmlns.com/foaf/0.1/>
-  prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
+  <<prefixes>>
   SELECT distinct * WHERE {
     ?well a omekg:Well ;
     <http://www.openmicroscopy.org/ns/default/TermSource1Accession> ?taxid.
@@ -1409,13 +664,8 @@ Find all datasets tagged "TestTag".
   limit 10
  #+end_src
 
- #+RESULTS:
- | well                              | taxid          | taxon_id | up_taxon                              |
- |-----------------------------------+----------------+----------+---------------------------------------|
- | https://example.org/site/Well/351 | NCBITaxon_9606 |     9606 | http://purl.uniprot.org/taxonomy/9606 |
 #+begin_src sparql :url https://sparql.uniprot.org/sparql :async yes
-  PREFIX up: <http://purl.uniprot.org/core/>
-  prefix foaf: <http://xmlns.com/foaf/0.1/>
+  <<prefixes>>
   SELECT *
   FROM <http://sparql.uniprot.org/taxonomy>
   WHERE
@@ -1427,109 +677,6 @@ Find all datasets tagged "TestTag".
   limit 100
 #+end_src
 
-#+RESULTS:
-| mnemonic | parasite                                 | parasite_name                                                                                 |
-|----------+------------------------------------------+-----------------------------------------------------------------------------------------------|
-| HUMAN    | http://purl.uniprot.org/taxonomy/59300   | Getah virus                                                                                   |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10632   | JC polyomavirus                                                                               |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10335   | Human herpesvirus 3                                                                           |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11086   | Louping ill virus                                                                             |
-| HUMAN    | http://purl.uniprot.org/taxonomy/231473  | Coxsackievirus B2 (strain Ohio-1)                                                             |
-| HUMAN    | http://purl.uniprot.org/taxonomy/1001061 | Ljunganvirus 1                                                                                |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10252   | Vaccinia virus (strain Lister)                                                                |
-| HUMAN    | http://purl.uniprot.org/taxonomy/103913  | Echovirus 6 (strain Charles)                                                                  |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10615   | Human papillomavirus 40                                                                       |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11064   | Dengue virus type 2 (strain Jamaica/1409/1983)                                                |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11688   | Human immunodeficiency virus type 1 group M subtype B (isolate JRCSF)                         |
-| HUMAN    | http://purl.uniprot.org/taxonomy/31642   | Hepatitis C virus genotype 1b (isolate HC-JT)                                                 |
-| HUMAN    | http://purl.uniprot.org/taxonomy/31768   | Hepatitis E virus genotype 2 (isolate Human/Mexico)                                           |
-| HUMAN    | http://purl.uniprot.org/taxonomy/33728   | Lake Victoria marburgvirus (strain Popp-67)                                                   |
-| HUMAN    | http://purl.uniprot.org/taxonomy/356416  | Hepatitis C virus genotype 3a (isolate k3a)                                                   |
-| HUMAN    | http://purl.uniprot.org/taxonomy/356422  | Hepatitis C virus genotype 6d (isolate VN235)                                                 |
-| HUMAN    | http://purl.uniprot.org/taxonomy/356425  | Hepatitis C virus genotype 6k (isolate VN405)                                                 |
-| HUMAN    | http://purl.uniprot.org/taxonomy/357355  | Hepatitis C virus genotype 3b (isolate Tr-Kj)                                                 |
-| HUMAN    | http://purl.uniprot.org/taxonomy/374596  | Eastern equine encephalitis virus (strain PE-0.0155)                                          |
-| HUMAN    | http://purl.uniprot.org/taxonomy/383568  | Influenza A virus (strain A/Shanghai/11/1987 H3N2)                                            |
-| HUMAN    | http://purl.uniprot.org/taxonomy/386032  | Reston ebolavirus (strain Reston-89)                                                          |
-| HUMAN    | http://purl.uniprot.org/taxonomy/388905  | Human immunodeficiency virus type 1 group M subtype J (isolate SE9280)                        |
-| HUMAN    | http://purl.uniprot.org/taxonomy/407137  | Yellow fever virus (strain Trinidad/TRINID79A/1979)                                           |
-| HUMAN    | http://purl.uniprot.org/taxonomy/407140  | Yellow fever virus (isolate Angola/14FA/1971)                                                 |
-| HUMAN    | http://purl.uniprot.org/taxonomy/443239  | Human coronavirus HKU1 (isolate N1)                                                           |
-| HUMAN    | http://purl.uniprot.org/taxonomy/489488  | Hepatitis B virus genotype D subtype ayw (isolate Australia/AustKW/1991)                      |
-| HUMAN    | http://purl.uniprot.org/taxonomy/88776   | Influenza A virus (strain A/Brevig Mission/1/1918 H1N1)                                       |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11709   | Human immunodeficiency virus 2                                                                |
-| HUMAN    | http://purl.uniprot.org/taxonomy/132475  | Yaba-like disease virus                                                                       |
-| HUMAN    | http://purl.uniprot.org/taxonomy/284218  | Influenza A virus (strain A/Vietnam/1203/2004 H5N1)                                           |
-| HUMAN    | http://purl.uniprot.org/taxonomy/445791  | Rabies virus (strain China/MRV)                                                               |
-| HUMAN    | http://purl.uniprot.org/taxonomy/489503  | Hepatitis B virus genotype F2 subtype adw4q (isolate Senegal/9203)                            |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11074   | Japanese encephalitis virus (strain SA(v))                                                    |
-| HUMAN    | http://purl.uniprot.org/taxonomy/12099   | Human hepatitis A virus genotype IA (isolate LA)                                              |
-| HUMAN    | http://purl.uniprot.org/taxonomy/37130   | Human astrovirus-6                                                                            |
-| HUMAN    | http://purl.uniprot.org/taxonomy/384525  | Influenza A virus (strain A/Fort Warren/1/1950 H1N1)                                          |
-| HUMAN    | http://purl.uniprot.org/taxonomy/482134  | Hepatitis B virus genotype A2 subtype adw (isolate Japan/Nishioka/1983)                       |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10524   | Human adenovirus F serotype 41                                                                |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10942   | Rotavirus B (isolate RVB/Human/China/ADRV/1982)                                               |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11587   | Punta toro phlebovirus                                                                        |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11701   | Human immunodeficiency virus type 1 group M subtype B (isolate RF/HAT3)                       |
-| HUMAN    | http://purl.uniprot.org/taxonomy/1263720 | Middle East respiratory syndrome-related coronavirus (isolate United Kingdom/H123990006/2012) |
-| HUMAN    | http://purl.uniprot.org/taxonomy/1671798 | Human papillomavirus type 54                                                                  |
-| HUMAN    | http://purl.uniprot.org/taxonomy/333761  | Human papillomavirus type 18                                                                  |
-| HUMAN    | http://purl.uniprot.org/taxonomy/401671  | Human immunodeficiency virus type 1 group M subtype B (strain 89.6)                           |
-| HUMAN    | http://purl.uniprot.org/taxonomy/40538   | Human papillomavirus type 48                                                                  |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10522   | Human adenovirus B serotype 35                                                                |
-| HUMAN    | http://purl.uniprot.org/taxonomy/392809  | Influenza A virus (strain A/Victoria/3/1975 H3N2)                                             |
-| HUMAN    | http://purl.uniprot.org/taxonomy/1980456 | Andes orthohantavirus                                                                         |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10515   | Human adenovirus C serotype 2                                                                 |
-| HUMAN    | http://purl.uniprot.org/taxonomy/3052225 | Nipah virus                                                                                   |
-| HUMAN    | http://purl.uniprot.org/taxonomy/3052299 | Sabia mammarenavirus (isolate Human/Brasil/SPH114202/1990)                                    |
-| HUMAN    | http://purl.uniprot.org/taxonomy/3052300 | Pichinde mammarenavirus                                                                       |
-| HUMAN    | http://purl.uniprot.org/taxonomy/3052302 | Chapare mammarenavirus (isolate Human/Bolivia/810419/2003)                                    |
-| HUMAN    | http://purl.uniprot.org/taxonomy/3052307 | Guanarito mammarenavirus (isolate Human/Venezuela/NH-95551/1990)                              |
-| HUMAN    | http://purl.uniprot.org/taxonomy/3052310 | Mammarenavirus lassaense                                                                      |
-| HUMAN    | http://purl.uniprot.org/taxonomy/3052317 | Machupo virus                                                                                 |
-| HUMAN    | http://purl.uniprot.org/taxonomy/3052490 | Black Creek Canal orthohantavirus                                                             |
-| HUMAN    | http://purl.uniprot.org/taxonomy/3052499 | Sin Nombre orthohantavirus                                                                    |
-| HUMAN    | http://purl.uniprot.org/taxonomy/3052503 | Tula orthohantavirus                                                                          |
-| HUMAN    | http://purl.uniprot.org/taxonomy/3052514 | Dugbe virus                                                                                   |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10298   | Human herpesvirus 1                                                                           |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10359   | Human cytomegalovirus                                                                         |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10533   | Human adenovirus C serotype 1                                                                 |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11039   | Western equine encephalitis virus                                                             |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11105   | Hepatitis C virus genotype 1b (isolate BK)                                                    |
-| HUMAN    | http://purl.uniprot.org/taxonomy/12132   | Human rhinovirus 89                                                                           |
-| HUMAN    | http://purl.uniprot.org/taxonomy/172148  | Alkhumra hemorrhagic fever virus                                                              |
-| HUMAN    | http://purl.uniprot.org/taxonomy/37296   | Human herpesvirus 8                                                                           |
-| HUMAN    | http://purl.uniprot.org/taxonomy/434309  | Saffold virus                                                                                 |
-| HUMAN    | http://purl.uniprot.org/taxonomy/489469  | Hepatitis B virus genotype C subtype ayw (isolate China/Tibet127/2002)                        |
-| HUMAN    | http://purl.uniprot.org/taxonomy/64286   | Usutu virus                                                                                   |
-| HUMAN    | http://purl.uniprot.org/taxonomy/638313  | Human bocavirus 3                                                                             |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10281   | Molluscum contagiosum virus subtype 2                                                         |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11028   | O'nyong-nyong virus (strain Gulu)                                                             |
-| HUMAN    | http://purl.uniprot.org/taxonomy/12088   | Poliovirus type 3 (strains P3/Leon/37 and P3/Leon 12A[1]B)                                    |
-| HUMAN    | http://purl.uniprot.org/taxonomy/2169991 | Junin mammarenavirus                                                                          |
-| HUMAN    | http://purl.uniprot.org/taxonomy/37121   | Human papillomavirus 69                                                                       |
-| HUMAN    | http://purl.uniprot.org/taxonomy/37129   | Southampton virus (strain GI/Human/United Kingdom/Southampton/1991)                           |
-| HUMAN    | http://purl.uniprot.org/taxonomy/39008   | Tick-borne powassan virus (strain LB)                                                         |
-| HUMAN    | http://purl.uniprot.org/taxonomy/408870  | Dengue virus type 3 (strain Philippines/H87/1956)                                             |
-| HUMAN    | http://purl.uniprot.org/taxonomy/638299  | Rotavirus A (isolate RVA/Human/India/116E/1986/G9P8[11])                                      |
-| HUMAN    | http://purl.uniprot.org/taxonomy/12440   | Non-A non-B hepatitis virus                                                                   |
-| HUMAN    | http://purl.uniprot.org/taxonomy/488241  | Influenza A virus (strain A/Korea/426/1968 H2N2)                                              |
-| HUMAN    | http://purl.uniprot.org/taxonomy/3052477 | Dobrava-Belgrade orthohantavirus                                                              |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10585   | Human papillomavirus 31                                                                       |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11689   | Human immunodeficiency virus type 1 group M subtype D (isolate ELI)                           |
-| HUMAN    | http://purl.uniprot.org/taxonomy/277944  | Human coronavirus NL63                                                                        |
-| HUMAN    | http://purl.uniprot.org/taxonomy/28282   | Human adenovirus A serotype 12                                                                |
-| HUMAN    | http://purl.uniprot.org/taxonomy/31548   | Human papillomavirus 21                                                                       |
-| HUMAN    | http://purl.uniprot.org/taxonomy/31631   | Human coronavirus OC43                                                                        |
-| HUMAN    | http://purl.uniprot.org/taxonomy/687345  | Torque teno virus (isolate Human/Germany/KAV/2001)                                            |
-| HUMAN    | http://purl.uniprot.org/taxonomy/489463  | Hepatitis B virus genotype B2 subtype adw (isolate China/patient4/1996)                       |
-| HUMAN    | http://purl.uniprot.org/taxonomy/10600   | Human papillomavirus type 6b                                                                  |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11038   | Venezuelan equine encephalitis virus (strain Trinidad donkey)                                 |
-| HUMAN    | http://purl.uniprot.org/taxonomy/145856  | Human picobirnavirus                                                                          |
-| HUMAN    | http://purl.uniprot.org/taxonomy/356415  | Hepatitis C virus genotype 3a (isolate NZL1)                                                  |
-| HUMAN    | http://purl.uniprot.org/taxonomy/489461  | Hepatitis B virus genotype B2 (isolate Vietnam/9873/1997)                                     |
-| HUMAN    | http://purl.uniprot.org/taxonomy/11020   | Barmah forest virus                                                                           |
-| HUMAN    | http://purl.uniprot.org/taxonomy/37119   | Human papillomavirus 66                                                                       |
 
 ** Federated query against locally running qlever and uniprot
 :PROPERTIES:
@@ -1537,127 +684,20 @@ Find all datasets tagged "TestTag".
 :END:
 #+begin_src sparql :url http://localhost:8888/sparql 
 
-PREFIX omekg: <https://ld.openmicroscopy.org/omekg/>
-PREFIX omecore: <https://ld.openmicroscopy.org/core/>
-PREFIX well: <http://ome.evolbio.mpg.de/Well/>
-PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
-PREFIX up: <http://purl.uniprot.org/core/>
-PREFIX uptaxon: <http://purl.uniprot.org/taxonomy/>
 
-SELECT DISTINCT ?well ?taxon ?host_scientific_name ?guest_organism_scientificname WHERE {
-  ?well a omekg:Well ;
-        omens:TermSource1Accession ?taxon .
-  BIND (IRI(CONCAT(STR(uptaxon:), STRAFTER(?taxon,"NCBITaxon_"))) AS ?host)
-  SERVICE <https://sparql.uniprot.org/sparql> {
-    ?host up:scientificName ?host_scientific_name;
-	^up:host ?guest_organism .
-    ?guest_organism up:scientificName ?guest_organism_scientificname .
+  <<prefixes>>
+  SELECT DISTINCT ?well ?taxon ?host_scientific_name ?guest_organism_scientificname WHERE {
+    ?well a omekg:Well ;
+          omens:TermSource1Accession ?taxon .
+    BIND (IRI(CONCAT(STR(uptaxon:), STRAFTER(?taxon,"NCBITaxon_"))) AS ?host)
+    SERVICE <https://sparql.uniprot.org/sparql> {
+      ?host up:scientificName ?host_scientific_name;
+  	^up:host ?guest_organism .
+      ?guest_organism up:scientificName ?guest_organism_scientificname .
+    }
   }
-}
-LIMIT 100
+  LIMIT 100
 #+end_src
 
-#+RESULTS:
-| well                              | taxon          | host_scientific_name | guest_organism_scientificname                                           |
-|-----------------------------------+----------------+----------------------+-------------------------------------------------------------------------|
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Aichi virus                                                             |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Aichi virus (strain Human/A846/88/1989)                                 |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Alkhumra hemorrhagic fever virus                                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Andes orthohantavirus                                                   |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Australian bat lyssavirus (isolate Bat/AUS/1996)                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Australian bat lyssavirus (isolate Human/AUS/1998)                      |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Banna virus (strain Indonesia/JKT-6423/1980)                            |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Banzi virus                                                             |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Barmah forest virus                                                     |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bhanja virus                                                            |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | BK polyomavirus                                                         |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | BK polyomavirus (strain AS)                                             |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Black Creek Canal orthohantavirus                                       |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bunyamwera virus                                                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bunyavirus La Crosse                                                    |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bunyavirus La Crosse (isolate Aedes triseriatus/United States/L74/1974) |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bunyavirus La Crosse (isolate Human/United States/L78/1978)             |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bunyavirus snowshoe hare                                                |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Bussuquara virus                                                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Cercopithecine herpesvirus 1                                            |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Cercopithecine herpesvirus 16                                           |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chandipura virus (strain I653514)                                       |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chapare mammarenavirus (isolate Human/Bolivia/810419/2003)              |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chiba virus (strain GI/Human/Japan/Chiba 407/1987)                      |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chikungunya virus                                                       |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chikungunya virus (strain 37997)                                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chikungunya virus (strain Nagpur)                                       |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Chikungunya virus (strain S27-African prototype)                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Colorado tick fever virus                                               |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Colorado tick fever virus (strain USA/Florio N-7180)                    |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Cosavirus A (isolate Human/Pakistan/0553/-)                             |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Cowpox virus                                                            |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Cowpox virus (strain Brighton Red)                                      |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Cowpox virus (strain GRI-90 / Grishak)                                  |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus A16 (strain G-10)                                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus A16 (strain Tainan/5079/98)                              |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus A21 (strain Coe)                                         |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus A24 (strain EH24/70)                                     |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus A9 (strain Griggs)                                       |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B1 (strain Japan)                                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B2 (strain Ohio-1)                                       |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B3 (strain Nancy)                                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B3 (strain Woodruff)                                     |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B4 (strain E2)                                           |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B4 (strain JVB / Benschoten / New York/51)               |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B5 (strain Peterborough / 1954/UK/85)                    |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Coxsackievirus B6 (strain Schmitt)                                      |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Crimean-Congo hemorrhagic fever virus (isolate C68031)                  |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Crimean-Congo hemorrhagic fever virus (strain Nigeria/IbAr10200/1970)   |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 1 (strain Brazil/97-11/1997)                          |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 1 (strain Jamaica/CV1636/1977)                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 1 (strain Nauru/West Pac/1974)                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 1 (strain Singapore/S275/1990)                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 1 (strain Thailand/AHF 82-80/1980)                    |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (isolate Malaysia M2)                               |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (isolate Malaysia M3)                               |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (isolate Thailand/0168/1979)                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain 16681-PDK53)                                |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain China/D2-04)                                |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Jamaica/1409/1983)                          |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Peru/IQT2913/1996)                          |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Puerto Rico/PR159-S1/1969)                  |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Thailand/16681/1984)                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Thailand/NGS-C/1944)                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Thailand/PUO-218/1980)                      |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Thailand/TH-36/1958)                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 2 (strain Tonga/EKB194/1974)                          |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 3 (strain China/80-2/1980)                            |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 3 (strain Martinique/1243/1999)                       |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 3 (strain Philippines/H87/1956)                       |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 3 (strain Singapore/8120/1995)                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 3 (strain Sri Lanka/1266/2000)                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 4 (strain Dominica/814669/1981)                       |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 4 (strain Philippines/H241/1956)                      |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 4 (strain Singapore/8976/1995)                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 4 (strain Thailand/0348/1991)                         |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dengue virus type 4 (strain Thailand/0476/1997)                         |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dhori virus (strain Indian/1313/61)                                     |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dobrava-Belgrade orthohantavirus                                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dugbe virus                                                             |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Dugbe virus (isolate ArD44313)                                          |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Duvenhage virus                                                         |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Eastern equine encephalitis virus                                       |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Eastern equine encephalitis virus (strain Florida 91-469)               |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Eastern equine encephalitis virus (strain PE-0.0155)                    |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Eastern equine encephalitis virus (strain PE-3.0815)                    |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Eastern equine encephalitis virus (strain va33[ten broeck])             |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echo 9 virus                                                            |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 1 (strain Human/Egypt/Farouk/1951)                            |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 11 (strain Gregory)                                           |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 12 (strain Travis)                                            |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 16 (strain Harrington)                                        |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 30 (strain Bastianni)                                         |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 5 (strain Noyce)                                              |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 6 (strain Charles)                                            |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 9 (strain Barty)                                              |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Echovirus 9 (strain Hill)                                               |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Encephalomyocarditis virus                                              |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Encephalomyocarditis virus (strain emc-b nondiabetogenic)               |
-| https://example.org/site/Well/351 | NCBITaxon_9606 | Homo sapiens         | Encephalomyocarditis virus (strain emc-d diabetogenic)                  |
+
 
