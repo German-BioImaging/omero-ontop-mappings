@@ -46,17 +46,17 @@ omero obj map-set $MAP4 mapValue provenance "Test Data"
 
 
 # Add images
-images1=$(find img/ -name "*_14-*.png" | xargs -i realpath {}) 
-images2=$(find img/ -name "*_15-*.png" | xargs -i realpath {}) 
-images3=$(find img/ -name "*_16-*.png" | xargs -i realpath {}) 
+images1=$(find img/ -name "*_14-*.png" -print0 | xargs -0 -I {} realpath "{}")
+images2=$(find img/ -name "*_15-*.png" -print0 | xargs -0 -I {} realpath "{}")
+images3=$(find img/ -name "*_16-*.png" -print0 | xargs -0 -I {} realpath "{}")
 
-for img in $images1; do omero import $img -d $DS1; done
-for img in $images2; do omero import $img -d $DS2; done
-for img in $images3; do omero import $img -d $DS3; done
+for img in $images1; do omero import "$img" -d $DS1; done
+for img in $images2; do omero import "$img" -d $DS2; done
+for img in $images3; do omero import "$img" -d $DS3; done
 
-# Import images with roi into Dataset:2
-images4=$(find img/ -name "*.ome.tif" | xargs -i realpath {}) 
-for img in $images4; do omero import $img -d $DS2; done
+# Import images with ROI into Dataset:2
+images4=$(find img/ -name "*.ome.tif" -print0 | xargs -0 -I {} realpath "{}")
+for img in $images4; do omero import "$img" -d $DS2; done
 
 TAG2=$(omero tag create --name "Screenshot")
 for image_index in {1..10}; do
