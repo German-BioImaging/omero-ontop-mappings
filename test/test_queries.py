@@ -537,12 +537,6 @@ select ?img ?roi where {
 
         print(results.to_string())
 
-        # Check return values.
-        #self.assertEqual(results.loc[0, "img"], "https://example.org/site/Image/11")
-        #self.assertEqual(results.loc[0, "roi"], "https://example.org/site/ROI/1")
-        #self.assertEqual(results.loc[1, "img"], "https://example.org/site/Image/12")
-        #self.assertEqual(results.loc[1, "roi"], "https://example.org/site/ROI/2")
-
         expected = [
         ("https://example.org/site/Image/11", "https://example.org/site/ROI/1"),
         ("https://example.org/site/Image/12", "https://example.org/site/ROI/2"),
