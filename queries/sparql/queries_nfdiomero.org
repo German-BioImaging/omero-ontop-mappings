@@ -412,3 +412,221 @@
 | https://omero-nfdi.uni-muenster.de/Dataset/1   | 2022-01-04T17:11:00+00:00     |
 | https://omero-nfdi.uni-muenster.de/Dataset/3   | 2020-03-05T08:46:31+00:00     |
 
+* Federated queries
+:PROPERTIES:
+:ID:       85c09c79-0420-4310-aaef-ae3d1c12b3e4
+:END:
+
+** Uniprot prefixes
+:PROPERTIES:
+:ID:       0bed5e6e-3988-4b6d-8ff4-73ee4ceb36d7
+:END:
+#+name: uniprot_prefixes
+#+begin_src sparql :url https://sparql.uniprot.org/sparql :noweb-ref prefixes
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX vg: <http://biohackathon.org/resource/vg#>
+PREFIX up: <http://purl.uniprot.org/core/>
+PREFIX uniprotkb: <http://purl.uniprot.org/uniprot/>
+PREFIX uberon: <http://purl.obolibrary.org/obo/uo#>
+PREFIX taxon: <http://purl.uniprot.org/taxonomy/>
+PREFIX SWISSLIPID: <https://swisslipids.org/rdf/SLM_>
+PREFIX sp: <http://spinrdf.org/sp#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX sio: <http://semanticscience.org/resource/>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
+PREFIX schema: <http://schema.org/>
+PREFIX sachem: <http://bioinfo.uochb.cas.cz/rdf/v1.0/sachem#>
+PREFIX rh: <http://rdf.rhea-db.org/>
+PREFIX pubmed: <http://rdf.ncbi.nlm.nih.gov/pubmed/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX patent: <http://data.epo.org/linked-data/def/patent/>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX orthodbGroup: <http://purl.orthodb.org/odbgroup/>
+PREFIX orthodb: <http://purl.orthodb.org/>
+PREFIX orth: <http://purl.org/net/orth#>
+PREFIX oboInOwl: <http://www.geneontology.org/formats/oboInOwl#>
+PREFIX mnx: <https://rdf.metanetx.org/schema/>
+PREFIX mnet: <https://rdf.metanetx.org/mnet/>
+PREFIX mesh: <http://id.nlm.nih.gov/mesh/>
+PREFIX lscr: <http://purl.org/lscr#>
+PREFIX lipidmaps: <https://www.lipidmaps.org/rdf/>
+PREFIX keywords: <http://purl.uniprot.org/keywords/>
+PREFIX insdcschema: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>
+PREFIX insdc: <http://identifiers.org/insdc/>
+PREFIX identifiers: <http://identifiers.org/>
+PREFIX GO: <http://purl.obolibrary.org/obo/GO_>
+PREFIX glyconnect: <https://purl.org/glyconnect/>
+PREFIX glycan: <http://purl.jp/bio/12/glyco/glycan#>
+PREFIX genex: <http://purl.org/genex#>
+PREFIX faldo: <http://biohackathon.org/resource/faldo#>
+PREFIX eunisSpecies: <http://eunis.eea.europa.eu/rdf/species-schema.rdf#>
+PREFIX ensembltranscript: <http://rdf.ebi.ac.uk/resource/ensembl.transcript/>
+PREFIX ensemblterms: <http://rdf.ebi.ac.uk/terms/ensembl/>
+PREFIX ensemblprotein: <http://rdf.ebi.ac.uk/resource/ensembl.protein/>
+PREFIX ensemblexon: <http://rdf.ebi.ac.uk/resource/ensembl.exon/>
+PREFIX ensembl: <http://rdf.ebi.ac.uk/resource/ensembl/>
+PREFIX ECO: <http://purl.obolibrary.org/obo/ECO_>
+PREFIX ec: <http://purl.uniprot.org/enzyme/>
+PREFIX chebislash: <http://purl.obolibrary.org/obo/chebi/>
+PREFIX chebihash: <http://purl.obolibrary.org/obo/chebi#>
+PREFIX CHEBI: <http://purl.obolibrary.org/obo/CHEBI_>
+PREFIX cco: <http://rdf.ebi.ac.uk/terms/chembl#>
+PREFIX busco: <http://busco.ezlab.org/schema#>
+PREFIX bibo: <http://purl.org/ontology/bibo/>
+PREFIX allie: <http://allie.dbcls.jp/>
+#+end_src
+
+** Protein and gene name
+:PROPERTIES:
+:ID:       40190bbc-ab4e-43d5-ab47-9730101c19c1
+:END:
+#+name: uniprot_protein_gene
+#+begin_src sparql :url https://sparql.uniprot.org/sparql
+  <<uniprot_prefixes>>
+  select *
+  where {
+    ?p a up:Protein;
+       up:encodedBy ?gene ;
+       up:organism taxon:216595 .
+     ?gene skos:prefLabel "wspF" .
+    }
+  limit 3
+#+end_src
+
+#+RESULTS:
+| p                                      | gene                                                                            |
+|----------------------------------------+---------------------------------------------------------------------------------|
+| http://purl.uniprot.org/uniprot/C3KE15 | http://purl.uniprot.org/uniprot/C3KE15#gene-MD50213B396243BFEF1A8961590CBCB65DC |
+
+** Gene ontology annotation from image key-value data
+:PROPERTIES:
+:ID:       ea9f2888-c48a-47b2-b0e1-b6942c79b88b
+:END:
+
+:PROPERTIES:
+:ID:       bf459494-2fe9-436b-9d7f-8294b278c5b1
+:END:
+#+begin_src sparql :url https://sparql.uniprot.org/sparql
+  <<prefixes>>
+  <<uniprot_prefixes>>
+  select distinct ?img ?gene ?protein ?go_term where {
+    service <https://omero-nfdi.uni-muenster.de/vkg/sparql> {
+        ?img a omecore:Image;
+             kv:Genotype ?gene .
+    }
+      ?protein a up:Protein;
+         up:encodedBy ?up_gene ;
+         up:organism taxon:216595 ;
+         up:classifiedWith ?go_term .
+      ?up_gene skos:prefLabel ?gene .
+      filter(strstarts(str(?go_term), str(GO:)))
+  }
+
+  limit 300
+
+#+end_src
+
+#+RESULTS:
+| img                                          | gene | protein                                | go_term                                   |
+|----------------------------------------------+------+----------------------------------------+-------------------------------------------|
+| https://omero-nfdi.uni-muenster.de/Image/113 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/113 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/113 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/113 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/113 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/116 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/116 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/116 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/116 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/116 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/119 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/119 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/119 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/119 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/119 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/125 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/125 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/125 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/125 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/125 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/143 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/143 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/143 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/143 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/143 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/144 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/144 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/144 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/144 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/144 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/145 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/145 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/145 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/145 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/145 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/147 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/147 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/147 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/147 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/147 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/149 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/149 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/149 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/149 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/149 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/153 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/153 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/153 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/153 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/153 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/154 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/154 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/154 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/154 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/154 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/157 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/157 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/157 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/157 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/157 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/158 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/158 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/158 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/158 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/158 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/161 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/161 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/161 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/161 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/161 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/167 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/167 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/167 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/167 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/167 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/179 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/179 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/179 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/179 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/179 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/183 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/183 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/183 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/183 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/183 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/190 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/190 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/190 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/190 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/190 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
+| https://omero-nfdi.uni-muenster.de/Image/192 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0000156 |
+| https://omero-nfdi.uni-muenster.de/Image/192 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0005737 |
+| https://omero-nfdi.uni-muenster.de/Image/192 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0006935 |
+| https://omero-nfdi.uni-muenster.de/Image/192 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0008984 |
+| https://omero-nfdi.uni-muenster.de/Image/192 | wspF | http://purl.uniprot.org/uniprot/C3KE15 | http://purl.obolibrary.org/obo/GO_0050568 |
