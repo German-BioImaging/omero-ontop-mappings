@@ -45,7 +45,7 @@ target		ome_instance:Screen/{id} a core:Screen ; dc:identifier {id}^^xsd:integer
 source		select id, group_id from screen where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
 mappingId	roi-id
-target		ome_instance:ROI/{id} a core:Image ; dc:identifier {id}^^xsd:integer . 
+target		ome_instance:ROI/{id} a core:ROI ; dc:identifier {id}^^xsd:integer . 
 source		select id, group_id from roi where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
 mappingId	plateacquisition-id

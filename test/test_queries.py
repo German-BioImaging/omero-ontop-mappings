@@ -11,6 +11,26 @@ import unittest
 
 ENDPOINT = "http://localhost:8080/sparql"
 
+# --- Helper for order-independent pair checks 
+def as_pairs(df, left, right):
+    """
+    Convert two DataFrame columns into a list of paired tuples.
+
+    This helper is used when query results might come back
+    in a different row order (SPARQL queries through Ontop).
+    """
+    #Extract the values from the left column as a list.
+    left_values = df[left].tolist()
+
+    #Extract the values from the right column as a list.
+    right_values = df[right].tolist()
+
+    #Combine both lists element-by-element into pairs.
+    # Example: ["A", "B"], ["1", "2"] → [("A", "1"), ("B", "2")]
+    paired = list(zip(left_values, right_values))
+
+    return paired
+
 # Check if endpoint is reachable.
 def check_endpoint():
     try:
@@ -517,11 +537,15 @@ select ?img ?roi where {
 
         print(results.to_string())
 
-        # Check return values.
-        self.assertEqual(results.loc[0, "img"], "https://example.org/site/Image/11")
-        self.assertEqual(results.loc[0, "roi"], "https://example.org/site/ROI/1")
-        self.assertEqual(results.loc[1, "img"], "https://example.org/site/Image/12")
-        self.assertEqual(results.loc[1, "roi"], "https://example.org/site/ROI/2")
+        expected = [
+        ("https://example.org/site/Image/11", "https://example.org/site/ROI/1"),
+        ("https://example.org/site/Image/12", "https://example.org/site/ROI/2"),
+        ]
+        # Actual pairs from the query results (order may vary)
+        actual = as_pairs(results, "img", "roi")
+        print("Actual pairs:", actual)
+        # Check that actual pairs match expected, ignoring order.
+        self.assertCountEqual(actual, expected)
 
     def test_image_properties(self):
         """ Check Image instances have all expected properties. """
