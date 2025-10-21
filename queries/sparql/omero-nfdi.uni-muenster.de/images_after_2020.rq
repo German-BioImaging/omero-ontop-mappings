@@ -1,12 +1,3 @@
------------------------------------------------------------------------------
---
---  Source code generated automatically by 'org-babel-tangle' from
---  file /home/grotec/Projects/omero-vkg/queries/sparql/omero-nfdi.uni-muenster.de/images_after_2020.rq
---  2025-10-21 14:22:56
---
---  DO NOT EDIT!!
---
------------------------------------------------------------------------------
 
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
