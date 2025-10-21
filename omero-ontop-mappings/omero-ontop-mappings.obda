@@ -228,7 +228,7 @@ source		select
 			join annotation on projectannotationlink.child = annotation.id where annotation.textvalue is not NULL
 
 mappingId	MAPID-dataset-image
-target		ome_instance:Dataset/{dataset_id} core:image ome_instance:Image/{image_id} ; dc:identifier {image_id}^^xsd:integer . 
+target		ome_instance:Dataset/{dataset_id} core:image ome_instance:Image/{image_id} . 
 source		select
 			_dataset.id as dataset_id,
 			_datasetimagelink.child as image_id
