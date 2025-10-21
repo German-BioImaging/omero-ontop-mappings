@@ -47,9 +47,9 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 select distinct * where {
   ?proj a omecore:Project ;
-    omekg:dataset ?dataset .
+    omecore:dataset ?dataset .
   ?dataset a omecore:Dataset ;
-    omekg:image ?image .
+    omecore:image ?image .
   ?image a omecore:Image ;
     rdfs:label ?name .
 }
@@ -110,7 +110,7 @@ PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
 SELECT ?dataset (count(distinct ?img) as ?Nimg)
 WHERE {
   ?img a omecore:Image ;
-       ^omekg:image ?dataset . # Uses inverse property.
+       ^omecore:image ?dataset . # Uses inverse property.
   ?dataset a omecore:Dataset .
 
 
