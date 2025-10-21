@@ -1,0 +1,414 @@
+#+title: Example queries for omero-nfdi.uni-muenster.de/vkg
+#+author: Carsten Fortmann-Grote (@CFGrote)
+#+date: [2025-10-21 Tue] 
+#+property: header-args:sparql :url https://omero-nfdi.uni-muenster.de/vkg/sparql :cache no :results output table :noweb yes :mkdirp yes :comments link
+* Prefixes
+:PROPERTIES:
+:ID:       62a37deb-cf19-46b5-acae-764cdfb04543
+:END:
+#+name: prefixes
+#+begin_src sparql :eval no
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX dcterms: <http://purl.org/dc/terms/>
+  PREFIX dc: <http://purl.org/dc/elements/1.1/>
+  PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+  PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+  PREFIX obda: <https://w3id.org/obda/vocabulary#>
+  PREFIX xml: <http://www.w3.org/XML/1998/namespace/>
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+  PREFIX kv: <http://www.openmicroscopy.org/ns/default/>
+  prefix site_image: <https://omero-nfdi.uni-muenster.de/Image/> 
+#+end_src
+
+* Basic queries
+:PROPERTIES:
+:ID:       20cabab8-d2ea-4a69-b9ac-8f742b66cb06
+:END:
+** All projects
+:PROPERTIES:
+:ID:       2f14f869-3fcb-466a-a920-68870dbf89b5
+:END:
+#+name: all_projects
+#+begin_src sparql :tangle omero-nfdi.uni-muenster.de/all_projects.rq 
+  <<prefixes>>
+
+  select ?project where {
+    ?project a omecore:Project .
+  }
+
+#+end_src
+
+#+RESULTS: all_projects
+| project                                        |
+|------------------------------------------------|
+| https://omero-nfdi.uni-muenster.de/Project/1   |
+| https://omero-nfdi.uni-muenster.de/Project/102 |
+| https://omero-nfdi.uni-muenster.de/Project/151 |
+| https://omero-nfdi.uni-muenster.de/Project/51  |
+| https://omero-nfdi.uni-muenster.de/Project/52  |
+| https://omero-nfdi.uni-muenster.de/Project/53  |
+
+** Datasets in a Project
+:PROPERTIES:
+:ID:       5396c961-e751-40a5-89b9-6129a74bdec3
+:END:
+#+name: datasets_in_project
+#+begin_src sparql :tangle omero-nfdi.uni-muenster.de/project_datasets.rq :cache false
+  <<prefixes>>
+
+  select distinct ?project ?project_name ?dataset ?dataset_name
+  where {
+     ?project a omecore:Project ;
+              rdfs:label ?project_name ;
+              omecore:dataset ?dataset .
+     ?dataset a omecore:Dataset .
+     ?dataset rdfs:label ?dataset_name .
+   }
+#+end_src
+
+#+RESULTS: datasets_in_project
+| project                                        | project_name               | dataset                                        | dataset_name             |
+|------------------------------------------------+----------------------------+------------------------------------------------+--------------------------|
+| https://omero-nfdi.uni-muenster.de/Project/1   | Sample Data                | https://omero-nfdi.uni-muenster.de/Dataset/3   | Leica                    |
+| https://omero-nfdi.uni-muenster.de/Project/1   | Sample Data                | https://omero-nfdi.uni-muenster.de/Dataset/2   | Zeiss                    |
+| https://omero-nfdi.uni-muenster.de/Project/1   | Sample Data                | https://omero-nfdi.uni-muenster.de/Dataset/1   | simple single images     |
+| https://omero-nfdi.uni-muenster.de/Project/102 | 2023-experiment125-cells   | https://omero-nfdi.uni-muenster.de/Dataset/159 | 2023-experiment125-cells |
+| https://omero-nfdi.uni-muenster.de/Project/151 | napari-omero-test          | https://omero-nfdi.uni-muenster.de/Dataset/201 | A9                       |
+| https://omero-nfdi.uni-muenster.de/Project/151 | napari-omero-test          | https://omero-nfdi.uni-muenster.de/Dataset/203 | f9620                    |
+| https://omero-nfdi.uni-muenster.de/Project/51  | Gerblin                    | https://omero-nfdi.uni-muenster.de/Dataset/101 | templates                |
+| https://omero-nfdi.uni-muenster.de/Project/52  | Project                    | https://omero-nfdi.uni-muenster.de/Dataset/102 | Dataset 1                |
+| https://omero-nfdi.uni-muenster.de/Project/52  | Project                    | https://omero-nfdi.uni-muenster.de/Dataset/103 | Dataset 2                |
+| https://omero-nfdi.uni-muenster.de/Project/52  | Project                    | https://omero-nfdi.uni-muenster.de/Dataset/104 | Dataset 3                |
+| https://omero-nfdi.uni-muenster.de/Project/53  | SBW25_WT_GT_classification | https://omero-nfdi.uni-muenster.de/Dataset/105 | 0085                     |
+| https://omero-nfdi.uni-muenster.de/Project/53  | SBW25_WT_GT_classification | https://omero-nfdi.uni-muenster.de/Dataset/106 | awsX                     |
+| https://omero-nfdi.uni-muenster.de/Project/53  | SBW25_WT_GT_classification | https://omero-nfdi.uni-muenster.de/Dataset/107 | mix                      |
+| https://omero-nfdi.uni-muenster.de/Project/53  | SBW25_WT_GT_classification | https://omero-nfdi.uni-muenster.de/Dataset/108 | mwsR                     |
+| https://omero-nfdi.uni-muenster.de/Project/53  | SBW25_WT_GT_classification | https://omero-nfdi.uni-muenster.de/Dataset/109 | wspF                     |
+| https://omero-nfdi.uni-muenster.de/Project/53  | SBW25_WT_GT_classification | https://omero-nfdi.uni-muenster.de/Dataset/110 | wt                       |
+
+** Images in Datasets
+:PROPERTIES:
+:ID:       54ab42f7-02fe-4164-80ba-1ac0683466df
+:END:
+#+name: images_in_datasets
+#+begin_src sparql :tangle omero-nfdi.uni-muenster.de/dataset_images.rq
+  <<prefixes>>
+
+  select ?dataset ?image ?image_id
+  where {
+    ?dataset a omecore:Dataset;
+             omecore:image ?image .
+    ?image dc:identifier ?image_id .
+  }
+
+#+end_src
+
+#+RESULTS: images_in_datasets
+| dataset                                        | image                                          | image_id |
+|------------------------------------------------+------------------------------------------------+----------|
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29508 |    29508 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/178   |      178 |
+| https://omero-nfdi.uni-muenster.de/Dataset/212 | https://omero-nfdi.uni-muenster.de/Image/29829 |    29829 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/200   |      200 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/147   |      147 |
+| https://omero-nfdi.uni-muenster.de/Dataset/1   | https://omero-nfdi.uni-muenster.de/Image/4     |        4 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/162   |      162 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/145   |      145 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29490 |    29490 |
+| https://omero-nfdi.uni-muenster.de/Dataset/211 | https://omero-nfdi.uni-muenster.de/Image/29821 |    29821 |
+| https://omero-nfdi.uni-muenster.de/Dataset/3   | https://omero-nfdi.uni-muenster.de/Image/9     |        9 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29505 |    29505 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/170   |      170 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/198   |      198 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/160   |      160 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29511 |    29511 |
+| https://omero-nfdi.uni-muenster.de/Dataset/103 | https://omero-nfdi.uni-muenster.de/Image/105   |      105 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/118   |      118 |
+| https://omero-nfdi.uni-muenster.de/Dataset/211 | https://omero-nfdi.uni-muenster.de/Image/29824 |    29824 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29500 |    29500 |
+| https://omero-nfdi.uni-muenster.de/Dataset/103 | https://omero-nfdi.uni-muenster.de/Image/106   |      106 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/201   |      201 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/133   |      133 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/192   |      192 |
+| https://omero-nfdi.uni-muenster.de/Dataset/103 | https://omero-nfdi.uni-muenster.de/Image/112   |      112 |
+| https://omero-nfdi.uni-muenster.de/Dataset/2   | https://omero-nfdi.uni-muenster.de/Image/8     |        8 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29477 |    29477 |
+| https://omero-nfdi.uni-muenster.de/Dataset/201 | https://omero-nfdi.uni-muenster.de/Image/29586 |    29586 |
+| https://omero-nfdi.uni-muenster.de/Dataset/3   | https://omero-nfdi.uni-muenster.de/Image/10    |       10 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/196   |      196 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29484 |    29484 |
+| https://omero-nfdi.uni-muenster.de/Dataset/110 | https://omero-nfdi.uni-muenster.de/Image/182   |      182 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/189   |      189 |
+| https://omero-nfdi.uni-muenster.de/Dataset/211 | https://omero-nfdi.uni-muenster.de/Image/29827 |    29827 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29503 |    29503 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29514 |    29514 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/117   |      117 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29485 |    29485 |
+| https://omero-nfdi.uni-muenster.de/Dataset/211 | https://omero-nfdi.uni-muenster.de/Image/29828 |    29828 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/187   |      187 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29468 |    29468 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/150   |      150 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/166   |      166 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29487 |    29487 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/194   |      194 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/158   |      158 |
+| https://omero-nfdi.uni-muenster.de/Dataset/1   | https://omero-nfdi.uni-muenster.de/Image/1     |        1 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/169   |      169 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29495 |    29495 |
+| https://omero-nfdi.uni-muenster.de/Dataset/211 | https://omero-nfdi.uni-muenster.de/Image/29822 |    29822 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/172   |      172 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/183   |      183 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/177   |      177 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/136   |      136 |
+| https://omero-nfdi.uni-muenster.de/Dataset/3   | https://omero-nfdi.uni-muenster.de/Image/11    |       11 |
+| https://omero-nfdi.uni-muenster.de/Dataset/203 | https://omero-nfdi.uni-muenster.de/Image/29589 |    29589 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/113   |      113 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/164   |      164 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/121   |      121 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/180   |      180 |
+| https://omero-nfdi.uni-muenster.de/Dataset/1   | https://omero-nfdi.uni-muenster.de/Image/3     |        3 |
+| https://omero-nfdi.uni-muenster.de/Dataset/110 | https://omero-nfdi.uni-muenster.de/Image/152   |      152 |
+| https://omero-nfdi.uni-muenster.de/Dataset/103 | https://omero-nfdi.uni-muenster.de/Image/111   |      111 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/116   |      116 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/124   |      124 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/131   |      131 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/193   |      193 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/153   |      153 |
+| https://omero-nfdi.uni-muenster.de/Dataset/3   | https://omero-nfdi.uni-muenster.de/Image/13    |       13 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29473 |    29473 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/195   |      195 |
+| https://omero-nfdi.uni-muenster.de/Dataset/211 | https://omero-nfdi.uni-muenster.de/Image/29818 |    29818 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/144   |      144 |
+| https://omero-nfdi.uni-muenster.de/Dataset/3   | https://omero-nfdi.uni-muenster.de/Image/17    |       17 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/167   |      167 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29475 |    29475 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29491 |    29491 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/197   |      197 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/179   |      179 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/175   |      175 |
+| https://omero-nfdi.uni-muenster.de/Dataset/102 | https://omero-nfdi.uni-muenster.de/Image/102   |      102 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/125   |      125 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29492 |    29492 |
+| https://omero-nfdi.uni-muenster.de/Dataset/1   | https://omero-nfdi.uni-muenster.de/Image/6     |        6 |
+| https://omero-nfdi.uni-muenster.de/Dataset/1   | https://omero-nfdi.uni-muenster.de/Image/5     |        5 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29501 |    29501 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/146   |      146 |
+| https://omero-nfdi.uni-muenster.de/Dataset/3   | https://omero-nfdi.uni-muenster.de/Image/15    |       15 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29486 |    29486 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29498 |    29498 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29510 |    29510 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/127   |      127 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29507 |    29507 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29489 |    29489 |
+| https://omero-nfdi.uni-muenster.de/Dataset/103 | https://omero-nfdi.uni-muenster.de/Image/103   |      103 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/130   |      130 |
+| https://omero-nfdi.uni-muenster.de/Dataset/201 | https://omero-nfdi.uni-muenster.de/Image/29587 |    29587 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29471 |    29471 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/137   |      137 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29494 |    29494 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/132   |      132 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/128   |      128 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/190   |      190 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29513 |    29513 |
+| https://omero-nfdi.uni-muenster.de/Dataset/105 | https://omero-nfdi.uni-muenster.de/Image/159   |      159 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/155   |      155 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/186   |      186 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/139   |      139 |
+| https://omero-nfdi.uni-muenster.de/Dataset/211 | https://omero-nfdi.uni-muenster.de/Image/29825 |    29825 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/185   |      185 |
+| https://omero-nfdi.uni-muenster.de/Dataset/104 | https://omero-nfdi.uni-muenster.de/Image/108   |      108 |
+| https://omero-nfdi.uni-muenster.de/Dataset/102 | https://omero-nfdi.uni-muenster.de/Image/101   |      101 |
+| https://omero-nfdi.uni-muenster.de/Dataset/203 | https://omero-nfdi.uni-muenster.de/Image/29590 |    29590 |
+| https://omero-nfdi.uni-muenster.de/Dataset/1   | https://omero-nfdi.uni-muenster.de/Image/2     |        2 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/129   |      129 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29488 |    29488 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/138   |      138 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29481 |    29481 |
+| https://omero-nfdi.uni-muenster.de/Dataset/110 | https://omero-nfdi.uni-muenster.de/Image/148   |      148 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29504 |    29504 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29506 |    29506 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/173   |      173 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/154   |      154 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29469 |    29469 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29482 |    29482 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/135   |      135 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/140   |      140 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29474 |    29474 |
+| https://omero-nfdi.uni-muenster.de/Dataset/3   | https://omero-nfdi.uni-muenster.de/Image/14    |       14 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29470 |    29470 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29499 |    29499 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29472 |    29472 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/176   |      176 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/181   |      181 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/123   |      123 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/163   |      163 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/142   |      142 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/114   |      114 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29515 |    29515 |
+| https://omero-nfdi.uni-muenster.de/Dataset/105 | https://omero-nfdi.uni-muenster.de/Image/168   |      168 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29502 |    29502 |
+| https://omero-nfdi.uni-muenster.de/Dataset/110 | https://omero-nfdi.uni-muenster.de/Image/199   |      199 |
+| https://omero-nfdi.uni-muenster.de/Dataset/211 | https://omero-nfdi.uni-muenster.de/Image/29819 |    29819 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/151   |      151 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/202   |      202 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29483 |    29483 |
+| https://omero-nfdi.uni-muenster.de/Dataset/211 | https://omero-nfdi.uni-muenster.de/Image/29820 |    29820 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29509 |    29509 |
+| https://omero-nfdi.uni-muenster.de/Dataset/105 | https://omero-nfdi.uni-muenster.de/Image/120   |      120 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/115   |      115 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29478 |    29478 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29496 |    29496 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/165   |      165 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/188   |      188 |
+| https://omero-nfdi.uni-muenster.de/Dataset/1   | https://omero-nfdi.uni-muenster.de/Image/7     |        7 |
+| https://omero-nfdi.uni-muenster.de/Dataset/103 | https://omero-nfdi.uni-muenster.de/Image/104   |      104 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/191   |      191 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29480 |    29480 |
+| https://omero-nfdi.uni-muenster.de/Dataset/3   | https://omero-nfdi.uni-muenster.de/Image/12    |       12 |
+| https://omero-nfdi.uni-muenster.de/Dataset/211 | https://omero-nfdi.uni-muenster.de/Image/29826 |    29826 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/126   |      126 |
+| https://omero-nfdi.uni-muenster.de/Dataset/211 | https://omero-nfdi.uni-muenster.de/Image/29823 |    29823 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/171   |      171 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/184   |      184 |
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | https://omero-nfdi.uni-muenster.de/Image/174   |      174 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/161   |      161 |
+| https://omero-nfdi.uni-muenster.de/Dataset/3   | https://omero-nfdi.uni-muenster.de/Image/16    |       16 |
+| https://omero-nfdi.uni-muenster.de/Dataset/201 | https://omero-nfdi.uni-muenster.de/Image/29585 |    29585 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/141   |      141 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29512 |    29512 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29476 |    29476 |
+| https://omero-nfdi.uni-muenster.de/Dataset/159 | https://omero-nfdi.uni-muenster.de/Image/29479 |    29479 |
+| https://omero-nfdi.uni-muenster.de/Dataset/104 | https://omero-nfdi.uni-muenster.de/Image/109   |      109 |
+| https://omero-nfdi.uni-muenster.de/Dataset/104 | https://omero-nfdi.uni-muenster.de/Image/110   |      110 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/134   |      134 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/119   |      119 |
+| https://omero-nfdi.uni-muenster.de/Dataset/103 | https://omero-nfdi.uni-muenster.de/Image/107   |      107 |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | https://omero-nfdi.uni-muenster.de/Image/156   |      156 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29497 |    29497 |
+| https://omero-nfdi.uni-muenster.de/Dataset/160 | https://omero-nfdi.uni-muenster.de/Image/29493 |    29493 |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | https://omero-nfdi.uni-muenster.de/Image/122   |      122 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/143   |      143 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/157   |      157 |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | https://omero-nfdi.uni-muenster.de/Image/149   |      149 |
+| https://omero-nfdi.uni-muenster.de/Dataset/201 | https://omero-nfdi.uni-muenster.de/Image/29584 |    29584 |
+
+** Image properties
+:PROPERTIES:
+:ID:       7ffd96b8-e2f8-43f3-8b9d-1b7c2a50e4a7
+:END:
+#+name: image_properties
+#+begin_src sparql :tangle omero-nfdi.uni-muenster.de/image_properties.rq
+  <<prefixes>>
+
+  select distinct *
+  where {
+    site_image:122 ?prop ?val .
+    }
+  limit 10
+#+end_src
+
+#+RESULTS: image_properties
+| prop                                                  | val                                                                                 |
+|-------------------------------------------------------+-------------------------------------------------------------------------------------|
+| http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/Image                                            |
+| https://ld.openmicroscopy.org/omekg#acquisition_date  | 2023-05-19T15:21:28                                                                 |
+| http://purl.org/dc/elements/1.1/identifier            | 122                                                                                 |
+| http://www.w3.org/2000/01/rdf-schema#label            | awsX-01.jpg                                                                         |
+| https://ld.openmicroscopy.org/core/experimenter       | https://omero-nfdi.uni-muenster.de/Experimenter/3                                   |
+| https://ld.openmicroscopy.org/core/experimenter_group | https://omero-nfdi.uni-muenster.de/ExperimenterGroup/3                              |
+| http://www.openmicroscopy.org/ns/default/Genotype     | awsX                                                                                |
+| http://www.openmicroscopy.org/ns/default/Study        | Segmentation and Classification of Pseudomonas fluorescens SBW25 colony morphotypes |
+| http://www.openmicroscopy.org/ns/default/Phenotype    | WS                                                                                  |
+| http://www.openmicroscopy.org/ns/default/MPB          | 15456                                                                               |
+
+
+
+** Images acquired after 2020
+:PROPERTIES:
+:ID:       b283424e-761d-4a43-b01a-dc9e3bddc4bc
+:END:
+#+name: images_after_2020
+#+begin_src sparql :tangle omero-nfdi.uni-muenster.de/images_after_2020.rq :cache nil
+  <<prefixes>>
+
+  select *
+  where {
+    ?img a omecore:Image;
+         omekg:acquisition_date ?acq_date .
+    filter(?acq_date > "2019-12-31T23:59:59"^^xsd:dateTime)
+    }
+  order by desc(?acq_date)
+  limit 30 
+
+#+end_src
+
+#+RESULTS: images_after_2020
+| img                                          | acq_date            |
+|----------------------------------------------+---------------------|
+| https://omero-nfdi.uni-muenster.de/Image/139 | 2023-05-19T17:20:47 |
+| https://omero-nfdi.uni-muenster.de/Image/114 | 2023-05-19T17:20:20 |
+| https://omero-nfdi.uni-muenster.de/Image/191 | 2023-05-19T17:19:30 |
+| https://omero-nfdi.uni-muenster.de/Image/188 | 2023-05-19T17:19:17 |
+| https://omero-nfdi.uni-muenster.de/Image/117 | 2023-05-19T17:18:45 |
+| https://omero-nfdi.uni-muenster.de/Image/197 | 2023-05-19T17:17:17 |
+| https://omero-nfdi.uni-muenster.de/Image/187 | 2023-05-19T17:16:28 |
+| https://omero-nfdi.uni-muenster.de/Image/162 | 2023-05-19T17:16:00 |
+| https://omero-nfdi.uni-muenster.de/Image/124 | 2023-05-19T17:15:36 |
+| https://omero-nfdi.uni-muenster.de/Image/174 | 2023-05-19T17:15:17 |
+| https://omero-nfdi.uni-muenster.de/Image/200 | 2023-05-19T17:14:54 |
+| https://omero-nfdi.uni-muenster.de/Image/123 | 2023-05-19T17:14:29 |
+| https://omero-nfdi.uni-muenster.de/Image/195 | 2023-05-19T17:13:51 |
+| https://omero-nfdi.uni-muenster.de/Image/137 | 2023-05-19T17:13:29 |
+| https://omero-nfdi.uni-muenster.de/Image/165 | 2023-05-19T17:12:56 |
+| https://omero-nfdi.uni-muenster.de/Image/175 | 2023-05-19T17:12:35 |
+| https://omero-nfdi.uni-muenster.de/Image/129 | 2023-05-19T17:12:05 |
+| https://omero-nfdi.uni-muenster.de/Image/132 | 2023-05-19T17:11:39 |
+| https://omero-nfdi.uni-muenster.de/Image/168 | 2023-05-19T17:09:33 |
+| https://omero-nfdi.uni-muenster.de/Image/120 | 2023-05-19T17:08:53 |
+| https://omero-nfdi.uni-muenster.de/Image/159 | 2023-05-19T17:08:16 |
+| https://omero-nfdi.uni-muenster.de/Image/183 | 2023-05-19T17:01:14 |
+| https://omero-nfdi.uni-muenster.de/Image/116 | 2023-05-19T17:00:48 |
+| https://omero-nfdi.uni-muenster.de/Image/144 | 2023-05-19T17:00:23 |
+| https://omero-nfdi.uni-muenster.de/Image/192 | 2023-05-19T17:00:10 |
+| https://omero-nfdi.uni-muenster.de/Image/147 | 2023-05-19T16:59:56 |
+| https://omero-nfdi.uni-muenster.de/Image/143 | 2023-05-19T16:58:42 |
+| https://omero-nfdi.uni-muenster.de/Image/157 | 2023-05-19T16:58:30 |
+| https://omero-nfdi.uni-muenster.de/Image/149 | 2023-05-19T16:57:44 |
+| https://omero-nfdi.uni-muenster.de/Image/179 | 2023-05-19T16:57:20 |
+
+
+** Oldest image in dataset
+:PROPERTIES:
+:ID:       94de1ac5-1974-4d87-872c-aa6f2e291b54
+:END:
+#+name: oldest_image_in_dataset
+#+begin_src sparql :tangle omero-nfdi.uni-muenster.de/oldest_image_in_dataset.rq
+  <<prefixes>>
+
+  select ?dataset (max(?acq_date) as ?oldest_acq_date)
+  where {
+    ?img a omecore:Image;
+         omekg:acquisition_date ?acq_date;
+         ^omecore:image ?dataset .
+    ?dataset a omecore:Dataset .
+    }
+  group by ?dataset
+  order by desc(?oldest_acq_date)
+  limit 10
+#+end_src
+
+#+RESULTS: oldest_image_in_dataset
+| dataset                                        | oldest_acq_date               |
+|------------------------------------------------+-------------------------------|
+| https://omero-nfdi.uni-muenster.de/Dataset/107 | 2023-05-19T17:20:47+00:00     |
+| https://omero-nfdi.uni-muenster.de/Dataset/105 | 2023-05-19T17:09:33+00:00     |
+| https://omero-nfdi.uni-muenster.de/Dataset/109 | 2023-05-19T17:01:14+00:00     |
+| https://omero-nfdi.uni-muenster.de/Dataset/108 | 2023-05-19T16:44:49+00:00     |
+| https://omero-nfdi.uni-muenster.de/Dataset/110 | 2023-05-19T16:28:23+00:00     |
+| https://omero-nfdi.uni-muenster.de/Dataset/106 | 2023-05-19T15:55:22+00:00     |
+| https://omero-nfdi.uni-muenster.de/Dataset/2   | 2022-09-23T12:44:09.958+00:00 |
+| https://omero-nfdi.uni-muenster.de/Dataset/1   | 2022-01-04T17:11:00+00:00     |
+| https://omero-nfdi.uni-muenster.de/Dataset/3   | 2020-03-05T08:46:31+00:00     |
+

@@ -1,0 +1,22 @@
+-----------------------------------------------------------------------------
+--
+--  Source code generated automatically by 'org-babel-tangle' from
+--  file /home/grotec/Projects/omero-vkg/queries/sparql/omero-nfdi.uni-muenster.de/images_after_2024.rq
+--  2025-10-21 13:59:24
+--
+--  DO NOT EDIT!!
+--
+-----------------------------------------------------------------------------
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+PREFIX obda: <https://w3id.org/obda/vocabulary#>
+PREFIX xml: <http://www.w3.org/XML/1998/namespace/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX kv: <http://www.openmicroscopy.org/ns/default/>
+prefix site_image: <https://omero-nfdi.uni-muenster.de/Image/>
