@@ -545,89 +545,39 @@ xsd:date rdf:type rdfs:Datatype .
 #################################################################
 
 ###  https://ld.openmicroscopy.org/core/dataset
-core:dataset rdf:type owl:ObjectProperty ;
-             rdfs:range core:Dataset ,
-                        omekg:Dataset .
+core:dataset rdf:type owl:ObjectProperty .
 
 
-###  https://ld.openmicroscopy.org/core/experimenter
-core:experimenter owl:equivalentProperty this:experimenter ;
-                  rdfs:range core:Experimenter .
+###  https://ld.openmicroscopy.org/core/image
+core:image rdf:type owl:ObjectProperty .
 
 
-###  https://ld.openmicroscopy.org/core/experimenter_group
-core:experimenter_group owl:equivalentProperty core:group ,
-                                               this:experimenter_group ;
-                        rdfs:range omekg:ExperimenterGroup .
-
-
-###  https://ld.openmicroscopy.org/core/group
-core:group rdf:type owl:ObjectProperty ;
-           owl:equivalentProperty this:experimenter_group .
-
-
-###  https://ld.openmicroscopy.org/core/owner
-core:owner rdf:type owl:ObjectProperty ;
-           owl:equivalentProperty this:experimenter ;
-           rdfs:range omekg:Owner .
+###  https://ld.openmicroscopy.org/core/pixels
+core:pixels rdf:type owl:ObjectProperty .
 
 
 ###  https://ld.openmicroscopy.org/core/plate
-core:plate rdf:type owl:ObjectProperty ;
-           rdfs:range omekg:Plate .
+core:plate rdf:type owl:ObjectProperty .
 
 
 ###  https://ld.openmicroscopy.org/core/reagent
-core:reagent owl:equivalentProperty this:reagent .
+core:reagent rdf:type owl:ObjectProperty .
 
 
 ###  https://ld.openmicroscopy.org/core/run
-core:run rdf:type owl:ObjectProperty ;
-         owl:equivalentProperty this:plate_acquisition .
+core:run rdf:type owl:ObjectProperty .
+
+
+###  https://ld.openmicroscopy.org/core/screen
+core:screen rdf:type owl:ObjectProperty .
 
 
 ###  https://ld.openmicroscopy.org/core/well
 core:well rdf:type owl:ObjectProperty .
 
 
-###  https://ld.openmicroscopy.org/omekg#experimenter
-this:experimenter rdf:type owl:ObjectProperty ;
-                  rdfs:range omekg:Experimenter ;
-                  rdfs:isDefinedBy core:experimenter .
-
-
-###  https://ld.openmicroscopy.org/omekg#experimenter_group
-this:experimenter_group rdf:type owl:ObjectProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#image
-this:image rdf:type owl:ObjectProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#pixels
-this:pixels rdf:type owl:ObjectProperty ;
-            rdfs:range omekg:Pixels .
-
-
-###  https://ld.openmicroscopy.org/omekg#plate_acquisition
-this:plate_acquisition rdf:type owl:ObjectProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#reagent
-this:reagent rdf:type owl:ObjectProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#roi
-this:roi rdf:type owl:ObjectProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#screen
-this:screen rdf:type owl:ObjectProperty ;
-            rdfs:range omekg:Screen .
-
-
-###  https://ld.openmicroscopy.org/omekg#well_sample
-this:well_sample rdf:type owl:ObjectProperty .
+###  https://ld.openmicroscopy.org/core/well_index
+core:well_index rdf:type owl:ObjectProperty .
 
 
 #################################################################
@@ -716,52 +666,40 @@ foaf:middleName rdf:type owl:DatatypeProperty .
 foaf:name rdf:type owl:DatatypeProperty .
 
 
+###  https://ld.openmicroscopy.org/core/physical_size_x_unit
+core:physical_size_x_unit rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/core/physical_size_x_value
+core:physical_size_x_value rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/core/physical_size_y_unit
+core:physical_size_y_unit rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/core/physical_size_y_value
+core:physical_size_y_value rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/core/physical_size_z_unit
+core:physical_size_z_unit rdf:type owl:DatatypeProperty .
+
+
+###  https://ld.openmicroscopy.org/core/physical_size_z_value
+core:physical_size_z_value rdf:type owl:DatatypeProperty .
+
+
 ###  https://ld.openmicroscopy.org/omekg#acquisition_date
 this:acquisition_date rdf:type owl:DatatypeProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#alpha
-this:alpha rdf:type owl:DatatypeProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#blue
 this:blue rdf:type owl:DatatypeProperty .
 
 
-###  https://ld.openmicroscopy.org/omekg#creation_id
-this:creation_id rdf:type owl:DatatypeProperty .
-
-
 ###  https://ld.openmicroscopy.org/omekg#green
 this:green rdf:type owl:DatatypeProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#omename
-this:omename rdf:type owl:DatatypeProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#physical_size_x
-this:physical_size_x rdf:type owl:DatatypeProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#physical_size_x_unit
-this:physical_size_x_unit rdf:type owl:DatatypeProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#physical_size_y
-this:physical_size_y rdf:type owl:DatatypeProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#physical_size_y_unit
-this:physical_size_y_unit rdf:type owl:DatatypeProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#physical_size_z
-this:physical_size_z rdf:type owl:DatatypeProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#physical_size_z_unit
-this:physical_size_z_unit rdf:type owl:DatatypeProperty .
 
 
 ###  https://ld.openmicroscopy.org/omekg#red
@@ -770,14 +708,6 @@ this:red rdf:type owl:DatatypeProperty .
 
 ###  https://ld.openmicroscopy.org/omekg#tag_annotation_value
 this:tag_annotation_value rdf:type owl:DatatypeProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#update_id
-this:update_id rdf:type owl:DatatypeProperty .
-
-
-###  https://ld.openmicroscopy.org/omekg#well_index
-this:well_index rdf:type owl:DatatypeProperty .
 
 
 #################################################################
@@ -887,146 +817,7 @@ dcterms:Standard rdf:type owl:Class .
 
 ###  http://xmlns.com/foaf/0.1/Person
 foaf:Person rdf:type owl:Class ;
-            owl:equivalentClass omekg:Experimenter .
-
-
-###  https://ld.openmicroscopy.org/core/Channel
-core:Channel owl:equivalentClass omekg:Channel .
-
-
-###  https://ld.openmicroscopy.org/core/Dataset
-core:Dataset owl:equivalentClass omekg:Dataset .
-
-
-###  https://ld.openmicroscopy.org/core/Experiment
-core:Experiment owl:equivalentClass omekg:Experiment .
-
-
-###  https://ld.openmicroscopy.org/core/Experimenter
-core:Experimenter owl:equivalentClass omekg:Experimenter ,
-                                      omekg:Owner .
-
-
-###  https://ld.openmicroscopy.org/core/ExperimenterGroup
-core:ExperimenterGroup owl:equivalentClass omekg:ExperimenterGroup ,
-                                           omekg:Group .
-
-
-###  https://ld.openmicroscopy.org/core/Image
-core:Image owl:equivalentClass omekg:Image .
-
-
-###  https://ld.openmicroscopy.org/core/Pixels
-core:Pixels owl:equivalentClass omekg:Pixels .
-
-
-###  https://ld.openmicroscopy.org/core/Plate
-core:Plate owl:equivalentClass omekg:Plate .
-
-
-###  https://ld.openmicroscopy.org/core/PlateAcquisition
-core:PlateAcquisition owl:equivalentClass omekg:PlateAcquisition .
-
-
-###  https://ld.openmicroscopy.org/core/Project
-core:Project owl:equivalentClass omekg:Project .
-
-
-###  https://ld.openmicroscopy.org/core/ROI
-core:ROI owl:equivalentClass omekg:ROI .
-
-
-###  https://ld.openmicroscopy.org/core/Reagent
-core:Reagent owl:equivalentClass omekg:Reagent .
-
-
-###  https://ld.openmicroscopy.org/core/Screen
-core:Screen owl:equivalentClass omekg:Screen .
-
-
-###  https://ld.openmicroscopy.org/core/Well
-core:Well owl:equivalentClass omekg:Well .
-
-
-###  https://ld.openmicroscopy.org/core/WellSample
-core:WellSample owl:equivalentClass omekg:WellSample .
-
-
-###  https://ld.openmicroscopy.org/omekg/Channel
-omekg:Channel rdf:type owl:Class .
-
-
-###  https://ld.openmicroscopy.org/omekg/Dataset
-omekg:Dataset rdf:type owl:Class ;
-              rdfs:isDefinedBy core:Dataset .
-
-
-###  https://ld.openmicroscopy.org/omekg/Experiment
-omekg:Experiment rdf:type owl:Class ;
-                 rdfs:isDefinedBy core:Experiment .
-
-
-###  https://ld.openmicroscopy.org/omekg/Experimenter
-omekg:Experimenter rdf:type owl:Class .
-
-
-###  https://ld.openmicroscopy.org/omekg/ExperimenterGroup
-omekg:ExperimenterGroup rdf:type owl:Class ;
-                        owl:equivalentClass omekg:Group ;
-                        rdfs:isDefinedBy core:ExperimenterGroup .
-
-
-###  https://ld.openmicroscopy.org/omekg/Group
-omekg:Group rdf:type owl:Class .
-
-
-###  https://ld.openmicroscopy.org/omekg/Image
-omekg:Image rdf:type owl:Class ;
-            rdfs:isDefinedBy core:Image .
-
-
-###  https://ld.openmicroscopy.org/omekg/Owner
-omekg:Owner rdf:type owl:Class .
-
-
-###  https://ld.openmicroscopy.org/omekg/Pixels
-omekg:Pixels rdf:type owl:Class .
-
-
-###  https://ld.openmicroscopy.org/omekg/Plate
-omekg:Plate rdf:type owl:Class .
-
-
-###  https://ld.openmicroscopy.org/omekg/PlateAcquisition
-omekg:PlateAcquisition rdf:type owl:Class .
-
-
-###  https://ld.openmicroscopy.org/omekg/Project
-omekg:Project rdf:type owl:Class ;
-              rdfs:isDefinedBy core:Project .
-
-
-###  https://ld.openmicroscopy.org/omekg/ROI
-omekg:ROI rdf:type owl:Class ;
-          rdfs:isDefinedBy core:ROI .
-
-
-###  https://ld.openmicroscopy.org/omekg/Reagent
-omekg:Reagent rdf:type owl:Class .
-
-
-###  https://ld.openmicroscopy.org/omekg/Screen
-omekg:Screen rdf:type owl:Class .
-
-
-###  https://ld.openmicroscopy.org/omekg/Well
-omekg:Well rdf:type owl:Class ;
-           rdfs:isDefinedBy core:Well .
-
-
-###  https://ld.openmicroscopy.org/omekg/WellSample
-omekg:WellSample rdf:type owl:Class ;
-                 rdfs:isDefinedBy core:WellSample .
+            owl:equivalentClass core:Experimenter .
 
 
 #################################################################
