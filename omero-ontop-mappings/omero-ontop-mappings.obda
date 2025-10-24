@@ -6,7 +6,6 @@ rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
 xml:		http://www.w3.org/XML/1998/namespace
 xsd:		http://www.w3.org/2001/XMLSchema#
 core:		https://ld.openmicroscopy.org/core/
-foaf:		http://xmlns.com/foaf/0.1/
 obda:		https://w3id.org/obda/vocabulary#
 rdfs:		http://www.w3.org/2000/01/rdf-schema#
 site:		http://example.org/
@@ -100,15 +99,15 @@ mappingId	wellsample-attributes
 target		ome_instance:WellSample/{id} core:experimenter ome_instance:Experimenter/{owner_id} ; core:experimenter_group ome_instance:ExperimenterGroup/{group_id} . 
 source		select id, owner_id, group_id from wellsample where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
-mappingId	MAPID-project-1
-target		ome_instance:Project/{project_id} core:dataset ome_instance:Dataset/{dataset_id} . 
+mappingId	MAPID-project-dataset
+target		ome_instance:Project/{project_id} dcterms:hasPart ome_instance:Dataset/{dataset_id} . ome_instance:Dataset/{dataset_id} dcterms:isPartOf ome_instance:Project/{project_id} . 
 source		select
 			_project.id as project_id,
 			_projectdatasetlink.child as dataset_id
 			from project as _project
 			left join projectdatasetlink as _projectdatasetlink on _project.id = _projectdatasetlink.parent
 
-mappingId	MAPID-project-2
+mappingId	MAPID-project-kv-annotations
 target		ome_instance:Project/{project_id} <{map_key}> {map_value}^^xsd:string . 
 source		select
 			_project.id as project_id,
@@ -132,7 +131,7 @@ source		select
 			join annotation as _annotation on _projectannotationlink.child = _annotation.id
 			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
-mappingId	MAPID-dataset-2
+mappingId	MAPID-dataset-kv-annotations
 target		ome_instance:Dataset/{dataset_id} <{map_key}> {map_value}^^xsd:string . 
 source		select
 			_dataset.id as dataset_id,
@@ -156,14 +155,14 @@ source		select
 			join annotation as _annotation on _datasetannotationlink.child = _annotation.id
 			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
-mappingId	MAPID-Image-0
+mappingId	MAPID-Image-acquisitiondate
 target		ome_instance:Image/{image_id} this:acquisition_date {image_acquisitiondate}^^xsd:dateTime . 
 source		select
 			_image.id as image_id,
 			_image.acquisitiondate as image_acquisitiondate
 			from image as _image
 
-mappingId	MAPID-Image-1
+mappingId	MAPID-Image-kv-annotations
 target		ome_instance:Image/{image_id} <{map_key}> {map_value}^^xsd:string . 
 source		select
 			_image.id as image_id,
@@ -188,7 +187,7 @@ source		select
 			join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
 mappingId	MAPID-experimentergroup
-target		ome_instance:ExperimenterGroup/{experimentergroup_id} a core:ExperimenterGroup ; dc:identifier {experimentergroup_id}^^xsd:integer ; foaf:name {name}^^xsd:string . 
+target		ome_instance:ExperimenterGroup/{experimentergroup_id} a core:ExperimenterGroup ; dc:identifier {experimentergroup_id}^^xsd:integer ; rdfs:label {name}^^xsd:string . 
 source		select
 			experimentergroup.name as name,
 			experimentergroup.id as experimentergroup_id
@@ -228,7 +227,7 @@ source		select
 			join annotation on projectannotationlink.child = annotation.id where annotation.textvalue is not NULL
 
 mappingId	MAPID-dataset-image
-target		ome_instance:Dataset/{dataset_id} core:image ome_instance:Image/{image_id} . 
+target		ome_instance:Dataset/{dataset_id} dcterms:hasPart ome_instance:Image/{image_id} . ome_instance:Image/{dataset_id} dcterms:isPartOf ome_instance:Dataset/{dataset_id} . 
 source		select
 			_dataset.id as dataset_id,
 			_datasetimagelink.child as image_id
@@ -236,11 +235,11 @@ source		select
 			left join datasetimagelink as _datasetimagelink on _dataset.id = _datasetimagelink.parent
 
 mappingId	MAPID-1c71091abd0f428a83a02cd2ab6fe927
-target		ome_instance:Experimenter/{id} a core:Experimenter ; dc:identifier {id}^^xsd:integer ; foaf:firstName {firstname}^^xsd:string ; foaf:lastName {lastname}^^xsd:string ; foaf:email {email}^^xsd:string ; foaf:name {name}^^xsd:string . 
+target		ome_instance:Experimenter/{id} a core:Experimenter ; dc:identifier {id}^^xsd:integer ; vcard:given-name {firstname}^^xsd:string ; vcard:family-name {lastname}^^xsd:string ; vcard:hasEmail <mailto:{email}> ; vcard:additional-name {middlename}^^xsd:string ; vcard:organization-name {institution} . 
 source		select id, email, firstname, middlename, lastname, institution, concat("firstname", ' ', "lastname") as name from experimenter
 
 mappingId	MAPID-well-plate
-target		ome_instance:Well/{well_id} core:plate ome_instance:Plate/{plate_id} . 
+target		ome_instance:Well/{well_id} dcterms:hasPart ome_instance:Plate/{plate_id} . 
 source		select _well.id as well_id, _well.owner_id as owner_id, _well.plate as plate_id from well as _well
 
 mappingId	MAPID-well_properties
@@ -271,7 +270,7 @@ source		select _well.id as well_id,
 			left join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
 mappingId	MAPID-wellsample
-target		ome_instance:WellSample/{wellsample_id} core:well ome_instance:Well/{well_id} ; core:run ome_instance:PlateAcquisition/{plateacquisition_id} ; core:image ome_instance:Image/{image_id} ; this:well_index {well_index}^^xsd:integer . 
+target		ome_instance:WellSample/{wellsample_id} dcterms:relation ome_instance:Well/{well_id} , ome_instance:PlateAcquisition/{plateacquisition_id} , _:b1 ; core:image ome_instance:Image/{image_id} . _:b1 rdfs:label "well_index"^^xsd:string ; dc:identifier {well_index}^^xsd:integer . 
 source		select
 			wellsample.id as wellsample_id,
 			owner_id,
@@ -282,7 +281,7 @@ source		select
 			from wellsample
 
 mappingId	MAPID-281f9aebe6744a7194389d0fcc967623
-target		ome_instance:Plate/{plate_id} core:screen ome_instance:Screen/{screen_id} . 
+target		ome_instance:Plate/{plate_id} dcterms:hasPart ome_instance:Screen/{screen_id} . 
 source		select _plate.id as plate_id, _screenplatelink.parent as screen_id, _plate.owner_id as plate_owner_id from plate as _plate left join screenplatelink as _screenplatelink on _plate.id = _screenplatelink.child where _plate.owner_id=0
 
 mappingId	MAPID-plate-kvannotations
@@ -309,7 +308,7 @@ source		select _plate.id as plate_id,
 			left join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
 mappingId	MAPID-281f9aebe6744a7194389d0fcc967624
-target		ome_instance:Screen/{screen_id} core:plate ome_instance:Plate/{plate_id} . 
+target		ome_instance:Screen/{screen_id} dcterms:hasPart ome_instance:Plate/{plate_id} . 
 source		select _screen.id as screen_id, _screenplatelink.child as plate_id from screen as _screen left join screenplatelink as _screenplatelink on _screen.id = _screenplatelink.parent
 
 mappingId	MAPID-screen-kvannotations
@@ -430,11 +429,11 @@ source		select
 			join annotation on wellannotationlink.child = annotation.id where annotation.textvalue is not NULL
 
 mappingId	MAPID-dcf5779a40a44cc4859c65a52285ae28
-target		ome_instance:Channel/{id} a core:Channel ; dc:identifier {id}^^xsd:integer ; this:blue {blue}^^xsd:integer ; this:red {red}^^xsd:integer ; this:green {green}^^xsd:integer ; core:pixels ome_instance:Pixels/{pixels_id} . 
+target		ome_instance:Channel/{id} a core:Channel ; dc:identifier {id}^^xsd:integer ; this:blue {blue}^^xsd:integer ; this:red {red}^^xsd:integer ; this:green {green}^^xsd:integer ; dcterms:relation ome_instance:Pixels/{pixels_id} . 
 source		select id, alpha, red, green, blue, pixels as pixels_id from channel
 
 mappingId	MAPID-ada4e8268d2e4546a2578e6aae8ccea6
-target		ome_instance:Pixels/{id} a core:Pixels ; core:image ome_instance:Image/{image_id} ; core:physical_size_x_value {physicalsizex}^^xsd:float ; core:physical_size_x_unit {physicalsizexunit}^^xsd:string ; core:physical_size_y_value {physicalsizey}^^xsd:float ; core:physical_size_y_unit {physicalsizeyunit}^^xsd:string ; core:physical_size_z_value {physicalsizez}^^xsd:float ; core:physical_size_z_unit {physicalsizezunit}^^xsd:string . 
+target		ome_instance:Pixels/{id} a core:Pixels ; dcterms:isPartOf ome_instance:Image/{image_id} ; core:physical_size_x _:psx ; core:physical_size_y _:psy ; core:physical_size_z _:psz . _:psx this:unit {physicalsizexunit}^^xsd:string ; this:value {physicalsizex}^^xsd:float . _:psy this:unit {physicalsizeyunit}^^xsd:string ; this:value {physicalsizey}^^xsd:float . _:psz this:unit {physicalsizeyunit}^^xsd:string ; this:value {physicalsizez}^^xsd:float . 
 source		select id, image as image_id, physicalsizex, physicalsizexunit, physicalsizey, physicalsizeyunit, physicalsizez, physicalsizezunit from pixels
 
 mappingId	MAPID-roi-image
@@ -454,7 +453,7 @@ target		ome_instance:ExperimenterGroup/{id} a core:ExperimenterGroup ; dc:identi
 source		select id from experimentergroup
 
 mappingId	experimenter-props
-target		ome_instance:Experimenter/{id} foaf:firstName {firstname} ; foaf:lastName {lastname} ; foaf:middleName {middlename} . 
+target		ome_instance:Experimenter/{id} vcard:given-name {firstname} ; vcard:family-name {lastname} ; vcard:additional-name {middlename} . 
 source		select id, firstname, middlename, lastname from experimenter
 
 mappingId	experimentergroup-props
