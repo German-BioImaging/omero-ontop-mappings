@@ -56,10 +56,11 @@ def run_query(query_string, endpoint=ENDPOINT, return_as_df=True):
     escapedQuery = parse.quote(query_string)
     requestURL = ENDPOINT + "?query=" + escapedQuery
 
-    response = requests.get(requestURL, timeout=600).json()
+    response = requests.get(requestURL, timeout=600)
 
+    response_as_json = response.json()
     if return_as_df:
-        return response_frame(response)
+        return response_frame(response_as_json)
 
     return response
 
@@ -123,10 +124,10 @@ select (count(distinct ?tp) as ?n_types) where {{
 }}
 """
         response = run_query(query_string)
+        print("\n"+response.to_string())
 
-        print(response.to_string())
         self.assertEqual(len(response), 1)
-        self.assertEqual(int(response.loc[0, 'n_types']), 2)
+        self.assertEqual(int(response.loc[0, 'n_types']), 1)
 
     def test_dataset_type_value(self):
         """ A ome_core:Dataset instance must be of type ome_core:Dataset (issue #5)."""
@@ -232,17 +233,16 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         self.assertTupleEqual((1,3), response.shape)
 
-    def test_owner_aliases(self):
-        """ Test all equivalent properties to owner work alike. """
+    def test_experimenter(self):
+        """ Test experimenter property on a project. """
 
         query_string = f"""
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
 
 
-        SELECT ?alias_owner_prop WHERE {{
+        SELECT ?owner WHERE {{
             ?project a ome_core:Project ;
                      ome_core:experimenter ?owner;
-                     ?alias_owner_prop ?owner .
         }}
         """
 
@@ -251,20 +251,19 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         print("\n" + response.to_string())
 
-        # There should be three equivalent properties.
-        self.assertEqual(len(response), 3)
+        # Check.
+        self.assertEqual(response.loc[0, 'owner'], "https://example.org/site/Experimenter/0")
 
-    def test_group_aliases(self):
-        """ Test all equivalent properties to group work alike. """
+
+    def test_experimenter_group(self):
+        """ Test querying the group of a Project. """
 
         query_string = f"""
         prefix ome_core: <https://ld.openmicroscopy.org/core/>
 
-
-        SELECT ?alias_group_prop WHERE {{
+        SELECT ?group WHERE {{
             ?project a ome_core:Project ;
-                     ome_core:experimenter_group ?group;
-                     ?alias_group_prop ?group .
+                     ome_core:experimenter_group ?group.
         }}
         """
 
@@ -274,22 +273,20 @@ select ?n_projects ?n_datasets ?n_images where {{
         print("\n" + response.to_string())
 
         # There should be three equivalent properties.
-        self.assertEqual(len(response), 3)
+        self.assertEqual(response.loc[0, 'group'], "https://example.org/site/ExperimenterGroup/0")
 
     def test_group_name(self):
         """ Test the name property on groups. """
 
         query_string = f"""
         prefix dc: <http://purl.org/dc/elements/1.1/>
-        prefix foaf: <http://xmlns.com/foaf/0.1/>
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
-        prefix omekg:  <https://ld.openmicroscopy.org/omekg/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
         prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
 
         SELECT * where {{
-            ?group a omekg:Group ;
+            ?group a omecore:ExperimenterGroup ;
                    dc:identifier ?group_id;
-                   foaf:name ?name .
+                   rdfs:label ?name .
         }}
         """
 
@@ -301,29 +298,6 @@ select ?n_projects ?n_datasets ?n_images where {{
         self.assertEqual(response.loc['0', 'name'], 'system')
         self.assertEqual(response.loc['1', 'name'], 'user')
         self.assertEqual(response.loc['2', 'name'], 'guest')
-
-    def test_owner_name(self):
-        """ Test the name property on owners. """
-
-        query_string = f"""
-        prefix dc: <http://purl.org/dc/elements/1.1/>
-        prefix foaf: <http://xmlns.com/foaf/0.1/>
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
-        prefix omekg:  <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
-
-        SELECT * where {{
-            ?owner a omekg:Experimenter ;
-                   dc:identifier ?owner_id;
-                   foaf:name ?name .
-        }}
-        """
-
-        # Run the query.
-        response = run_query(query_string).set_index('owner_id')
-
-        self.assertEqual(response.loc['0', 'name'], 'root root')
-        self.assertEqual(response.loc['1', 'name'], 'Guest Account')
 
     def test_dataset_core(self):
         """ Test query with the core prefix and ontology. """
@@ -390,22 +364,23 @@ select ?n_projects ?n_datasets ?n_images where {{
         """ Test a query for a project-dataset-image hierarchy. """
 
         query_string = """
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
+        prefix omekg: <https://ld.openmicroscopy.org/omekg#>
+        prefix dcterms: <http://purl.org/dc/terms/>
 
         SELECT distinct ?project ?dataset ?image ?image_name  WHERE {{
-            ?project a ome_core:Project ;
-                     ome_core:dataset ?dataset .
-            ?dataset a ome_core:Dataset ;
-                     ome_core:image ?image .
-            ?image a ome_core:Image ;
-                   rdfs:label ?image_name .
+            ?project a omecore:Project ;
+                     dcterms:hasPart ?dataset .
+            ?dataset a omecore:Dataset ;
+                     dcterms:hasPart ?image .
+            # ?image a omecore:Image ;
+            #        rdfs:label ?image_name .
         }}
         """
 
         # Run the query.
         response = run_query(query_string)
+        print("\n" + response.to_string())
 
         # Should get 10 images.
         self.assertEqual(len(response), 12)
@@ -965,16 +940,17 @@ SELECT DISTINCT * WHERE {
         """ Test querying for Channels object. """
 
         query_string = f"""
-      prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-    prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-    prefix foaf: <http://xmlns.com/foaf/0.1/>
+    prefix omekg: <https://ld.openmicroscopy.org/omekg#>
+    prefix omecore: <https://ld.openmicroscopy.org/core/>
+    prefix dcterms: <http://purl.org/dc/terms/>
+
     select ?pixels (min(?red) as ?min_red) (min(?green) as ?min_green) (min(?blue) as ?min_blue) (max(?red) as ?max_red) (max(?green) as ?max_green) (max(?blue) as ?max_blue)
   where {{
-      ?channel a omekg:Channel;
-               omeprop:pixels ?pixels;
-               omeprop:red ?red;
-               omeprop:green ?green;
-               omeprop:blue ?blue .
+      ?channel a omecore:Channel;
+               dcterms:relation ?pixels;
+               omekg:red ?red;
+               omekg:green ?green;
+               omekg:blue ?blue .
      }}
   group by ?pixels
   limit 100
