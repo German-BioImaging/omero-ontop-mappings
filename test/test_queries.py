@@ -373,8 +373,8 @@ select ?n_projects ?n_datasets ?n_images where {{
                      dcterms:hasPart ?dataset .
             ?dataset a omecore:Dataset ;
                      dcterms:hasPart ?image .
-            # ?image a omecore:Image ;
-            #        rdfs:label ?image_name .
+            ?image a omecore:Image ;
+                   rdfs:label ?image_name .
         }}
         """
 
