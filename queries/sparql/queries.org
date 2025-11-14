@@ -652,28 +652,33 @@ Find all datasets tagged "TestTag".
 | screen                            | plate                            |
 |-----------------------------------+----------------------------------|
 | https://example.org/site/Screen/1 | https://example.org/site/Plate/1 |
-| https://example.org/site/Screen/2 | https://example.org/site/Plate/1 |
-| https://example.org/site/Screen/3 | https://example.org/site/Plate/1 |
-*** Plate-PlateAcquisition
+*** WellSample
 :PROPERTIES:
 :ID:       5a903ef3-9779-4702-ae88-3a82f50b1d42
 :END:
 #+begin_src sparql
   <<prefixes>>
   select * where {
-            # ?plate a omecore:Plate .
-                   # ^dcterms:hasPart ?acq .
-            ?acq a omecore:PlateAcquisition .
-            ?acq ?prop ?val .
+            ?wellsample a omecore:WellSample ;
+                        dcterms:relation ?related_obj .
+            ?related_obj a omecore:PlateAcquisition .
         }
   limit 10
 #+end_src
 
 #+RESULTS:
-| acq                                         | prop                                            | val                                                 |
-|---------------------------------------------+-------------------------------------------------+-----------------------------------------------------|
-| https://example.org/site/Plateacquisition/1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://ld.openmicroscopy.org/core/PlateAcquisition |
-| https://example.org/site/Plateacquisition/1 | http://purl.org/dc/elements/1.1/identifier      | 1                                                   |
+| wellsample                             | related_obj                                 |
+|----------------------------------------+---------------------------------------------|
+| https://example.org/site/WellSample/1  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/2  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/3  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/4  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/5  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/6  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/7  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/8  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/9  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/10 | https://example.org/site/PlateAcquisition/1 |
 
 ** Federated query against ome and taxonomy database with HCS objects
 :PROPERTIES:
