@@ -13,6 +13,7 @@
   PREFIX foaf: <http://xmlns.com/foaf/0.1/>
   PREFIX image: <https://example.org/site/Image/>
   PREFIX dc: <http://purl.org/dc/terms/>
+  PREFIX dcterms: <http://purl.org/dc/terms/>
   PREFIX obda: <https://w3id.org/obda/vocabulary#>
   PREFIX omecore: <https://ld.openmicroscopy.org/core/>
   PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
@@ -30,6 +31,27 @@
   PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #+end_src
 
+#+RESULTS: prefixes
+| HTTP/1.1 400                           |                          |
+|----------------------------------------+--------------------------|
+| Vary: Origin                           |                          |
+| Vary: Access-Control-Request-Method    |                          |
+| Vary: Access-Control-Request-Headers   |                          |
+| Content-Type: text/plain;charset=UTF-8 |                          |
+| Content-Length: 171                    |                          |
+| Date: Fri                              | 14 Nov 2025 10:43:46 GMT |
+| Connection: close                      |                          |
+|                                        |                          |
+| Encountered "<EOF>" at line 19         | column 47.               |
+| Was expecting one of:                  |                          |
+| base ...                               |                          |
+| prefix ...                             |                          |
+| select ...                             |                          |
+| construct ...                          |                          |
+| describe ...                           |                          |
+| ask ...                                |                          |
+|                                        |                          |
+
 
 ** SPO
 :PROPERTIES:
@@ -44,18 +66,18 @@
 #+end_src
 
 #+RESULTS:
-| s                                                      | p                                               | o                                      |
-|--------------------------------------------------------+-------------------------------------------------+----------------------------------------|
-| https://ld.openmicroscopy.org/core/last_name           | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/laser_medium        | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/type                | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/uuid                | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/pockel_cell_setting | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/k                   | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/metadata_only       | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/reagent_identifier  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/font_size           | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
-| https://ld.openmicroscopy.org/core/temperature         | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| s                                                          | p                                               | o                                      |
+|------------------------------------------------------------+-------------------------------------------------+----------------------------------------|
+| https://ld.openmicroscopy.org/core/light_path              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/status                  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/stage_label             | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/position_z              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/pump                    | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/correction              | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/serial_number           | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/physical_size_y         | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/reagent_set_description | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
+| https://ld.openmicroscopy.org/core/co2_percent             | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
 
 
 ** Project
@@ -96,9 +118,9 @@
 #+RESULTS:
 | ds                                 |
 |------------------------------------|
+| https://example.org/site/Dataset/1 |
 | https://example.org/site/Dataset/2 |
 | https://example.org/site/Dataset/3 |
-| https://example.org/site/Dataset/1 |
 
 
 *** datasets and properties
@@ -138,63 +160,46 @@
 #+RESULTS:
 | ds                                 | prop                                                     | value                                        |
 |------------------------------------+----------------------------------------------------------+----------------------------------------------|
-| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/6             |
-| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/subject                         | Test images                                  |
-| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/provenance                      | Screenshots                                  |
-| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/omekg#experimenter_group   | https://example.org/site/ExperimenterGroup/0 |
-| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/10            |
-| https://example.org/site/Dataset/1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset   |
-| https://example.org/site/Dataset/1 | http://purl.org/dc/elements/1.1/identifier               | 2                                            |
-| https://example.org/site/Dataset/3 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset   |
-| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/0      |
-| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/omekg#experimenter_group   | https://example.org/site/ExperimenterGroup/0 |
-| https://example.org/site/Dataset/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset   |
-| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/11            |
-| https://example.org/site/Dataset/3 | http://purl.org/dc/elements/1.1/identifier               | 3                                            |
-| https://example.org/site/Dataset/3 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 3                                    |
-| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
-| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/3             |
-| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/experimenter_group    | https://example.org/site/ExperimenterGroup/0 |
-| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/2             |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 4                                            |
 | https://example.org/site/Dataset/1 | http://purl.org/dc/elements/1.1/identifier               | 1                                            |
 | https://example.org/site/Dataset/1 | http://purl.org/dc/terms/contributor                     | Test User                                    |
-| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/contributor                     | Caligula                                     |
-| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/group                 | https://example.org/site/ExperimenterGroup/0 |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 2                                            |
-| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/0      |
-| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/contributor                     | Test User                                    |
-| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/0      |
-| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/experimenter_group    | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/hasPart                         | https://example.org/site/Image/1             |
+| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/hasPart                         | https://example.org/site/Image/2             |
+| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/isPartOf                        | https://example.org/site/Project/1           |
 | https://example.org/site/Dataset/1 | http://purl.org/dc/terms/provenance                      | Screenshots                                  |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 3                                            |
-| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
-| https://example.org/site/Dataset/1 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 1                                    |
-| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/9             |
-| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | TestTag                                      |
-| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/7             |
-| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/omekg#experimenter_group   | https://example.org/site/ExperimenterGroup/0 |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/provenance                      | Screenshots                                  |
-| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/1             |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 5                                            |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 7                                            |
-| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/8             |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 6                                            |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 12                                           |
-| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/5             |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/subject                         | Test images                                  |
-| https://example.org/site/Dataset/3 | http://purl.org/dc/elements/1.1/identifier               | 8                                            |
-| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/group                 | https://example.org/site/ExperimenterGroup/0 |
-| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/4             |
-| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/core/group                 | https://example.org/site/ExperimenterGroup/0 |
-| https://example.org/site/Dataset/3 | http://purl.org/dc/elements/1.1/identifier               | 9                                            |
+| https://example.org/site/Dataset/1 | http://purl.org/dc/terms/subject                         | Test images                                  |
+| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
 | https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/core/experimenter_group    | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/1 | https://ld.openmicroscopy.org/omekg#tag_annotation_value | TestTag                                      |
+| https://example.org/site/Dataset/1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset   |
+| https://example.org/site/Dataset/1 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 1                                    |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 2                                            |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/contributor                     | Test User                                    |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/hasPart                         | https://example.org/site/Image/11            |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/hasPart                         | https://example.org/site/Image/12            |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/hasPart                         | https://example.org/site/Image/3             |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/hasPart                         | https://example.org/site/Image/4             |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/hasPart                         | https://example.org/site/Image/5             |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/hasPart                         | https://example.org/site/Image/6             |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/hasPart                         | https://example.org/site/Image/7             |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/isPartOf                        | https://example.org/site/Project/1           |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/provenance                      | Screenshots                                  |
+| https://example.org/site/Dataset/2 | http://purl.org/dc/terms/subject                         | Test images                                  |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
+| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/experimenter_group    | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset   |
 | https://example.org/site/Dataset/2 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 2                                    |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/elements/1.1/identifier               | 3                                            |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/contributor                     | Caligula                                     |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/hasPart                         | https://example.org/site/Image/10            |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/hasPart                         | https://example.org/site/Image/8             |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/hasPart                         | https://example.org/site/Image/9             |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/isPartOf                        | https://example.org/site/Project/1           |
+| https://example.org/site/Dataset/3 | http://purl.org/dc/terms/provenance                      | Screenshots                                  |
 | https://example.org/site/Dataset/3 | http://purl.org/dc/terms/subject                         | OMERO Mapping                                |
-| https://example.org/site/Dataset/3 | http://purl.org/dc/elements/1.1/identifier               | 10                                           |
-| https://example.org/site/Dataset/2 | http://purl.org/dc/elements/1.1/identifier               | 11                                           |
-| https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/image                 | https://example.org/site/Image/12            |
+| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
+| https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/experimenter_group    | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Dataset/3 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset   |
+| https://example.org/site/Dataset/3 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 3                                    |
 
 
 ** Project Dataset Image hierarchy
@@ -206,9 +211,9 @@
   <<prefixes>>
   SELECT distinct *  WHERE {
       ?project a omecore:Project ;
-                omecore:dataset ?dataset .
+                dcterms:hasPart ?dataset .
       ?dataset a omecore:Dataset ;
-                omecore:image ?image .
+                dcterms:hasPart ?image .
       ?image a omecore:Image ;
               rdfs:label ?image_name .
   }
@@ -258,8 +263,6 @@
 | https://example.org/site/Image/7  | https://example.org/site/Experimenter/0 |
 | https://example.org/site/Image/8  | https://example.org/site/Experimenter/0 |
 | https://example.org/site/Image/9  | https://example.org/site/Experimenter/0 |
-| https://example.org/site/ROI/1    | https://example.org/site/Experimenter/0 |
-| https://example.org/site/ROI/2    | https://example.org/site/Experimenter/0 |
 
 
 
@@ -310,10 +313,8 @@
 #+RESULTS:
 | prop                                                     | val                                          |
 |----------------------------------------------------------+----------------------------------------------|
-| https://ld.openmicroscopy.org/omekg#experimenter         | https://example.org/site/Experimenter/0      |
+| http://purl.org/dc/terms/isPartOf                        | https://example.org/site/Dataset/1           |
 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
-| https://ld.openmicroscopy.org/core/group                 | https://example.org/site/ExperimenterGroup/0 |
-| https://ld.openmicroscopy.org/omekg#experimenter_group   | https://example.org/site/ExperimenterGroup/0 |
 | https://ld.openmicroscopy.org/core/experimenter_group    | https://example.org/site/ExperimenterGroup/0 |
 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image     |
 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_14-58-36_screenshot.png           |
@@ -382,11 +383,8 @@
 #+end_src
 
 #+RESULTS:
-| dataset                            | Nimg |
-|------------------------------------+------|
-| https://example.org/site/Dataset/2 |    7 |
-| https://example.org/site/Dataset/3 |    3 |
-| https://example.org/site/Dataset/1 |    2 |
+| dataset | Nimg |
+|---------+------|
 
 
 
@@ -419,7 +417,7 @@
 #+RESULTS:
 | n_projects | n_datasets | n_images |
 |------------+------------+----------|
-|          1 |          3 |       14 |
+|          1 |          3 |       12 |
 
 
 ** Project and contained datasets
@@ -439,11 +437,8 @@
 #+end_src
 
 #+RESULTS:
-| proj                               | lbl     | ds                                 |
-|------------------------------------+---------+------------------------------------|
-| https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/1 |
-| https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/2 |
-| https://example.org/site/Project/1 | Project | https://example.org/site/Dataset/3 |
+| proj | lbl | ds |
+|------+-----+----|
 
 
 ** Project with datasets and images
@@ -467,20 +462,8 @@
 #+end_src
 
 #+RESULTS:
-| proj                               | dataset                            | image                             | name                                       |
-|------------------------------------+------------------------------------+-----------------------------------+--------------------------------------------|
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/1  | 2024-10-10_14-58-36_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/10 | 2024-10-10_16-42-47_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/11 | 2024-10-10_15-28-16_screenshot.png.ome.tif |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/12 | image_6_with_roi.ome.tif                   |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/1 | https://example.org/site/Image/2  | 2024-10-10_14-53-28_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/3  | 2024-10-10_15-28-16_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/4  | 2024-10-10_15-09-28_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/5  | 2024-10-10_15-07-18_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/6  | 2024-10-10_15-01-36_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/7  | 2024-10-10_15-17-25_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/8  | 2024-10-10_16-47-01_screenshot.png         |
-| https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/9  | 2024-10-10_16-39-27_screenshot.png         |
+| proj | dataset | image | name |
+|------+---------+-------+------|
 
 
 ** Dataset subject as per map annotation, queried by namespace:key concatenation (dc:subject)
@@ -600,12 +583,12 @@ Find all datasets tagged "TestTag".
 | prop                                                     | val                                          |
 |----------------------------------------------------------+----------------------------------------------|
 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Image     |
+| https://ld.openmicroscopy.org/core/experimenter_group    | https://example.org/site/ExperimenterGroup/0 |
 | https://ld.openmicroscopy.org/core/experimenter          | https://example.org/site/Experimenter/0      |
 | http://purl.org/dc/terms/date                            | Thu Sep 11 11:49:26 AM CEST 2025             |
+| https://ld.openmicroscopy.org/omekg#tag_annotation_value | Screenshot                                   |
 | http://purl.org/dc/elements/1.1/identifier               | 9                                            |
 | http://www.w3.org/2000/01/rdf-schema#label               | 2024-10-10_16-39-27_screenshot.png           |
-| https://ld.openmicroscopy.org/core/group                 | https://example.org/site/ExperimenterGroup/0 |
-| https://ld.openmicroscopy.org/omekg#tag_annotation_value | Screenshot                                   |
 | http://purl.org/dc/terms/contributor                     | Test User                                    |
 | http://purl.org/dc/terms/subject                         | Unittest                                     |
 | http://www.openmicroscopy.org/ns/default/Assay           | Bruker                                       |
@@ -628,8 +611,9 @@ Find all datasets tagged "TestTag".
  #+end_src
 
  #+RESULTS:
- | s | owner | group |
- |---+-------+-------|
+ | s                                  | owner                                   | group                                        |
+ |------------------------------------+-----------------------------------------+----------------------------------------------|
+ | https://example.org/site/Project/1 | https://example.org/site/Experimenter/0 | https://example.org/site/ExperimenterGroup/0 |
 
 
 #+begin_src sparql :url http://localhost:8080/sparql
@@ -640,6 +624,10 @@ Find all datasets tagged "TestTag".
             foaf:name ?name .
     }
  #+end_src
+
+ #+RESULTS:
+ | group | name |
+ |-------+------|
 
 
 ** Federated query against ome and taxonomy database with HCS objects
@@ -664,6 +652,10 @@ Find all datasets tagged "TestTag".
   limit 10
  #+end_src
 
+ #+RESULTS:
+ | well | taxid | taxon_id | up_taxon |
+ |------+-------+----------+----------|
+
 #+begin_src sparql :url https://sparql.uniprot.org/sparql :async yes
   <<prefixes>>
   SELECT *
@@ -677,12 +669,116 @@ Find all datasets tagged "TestTag".
   limit 100
 #+end_src
 
+#+RESULTS:
+| mnemonic | parasite                                 | parasite_name                                                               |
+|----------+------------------------------------------+-----------------------------------------------------------------------------|
+| HUMAN    | http://purl.uniprot.org/taxonomy/1001061 | Ljunganvirus 1                                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/100673  | Influenza C virus (strain C/Johannesburg/1/1966)                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/100834  | Influenza A virus (strain A/Chicken/Hong Kong/220/1997 H5N1 genotype Gs/Gd) |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10243   | Cowpox virus                                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10244   | Monkeypox virus                                                             |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10246   | Vaccinia virus (strain LC16m0)                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10247   | Vaccinia virus (strain WR 65-16)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10248   | Vaccinia virus (strain LC16m8)                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10249   | Vaccinia virus (strain Copenhagen)                                          |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10250   | Vaccinia virus (strain Dairen I)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10251   | Vaccinia virus (strain IHD-J)                                               |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10252   | Vaccinia virus (strain Lister)                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10253   | Vaccinia virus (strain Tian Tan)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10255   | Variola virus                                                               |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10258   | Orf virus                                                                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10259   | Orf virus (strain NZ2)                                                      |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10280   | Molluscum contagiosum virus subtype 1                                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10281   | Molluscum contagiosum virus subtype 2                                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10298   | Human herpesvirus 1                                                         |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10299   | Human herpesvirus 1 (strain 17)                                             |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10300   | Human herpesvirus 1 (strain A44)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10301   | Human herpesvirus 1 (strain Angelotti)                                      |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10302   | Human herpesvirus 1 (strain CL101)                                          |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10303   | Human herpesvirus 1 (strain HFEM)                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10304   | Human herpesvirus 1 (strain F)                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10305   | Human herpesvirus 1 (strain HZT)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10306   | Human herpesvirus 1 (strain KOS)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10307   | Human herpesvirus 1 (strain MP)                                             |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10308   | Human herpesvirus 1 (strain Patton)                                         |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10309   | Human herpesvirus 1 (strain SC16)                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10310   | Human herpesvirus 2                                                         |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10312   | Human herpesvirus 2 (strain 186)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10313   | Human herpesvirus 2 (strain 333)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10314   | Human herpesvirus 2 (strain G)                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10315   | Human herpesvirus 2 (strain HG52)                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10316   | Herpes simplex virus type 2 (strain SA8)                                    |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10325   | Cercopithecine herpesvirus 1                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10335   | Human herpesvirus 3                                                         |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10338   | Varicella-zoster virus (strain Dumas)                                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10359   | Human cytomegalovirus                                                       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10360   | Human cytomegalovirus (strain AD169)                                        |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10362   | Human cytomegalovirus (strain Eisenhardt)                                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10363   | Human cytomegalovirus (strain Towne)                                        |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10369   | Human herpesvirus 6A (strain GS)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10370   | Human herpesvirus 6A (strain Uganda-1102)                                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10376   | Epstein-Barr virus (strain GD1)                                             |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10377   | Epstein-Barr virus (strain B95-8)                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10378   | Epstein-Barr virus (strain Raji)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103902  | Coxsackievirus B1 (strain Japan)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103903  | Coxsackievirus B3 (strain Nancy)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103904  | Coxsackievirus B3 (strain Woodruff)                                         |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103905  | Coxsackievirus B4 (strain E2)                                               |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103906  | Coxsackievirus B4 (strain JVB / Benschoten / New York/51)                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103907  | Coxsackievirus B5 (strain Peterborough / 1954/UK/85)                        |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103908  | Echovirus 1 (strain Human/Egypt/Farouk/1951)                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103909  | Echovirus 12 (strain Travis)                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103910  | Echovirus 16 (strain Harrington)                                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103911  | Human parechovirus 1 (strain Harris)                                        |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103913  | Echovirus 6 (strain Charles)                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103914  | Echovirus 9 (strain Barty)                                                  |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103915  | Echovirus 9 (strain Hill)                                                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103921  | Human herpesvirus 2 (strain B4327UR)                                        |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103922  | Human enterovirus 71 (strain 7423/MS/87)                                    |
+| HUMAN    | http://purl.uniprot.org/taxonomy/103929  | Rabies virus (strain Pasteur vaccins / PV)                                  |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10407   | Hepatitis B virus                                                           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10409   | Hepatitis B virus genotype C subtype adr (strain Japan/adr4/1983)           |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10410   | Hepatitis B virus genotype A2 subtype adw2 (isolate Germany/991/1990)       |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10411   | Hepatitis B virus genotype D (isolate France/alpha1/1989)                   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10412   | Hepatitis B virus genotype B2 (isolate Indonesia/pIDW420/1988)              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10413   | Hepatitis B virus genotype B1 subtype adw (isolate Japan/pJDW233/1988)      |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10415   | Hepatitis B virus genotype B/C subtype adw (isolate Okinawa/pODW282/1998)   |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10419   | Hepatitis B virus genotype D subtype adw (isolate United Kingdom/adyw/1979) |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10421   | Hepatitis delta virus genotype II (isolate 7/18/83)                         |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10422   | Hepatitis delta virus genotype I (isolate American)                         |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10423   | Hepatitis delta virus genotype I (isolate Italian)                          |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10424   | Hepatitis delta virus genotype I (isolate Japanese M-1)                     |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10425   | Hepatitis delta virus genotype I (isolate Japanese M-2)                     |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10426   | Hepatitis delta virus genotype I (isolate Nauru)                            |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10427   | Hepatitis delta virus genotype II (isolate Japanese S-1)                    |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10428   | Hepatitis delta virus genotype I (isolate Japanese S-2)                     |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10515   | Human adenovirus C serotype 2                                               |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10519   | Human adenovirus B serotype 7                                               |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10522   | Human adenovirus B serotype 35                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10524   | Human adenovirus F serotype 41                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10527   | Human adenovirus D serotype 9                                               |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10528   | Human adenovirus A serotype 18                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10529   | Human adenovirus A serotype 31                                              |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10533   | Human adenovirus C serotype 1                                               |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10534   | Human adenovirus C serotype 6                                               |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10573   | Human papillomavirus 13                                                     |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10579   | Human papillomavirus type 8                                                 |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10580   | Human papillomavirus 11                                                     |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10583   | Human papillomavirus type 1                                                 |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10584   | Human papillomavirus type 2a                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10585   | Human papillomavirus 31                                                     |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10586   | Human papillomavirus 33                                                     |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10587   | Human papillomavirus 35                                                     |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10588   | Human papillomavirus 39                                                     |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10589   | Human papillomavirus type 41                                                |
+| HUMAN    | http://purl.uniprot.org/taxonomy/10590   | Human papillomavirus 42                                                     |
+
 
 ** Federated query against locally running qlever and uniprot
 :PROPERTIES:
 :ID:       deea35fd-873a-4a43-983e-6497a8a04163
 :END:
-#+begin_src sparql :url http://localhost:8888/sparql 
+#+begin_src sparql :url http://localhost:8888/sparql  :eval no
 
 
   <<prefixes>>
