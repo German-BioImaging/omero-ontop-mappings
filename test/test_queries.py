@@ -374,7 +374,8 @@ select ?n_projects ?n_datasets ?n_images where {{
             ?dataset a omecore:Dataset ;
                      dcterms:hasPart ?image .
             ?image a omecore:Image ;
-                   rdfs:label ?image_name .
+
+        rdfs:label ?image_name .
         }}
         """
 
