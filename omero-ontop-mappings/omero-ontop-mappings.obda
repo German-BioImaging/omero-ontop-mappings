@@ -48,7 +48,7 @@ target		ome_instance:ROI/{id} a core:ROI ; dc:identifier {id}^^xsd:integer .
 source		select id, group_id from roi where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
 mappingId	plateacquisition-id
-target		ome_instance:Plateacquisition/{id} a core:PlateAcquisition ; dc:identifier {id}^^xsd:integer . 
+target		ome_instance:PlateAcquisition/{id} a core:PlateAcquisition ; dc:identifier {id}^^xsd:integer . 
 source		select id, group_id from plateacquisition where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
 mappingId	channel-id
