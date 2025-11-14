@@ -722,9 +722,6 @@ Find all datasets tagged "TestTag".
 | https://ld.openmicroscopy.org/core/Image            |         384 |
 | https://ld.openmicroscopy.org/core/PlateAcquisition |           1 |
 
-#+RESULTS: query plate-plateacquisition
-| plate | acq | rel |
-|-------+-----+-----|
 
 ** Federated query against ome and taxonomy database with HCS objects
 :PROPERTIES:
