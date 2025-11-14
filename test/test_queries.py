@@ -742,7 +742,7 @@ SELECT DISTINCT * WHERE {
         self.assertEqual(results.iloc[1,1], 1)  
 
     def test_plate_well(self):
-        """ Test query for plate-acquisition and well. """
+        """ Test query for Plate and Well."""
 
         results = run_query("""
         prefix omekg: <https://ld.openmicroscopy.org/omekg/>

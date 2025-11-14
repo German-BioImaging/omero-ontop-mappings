@@ -721,7 +721,29 @@ Find all datasets tagged "TestTag".
 |-----------------------------------------------------+-------------|
 | https://ld.openmicroscopy.org/core/Image            |         384 |
 | https://ld.openmicroscopy.org/core/PlateAcquisition |           1 |
+*** Plate and relations
+:PROPERTIES:
+:ID:       64c20ac5-aec0-4164-9c45-572d3d885d23
+:END:
+#+name: query plate relations
+#+begin_src sparql
+  <<prefixes>>
 
+  select * where {
+  ?plate a omecore:Plate ;
+         ?rel ?class.
+  }
+#+end_src
+
+#+RESULTS: query plate well
+| plate                            | rel                                                   | class                                        |
+|----------------------------------+-------------------------------------------------------+----------------------------------------------|
+| https://example.org/site/Plate/1 | http://purl.org/dc/elements/1.1/identifier            | 1                                            |
+| https://example.org/site/Plate/1 | http://purl.org/dc/terms/hasPart                      | https://example.org/site/Screen/1            |
+| https://example.org/site/Plate/1 | https://ld.openmicroscopy.org/core/experimenter       | https://example.org/site/Experimenter/0      |
+| https://example.org/site/Plate/1 | https://ld.openmicroscopy.org/core/experimenter_group | https://example.org/site/ExperimenterGroup/0 |
+| https://example.org/site/Plate/1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/Plate     |
+| https://example.org/site/Plate/1 | http://www.w3.org/2000/01/rdf-schema#label            | idr0017                                      |
 
 ** Federated query against ome and taxonomy database with HCS objects
 :PROPERTIES:
