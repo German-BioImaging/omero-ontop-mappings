@@ -679,6 +679,52 @@ Find all datasets tagged "TestTag".
 | https://example.org/site/WellSample/8  | https://example.org/site/PlateAcquisition/1 |
 | https://example.org/site/WellSample/9  | https://example.org/site/PlateAcquisition/1 |
 | https://example.org/site/WellSample/10 | https://example.org/site/PlateAcquisition/1 |
+|                                        |                                             |
+|                                        |                                             |
+*** Screen-Plate
+:PROPERTIES:
+:ID:       12399ff0-2a6c-4e7b-a5f5-92cdf129e666
+:END:
+#+name: query_screen_plate
+#+begin_src sparql
+  <<prefixes>>
+
+  select * where {
+    ?plate a omecore:Plate ;
+           dcterms:hasPart ?screen .
+    ?screen a omecore:Screen .
+  }
+#+end_src
+
+#+RESULTS: query_screen_plate
+| plate                            | screen                            |
+|----------------------------------+-----------------------------------|
+| https://example.org/site/Plate/1 | https://example.org/site/Screen/1 |
+*** Plate-PlateAcquisition
+:PROPERTIES:
+:ID:       1329dd6f-89c9-44f6-9015-e6e91be01abb
+:END:
+#+name: query wellsample-relations
+#+begin_src sparql
+  <<prefixes>>
+
+  select ?class (count(distinct ?relation) as ?n_relations) where {
+    ?wellsample a omecore:WellSample ;
+                dcterms:relation ?relation .
+    ?relation a ?class
+  }
+  group by ?class
+#+end_src
+
+#+RESULTS: query wellsample-relations
+| class                                               | n_relations |
+|-----------------------------------------------------+-------------|
+| https://ld.openmicroscopy.org/core/Image            |         384 |
+| https://ld.openmicroscopy.org/core/PlateAcquisition |           1 |
+
+#+RESULTS: query plate-plateacquisition
+| plate | acq | rel |
+|-------+-----+-----|
 
 ** Federated query against ome and taxonomy database with HCS objects
 :PROPERTIES:

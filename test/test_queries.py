@@ -690,40 +690,56 @@ SELECT DISTINCT * WHERE {
 
         self.assertEqual(1, len(results))
 
-    def test_screen_plate(self):
-        """ Test query for screen and related plate."""
-        results = run_query("""
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+    def test_wellsample_plateacquisition(self):
+        """ Test querying for WellSamples and related PlateAcquisitions."""
+
+        query = self._prefix_string + """
 
         SELECT *
         where {{
-            ?plate a omekg:Plate ;
-                   omeprop:screen ?screen .
-            ?screen a omekg:Screen .
+            ?wellsample a omecore:WellSample ;
+                        dcterms:relation ?related_obj .
+            ?related_obj a omecore:PlateAcquisition .
         }}
+        """
+
+        results = run_query(query, return_as_df=True)
+
+        self.assertEqual(1536, len(results))
+
+    def test_screen_plate(self):
+        """ Test query for screen and related plate."""
+        results = run_query(self._prefix_string + """
+
+        SELECT *
+        where {{
+            ?plate a omecore:Plate ;
+                   dcterms:hasPart ?screen .
+            ?screen a omecore:Screen .
+       }}
         """)
 
         print("\n"+results.to_string())
 
         self.assertTupleEqual((1, 2), results.shape)
 
-    def test_plate_acquisition(self):
-        """ Test query for plate and plate acquisition."""
+    def test_wellsample_relations(self):
+        """ Count number of relations of WellSamples. """
 
         results = run_query(self._prefix_string + """
 
-        SELECT *
-        where {{
-            ?plate a omecore:Plate ;
-                   ^dcterms:hasPart ?acq .
-            ?acq a omecore:PlateAcquisition .
-        }}
-        """)
+  select ?class (count(distinct ?relation) as ?n_relations) where {{
+    ?wellsample a omecore:WellSample ;
+                dcterms:relation ?relation .
+    ?relation a ?class
+  }}
+  group by ?class
+  order by ?n_relations
+       """)
 
-        print("\n"+results.to_string())
-
-        self.assertTupleEqual( (1,2), results.shape )
+        self.assertTupleEqual( (2,2), results.shape )
+        self.assertEqual(results.iloc[0,1], 384)
+        self.assertEqual(results.iloc[1,1], 1)  
 
     def test_plate_well(self):
         """ Test query for plate-acquisition and well. """
