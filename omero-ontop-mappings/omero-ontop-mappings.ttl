@@ -20,8 +20,7 @@
 @base <https://ld.openmicroscopy.org/omekg/> .
 
 <https://ld.openmicroscopy.org/omekg> rdf:type owl:Ontology ;
-                                       owl:imports rdfs: ,
-                                                   core: ;
+                                       owl:imports rdfs: ;
                                        dcterms:license "https://creativecommons.org/publicdomain/zero/1.0/" ;
                                        rdfs:label "OMERO VKG Ontology" ;
                                        skos:definition "Mapping ontology for OMERO Virtual Knowledge Graph" .
