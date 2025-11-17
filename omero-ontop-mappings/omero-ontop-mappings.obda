@@ -32,7 +32,7 @@ target		ome_instance:Project/{id} a core:Project ; dc:identifier {id}^^xsd:integ
 source		select id, group_id from project where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
 mappingId	well-id
-target		ome_instance:Well/{id} a core:Image ; dc:identifier {id}^^xsd:integer . 
+target		ome_instance:Well/{id} a core:Well ; dc:identifier {id}^^xsd:integer . 
 source		select id, group_id from well where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
 mappingId	plate-id
@@ -54,10 +54,6 @@ source		select id, group_id from plateacquisition where group_id in (select pare
 mappingId	channel-id
 target		ome_instance:Channel/{id} a core:Channel ; dc:identifier {id}^^xsd:integer . 
 source		select id, group_id from channel where group_id in (select parent as group_id from groupexperimentermap where child=0)
-
-mappingId	wellsample-id
-target		ome_instance:WellSample/{id} a core:WellSample ; dc:identifier {id}^^xsd:integer . 
-source		select id, group_id from wellsample where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
 mappingId	image-attributes
 target		ome_instance:Image/{id} rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; core:experimenter ome_instance:Experimenter/{owner_id} ; core:experimenter_group ome_instance:ExperimenterGroup/{group_id} . 
@@ -94,10 +90,6 @@ source		select id, name, description, owner_id, group_id from image where group_
 mappingId	channel-attributes
 target		ome_instance:Channel/{id} core:experimenter ome_instance:Experimenter/{owner_id} ; core:experimenter_group ome_instance:ExperimenterGroup/{group_id} . 
 source		select id, owner_id, group_id from channel where group_id in (select parent as group_id from groupexperimentermap where child=0)
-
-mappingId	wellsample-attributes
-target		ome_instance:WellSample/{id} core:experimenter ome_instance:Experimenter/{owner_id} ; core:experimenter_group ome_instance:ExperimenterGroup/{group_id} . 
-source		select id, owner_id, group_id from wellsample where group_id in (select parent as group_id from groupexperimentermap where child=0)
 
 mappingId	MAPID-project-dataset
 target		ome_instance:Project/{project_id} dcterms:hasPart ome_instance:Dataset/{dataset_id} . ome_instance:Dataset/{dataset_id} dcterms:isPartOf ome_instance:Project/{project_id} . 
@@ -238,10 +230,6 @@ mappingId	MAPID-1c71091abd0f428a83a02cd2ab6fe927
 target		ome_instance:Experimenter/{id} a core:Experimenter ; dc:identifier {id}^^xsd:integer ; vcard:given-name {firstname}^^xsd:string ; vcard:family-name {lastname}^^xsd:string ; vcard:hasEmail <mailto:{email}> ; vcard:additional-name {middlename}^^xsd:string ; vcard:organization-name {institution} . 
 source		select id, email, firstname, middlename, lastname, institution, concat("firstname", ' ', "lastname") as name from experimenter
 
-mappingId	MAPID-well-plate
-target		ome_instance:Well/{well_id} dcterms:hasPart ome_instance:Plate/{plate_id} . 
-source		select _well.id as well_id, _well.owner_id as owner_id, _well.plate as plate_id from well as _well
-
 mappingId	MAPID-well_properties
 target		ome_instance:Well/{well_id} core:reagent ome_instance:Reagent/{reagent_id} . 
 source		select _well.id as well_id, _wellreagentlink.child as reagent_id from well as _well left join wellreagentlink as _wellreagentlink on _well.id = _wellreagentlink.parent
@@ -269,20 +257,38 @@ source		select _well.id as well_id,
 			left join annotation as _annotation on _wellannotationlink.child = _annotation.id
 			left join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
-mappingId	MAPID-wellsample
-target		ome_instance:WellSample/{wellsample_id} dcterms:relation ome_instance:Well/{well_id} , ome_instance:PlateAcquisition/{plateacquisition_id} , _:b1 ; core:image ome_instance:Image/{image_id} . _:b1 rdfs:label "well_index"^^xsd:string ; dc:identifier {well_index}^^xsd:integer . 
+mappingId	MAPID-well-wellsample-relation
+target		ome_instance:Well/{well_id} dcterms:hasPart ome_instance:WellSample/{wellsample_id} .
 source		select
 			wellsample.id as wellsample_id,
-			owner_id,
-			image as image_id,
-			plateacquisition as plateacquisition_id,
-			well as well_id,
-			well_index
+      well as well_id
 			from wellsample
 
+mappingId	MAPID-plateacquisition-wellsample-relation
+target		ome_instance:PlateAcquisition/{plateacquisition_id} dcterms:hasPart ome_instance:WellSample/{wellsample_id} .
+source		select
+			plateacquisition as plateacquisition_id,
+      id as wellsample_id
+			from wellsample
+
+; mappingId	MAPID-image-wellsample-relation
+; target		ome_instance:WellSample/{wellsample_id} a dcterms:relation ome_instance:Image/{image_id} .
+; source		select
+; 			image as image_id,
+;       id as wellsample_id
+; 			from wellsample
+
+mappingId	wellsample-id
+target		ome_instance:WellSample/{id} a core:WellSample ; dc:identifier {id}^^xsd:integer ; core:experimenter ome_instance:Experimenter/{owner_id} ; core:experimenter_group ome_instance:ExperimenterGroup/{group_id} .
+source		select id, owner_id, group_id from wellsample
+
 mappingId	MAPID-281f9aebe6744a7194389d0fcc967623
-target		ome_instance:Plate/{plate_id} dcterms:hasPart ome_instance:Screen/{screen_id} . 
+target		ome_instance:Plate/{plate_id} dcterms:relation ome_instance:Screen/{screen_id} . 
 source		select _plate.id as plate_id, _screenplatelink.parent as screen_id, _plate.owner_id as plate_owner_id from plate as _plate left join screenplatelink as _screenplatelink on _plate.id = _screenplatelink.child where _plate.owner_id=0
+
+mappingId MAPID-plate-well
+target    ome_instance:Plate/{plate_id} dcterms:hasPart ome_instance:Well/{well_id} .
+source    select plate as plate_id, id as well_id from well where well.group_id in (select parent as group_id from groupexperimentermap where child=0)
 
 mappingId	MAPID-plate-kvannotations
 target		ome_instance:Plate/{plate_id} <{map_key}> {map_value}^^xsd:string . 
@@ -308,7 +314,7 @@ source		select _plate.id as plate_id,
 			left join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
 
 mappingId	MAPID-281f9aebe6744a7194389d0fcc967624
-target		ome_instance:Screen/{screen_id} dcterms:hasPart ome_instance:Plate/{plate_id} . 
+target		ome_instance:Screen/{screen_id} dcterms:relation ome_instance:Plate/{plate_id} . 
 source		select _screen.id as screen_id, _screenplatelink.child as plate_id from screen as _screen left join screenplatelink as _screenplatelink on _screen.id = _screenplatelink.parent
 
 mappingId	MAPID-screen-kvannotations
