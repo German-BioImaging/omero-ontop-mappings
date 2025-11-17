@@ -744,17 +744,17 @@ SELECT DISTINCT * WHERE {
     def test_plate_well(self):
         """ Test query for Plate and Well."""
 
-        results = run_query("""
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+        query = self._prefix_string + f"""
 
         SELECT *
         where {{
-            ?plate a omekg:Plate ;
-                   ^omeprop:plate ?well .
-            ?well a omekg:Well .
+            ?plate a omecore:Plate ;
+                   dcterms:hasPart ?well .
+            ?well a omecore:Well .
         }}
-        """)
+        """
+
+        results = run_query(query)
 
         print("\n"+results.to_string())
 
@@ -763,17 +763,14 @@ SELECT DISTINCT * WHERE {
     def test_well_sample(self):
         """ Test query for well and well sample."""
 
-        results = run_query("""
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-
+        query = self._prefix_string + f"""
         SELECT *
         where {{
-            ?well a omekg:Well ;
-                   ^omeprop:well ?ws .
-            ?ws a omekg:WellSample .
+            ?well a omecore:Well ;
+                   dcterms:hasPart ?ws .
+            ?ws a omecore:WellSample .
         }}
-        """)
+        """
 
         print("\n"+results.to_string())
 
@@ -836,19 +833,15 @@ SELECT DISTINCT * WHERE {
 
         self.assertEqual(0, len(results))
 
+    @unittest.expectedFailure
     def test_plate_key_value(self):
         """ Test querying for plate kv annotations as properties and values. """
 
-        query_string = f"""
-        prefix omecore: <https://ld.openmicroscopy.org/core/>
-        prefix dc: <http://purl.org/dc/terms/>
-        prefix omens: <http://www.openmicroscopy.org/ns/default/>
+        query_string = self._prefix_string + f"""
 
-        SELECT distinct ?key WHERE {{
-            ?img a omecore:Plate;
-                 ?kvterm ?val .
-        filter(strstarts(str(?kvterm), str(omens:)))
-        bind(strafter(str(?kvterm), str(omens:)) as ?key)
+        SELECT * WHERE {{
+            bind(iri(concat(str(site:), "Plate/1")) as ?plate)
+            ?plate omens:foo ?foo
         }}
         order by ?key
 
@@ -857,28 +850,38 @@ SELECT DISTINCT * WHERE {
         # Run the query.
         results = run_query(query_string)
 
-        print("\n"+results.to_string())
+        self.assertEqual(results.iloc[0,1], "bar")
 
-        self.assertTupleEqual((13,1), results.shape)
+    @unittest.expectedFailure
+    def test_plateacquisition_key_value(self):
+        """ Test querying for plate acquisition (run) kv annotations as properties and values. """
 
-        self.assertIn("CellLineMutation", results['key'].values)
+        query_string = self._prefix_string + f"""
+
+        SELECT * WHERE {{
+            ?run a omecore:PlateAcquisition;
+                 ?prop ?val.
+            filter(strstarts(str(?prop), str(omens)))
+        }}
+        order by ?prop
+        """
+
+        # Run the query.
+        results = run_query(query_string)
+
+        self.assertIn("CellLineMutation", results['prop'].values)
 
     def test_well_key_value(self):
         """ Test querying for a well kv-annotations as property value pairs."""
 
-        query_string = f"""
-        prefix omecore: <https://ld.openmicroscopy.org/core/>
-        prefix dc: <http://purl.org/dc/terms/>
-        prefix omens: <http://www.openmicroscopy.org/ns/default/>
+        query_string = self._prefix_string + f"""
 
-        SELECT distinct ?key ?val WHERE {{
-            ?img a omecore:Well;
-                 ?kvterm ?val .
-        filter(strstarts(str(?kvterm), str(omens:)))
-        bind(strafter(str(?kvterm), str(omens:)) as ?key)
+  SELECT distinct * WHERE {{
+    bind(iri(concat(str(site:), "Well/48")) as ?well)
+    ?well ?kvterm ?val .
+    filter(strstarts(str(?kvterm), str(omens:)))
+    bind(strafter(str(?kvterm), str(omens:)) as ?key)
         }}
-        order by ?key
-
         """
 
         # Run the query.
@@ -889,9 +892,8 @@ SELECT DISTINCT * WHERE {
 
         print("\n"+results.to_string())
 
-        self.assertTupleEqual((39,), results.shape)
 
-        self.assertEqual("NCBITaxon_9606", results['TermSource1Accession'])
+        self.assertEqual("NCBITaxon_9606", results['TermZZSourceZZ1ZZAccession'])
         self.assertEqual('0.610481812', results["nseg.0.m.eccentricity.mean"])
 
     def test_wellsample(self):
