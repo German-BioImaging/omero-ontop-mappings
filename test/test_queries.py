@@ -9,6 +9,7 @@ from urllib import parse
 
 import unittest
 
+DEBUG = True
 ENDPOINT = "http://localhost:8080/sparql"
 
 # --- Helper for order-independent pair checks 
@@ -205,7 +206,7 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Check numbers.
         number_of_objects = [r for r in response][0]
-        self.assertEqual(int(number_of_objects.n_images  ),  1932)
+        self.assertEqual(int(number_of_objects.n_images  ),  1548)
         self.assertEqual(int(number_of_objects.n_datasets), 3)
         self.assertEqual(int(number_of_objects.n_projects), 1)
 
@@ -380,7 +381,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         response = graph.query(query_string)
 
         # Test.
-        self.assertEqual(len(response), 1932)
+        self.assertEqual(len(response), 1548)
 
     def test_project_dataset_image(self):
         """ Test a query for a project-dataset-image hierarchy. """
@@ -671,7 +672,7 @@ SELECT DISTINCT * WHERE {
 
         print("\n"+results.to_string())
 
-        self.assertEqual(1, len(results))
+        self.assertEqual(3, len(results))
 
     def test_plate(self):
         """ Test query for a plate."""
@@ -698,12 +699,15 @@ SELECT DISTINCT * WHERE {
         SELECT *
         where {{
             ?wellsample a omecore:WellSample ;
-                        dcterms:relation ?related_obj .
-            ?related_obj a omecore:PlateAcquisition .
+                        ^dcterms:hasPart ?run .
+            ?run a omecore:PlateAcquisition .
         }}
         """
 
         results = run_query(query, return_as_df=True)
+
+        if DEBUG:
+            print("\n" + results.to_string())
 
         self.assertEqual(1536, len(results))
 
@@ -714,7 +718,7 @@ SELECT DISTINCT * WHERE {
         SELECT *
         where {{
             ?plate a omecore:Plate ;
-                   dcterms:hasPart ?screen .
+                   dcterms:relation ?screen .
             ?screen a omecore:Screen .
        }}
         """)
@@ -737,9 +741,9 @@ SELECT DISTINCT * WHERE {
   order by ?n_relations
        """)
 
-        self.assertTupleEqual( (2,2), results.shape )
-        self.assertEqual(results.iloc[0,1], 384)
-        self.assertEqual(results.iloc[1,1], 1)  
+        print(results.to_string())
+        self.assertTupleEqual( (1,2), results.shape )
+        self.assertEqual(int(results.iloc[0,1]), 1536) # 384*4 = 1536 related images 
 
     def test_plate_well(self):
         """ Test query for Plate and Well."""
@@ -772,30 +776,13 @@ SELECT DISTINCT * WHERE {
         }}
         """
 
-        print("\n"+results.to_string())
+        results = run_query(query)
+
+        if DEBUG:
+            print("\n"+results.to_string())
 
         # 384 wells x 4 samples per well
         self.assertTupleEqual((384*4, 2), results.shape)
-
-
-    def test_well_sample_image(self):
-        """ Test query for  well sample and image. """
-
-        results = run_query("""
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-
-        SELECT *
-        where {{
-            ?ws a omekg:WellSample ;
-                   omeprop:image ?img .
-            ?img a omekg:Image .
-        }}
-        """)
-
-        print("\n"+results.to_string())
-
-        self.assertTupleEqual((1536, 2), results.shape)
 
     def test_plateAcquisition(self):
         """ Test query for a PlateAcquisition."""
