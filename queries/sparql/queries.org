@@ -1,18 +1,18 @@
 * Queries against localhost running omero-ontop-mappings
 :PROPERTIES:
-:ID:       059e06f4-bd2b-4ec1-8280-7c25d62a66fa
-:header-args:sparql: :url http://localhost:8080/sparql :cache nil :noweb yes
-:mappings: omero-ontop-mappings
+:ID:       813a422b-3169-4d5f-9508-80d1c09cf5df
+:header-args:sparql: :url http://localhost:8080/sparql :cache nil :noweb yes :exports both :eval yes
+:header-args:sql: :engine postgresql :dbhost 127.0.0.1 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres :results output table :exports no :query
 :END:
 ** Prefixes
 :PROPERTIES:
 :ID:       446e434f-dc84-4edd-b69a-7d96824b853b
 :END:
 #+name: prefixes
-#+begin_src sparql :noweb yes
+#+begin_src sparql :noweb yes :eval no
   PREFIX foaf: <http://xmlns.com/foaf/0.1/>
   PREFIX image: <https://example.org/site/Image/>
-  PREFIX dc: <http://purl.org/dc/terms/>
+  PREFIX dc: <http://purl.org/dc/elements/1.1/>
   PREFIX dcterms: <http://purl.org/dc/terms/>
   PREFIX obda: <https://w3id.org/obda/vocabulary#>
   PREFIX omecore: <https://ld.openmicroscopy.org/core/>
@@ -31,26 +31,6 @@
   PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #+end_src
 
-#+RESULTS: prefixes
-| HTTP/1.1 400                           |                          |
-|----------------------------------------+--------------------------|
-| Vary: Origin                           |                          |
-| Vary: Access-Control-Request-Method    |                          |
-| Vary: Access-Control-Request-Headers   |                          |
-| Content-Type: text/plain;charset=UTF-8 |                          |
-| Content-Length: 171                    |                          |
-| Date: Fri                              | 14 Nov 2025 10:43:46 GMT |
-| Connection: close                      |                          |
-|                                        |                          |
-| Encountered "<EOF>" at line 19         | column 47.               |
-| Was expecting one of:                  |                          |
-| base ...                               |                          |
-| prefix ...                             |                          |
-| select ...                             |                          |
-| construct ...                          |                          |
-| describe ...                           |                          |
-| ask ...                                |                          |
-|                                        |                          |
 
 
 ** SPO
@@ -79,7 +59,6 @@
 | https://ld.openmicroscopy.org/core/reagent_set_description | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
 | https://ld.openmicroscopy.org/core/co2_percent             | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | https://w3id.org/linkml/SlotDefinition |
 
-
 ** Project
 :PROPERTIES:
 :ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
@@ -97,7 +76,6 @@
 | project                            | typ                                        |
 |------------------------------------+--------------------------------------------|
 | https://example.org/site/Project/1 | https://ld.openmicroscopy.org/core/Project |
-
 
 ** Dataset
 :PROPERTIES:
@@ -122,7 +100,6 @@
 | https://example.org/site/Dataset/2 |
 | https://example.org/site/Dataset/3 |
 
-
 *** datasets and properties
 :PROPERTIES:
 :ID:       ffeb2f65-35a2-40b6-af88-820caf58ffa8
@@ -142,7 +119,6 @@
 | https://example.org/site/Dataset/1 | https://example.org/site/Experimenter/0 |
 | https://example.org/site/Dataset/2 | https://example.org/site/Experimenter/0 |
 | https://example.org/site/Dataset/3 | https://example.org/site/Experimenter/0 |
-
 
 ** Dataset II
 :PROPERTIES:
@@ -201,7 +177,6 @@
 | https://example.org/site/Dataset/3 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type          | https://ld.openmicroscopy.org/core/Dataset   |
 | https://example.org/site/Dataset/3 | http://www.w3.org/2000/01/rdf-schema#label               | Dataset 3                                    |
 
-
 ** Project Dataset Image hierarchy
 :PROPERTIES:
 :ID:       9a7fae93-80a0-4cf9-b889-a60113b9bf01
@@ -235,7 +210,6 @@
 | https://example.org/site/Project/1 | https://example.org/site/Dataset/3 | https://example.org/site/Image/8  | 2024-10-10_16-47-01_screenshot.png         |
 | https://example.org/site/Project/1 | https://example.org/site/Dataset/2 | https://example.org/site/Image/12 | image_6_with_roi.ome.tif                   |
 
-
 ** Image with owner
 :PROPERTIES:
 :ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
@@ -263,7 +237,6 @@
 | https://example.org/site/Image/7  | https://example.org/site/Experimenter/0 |
 | https://example.org/site/Image/8  | https://example.org/site/Experimenter/0 |
 | https://example.org/site/Image/9  | https://example.org/site/Experimenter/0 |
-
 
 
 ** Image and DC metadata terms
@@ -295,7 +268,6 @@
 | https://example.org/site/Image/10 | Test User | Unittest |
 | https://example.org/site/Image/11 | Test User | Unittest |
 | https://example.org/site/Image/12 | Test User | Unittest |
-
 
 
 ** Image properties
@@ -347,7 +319,6 @@
 | https://example.org/site/Dataset/2 | https://ld.openmicroscopy.org/core/Dataset |
 | https://example.org/site/Dataset/3 | https://ld.openmicroscopy.org/core/Dataset |
 
-
 ** Dataset number of type relations
 :PROPERTIES:
 :ID:       c97f7deb-8163-4c3d-9c8f-ed50b3e36552
@@ -387,7 +358,6 @@
 |---------+------|
 
 
-
 ** Number of projects, datasets, images
 :PROPERTIES:
 :ID:       b8d9a7e6-cb6f-46a3-a198-f8a57a3e81ba
@@ -419,7 +389,6 @@
 |------------+------------+----------|
 |          1 |          3 |       12 |
 
-
 ** Project and contained datasets
 :PROPERTIES:
 :ID:       9114c7b4-6367-43f6-a8d2-9583999e554f
@@ -439,7 +408,6 @@
 #+RESULTS:
 | proj | lbl | ds |
 |------+-----+----|
-
 
 ** Project with datasets and images
 :PROPERTIES:
@@ -465,7 +433,6 @@
 | proj | dataset | image | name |
 |------+---------+-------+------|
 
-
 ** Dataset subject as per map annotation, queried by namespace:key concatenation (dc:subject)
 :PROPERTIES:
 :ID:       39bce638-19c5-4ed5-9428-7bfdbdc64b72
@@ -485,7 +452,6 @@
 | https://example.org/site/Dataset/1 | Test images   |
 | https://example.org/site/Dataset/2 | Test images   |
 | https://example.org/site/Dataset/3 | OMERO Mapping |
-
 
 ** Images and (optional) tags
 :PROPERTIES:
@@ -518,7 +484,6 @@
 | https://example.org/site/Image/11 | Screenshot |
 | https://example.org/site/Image/12 | Screenshot |
 
-
 ** Tagged dataset
 :PROPERTIES:
 :ID:       5ccad4e1-5090-438e-b90c-ede0bd3356bc
@@ -547,7 +512,6 @@ Find all datasets tagged "TestTag".
 
 
 
-
 ** Property with default namespace
 :PROPERTIES:
 :ID:       f538ab93-67f7-4a3e-aa6e-9b6d82e2f99c
@@ -565,7 +529,6 @@ Find all datasets tagged "TestTag".
 | val    |
 |--------|
 | screen |
-
 
 ** Image 9 MouseCT/Skyscan/System namespace
 :PROPERTIES:
@@ -592,7 +555,6 @@ Find all datasets tagged "TestTag".
 | http://purl.org/dc/terms/contributor                     | Test User                                    |
 | http://purl.org/dc/terms/subject                         | Unittest                                     |
 | http://www.openmicroscopy.org/ns/default/Assay           | Bruker                                       |
-
 
 
 ** Owners and Groups
@@ -629,6 +591,1186 @@ Find all datasets tagged "TestTag".
  | group | name |
  |-------+------|
 
+** HCS objects
+:PROPERTIES:
+:ID:       07aeeb4f-d827-4bb6-af03-564f3c23bbbd
+:END:
+*Annotation*:
+To annotate the HCS objects in Screen:3:
+- upload [[file:~/../../img/idr0017/idr0017-screenA-annotations-Field1.csv]] as FileAnnotation attachment to the Plate
+- Run Scripts -> Annotation -> import from csv:
+  - Target object: Well
+*** Plates and screens
+:PROPERTIES:
+:ID:       1b78f988-ab2e-47ca-a7a5-d389f2190240
+:END:
+#+begin_src sparql
+  <<prefixes>>
+
+  select * where {
+    ?screen a omecore:Screen .
+    ?plate a omecore:Plate .
+    }
+  limit 10
+#+end_src
+
+#+RESULTS:
+| screen                            | plate                            |
+|-----------------------------------+----------------------------------|
+| https://example.org/site/Screen/1 | https://example.org/site/Plate/1 |
+*** WellSample
+:PROPERTIES:
+:ID:       5a903ef3-9779-4702-ae88-3a82f50b1d42
+:END:
+#+begin_src sparql
+  <<prefixes>>
+  select * where {
+            ?wellsample a omecore:WellSample ;
+                        dcterms:relation ?related_obj .
+            ?related_obj a omecore:PlateAcquisition .
+        }
+  limit 10
+#+end_src
+
+#+RESULTS:
+| wellsample                             | related_obj                                 |
+|----------------------------------------+---------------------------------------------|
+| https://example.org/site/WellSample/1  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/2  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/3  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/4  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/5  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/6  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/7  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/8  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/9  | https://example.org/site/PlateAcquisition/1 |
+| https://example.org/site/WellSample/10 | https://example.org/site/PlateAcquisition/1 |
+|                                        |                                             |
+|                                        |                                             |
+*** Screen-Plate
+:PROPERTIES:
+:ID:       12399ff0-2a6c-4e7b-a5f5-92cdf129e666
+:END:
+#+name: query_screen_plate
+#+begin_src sparql
+  <<prefixes>>
+
+  select * where {
+    ?plate a omecore:Plate ;
+           dcterms:hasPart ?screen .
+    ?screen a omecore:Screen .
+  }
+#+end_src
+
+#+RESULTS: query_screen_plate
+| plate                            | screen                            |
+|----------------------------------+-----------------------------------|
+| https://example.org/site/Plate/1 | https://example.org/site/Screen/1 |
+*** Plate-PlateAcquisition
+:PROPERTIES:
+:ID:       1329dd6f-89c9-44f6-9015-e6e91be01abb
+:END:
+#+name: query wellsample-relations
+#+begin_src sparql
+  <<prefixes>>
+
+  select ?class (count(distinct ?relation) as ?n_relations) where {
+    ?wellsample a omecore:WellSample ;
+                dcterms:relation ?relation .
+    ?relation a ?class
+  }
+  group by ?class
+#+end_src
+
+#+RESULTS: query wellsample-relations
+| class                                               | n_relations |
+|-----------------------------------------------------+-------------|
+| https://ld.openmicroscopy.org/core/Image            |         384 |
+| https://ld.openmicroscopy.org/core/PlateAcquisition |           1 |
+*** Plate and relations
+:PROPERTIES:
+:ID:       64c20ac5-aec0-4164-9c45-572d3d885d23
+:END:
+#+name: query plate relations
+#+begin_src sparql
+  <<prefixes>>
+
+  select * where {
+    ?plate a omecore:Plate .
+    optional {
+      ?plate dcterms:relation ?rel .
+    }
+  }
+#+end_src
+
+#+RESULTS: query plate relations
+| plate                            | rel |
+|----------------------------------+-----|
+| https://example.org/site/Plate/1 |     |
+
+*** Plate annotations
+:PROPERTIES:
+:ID:       725836bc-4cff-496c-8624-f1e5453424f0
+:END:
+#+begin_src sparql :cache no
+  <<prefixes>>
+
+  SELECT * WHERE {
+    bind(iri(concat(str(site:), "Plate/1")) as ?plate)
+    ?plate omens:foo ?foo .
+  }
+#+end_src
+
+#+RESULTS:
+| plate                            | foo |
+|----------------------------------+-----|
+| https://example.org/site/Plate/1 | bar |
+#+name: plate-annotations-sql-source
+
+#+begin_src sql :engine postgresql :dbhost 127.0.0.1 :dbport 15432 :dbuser postgres :dbpassword postgres :database postgres :results output table :exports no :query 
+		select _plate.id as plate_id,
+			concat(
+			regexp_replace(
+			case
+			when _annotation.ns is null then 'http://www.openmicroscopy.org/ns/default/'
+			else
+			case
+			when _annotation.ns ~ '^http[s]{0,1}:\/\/' then _annotation.ns
+			else 'http://www.openmicroscopy.org/ns/default/'
+			end
+			end,
+			'([^\/,#])$','\1/'
+			),
+			regexp_replace(_annotation_mapvalue.name,'[^a-zA-Z0-9./_-]', 'ZZ', 'g')
+			) as map_key,
+			_annotation_mapvalue.value as map_value
+			from plate as _plate
+			left join plateannotationlink as _plateannotationlink on _plateannotationlink.parent = _plate.id
+			left join annotation as _annotation on _plateannotationlink.child = _annotation.id
+			left join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id ;
+#+end_src
+
+#+RESULTS: plate-annotations-sql-source
+| plate_id | map_key                                      | map_value |
+|----------+----------------------------------------------+-----------|
+|        1 | http://www.openmicroscopy.org/ns/default/foo | bar       |
+
+
+*** PlateAcquisition annotations
+:PROPERTIES:
+:ID:       4aba7065-ff8b-4da9-98f6-382d339ee6dd
+:END:
+#+begin_src sparql
+  <<prefixes>> 
+  SELECT * WHERE {{
+    ?run a omecore:PlateAcquisition;
+         ?prop ?val.
+    # filter(strstarts(str(?prop), str(omens)))
+  }}
+  # order by ?prop
+#+end_src
+
+#+RESULTS:
+| run                                         | prop                                                  | val                                                 |
+|---------------------------------------------+-------------------------------------------------------+-----------------------------------------------------|
+| https://example.org/site/PlateAcquisition/1 | http://purl.org/dc/elements/1.1/identifier            | 1                                                   |
+| https://example.org/site/PlateAcquisition/1 | https://ld.openmicroscopy.org/core/experimenter       | https://example.org/site/Experimenter/0             |
+| https://example.org/site/PlateAcquisition/1 | https://ld.openmicroscopy.org/core/experimenter_group | https://example.org/site/ExperimenterGroup/0        |
+| https://example.org/site/PlateAcquisition/1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/PlateAcquisition |
+ 
+
+*** DONE Well annotations
+CLOSED: [2025-11-17 Mon 12:55]
+:PROPERTIES:
+:ID:       1a218164-282d-4dd2-829c-fb7a7d13bd72
+:END:
+:LOGBOOK:
+CLOCK: [2025-11-17 Mon 12:16]--[2025-11-17 Mon 12:55] =>  0:39
+CLOCK: [2025-11-17 Mon 11:46]--[2025-11-17 Mon 12:11] =>  0:25
+:END:
+#+name: well annotations
+#+begin_src sparql
+  <<prefixes>>
+
+  SELECT distinct * WHERE {{
+    bind(iri(concat(str(site:), "Well/48")) as ?well)
+    ?well      ?kvterm ?val .
+    filter(strstarts(str(?kvterm), str(omens:)))
+    bind(strafter(str(?kvterm), str(omens:)) as ?key)
+  }}
+#+end_src
+
+#+RESULTS: well annotations
+| well                             | kvterm                                                                           |                                                           val | key                                     |
+|----------------------------------+----------------------------------------------------------------------------------+---------------------------------------------------------------+-----------------------------------------|
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/nseg.dna.h.cor.s2.sd                    |                                                   0.139844699 | nseg.dna.h.cor.s2.sd                    |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/Channels                                |                                            DAPI:DNA;CY3:Actin | Channels                                |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/nseg.dna.h.idm.s1.sd                    |                                                   0.153299109 | nseg.dna.h.idm.s1.sd                    |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/cseg.act.h.cor.s1.mean                  |                                                    0.65853358 | cseg.act.h.cor.s1.mean                  |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/ImageZZDirectoryZZName                  |                           2011-11-17_X-Man_LOPAC_X01_LP_S01_1 | ImageZZDirectoryZZName                  |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/ExperimentalZZConditionZZZZCellZZLineZZ |                                                        02-006 | ExperimentalZZConditionZZZZCellZZLineZZ |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/nseg.0.m.majoraxis.mean                 |                                                   22.75775284 | nseg.0.m.majoraxis.mean                 |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/WellZZNumber                            |                                                             1 | WellZZNumber                            |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/Image                                   | 2011-11-17 X-Man LOPAC_X03_LP_S01_1.xdce [Well A-1, Field #1] | Image                                   |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/CompoundZZTreatment                     |                                                  no treatment | CompoundZZTreatment                     |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/CompoundZZSelectivityZZUpdated          |                                                            NA | CompoundZZSelectivityZZUpdated          |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/CellZZLineZZMutation                    |                                                        AKT1/2 | CellZZLineZZMutation                    |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/cseg.0.s.radius.min.qt.0.05             |                                                   1.594356288 | cseg.0.s.radius.min.qt.0.05             |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/ControlZZType                           |                                              negative control | ControlZZType                           |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/cseg.act.h.f12.s2.sd                    |                                                   0.107960093 | cseg.act.h.f12.s2.sd                    |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/nseg.0.m.eccentricity.mean              |                                                   0.610481812 | nseg.0.m.eccentricity.mean              |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/cseg.dnaact.h.den.s2.sd                 |                                                   0.291094908 | cseg.dnaact.h.den.s2.sd                 |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/n                                       |                                                          2327 | n                                       |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/Replicate                               |                                                             1 | Replicate                               |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/cseg.act.m.eccentricity.mean            |                                                   0.711993962 | cseg.act.m.eccentricity.mean            |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/TermZZSourceZZ1ZZAccession              |                                                NCBITaxon_9606 | TermZZSourceZZ1ZZAccession              |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/ControlZZComments                       |                                                  no treatment | ControlZZComments                       |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/cseg.act.m.majoraxis.mean               |                                                   43.25319104 | cseg.act.m.majoraxis.mean               |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/cseg.dnaact.b.mean.qt.0.05              |                                                  -0.042957682 | cseg.dnaact.b.mean.qt.0.05              |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/nseg.0.s.radius.max.qt.0.05             |                                                   8.260531891 | nseg.0.s.radius.max.qt.0.05             |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/Plate                                   |                           2011-11-17 X-Man LOPAC_X03_LP_S01_1 | Plate                                   |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/nseg.dna.m.eccentricity.sd              |                                                   0.146952584 | nseg.dna.m.eccentricity.sd              |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/TermZZSourceZZ1ZZREF                    |                                                     NCBITaxon | TermZZSourceZZ1ZZREF                    |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/MutationZZDetailed                      |                                             AKT1-/- & AKT2-/- | MutationZZDetailed                      |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/Plate_Well                              |                        2011-11-17 X-Man LOPAC_X03_LP_S01_1_A1 | Plate_Well                              |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/cseg.act.h.asm.s2.mean                  |                                                   0.345989597 | cseg.act.h.asm.s2.mean                  |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/cseg.act.h.idm.s2.sd                    |                                                   0.088020256 | cseg.act.h.idm.s2.sd                    |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/PlateZZNumber                           |                                                             1 | PlateZZNumber                           |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/cseg.dnaact.b.mad.mean                  |                                                   0.350633699 | cseg.dnaact.b.mad.mean                  |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/cseg.dnaact.h.f13.s1.mean               |                                                   0.569235855 | cseg.dnaact.h.f13.s1.mean               |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/CharacteristicsZZZZCellZZLineZZ         |                                                        02-006 | CharacteristicsZZZZCellZZLineZZ         |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/cseg.dnaact.m.eccentricity.sd           |                                                   0.379328051 | cseg.dnaact.m.eccentricity.sd           |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/nseg.dna.h.var.s2.mean                  |                                                   5.359524439 | nseg.dna.h.var.s2.mean                  |
+| https://example.org/site/Well/48 | http://www.openmicroscopy.org/ns/default/CharacteristicsZZZZOrganismZZ           |                                                  Homo sapiens | CharacteristicsZZZZOrganismZZ           |
+
+
+
+*** DONE Plates and Wells
+CLOSED: [2025-11-17 Mon 13:21]
+:PROPERTIES:
+:ID:       19438d1d-ebe7-4798-ae9c-6aeaf4711e13
+:END:
+#+name: plates and wells
+#+begin_src sparql
+  <<prefixes>>
+
+  select * where {
+  ?plate a omecore:Plate;
+         dcterms:hasPart ?well .
+    ?well a omecore:Well .
+    }
+#+end_src
+
+#+RESULTS: plates and wells
+| plate                            | well                              |
+|----------------------------------+-----------------------------------|
+| https://example.org/site/Plate/1 | https://example.org/site/Well/1   |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/10  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/100 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/101 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/102 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/103 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/104 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/105 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/106 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/107 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/108 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/109 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/11  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/110 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/111 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/112 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/113 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/114 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/115 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/116 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/117 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/118 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/119 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/12  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/120 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/121 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/122 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/123 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/124 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/125 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/126 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/127 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/128 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/129 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/13  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/130 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/131 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/132 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/133 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/134 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/135 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/136 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/137 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/138 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/139 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/14  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/140 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/141 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/142 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/143 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/144 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/145 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/146 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/147 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/148 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/149 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/15  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/150 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/151 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/152 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/153 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/154 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/155 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/156 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/157 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/158 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/159 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/16  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/160 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/161 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/162 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/163 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/164 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/165 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/166 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/167 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/168 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/169 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/17  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/170 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/171 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/172 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/173 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/174 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/175 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/176 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/177 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/178 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/179 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/18  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/180 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/181 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/182 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/183 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/184 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/185 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/186 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/187 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/188 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/189 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/19  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/190 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/191 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/192 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/193 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/194 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/195 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/196 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/197 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/198 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/199 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/2   |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/20  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/200 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/201 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/202 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/203 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/204 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/205 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/206 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/207 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/208 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/209 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/21  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/210 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/211 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/212 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/213 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/214 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/215 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/216 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/217 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/218 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/219 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/22  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/220 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/221 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/222 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/223 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/224 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/225 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/226 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/227 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/228 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/229 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/23  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/230 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/231 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/232 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/233 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/234 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/235 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/236 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/237 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/238 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/239 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/24  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/240 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/241 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/242 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/243 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/244 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/245 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/246 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/247 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/248 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/249 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/25  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/250 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/251 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/252 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/253 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/254 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/255 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/256 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/257 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/258 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/259 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/26  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/260 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/261 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/262 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/263 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/264 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/265 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/266 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/267 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/268 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/269 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/27  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/270 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/271 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/272 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/273 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/274 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/275 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/276 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/277 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/278 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/279 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/28  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/280 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/281 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/282 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/283 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/284 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/285 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/286 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/287 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/288 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/289 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/29  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/290 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/291 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/292 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/293 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/294 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/295 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/296 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/297 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/298 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/299 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/3   |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/30  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/300 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/301 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/302 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/303 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/304 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/305 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/306 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/307 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/308 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/309 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/31  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/310 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/311 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/312 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/313 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/314 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/315 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/316 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/317 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/318 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/319 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/32  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/320 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/321 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/322 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/323 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/324 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/325 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/326 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/327 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/328 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/329 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/33  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/330 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/331 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/332 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/333 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/334 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/335 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/336 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/337 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/338 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/339 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/34  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/340 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/341 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/342 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/343 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/344 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/345 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/346 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/347 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/348 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/349 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/35  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/350 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/351 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/352 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/353 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/354 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/355 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/356 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/357 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/358 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/359 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/36  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/360 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/361 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/362 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/363 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/364 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/365 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/366 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/367 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/368 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/369 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/37  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/370 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/371 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/372 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/373 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/374 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/375 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/376 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/377 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/378 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/379 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/38  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/380 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/381 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/382 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/383 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/384 |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/39  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/4   |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/40  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/41  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/42  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/43  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/44  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/45  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/46  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/47  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/48  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/49  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/5   |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/50  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/51  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/52  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/53  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/54  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/55  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/56  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/57  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/58  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/59  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/6   |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/60  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/61  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/62  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/63  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/64  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/65  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/66  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/67  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/68  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/69  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/7   |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/70  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/71  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/72  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/73  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/74  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/75  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/76  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/77  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/78  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/79  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/8   |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/80  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/81  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/82  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/83  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/84  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/85  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/86  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/87  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/88  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/89  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/9   |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/90  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/91  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/92  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/93  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/94  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/95  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/96  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/97  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/98  |
+| https://example.org/site/Plate/1 | https://example.org/site/Well/99  |
+
+**** sql
+:PROPERTIES:
+:ID:       5b1fda34-d101-47f2-a3bc-06791309023e
+:END:
+#+begin_src sql
+-- select id, group_id from well where group_id in (select parent as group_id from groupexperimentermap where child=0)
+  
+select * from well where well.group_id in (select parent as group_id from groupexperimentermap where child=0)
+#+end_src
+
+#+RESULTS:
+|  id | alpha | blue | column | permissions | externaldescription | externalidentifier | green | red | row | status | type | version | creation_id | external_id | group_id | owner_id | update_id | plate |
+|-----+-------+------+--------+-------------+---------------------+--------------------+-------+-----+-----+--------+------+---------+-------------+-------------+----------+----------+-----------+-------|
+|   1 |       |      |     17 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|   2 |       |      |      5 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|   3 |       |      |     10 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|   4 |       |      |     20 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|   5 |       |      |     13 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|   6 |       |      |      6 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|   7 |       |      |     17 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|   8 |       |      |      2 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|   9 |       |      |     14 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  10 |       |      |     23 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  11 |       |      |      8 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  12 |       |      |     10 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  13 |       |      |     17 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  14 |       |      |     22 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  15 |       |      |     12 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  16 |       |      |      3 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  17 |       |      |     15 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  18 |       |      |     19 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  19 |       |      |      4 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  20 |       |      |     17 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  21 |       |      |      2 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  22 |       |      |     21 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  23 |       |      |      4 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  24 |       |      |      1 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  25 |       |      |     12 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  26 |       |      |     23 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  27 |       |      |     18 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  28 |       |      |     15 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  29 |       |      |     19 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  30 |       |      |     21 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  31 |       |      |      2 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  32 |       |      |      4 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  33 |       |      |      3 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  34 |       |      |      9 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  35 |       |      |     14 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  36 |       |      |     15 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  37 |       |      |      8 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  38 |       |      |      0 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  39 |       |      |      9 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  40 |       |      |     11 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  41 |       |      |      1 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  42 |       |      |     10 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  43 |       |      |      6 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  44 |       |      |      3 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  45 |       |      |     10 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  46 |       |      |      1 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  47 |       |      |      7 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  48 |       |      |      0 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  49 |       |      |     18 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  50 |       |      |      5 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  51 |       |      |      7 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  52 |       |      |      5 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  53 |       |      |     15 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  54 |       |      |     20 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  55 |       |      |     16 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  56 |       |      |     17 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  57 |       |      |     14 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  58 |       |      |     16 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  59 |       |      |      0 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  60 |       |      |     21 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  61 |       |      |      3 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  62 |       |      |     22 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  63 |       |      |      7 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  64 |       |      |     12 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  65 |       |      |      0 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  66 |       |      |     13 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  67 |       |      |      2 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  68 |       |      |     14 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  69 |       |      |     16 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  70 |       |      |     17 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  71 |       |      |     10 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  72 |       |      |     18 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  73 |       |      |     14 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  74 |       |      |     23 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  75 |       |      |     13 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  76 |       |      |     11 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  77 |       |      |      1 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  78 |       |      |     16 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  79 |       |      |     23 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  80 |       |      |     12 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  81 |       |      |      9 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  82 |       |      |     20 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  83 |       |      |      5 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  84 |       |      |     15 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  85 |       |      |      4 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  86 |       |      |     13 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  87 |       |      |     17 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  88 |       |      |      3 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  89 |       |      |      7 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  90 |       |      |     20 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  91 |       |      |     15 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  92 |       |      |      8 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  93 |       |      |      3 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  94 |       |      |     13 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  95 |       |      |      1 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  96 |       |      |      8 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  97 |       |      |     14 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  98 |       |      |     11 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+|  99 |       |      |     19 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 100 |       |      |      5 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 101 |       |      |     19 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 102 |       |      |      0 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 103 |       |      |      8 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 104 |       |      |      5 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 105 |       |      |     11 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 106 |       |      |     16 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 107 |       |      |      5 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 108 |       |      |      2 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 109 |       |      |     15 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 110 |       |      |     11 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 111 |       |      |      2 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 112 |       |      |     20 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 113 |       |      |      8 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 114 |       |      |      6 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 115 |       |      |     14 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 116 |       |      |      2 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 117 |       |      |     11 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 118 |       |      |     18 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 119 |       |      |      0 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 120 |       |      |     17 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 121 |       |      |     20 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 122 |       |      |     12 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 123 |       |      |     12 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 124 |       |      |     10 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 125 |       |      |      7 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 126 |       |      |     17 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 127 |       |      |     15 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 128 |       |      |      7 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 129 |       |      |      9 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 130 |       |      |      9 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 131 |       |      |     22 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 132 |       |      |     20 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 133 |       |      |      6 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 134 |       |      |     18 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 135 |       |      |     15 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 136 |       |      |     13 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 137 |       |      |      3 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 138 |       |      |      1 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 139 |       |      |      8 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 140 |       |      |     19 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 141 |       |      |      0 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 142 |       |      |      3 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 143 |       |      |     22 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 144 |       |      |     23 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 145 |       |      |      0 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 146 |       |      |     22 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 147 |       |      |      6 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 148 |       |      |      0 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 149 |       |      |     10 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 150 |       |      |      2 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 151 |       |      |     10 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 152 |       |      |      7 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 153 |       |      |      9 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 154 |       |      |     18 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 155 |       |      |     18 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 156 |       |      |      6 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 157 |       |      |     13 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 158 |       |      |     12 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 159 |       |      |      9 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 160 |       |      |     22 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 161 |       |      |      1 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 162 |       |      |      9 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 163 |       |      |     13 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 164 |       |      |      5 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 165 |       |      |     17 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 166 |       |      |     19 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 167 |       |      |     18 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 168 |       |      |      7 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 169 |       |      |     13 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 170 |       |      |     17 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 171 |       |      |      8 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 172 |       |      |     13 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 173 |       |      |     13 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 174 |       |      |     19 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 175 |       |      |      2 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 176 |       |      |      1 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 177 |       |      |      1 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 178 |       |      |      2 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 179 |       |      |     14 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 180 |       |      |      3 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 181 |       |      |      4 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 182 |       |      |     19 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 183 |       |      |     23 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 184 |       |      |      5 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 185 |       |      |     13 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 186 |       |      |      3 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 187 |       |      |      7 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 188 |       |      |     18 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 189 |       |      |     18 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 190 |       |      |      8 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 191 |       |      |      7 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 192 |       |      |     11 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 193 |       |      |     13 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 194 |       |      |     22 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 195 |       |      |     20 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 196 |       |      |     22 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 197 |       |      |      9 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 198 |       |      |     22 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 199 |       |      |     16 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 200 |       |      |      1 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 201 |       |      |     23 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 202 |       |      |     21 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 203 |       |      |      1 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 204 |       |      |     14 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 205 |       |      |      7 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 206 |       |      |      7 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 207 |       |      |     21 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 208 |       |      |     20 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 209 |       |      |      3 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 210 |       |      |      4 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 211 |       |      |     21 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 212 |       |      |     10 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 213 |       |      |      6 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 214 |       |      |     16 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 215 |       |      |      8 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 216 |       |      |     16 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 217 |       |      |      7 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 218 |       |      |     12 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 219 |       |      |     21 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 220 |       |      |      3 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 221 |       |      |     21 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 222 |       |      |      6 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 223 |       |      |      5 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 224 |       |      |     19 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 225 |       |      |     21 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 226 |       |      |     17 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 227 |       |      |     16 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 228 |       |      |     15 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 229 |       |      |      5 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 230 |       |      |     19 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 231 |       |      |     10 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 232 |       |      |     14 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 233 |       |      |      1 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 234 |       |      |     12 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 235 |       |      |     10 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 236 |       |      |      6 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 237 |       |      |     12 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 238 |       |      |      6 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 239 |       |      |     18 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 240 |       |      |     12 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 241 |       |      |     23 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 242 |       |      |     16 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 243 |       |      |     19 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 244 |       |      |     19 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 245 |       |      |     18 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 246 |       |      |     15 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 247 |       |      |     12 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 248 |       |      |     17 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 249 |       |      |     23 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 250 |       |      |     11 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 251 |       |      |      8 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 252 |       |      |      4 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 253 |       |      |     10 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 254 |       |      |     19 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 255 |       |      |     10 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 256 |       |      |      4 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 257 |       |      |      5 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 258 |       |      |     18 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 259 |       |      |     13 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 260 |       |      |     12 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 261 |       |      |      9 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 262 |       |      |      1 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 263 |       |      |     19 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 264 |       |      |     20 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 265 |       |      |     21 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 266 |       |      |      0 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 267 |       |      |      8 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 268 |       |      |      6 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 269 |       |      |     11 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 270 |       |      |      0 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 271 |       |      |     12 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 272 |       |      |     17 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 273 |       |      |      4 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 274 |       |      |     21 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 275 |       |      |      5 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 276 |       |      |      2 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 277 |       |      |     20 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 278 |       |      |      4 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 279 |       |      |     22 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 280 |       |      |      8 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 281 |       |      |     14 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 282 |       |      |     21 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 283 |       |      |     18 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 284 |       |      |      6 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 285 |       |      |     11 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 286 |       |      |     10 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 287 |       |      |     14 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 288 |       |      |     16 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 289 |       |      |      4 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 290 |       |      |      3 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 291 |       |      |      5 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 292 |       |      |     15 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 293 |       |      |      7 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 294 |       |      |      4 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 295 |       |      |     22 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 296 |       |      |     21 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 297 |       |      |     15 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 298 |       |      |      9 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 299 |       |      |     13 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 300 |       |      |     12 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 301 |       |      |      4 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 302 |       |      |      6 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 303 |       |      |      9 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 304 |       |      |      3 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 305 |       |      |      6 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 306 |       |      |     23 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 307 |       |      |     11 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 308 |       |      |     16 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 309 |       |      |      0 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 310 |       |      |      4 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 311 |       |      |     14 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 312 |       |      |     21 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 313 |       |      |     10 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 314 |       |      |      7 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 315 |       |      |     22 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 316 |       |      |     17 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 317 |       |      |     21 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 318 |       |      |     15 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 319 |       |      |     21 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 320 |       |      |     23 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 321 |       |      |     11 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 322 |       |      |     22 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 323 |       |      |      0 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 324 |       |      |      2 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 325 |       |      |      0 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 326 |       |      |     23 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 327 |       |      |      6 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 328 |       |      |     20 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 329 |       |      |     19 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 330 |       |      |      3 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 331 |       |      |      9 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 332 |       |      |     12 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 333 |       |      |      6 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 334 |       |      |     22 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 335 |       |      |     18 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 336 |       |      |     15 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 337 |       |      |      4 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 338 |       |      |      1 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 339 |       |      |     16 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 340 |       |      |      9 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 341 |       |      |     14 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 342 |       |      |      0 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 343 |       |      |     13 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 344 |       |      |      5 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 345 |       |      |     17 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 346 |       |      |      4 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 347 |       |      |     20 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 348 |       |      |     11 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 349 |       |      |     11 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 350 |       |      |      5 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 351 |       |      |     23 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 352 |       |      |      1 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 353 |       |      |     20 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 354 |       |      |      2 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 355 |       |      |      1 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 356 |       |      |     14 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 357 |       |      |     10 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 358 |       |      |      9 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 359 |       |      |     18 |        -120 |                     |                    |       |     |   6 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 360 |       |      |     16 |        -120 |                     |                    |       |     |   9 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 361 |       |      |      7 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 362 |       |      |      8 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 363 |       |      |     20 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 364 |       |      |      8 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 365 |       |      |      8 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 366 |       |      |     11 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 367 |       |      |     23 |        -120 |                     |                    |       |     |   5 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 368 |       |      |      2 |        -120 |                     |                    |       |     |  12 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 369 |       |      |      2 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 370 |       |      |     20 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 371 |       |      |     16 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 372 |       |      |      2 |        -120 |                     |                    |       |     |  15 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 373 |       |      |     11 |        -120 |                     |                    |       |     |   1 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 374 |       |      |     14 |        -120 |                     |                    |       |     |   7 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 375 |       |      |     19 |        -120 |                     |                    |       |     |  10 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 376 |       |      |     22 |        -120 |                     |                    |       |     |   0 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 377 |       |      |      0 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 378 |       |      |     15 |        -120 |                     |                    |       |     |  11 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 379 |       |      |      9 |        -120 |                     |                    |       |     |   4 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 380 |       |      |      3 |        -120 |                     |                    |       |     |   2 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 381 |       |      |     22 |        -120 |                     |                    |       |     |  14 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 382 |       |      |     23 |        -120 |                     |                    |       |     |   8 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 383 |       |      |     23 |        -120 |                     |                    |       |     |  13 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+| 384 |       |      |     16 |        -120 |                     |                    |       |     |   3 |        |      |         |       12776 |             |        0 |        0 |     12776 |     1 |
+
+
+
+*** DONE WellSample-WellIndex
+CLOSED: [2025-11-18 Tue 15:48]
+:PROPERTIES:
+:ID:       38745fe8-994a-4b11-9d21-0e3a1e749e70
+:END:
+:LOGBOOK:
+CLOCK: [2025-11-17 Mon 15:40]--[2025-11-17 Mon 16:05] =>  0:25
+CLOCK: [2025-11-17 Mon 15:09]--[2025-11-17 Mon 15:34] =>  0:25
+CLOCK: [2025-11-17 Mon 13:48]--[2025-11-17 Mon 14:13] =>  0:25
+:END:
+#+begin_src sparql
+   <<prefixes>>
+
+   SELECT distinct *
+   where {
+       ?ws a omecore:WellSample ;
+           dc:identifier ?id ;
+           omecore:well_index ?well_index ;
+           dcterms:relation ?is_related ;
+           ^dcterms:hasPart ?ws_is_part_of .
+   }
+  limit 16
+#+end_src
+
+#+RESULTS:
+| ws                                     | id | well_index | is_related                        | ws_is_part_of                   |
+|----------------------------------------+----+------------+-----------------------------------+---------------------------------|
+| https://example.org/site/WellSample/1  |  1 |          0 | https://example.org/site/Image/52 | https://example.org/site/Well/1 |
+| https://example.org/site/WellSample/2  |  2 |          1 | https://example.org/site/Image/53 | https://example.org/site/Well/1 |
+| https://example.org/site/WellSample/3  |  3 |          2 | https://example.org/site/Image/54 | https://example.org/site/Well/1 |
+| https://example.org/site/WellSample/4  |  4 |          3 | https://example.org/site/Image/55 | https://example.org/site/Well/1 |
+| https://example.org/site/WellSample/5  |  5 |          0 | https://example.org/site/Image/56 | https://example.org/site/Well/2 |
+| https://example.org/site/WellSample/6  |  6 |          1 | https://example.org/site/Image/57 | https://example.org/site/Well/2 |
+| https://example.org/site/WellSample/7  |  7 |          2 | https://example.org/site/Image/58 | https://example.org/site/Well/2 |
+| https://example.org/site/WellSample/8  |  8 |          3 | https://example.org/site/Image/59 | https://example.org/site/Well/2 |
+| https://example.org/site/WellSample/9  |  9 |          0 | https://example.org/site/Image/60 | https://example.org/site/Well/3 |
+| https://example.org/site/WellSample/10 | 10 |          1 | https://example.org/site/Image/61 | https://example.org/site/Well/3 |
+| https://example.org/site/WellSample/11 | 11 |          2 | https://example.org/site/Image/62 | https://example.org/site/Well/3 |
+| https://example.org/site/WellSample/12 | 12 |          3 | https://example.org/site/Image/63 | https://example.org/site/Well/3 |
+| https://example.org/site/WellSample/13 | 13 |          0 | https://example.org/site/Image/64 | https://example.org/site/Well/4 |
+| https://example.org/site/WellSample/14 | 14 |          1 | https://example.org/site/Image/65 | https://example.org/site/Well/4 |
+| https://example.org/site/WellSample/15 | 15 |          2 | https://example.org/site/Image/66 | https://example.org/site/Well/4 |
+| https://example.org/site/WellSample/16 | 16 |          3 | https://example.org/site/Image/67 | https://example.org/site/Well/4 |
+
+**** sql query
+:PROPERTIES:
+:ID:       f5b460be-4fdf-4756-a6c8-5895dd74b812
+:END:
+#+begin_src sql
+select * from wellsample where group_id in (select parent as group_id from groupexperimentermap where child=0) limit 10
+#+end_src
+
+#+RESULTS:
+| id | permissions | posxunit        |           posx | posyunit        |             posy | timepoint | version | creation_id | external_id | group_id | owner_id | update_id | image | plateacquisition | well | well_index |
+|----+-------------+-----------------+----------------+-----------------+------------------+-----------+---------+-------------+-------------+----------+----------+-----------+-------+------------------+------+------------|
+|  1 |        -120 | reference frame | -757.759765625 | reference frame | -757.76025390625 |           |         |       12776 |             |        0 |        0 |     12776 |    52 |                1 |    1 |          0 |
+|  2 |        -120 | reference frame |  757.759765625 | reference frame | -757.76025390625 |           |         |       12776 |             |        0 |        0 |     12776 |    53 |                1 |    1 |          1 |
+|  3 |        -120 | reference frame | -757.759765625 | reference frame |    757.759765625 |           |         |       12776 |             |        0 |        0 |     12776 |    54 |                1 |    1 |          2 |
+|  4 |        -120 | reference frame |  757.759765625 | reference frame |    757.759765625 |           |         |       12776 |             |        0 |        0 |     12776 |    55 |                1 |    1 |          3 |
+|  5 |        -120 | reference frame | -757.759765625 | reference frame | -757.76025390625 |           |         |       12776 |             |        0 |        0 |     12776 |    56 |                1 |    2 |          0 |
+|  6 |        -120 | reference frame |  757.759765625 | reference frame | -757.76025390625 |           |         |       12776 |             |        0 |        0 |     12776 |    57 |                1 |    2 |          1 |
+|  7 |        -120 | reference frame | -757.759765625 | reference frame |    757.759765625 |           |         |       12776 |             |        0 |        0 |     12776 |    58 |                1 |    2 |          2 |
+|  8 |        -120 | reference frame |  757.759765625 | reference frame |    757.759765625 |           |         |       12776 |             |        0 |        0 |     12776 |    59 |                1 |    2 |          3 |
+|  9 |        -120 | reference frame | -757.759765625 | reference frame | -757.76025390625 |           |         |       12776 |             |        0 |        0 |     12776 |    60 |                1 |    3 |          0 |
+| 10 |        -120 | reference frame |  757.759765625 | reference frame | -757.76025390625 |           |         |       12776 |             |        0 |        0 |     12776 |    61 |                1 |    3 |          1 |
+
+
+*** DONE Well-WellSample
+CLOSED: [2025-11-18 Tue 16:00]
+:PROPERTIES:
+:ID:       d005d63e-1c10-4713-b8d0-053d137abf02
+:END:
+:LOGBOOK:
+CLOCK: [2025-11-18 Tue 15:51]--[2025-11-18 Tue 16:00] =>  0:09
+:END:
+#+name: well-wellsample
+#+begin_src sparql
+  <<prefixes>>
+
+  select * where {
+    ?well a omecore:Well .
+    ?ws a omecore:WellSample .
+    ?well dcterms:hasPart ?ws .
+    }
+  limit 10
+#+end_src
+
+#+RESULTS: well-wellsample
+| well                              | ws                                       |
+|-----------------------------------+------------------------------------------|
+| https://example.org/site/Well/372 | https://example.org/site/WellSample/1487 |
+| https://example.org/site/Well/222 | https://example.org/site/WellSample/885  |
+| https://example.org/site/Well/82  | https://example.org/site/WellSample/324  |
+| https://example.org/site/Well/263 | https://example.org/site/WellSample/1051 |
+| https://example.org/site/Well/188 | https://example.org/site/WellSample/749  |
+| https://example.org/site/Well/50  | https://example.org/site/WellSample/199  |
+| https://example.org/site/Well/118 | https://example.org/site/WellSample/469  |
+| https://example.org/site/Well/222 | https://example.org/site/WellSample/884  |
+| https://example.org/site/Well/125 | https://example.org/site/WellSample/499  |
+| https://example.org/site/Well/104 | https://example.org/site/WellSample/414  |
+
+**** sql query
+:PROPERTIES:
+:ID:       f5b460be-4fdf-4756-a6c8-5895dd74b812
+:END:
+#+begin_src sql
+select id as wellsample_id, well as well_id from wellsample ;
+#+end_src
+
+#+RESULTS:
+| wellsample_id | well_id |
+|---------------+---------|
+|             1 |       1 |
+|             2 |       1 |
+|             3 |       1 |
+|             4 |       1 |
+|             5 |       2 |
+|             6 |       2 |
+|             7 |       2 |
+|             8 |       2 |
+|             9 |       3 |
+|            10 |       3 |
 
 ** Federated query against ome and taxonomy database with HCS objects
 :PROPERTIES:
@@ -639,7 +1781,7 @@ Find all datasets tagged "TestTag".
 
   <<prefixes>>
   SELECT distinct * WHERE {
-    ?well a omekg:Well ;
+    ?well a omecore:Well ;
     <http://www.openmicroscopy.org/ns/default/TermSource1Accession> ?taxid.
 
     bind(strafter(?taxid, 'NCBITaxon_') as ?taxon_id)
@@ -773,10 +1915,12 @@ Find all datasets tagged "TestTag".
 | HUMAN    | http://purl.uniprot.org/taxonomy/10589   | Human papillomavirus type 41                                                |
 | HUMAN    | http://purl.uniprot.org/taxonomy/10590   | Human papillomavirus 42                                                     |
 
-
 ** Federated query against locally running qlever and uniprot
 :PROPERTIES:
 :ID:       deea35fd-873a-4a43-983e-6497a8a04163
+:END:
+:LOGBOOK:
+CLOCK: [2025-11-14 Fri 11:52]--[2025-11-14 Fri 12:17] =>  0:25
 :END:
 #+begin_src sparql :url http://localhost:8888/sparql  :eval no
 

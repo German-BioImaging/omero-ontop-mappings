@@ -21,9 +21,7 @@
 <https://ld.openmicroscopy.org/omekg> rdf:type owl:Ontology ;
                                        owl:imports rdfs: ,
                                                    <http://www.w3.org/2006/vcard/ns> ,
-                                                   core: ,
-                                                   <https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_elements.nt> ,
-                                                   <https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_terms.nt> ;
+    core: ;
                                        dcterms:license "https://creativecommons.org/publicdomain/zero/1.0/" ;
                                        rdfs:label "OMERO VKG Ontology" ;
                                        skos:definition "Mapping ontology for OMERO Virtual Knowledge Graph" .
