@@ -12,7 +12,7 @@
 #+begin_src sparql :noweb yes :eval no
   PREFIX foaf: <http://xmlns.com/foaf/0.1/>
   PREFIX image: <https://example.org/site/Image/>
-  PREFIX dc: <http://purl.org/dc/terms/>
+  PREFIX dc: <http://purl.org/dc/elements/1.1/>
   PREFIX dcterms: <http://purl.org/dc/terms/>
   PREFIX obda: <https://w3id.org/obda/vocabulary#>
   PREFIX omecore: <https://ld.openmicroscopy.org/core/>
@@ -1649,53 +1649,128 @@ select * from well where well.group_id in (select parent as group_id from groupe
 
 
 
-*** TODO Well-WellSample
+*** DONE WellSample-WellIndex
+CLOSED: [2025-11-18 Tue 15:48]
 :PROPERTIES:
 :ID:       38745fe8-994a-4b11-9d21-0e3a1e749e70
 :END:
 :LOGBOOK:
-CLOCK: [2025-11-17 Mon 15:40]
+CLOCK: [2025-11-17 Mon 15:40]--[2025-11-17 Mon 16:05] =>  0:25
 CLOCK: [2025-11-17 Mon 15:09]--[2025-11-17 Mon 15:34] =>  0:25
 CLOCK: [2025-11-17 Mon 13:48]--[2025-11-17 Mon 14:13] =>  0:25
 :END:
 #+begin_src sparql
    <<prefixes>>
 
-   SELECT *
+   SELECT distinct *
    where {
        ?ws a omecore:WellSample ;
-           dc:identifier ?id .
+           dc:identifier ?id ;
+           omecore:well_index ?well_index ;
+           dcterms:relation ?is_related ;
+           ^dcterms:hasPart ?ws_is_part_of .
    }
-  limit 100
+  limit 16
 #+end_src
 
 #+RESULTS:
-| ws | id |
-|----+----|
-
-
+| ws                                     | id | well_index | is_related                        | ws_is_part_of                   |
+|----------------------------------------+----+------------+-----------------------------------+---------------------------------|
+| https://example.org/site/WellSample/1  |  1 |          0 | https://example.org/site/Image/52 | https://example.org/site/Well/1 |
+| https://example.org/site/WellSample/2  |  2 |          1 | https://example.org/site/Image/53 | https://example.org/site/Well/1 |
+| https://example.org/site/WellSample/3  |  3 |          2 | https://example.org/site/Image/54 | https://example.org/site/Well/1 |
+| https://example.org/site/WellSample/4  |  4 |          3 | https://example.org/site/Image/55 | https://example.org/site/Well/1 |
+| https://example.org/site/WellSample/5  |  5 |          0 | https://example.org/site/Image/56 | https://example.org/site/Well/2 |
+| https://example.org/site/WellSample/6  |  6 |          1 | https://example.org/site/Image/57 | https://example.org/site/Well/2 |
+| https://example.org/site/WellSample/7  |  7 |          2 | https://example.org/site/Image/58 | https://example.org/site/Well/2 |
+| https://example.org/site/WellSample/8  |  8 |          3 | https://example.org/site/Image/59 | https://example.org/site/Well/2 |
+| https://example.org/site/WellSample/9  |  9 |          0 | https://example.org/site/Image/60 | https://example.org/site/Well/3 |
+| https://example.org/site/WellSample/10 | 10 |          1 | https://example.org/site/Image/61 | https://example.org/site/Well/3 |
+| https://example.org/site/WellSample/11 | 11 |          2 | https://example.org/site/Image/62 | https://example.org/site/Well/3 |
+| https://example.org/site/WellSample/12 | 12 |          3 | https://example.org/site/Image/63 | https://example.org/site/Well/3 |
+| https://example.org/site/WellSample/13 | 13 |          0 | https://example.org/site/Image/64 | https://example.org/site/Well/4 |
+| https://example.org/site/WellSample/14 | 14 |          1 | https://example.org/site/Image/65 | https://example.org/site/Well/4 |
+| https://example.org/site/WellSample/15 | 15 |          2 | https://example.org/site/Image/66 | https://example.org/site/Well/4 |
+| https://example.org/site/WellSample/16 | 16 |          3 | https://example.org/site/Image/67 | https://example.org/site/Well/4 |
 
 **** sql query
 :PROPERTIES:
 :ID:       f5b460be-4fdf-4756-a6c8-5895dd74b812
 :END:
 #+begin_src sql
-select id, owner_id, group_id from wellsample where group_id in (select parent as group_id from groupexperimentermap where child=0) limit 10
+select * from wellsample where group_id in (select parent as group_id from groupexperimentermap where child=0) limit 10
 #+end_src
 
 #+RESULTS:
-| id | owner_id | group_id |
-|----+----------+----------|
-|  1 |        0 |        0 |
-|  2 |        0 |        0 |
-|  3 |        0 |        0 |
-|  4 |        0 |        0 |
-|  5 |        0 |        0 |
-|  6 |        0 |        0 |
-|  7 |        0 |        0 |
-|  8 |        0 |        0 |
-|  9 |        0 |        0 |
-| 10 |        0 |        0 |
+| id | permissions | posxunit        |           posx | posyunit        |             posy | timepoint | version | creation_id | external_id | group_id | owner_id | update_id | image | plateacquisition | well | well_index |
+|----+-------------+-----------------+----------------+-----------------+------------------+-----------+---------+-------------+-------------+----------+----------+-----------+-------+------------------+------+------------|
+|  1 |        -120 | reference frame | -757.759765625 | reference frame | -757.76025390625 |           |         |       12776 |             |        0 |        0 |     12776 |    52 |                1 |    1 |          0 |
+|  2 |        -120 | reference frame |  757.759765625 | reference frame | -757.76025390625 |           |         |       12776 |             |        0 |        0 |     12776 |    53 |                1 |    1 |          1 |
+|  3 |        -120 | reference frame | -757.759765625 | reference frame |    757.759765625 |           |         |       12776 |             |        0 |        0 |     12776 |    54 |                1 |    1 |          2 |
+|  4 |        -120 | reference frame |  757.759765625 | reference frame |    757.759765625 |           |         |       12776 |             |        0 |        0 |     12776 |    55 |                1 |    1 |          3 |
+|  5 |        -120 | reference frame | -757.759765625 | reference frame | -757.76025390625 |           |         |       12776 |             |        0 |        0 |     12776 |    56 |                1 |    2 |          0 |
+|  6 |        -120 | reference frame |  757.759765625 | reference frame | -757.76025390625 |           |         |       12776 |             |        0 |        0 |     12776 |    57 |                1 |    2 |          1 |
+|  7 |        -120 | reference frame | -757.759765625 | reference frame |    757.759765625 |           |         |       12776 |             |        0 |        0 |     12776 |    58 |                1 |    2 |          2 |
+|  8 |        -120 | reference frame |  757.759765625 | reference frame |    757.759765625 |           |         |       12776 |             |        0 |        0 |     12776 |    59 |                1 |    2 |          3 |
+|  9 |        -120 | reference frame | -757.759765625 | reference frame | -757.76025390625 |           |         |       12776 |             |        0 |        0 |     12776 |    60 |                1 |    3 |          0 |
+| 10 |        -120 | reference frame |  757.759765625 | reference frame | -757.76025390625 |           |         |       12776 |             |        0 |        0 |     12776 |    61 |                1 |    3 |          1 |
+
+
+*** DONE Well-WellSample
+CLOSED: [2025-11-18 Tue 16:00]
+:PROPERTIES:
+:ID:       d005d63e-1c10-4713-b8d0-053d137abf02
+:END:
+:LOGBOOK:
+CLOCK: [2025-11-18 Tue 15:51]--[2025-11-18 Tue 16:00] =>  0:09
+:END:
+#+name: well-wellsample
+#+begin_src sparql
+  <<prefixes>>
+
+  select * where {
+    ?well a omecore:Well .
+    ?ws a omecore:WellSample .
+    ?well dcterms:hasPart ?ws .
+    }
+  limit 10
+#+end_src
+
+#+RESULTS: well-wellsample
+| well                              | ws                                       |
+|-----------------------------------+------------------------------------------|
+| https://example.org/site/Well/372 | https://example.org/site/WellSample/1487 |
+| https://example.org/site/Well/222 | https://example.org/site/WellSample/885  |
+| https://example.org/site/Well/82  | https://example.org/site/WellSample/324  |
+| https://example.org/site/Well/263 | https://example.org/site/WellSample/1051 |
+| https://example.org/site/Well/188 | https://example.org/site/WellSample/749  |
+| https://example.org/site/Well/50  | https://example.org/site/WellSample/199  |
+| https://example.org/site/Well/118 | https://example.org/site/WellSample/469  |
+| https://example.org/site/Well/222 | https://example.org/site/WellSample/884  |
+| https://example.org/site/Well/125 | https://example.org/site/WellSample/499  |
+| https://example.org/site/Well/104 | https://example.org/site/WellSample/414  |
+
+**** sql query
+:PROPERTIES:
+:ID:       f5b460be-4fdf-4756-a6c8-5895dd74b812
+:END:
+#+begin_src sql
+select id as wellsample_id, well as well_id from wellsample ;
+#+end_src
+
+#+RESULTS:
+| wellsample_id | well_id |
+|---------------+---------|
+|             1 |       1 |
+|             2 |       1 |
+|             3 |       1 |
+|             4 |       1 |
+|             5 |       2 |
+|             6 |       2 |
+|             7 |       2 |
+|             8 |       2 |
+|             9 |       3 |
+|            10 |       3 |
 
 ** Federated query against ome and taxonomy database with HCS objects
 :PROPERTIES:
