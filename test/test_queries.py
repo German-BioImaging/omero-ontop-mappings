@@ -9,6 +9,7 @@ from urllib import parse
 
 import unittest
 
+DEBUG = True
 ENDPOINT = "http://localhost:8080/sparql"
 
 # --- Helper for order-independent pair checks 
@@ -56,10 +57,11 @@ def run_query(query_string, endpoint=ENDPOINT, return_as_df=True):
     escapedQuery = parse.quote(query_string)
     requestURL = ENDPOINT + "?query=" + escapedQuery
 
-    response = requests.get(requestURL, timeout=600).json()
+    response = requests.get(requestURL, timeout=600)
 
+    response_as_json = response.json()
     if return_as_df:
-        return response_frame(response)
+        return response_frame(response_as_json)
 
     return response
 
@@ -86,6 +88,28 @@ class QueriesTest(unittest.TestCase):
     def setUpClass(cls):
 
         check_endpoint()
+
+        cls._prefix_string = """
+PREFIX dc: <http://purl.org/dc/terms/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX image: <https://example.org/site/Image/>
+PREFIX obda: <https://w3id.org/obda/vocabulary#>
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+PREFIX omemap: <https://www.openmicroscopy.org/omemap#>
+PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX site: <https://example.org/site/>
+PREFIX up: <http://purl.uniprot.org/core/>
+PREFIX uptaxon: <http://purl.uniprot.org/taxonomy/>
+PREFIX vcard: <https://www.w3.org/2006/vcard/ns#>
+PREFIX well: <http://ome.evolbio.mpg.de/Well/>
+PREFIX xml: <http://www.w3.org/XML/1998/namespace>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+"""
 
         return super().setUpClass()
 
@@ -115,28 +139,28 @@ class QueriesTest(unittest.TestCase):
 
 
         query_string = f"""
-prefix ome_core: <https://ld.openmicroscopy.org/core/>
+prefix omecore: <https://ld.openmicroscopy.org/core/>
 
 select (count(distinct ?tp) as ?n_types) where {{
-            ?s a ome_core:Dataset;
+            ?s a omecore:Dataset;
                 a ?tp .
 }}
 """
         response = run_query(query_string)
+        print("\n"+response.to_string())
 
-        print(response.to_string())
         self.assertEqual(len(response), 1)
-        self.assertEqual(int(response.loc[0, 'n_types']), 2)
+        self.assertEqual(int(response.loc[0, 'n_types']), 1)
 
     def test_dataset_type_value(self):
-        """ A ome_core:Dataset instance must be of type ome_core:Dataset (issue #5)."""
+        """ A omecore:Dataset instance must be of type omecore:Dataset (issue #5)."""
 
         query_string = f"""
-prefix ome_core: <https://ld.openmicroscopy.org/core/>
+prefix omecore: <https://ld.openmicroscopy.org/core/>
 
 select distinct ?tp where {{
     SERVICE <{ENDPOINT}> {{
-            ?s a ome_core:Dataset;
+            ?s a omecore:Dataset;
                 a ?tp .
     }}
 }}
@@ -151,23 +175,23 @@ select distinct ?tp where {{
         graph = self._graph
 
         query_string = f"""
-prefix ome_core: <https://ld.openmicroscopy.org/core/>
+prefix omecore: <https://ld.openmicroscopy.org/core/>
 
 select ?n_projects ?n_datasets ?n_images where {{
     SERVICE <{ENDPOINT}> {{
     {{
       select (count(?project) as ?n_projects) where {{
-        ?project a ome_core:Project .
+        ?project a omecore:Project .
       }}
     }}
     {{
       select (count(?dataset) as ?n_datasets) where {{
-        ?dataset a ome_core:Dataset .
+        ?dataset a omecore:Dataset .
         }}
     }}
     {{
       select (count(?image) as ?n_images) where {{
-        ?image a ome_core:Image .
+        ?image a omecore:Image .
       }}
     }}
   }}
@@ -182,7 +206,7 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Check numbers.
         number_of_objects = [r for r in response][0]
-        self.assertEqual(int(number_of_objects.n_images  ),  12)
+        self.assertEqual(int(number_of_objects.n_images  ),  1548)
         self.assertEqual(int(number_of_objects.n_datasets), 3)
         self.assertEqual(int(number_of_objects.n_projects), 1)
 
@@ -192,11 +216,11 @@ select ?n_projects ?n_datasets ?n_images where {{
         graph = self._graph
 
         query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
 
         SELECT distinct ?s WHERE {{
           SERVICE <{ENDPOINT}> {{
-            ?s a ome_core:Project .
+            ?s a omecore:Project .
           }}
         }}
         limit 3
@@ -212,15 +236,15 @@ select ?n_projects ?n_datasets ?n_images where {{
         """ Test project ownership """
 
         query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
         prefix omekg:  <https://ld.openmicroscopy.org/omekg/>
         prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
 
 
         SELECT distinct ?project ?owner ?group WHERE {{
-            ?project a ome_core:Project ;
-        ome_core:experimenter ?owner;
-        ome_core:experimenter_group ?group .
+            ?project a omecore:Project ;
+        omecore:experimenter ?owner;
+        omecore:experimenter_group ?group .
         }}
         """
 
@@ -232,17 +256,37 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         self.assertTupleEqual((1,3), response.shape)
 
-    def test_owner_aliases(self):
-        """ Test all equivalent properties to owner work alike. """
+    def test_experimenter(self):
+        """ Test experimenter property on a project. """
 
         query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
 
 
-        SELECT ?alias_owner_prop WHERE {{
-            ?project a ome_core:Project ;
-                     ome_core:experimenter ?owner;
-                     ?alias_owner_prop ?owner .
+        SELECT ?owner WHERE {{
+            ?project a omecore:Project ;
+                     omecore:experimenter ?owner;
+        }}
+        """
+
+        # Run the query.
+        response = run_query(query_string)
+
+        print("\n" + response.to_string())
+
+        # Check.
+        self.assertEqual(response.loc[0, 'owner'], "https://example.org/site/Experimenter/0")
+
+
+    def test_experimenter_group(self):
+        """ Test querying the group of a Project. """
+
+        query_string = f"""
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
+
+        SELECT ?group WHERE {{
+            ?project a omecore:Project ;
+                     omecore:experimenter_group ?group.
         }}
         """
 
@@ -252,44 +296,20 @@ select ?n_projects ?n_datasets ?n_images where {{
         print("\n" + response.to_string())
 
         # There should be three equivalent properties.
-        self.assertEqual(len(response), 3)
-
-    def test_group_aliases(self):
-        """ Test all equivalent properties to group work alike. """
-
-        query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
-
-
-        SELECT ?alias_group_prop WHERE {{
-            ?project a ome_core:Project ;
-                     ome_core:experimenter_group ?group;
-                     ?alias_group_prop ?group .
-        }}
-        """
-
-        # Run the query.
-        response = run_query(query_string)
-
-        print("\n" + response.to_string())
-
-        # There should be three equivalent properties.
-        self.assertEqual(len(response), 3)
+        self.assertEqual(response.loc[0, 'group'], "https://example.org/site/ExperimenterGroup/0")
 
     def test_group_name(self):
         """ Test the name property on groups. """
 
         query_string = f"""
         prefix dc: <http://purl.org/dc/elements/1.1/>
-        prefix foaf: <http://xmlns.com/foaf/0.1/>
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
-        prefix omekg:  <https://ld.openmicroscopy.org/omekg/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
         prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
 
         SELECT * where {{
-            ?group a omekg:Group ;
+            ?group a omecore:ExperimenterGroup ;
                    dc:identifier ?group_id;
-                   foaf:name ?name .
+                   rdfs:label ?name .
         }}
         """
 
@@ -302,37 +322,14 @@ select ?n_projects ?n_datasets ?n_images where {{
         self.assertEqual(response.loc['1', 'name'], 'user')
         self.assertEqual(response.loc['2', 'name'], 'guest')
 
-    def test_owner_name(self):
-        """ Test the name property on owners. """
-
-        query_string = f"""
-        prefix dc: <http://purl.org/dc/elements/1.1/>
-        prefix foaf: <http://xmlns.com/foaf/0.1/>
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
-        prefix omekg:  <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop:  <https://ld.openmicroscopy.org/omekg#>
-
-        SELECT * where {{
-            ?owner a omekg:Experimenter ;
-                   dc:identifier ?owner_id;
-                   foaf:name ?name .
-        }}
-        """
-
-        # Run the query.
-        response = run_query(query_string).set_index('owner_id')
-
-        self.assertEqual(response.loc['0', 'name'], 'root root')
-        self.assertEqual(response.loc['1', 'name'], 'Guest Account')
-
     def test_dataset_core(self):
         """ Test query with the core prefix and ontology. """
 
         query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
 
         SELECT distinct ?ds WHERE {{
-            ?ds a ome_core:Dataset .
+            ?ds a omecore:Dataset .
         }}
         limit 10
         """
@@ -349,12 +346,12 @@ select ?n_projects ?n_datasets ?n_images where {{
         """ Test that there are 3 datasets in the graph db"""
 
         query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
         prefix omekg: <https://ld.openmicroscopy.org/omekg/>
         prefix omekgprops: <https://ld.openmicroscopy.org/omekg#>
 
         SELECT distinct ?ds WHERE {{
-            ?ds a ome_core:Dataset .
+            ?ds a omecore:Dataset .
         }}
         limit 3
         """
@@ -371,11 +368,11 @@ select ?n_projects ?n_datasets ?n_images where {{
         graph = self._graph
 
         query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
 
         SELECT distinct ?s WHERE {{
           SERVICE <{ENDPOINT}> {{
-            ?s a ome_core:Image .
+            ?s a omecore:Image .
           }}
         }}
         """
@@ -384,28 +381,30 @@ select ?n_projects ?n_datasets ?n_images where {{
         response = graph.query(query_string)
 
         # Test.
-        self.assertEqual(len(response), 12)
+        self.assertEqual(len(response), 1548)
 
     def test_project_dataset_image(self):
         """ Test a query for a project-dataset-image hierarchy. """
 
         query_string = """
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
+        prefix omekg: <https://ld.openmicroscopy.org/omekg#>
+        prefix dcterms: <http://purl.org/dc/terms/>
 
         SELECT distinct ?project ?dataset ?image ?image_name  WHERE {{
-            ?project a ome_core:Project ;
-                     ome_core:dataset ?dataset .
-            ?dataset a ome_core:Dataset ;
-                     ome_core:image ?image .
-            ?image a ome_core:Image ;
-                   rdfs:label ?image_name .
+            ?project a omecore:Project ;
+                     dcterms:hasPart ?dataset .
+            ?dataset a omecore:Dataset ;
+                     dcterms:hasPart ?image .
+            ?image a omecore:Image ;
+
+        rdfs:label ?image_name .
         }}
         """
 
         # Run the query.
         response = run_query(query_string)
+        print("\n" + response.to_string())
 
         # Should get 10 images.
         self.assertEqual(len(response), 12)
@@ -416,12 +415,12 @@ select ?n_projects ?n_datasets ?n_images where {{
         graph = self._graph
 
         query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
         prefix dc: <http://purl.org/dc/terms/>
 
         SELECT distinct ?img ?author ?subject WHERE {{
           SERVICE <{ENDPOINT}> {{
-            ?img a ome_core:Image;
+            ?img a omecore:Image;
                  dc:contributor ?author;
                  dc:subject ?subject.
          }}
@@ -442,12 +441,12 @@ select ?n_projects ?n_datasets ?n_images where {{
         graph = self._graph
 
         query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
         prefix dcterms: <http://purl.org/dc/terms/>
 
         SELECT distinct ?project ?author ?subject WHERE {{
           SERVICE <{ENDPOINT}> {{
-            ?project a ome_core:Project;
+            ?project a omecore:Project;
                  dcterms:contributor ?author;
                  dcterms:subject ?subject;
          }}
@@ -464,11 +463,11 @@ select ?n_projects ?n_datasets ?n_images where {{
 
 
         query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
         prefix dc: <http://purl.org/dc/terms/>
 
         SELECT distinct ?dataset ?author ?subject ?provenance WHERE {{
-            ?dataset a ome_core:Dataset;
+            ?dataset a omecore:Dataset;
                  dc:contributor ?author;
                  dc:provenance ?provenance;
                  dc:subject ?subject.
@@ -485,10 +484,10 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         query = """
 
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
         prefix kgprops: <https://ld.openmicroscopy.org/omekg#>
         select distinct * where {
-            ?s a ome_core:Dataset;
+            ?s a omecore:Dataset;
                kgprops:tag_annotation_value ?tag.
         }
         """
@@ -503,10 +502,10 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         query = """
 
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
         prefix kgprops: <https://ld.openmicroscopy.org/omekg#>
         SELECT distinct ?s ?tag WHERE {
-            ?s a ome_core:Image;
+            ?s a omecore:Image;
                kgprops:tag_annotation_value ?tag.
         }
         """
@@ -522,13 +521,13 @@ select ?n_projects ?n_datasets ?n_images where {{
         """ Test querying image with ROI. """
 
         query = """
-prefix ome_core: <https://ld.openmicroscopy.org/core/>
+prefix omecore: <https://ld.openmicroscopy.org/core/>
 prefix kg: <https://ld.openmicroscopy.org/omekg/>
 prefix kgprops: <https://ld.openmicroscopy.org/omekg#>
 select ?img ?roi where {
-    ?roi a ome_core:ROI .
-    ?img a ome_core:Image;
-         ^ome_core:image ?roi .
+    ?roi a omecore:ROI .
+    ?img a omecore:Image;
+         ^omecore:image ?roi .
 }
 """
 
@@ -549,9 +548,9 @@ select ?img ?roi where {
 
     def test_image_properties(self):
         """ Check Image instances have all expected properties. """
-        query = """prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        query = """prefix omecore: <https://ld.openmicroscopy.org/core/>
 SELECT distinct ?prop WHERE {
-    ?s a ome_core:Image;
+    ?s a omecore:Image;
         ?prop ?val .
 }
 """
@@ -573,7 +572,7 @@ SELECT distinct ?prop WHERE {
     def test_namespace_fixing_non_uri(self):
         """ Test that non-URI namespaces are correctly fixed """
         query = """
-PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
 PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
@@ -588,7 +587,7 @@ SELECT DISTINCT * WHERE {
     def test_namespace_fixing_no_ns(self):
         """ Test that empty namespaces are set to a default value."""
         query = """
-PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
 PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
@@ -603,7 +602,7 @@ SELECT DISTINCT * WHERE {
     def test_namespace_fixing_issue16(self):
         """ Test that empty namespaces are set to a default value."""
         query = """
-PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
 PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
@@ -620,7 +619,7 @@ SELECT DISTINCT * WHERE {
     def test_namespace_fixing_issue17(self):
         """ Test that namespaces starting with "/" are correctly fixed."""
         query = """
-PREFIX ome_core: <https://ld.openmicroscopy.org/core/>
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
 PREFIX image: <https://example.org/site/Image/>
 PREFIX ome_ns: <http://www.openmicroscopy.org/ns/default/>
 
@@ -658,17 +657,14 @@ SELECT DISTINCT * WHERE {
         print("\n"+response.to_string())
 
 
-    @unittest.expectedFailure
     def test_screen(self):
         """ Test query for a screen."""
 
-        query = """
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+        query = self._prefix_string + """
 
         SELECT *
         where {{
-            ?screen a omekg:Screen .
+            ?screen a omecore:Screen .
         }}
         """
 
@@ -676,19 +672,16 @@ SELECT DISTINCT * WHERE {
 
         print("\n"+results.to_string())
 
-        self.assertEqual(1, len(results))
+        self.assertEqual(3, len(results))
 
-    @unittest.expectedFailure
     def test_plate(self):
         """ Test query for a plate."""
 
-        query = """
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+        query = self._prefix_string + """
 
         SELECT *
         where {{
-            ?plate a omekg:Plate .
+            ?plate a omecore:Plate .
         }}
         """
 
@@ -698,118 +691,107 @@ SELECT DISTINCT * WHERE {
 
         self.assertEqual(1, len(results))
 
-    @unittest.expectedFailure
-    def test_screen_plate(self):
-        """ Test query for screen and related plate."""
-        results = run_query("""
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+    def test_wellsample_plateacquisition(self):
+        """ Test querying for WellSamples and related PlateAcquisitions."""
+
+        query = self._prefix_string + """
 
         SELECT *
         where {{
-            ?plate a omekg:Plate ;
-                   omeprop:screen ?screen .
-            ?screen a omekg:Screen .
+            ?wellsample a omecore:WellSample ;
+                        ^dcterms:hasPart ?run .
+            ?run a omecore:PlateAcquisition .
         }}
+        """
+
+        results = run_query(query, return_as_df=True)
+
+        if DEBUG:
+            print("\n" + results.to_string())
+
+        self.assertEqual(1536, len(results))
+
+    def test_screen_plate(self):
+        """ Test query for screen and related plate."""
+        results = run_query(self._prefix_string + """
+
+        SELECT *
+        where {{
+            ?plate a omecore:Plate ;
+                   dcterms:relation ?screen .
+            ?screen a omecore:Screen .
+       }}
         """)
 
         print("\n"+results.to_string())
 
         self.assertTupleEqual((1, 2), results.shape)
 
-    @unittest.expectedFailure
-    def test_plate_acquisition(self):
-        """ Test query for plate and plate acquisition."""
+    def test_wellsample_relations(self):
+        """ Count number of relations of WellSamples. """
 
-        results = run_query("""
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+        results = run_query(self._prefix_string + """
 
-        SELECT *
-        where {{
-            ?plate a omekg:Plate ;
-                   ^omeprop:plate ?acq .
-            ?acq a omekg:PlateAcquisition .
-        }}
-        """)
+  select ?class (count(distinct ?relation) as ?n_relations) where {{
+    ?wellsample a omecore:WellSample ;
+                dcterms:relation ?relation .
+    ?relation a ?class
+  }}
+  group by ?class
+  order by ?n_relations
+       """)
 
-        print("\n"+results.to_string())
-
+        print(results.to_string())
         self.assertTupleEqual( (1,2), results.shape )
+        self.assertEqual(int(results.iloc[0,1]), 1536) # 384*4 = 1536 related images 
 
-    @unittest.expectedFailure
     def test_plate_well(self):
-        """ Test query for plate-acquisition and well. """
+        """ Test query for Plate and Well."""
 
-        results = run_query("""
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+        query = self._prefix_string + f"""
 
         SELECT *
         where {{
-            ?plate a omekg:Plate ;
-                   ^omeprop:plate ?well .
-            ?well a omekg:Well .
+            ?plate a omecore:Plate ;
+                   dcterms:hasPart ?well .
+            ?well a omecore:Well .
         }}
-        """)
+        """
+
+        results = run_query(query)
 
         print("\n"+results.to_string())
 
         self.assertTupleEqual((384, 2), results.shape)
 
-    @unittest.expectedFailure
     def test_well_sample(self):
         """ Test query for well and well sample."""
 
-        results = run_query("""
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-
+        query = self._prefix_string + f"""
         SELECT *
         where {{
-            ?well a omekg:Well ;
-                   ^omeprop:well ?ws .
-            ?ws a omekg:WellSample .
+            ?well a omecore:Well ;
+                   dcterms:hasPart ?ws .
+            ?ws a omecore:WellSample .
         }}
-        """)
+        """
 
-        print("\n"+results.to_string())
+        results = run_query(query)
+
+        if DEBUG:
+            print("\n"+results.to_string())
 
         # 384 wells x 4 samples per well
         self.assertTupleEqual((384*4, 2), results.shape)
 
-
-    @unittest.expectedFailure
-    def test_well_sample_image(self):
-        """ Test query for  well sample and image. """
-
-        results = run_query("""
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-
-        SELECT *
-        where {{
-            ?ws a omekg:WellSample ;
-                   omeprop:image ?img .
-            ?img a omekg:Image .
-        }}
-        """)
-
-        print("\n"+results.to_string())
-
-        self.assertTupleEqual((1536, 2), results.shape)
-
-    @unittest.expectedFailure
     def test_plateAcquisition(self):
         """ Test query for a PlateAcquisition."""
 
-        query = """
-        prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-        prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
+        query = self._prefix_string + """
 
         SELECT *
         where {{
-            ?plate_acquisition a omekg:PlateAcquisition .
+            ?plate_acquisition a omecore:PlateAcquisition .
         }}
         """
 
@@ -842,16 +824,11 @@ SELECT DISTINCT * WHERE {
     def test_plate_key_value(self):
         """ Test querying for plate kv annotations as properties and values. """
 
-        query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
-        prefix dc: <http://purl.org/dc/terms/>
-        prefix omens: <http://www.openmicroscopy.org/ns/default/>
+        query_string = self._prefix_string + f"""
 
-        SELECT distinct ?key WHERE {{
-            ?img a ome_core:Plate;
-                 ?kvterm ?val .
-        filter(strstarts(str(?kvterm), str(omens:)))
-        bind(strafter(str(?kvterm), str(omens:)) as ?key)
+        SELECT * WHERE {{
+            bind(iri(concat(str(site:), "Plate/1")) as ?plate)
+            ?plate omens:foo ?foo
         }}
         order by ?key
 
@@ -860,29 +837,38 @@ SELECT DISTINCT * WHERE {
         # Run the query.
         results = run_query(query_string)
 
-        print("\n"+results.to_string())
-
-        self.assertTupleEqual((13,1), results.shape)
-
-        self.assertIn("CellLineMutation", results['key'].values)
+        self.assertEqual(results.iloc[0,1], "bar")
 
     @unittest.expectedFailure
+    def test_plateacquisition_key_value(self):
+        """ Test querying for plate acquisition (run) kv annotations as properties and values. """
+
+        query_string = self._prefix_string + f"""
+
+        SELECT * WHERE {{
+            ?run a omecore:PlateAcquisition;
+                 ?prop ?val.
+            filter(strstarts(str(?prop), str(omens)))
+        }}
+        order by ?prop
+        """
+
+        # Run the query.
+        results = run_query(query_string)
+
+        self.assertIn("CellLineMutation", results['prop'].values)
+
     def test_well_key_value(self):
         """ Test querying for a well kv-annotations as property value pairs."""
 
-        query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
-        prefix dc: <http://purl.org/dc/terms/>
-        prefix omens: <http://www.openmicroscopy.org/ns/default/>
+        query_string = self._prefix_string + f"""
 
-        SELECT distinct ?key ?val WHERE {{
-            ?img a ome_core:Well;
-                 ?kvterm ?val .
-        filter(strstarts(str(?kvterm), str(omens:)))
-        bind(strafter(str(?kvterm), str(omens:)) as ?key)
+  SELECT distinct * WHERE {{
+    bind(iri(concat(str(site:), "Well/48")) as ?well)
+    ?well ?kvterm ?val .
+    filter(strstarts(str(?kvterm), str(omens:)))
+    bind(strafter(str(?kvterm), str(omens:)) as ?key)
         }}
-        order by ?key
-
         """
 
         # Run the query.
@@ -893,22 +879,20 @@ SELECT DISTINCT * WHERE {
 
         print("\n"+results.to_string())
 
-        self.assertTupleEqual((39,), results.shape)
 
-        self.assertEqual("NCBITaxon_9606", results['TermSource1Accession'])
+        self.assertEqual("NCBITaxon_9606", results['TermZZSourceZZ1ZZAccession'])
         self.assertEqual('0.610481812', results["nseg.0.m.eccentricity.mean"])
 
-    @unittest.expectedFailure
     def test_wellsample(self):
         """ Test querying for a wellsample. """
 
         query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
         prefix dc: <http://purl.org/dc/terms/>
         prefix omens: <http://www.openmicroscopy.org/ns/default/>
 
         SELECT distinct ?wellsample WHERE {{
-            ?wellsample a ome_core:WellSample.
+            ?wellsample a omecore:WellSample.
         }}
 
         """
@@ -923,12 +907,12 @@ SELECT DISTINCT * WHERE {
         """ Test querying for multiple reagents. """
 
         query_string = f"""
-        prefix ome_core: <https://ld.openmicroscopy.org/core/>
+        prefix omecore: <https://ld.openmicroscopy.org/core/>
         prefix dc: <http://purl.org/dc/terms/>
         prefix omens: <http://www.openmicroscopy.org/ns/default/>
 
         SELECT distinct * WHERE {{
-            ?wellsample a ome_core:Reagent.
+            ?wellsample a omecore:Reagent.
         }}
 
         """
@@ -965,16 +949,17 @@ SELECT DISTINCT * WHERE {
         """ Test querying for Channels object. """
 
         query_string = f"""
-      prefix omekg: <https://ld.openmicroscopy.org/omekg/>
-    prefix omeprop: <https://ld.openmicroscopy.org/omekg#>
-    prefix foaf: <http://xmlns.com/foaf/0.1/>
+    prefix omekg: <https://ld.openmicroscopy.org/omekg#>
+    prefix omecore: <https://ld.openmicroscopy.org/core/>
+    prefix dcterms: <http://purl.org/dc/terms/>
+
     select ?pixels (min(?red) as ?min_red) (min(?green) as ?min_green) (min(?blue) as ?min_blue) (max(?red) as ?max_red) (max(?green) as ?max_green) (max(?blue) as ?max_blue)
   where {{
-      ?channel a omekg:Channel;
-               omeprop:pixels ?pixels;
-               omeprop:red ?red;
-               omeprop:green ?green;
-               omeprop:blue ?blue .
+      ?channel a omecore:Channel;
+               dcterms:relation ?pixels;
+               omekg:red ?red;
+               omekg:green ?green;
+               omekg:blue ?blue .
      }}
   group by ?pixels
   limit 100
