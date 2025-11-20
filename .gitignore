@@ -15,3 +15,4 @@ test-ontop.sh
 test/test.ttl
 *.q
 /queries/sparql/queries_mpb.org
+tmp/
