@@ -15,42 +15,65 @@ mkdir -p "$OUT"
 echo "🔧 Ontop deployment configuration"
 
 # --- Ask user for values 
-echo "Please enter OMERO username, password, and URL to connect to the OMERO DB."
-read -r -p "jdbc_user: " JDBC_USER
+echo "Please enter database username (postgres user), password, and its URL, e.g.: localhost or host.example.com"
+read -r -p "Postgres user: " JDBC_USER
 while [[ -z "$JDBC_USER" ]]; do
-  echo "jdbc_user cannot be empty."
-  read -r -p "jdbc_user: " JDBC_USER
+  echo "user cannot be empty."
+  read -r -p "Postgres user: " JDBC_USER
 done
 
-read -r -s -p "jdbc_password: " JDBC_PASS
+read -r -s -p "DB password: " JDBC_PASS
 echo
 while [[ -z "$JDBC_PASS" ]]; do
-  echo "jdbc_password cannot be empty."
-  read -r -s -p "jdbc_password: " JDBC_PASS
+  echo "DB password cannot be empty."
+  read -r -s -p "DB password: " JDBC_PASS
   echo
 done
 
-read -r -p "db_host [ome.evolbio.mpg.de]: " DB_HOST
-DB_HOST=${DB_HOST:-ome.evolbio.mpg.de}
-
+read -r -p "DB host [localhost]: " DB_HOST
+DB_HOST=${DB_HOST:-localhost}
+echo ""
 echo "Enter PREFIX: RDF prefix for site instance, e.g. \"iob\"."
 read -r -p "prefix [ome_instance]: " PREFIX
 PREFIX=${PREFIX:-ome_instance}
 echo "Enter URI: URI of site instance including trailing slash or #, e.g. \"https://institute.of.bioimaging.com/\"."
 read -r -p "site_uri [https://example.org/site/]: " SITE_URI
 SITE_URI=${SITE_URI:-https://example.org/site/}
-echo "Enter PUBLICCOND: SQL Condition on \"user_id\" column that must evaluate to TRUE to map object. E.g. \"=2\" or \">=0\"."
-read -r -p "publiccond [>=0]: " PUBLICCOND
-PUBLICCOND=${PUBLICCOND:->=0}
+echo ""
+echo "Setting public data mapping:"
+echo "  - YES  → Only data of the public user is mapped (enter that user's OMERO ID)."
+echo "  - NO   → Enter SQL Condition on user_id that must evaluate to true to map object (e.g. \"=2\" or \">=0\")."
+# Ask if only public data is mapped
+while true; do
+  read -r -p "Only public data will be mapped to RDF? [yes]/no: " PUBLIC_ONLY
+  PUBLIC_ONLY=${PUBLIC_ONLY:-yes}
+  PUBLIC_ONLY_LC=$(echo "$PUBLIC_ONLY" | tr '[:upper:]' '[:lower:]')
 
-echo ""
-echo "Using:"
-echo "  jdbc_user : $JDBC_USER"
-echo "  db_host   : $DB_HOST"
-echo "  prefix    : $PREFIX"
-echo "  site_uri  : $SITE_URI"
-echo "  publiccond: $PUBLICCOND"
-echo ""
+  case "$PUBLIC_ONLY_LC" in
+    yes|y)
+      # Public-only mode: ask for OMERO ID of public user
+      while true; do
+        read -r -p "Enter ID of the public OMERO user. ID = " PUBLIC_USER_ID
+        if [[ "$PUBLIC_USER_ID" =~ ^[0-9]+$ ]]; then
+          PUBLICCOND="=$PUBLIC_USER_ID"
+          break
+        else
+          echo "❗ Please enter a valid integer OMERO user ID (e.g. 2)."
+        fi
+      done
+      break
+      ;;
+    no|n)
+      # Custom SQL condition
+      read -r -p "Enter SQL condition on user_id (e.g. \"=2\", \">=0\") [>=0]: " PUBLICCOND
+      PUBLICCOND=${PUBLICCOND:->=0}
+      break
+      ;;
+    *)
+      echo "Please answer 'yes' or 'no' (or press Enter for 'yes')."
+      ;;
+  esac
+done
 
 # 2) Build cookiecutter args 
 CC_ARGS=(
@@ -138,8 +161,8 @@ cp -v "$SRC_OBDA" "${PREFIX}/${PREFIX}.obda"
 
 # Ontop launch script
 if [[ -f "$BASE_DIR/omero-ontop.sh" ]]; then
-  sed "s/omero-ontop-mappings/${PREFIX}/g" "$BASE_DIR/omero-ontop.sh" > "${PREFIX}/${PREFIX}-ontop.sh"
-  chmod +x "${PREFIX}/${PREFIX}-ontop.sh"
+  sed "s/omero-ontop-mappings/${PREFIX}/g" "$BASE_DIR/omero-ontop.sh" > "${PREFIX}/${PREFIX}-ontop-endpoint.sh"
+  chmod +x "${PREFIX}/${PREFIX}-ontop-endpoint.sh"
 fi
 
 # 6) Print confirmation (no password)
@@ -154,7 +177,7 @@ echo ""
 echo "✅ Deployment folder created: $PREFIX/"
 
 echo ""
-echo "   jdbc.user : $jdbc_user_final"
+echo "   Postgres user : $jdbc_user_final"
 echo "   db_host   : $db_host_final"
 echo "   jdbc.url  : $jdbc_url"
 echo "   prefix    : $PREFIX"
@@ -163,19 +186,18 @@ echo "   publiccond: $PUBLICCOND"
 echo ""
 echo "To start the endpoint:"
 echo "  cd $PREFIX"
-echo "  ./${PREFIX}-ontop.sh"
+echo "  ./${PREFIX}-ontop-endpoint.sh"
 echo ""
 
 
 
 ################################################################################
-# 7) Create materialization folder + script
+# 7) Create materialization script in same directory as deployment folder
 ################################################################################
 
-MAT_DIR="materialize"
-MAT_SCRIPT="${MAT_DIR}/materialize_data.sh"
-
-mkdir -p "$MAT_DIR"
+MAT_DIR=${PREFIX}
+#MAT_SCRIPT="${MAT_DIR}/"${"PREFIX"}-ontop-materialize.sh"
+MAT_SCRIPT="${MAT_DIR}/${PREFIX}-ontop-materialize.sh"
 
 cat > "$MAT_SCRIPT" <<EOF
 #!/usr/bin/env bash
@@ -215,7 +237,5 @@ chmod +x "$MAT_SCRIPT"
 echo ""
 echo "🧪 Materialization script created:"
 echo "   $MAT_SCRIPT"
-echo "   Run it using:"
-echo "     $MAT_SCRIPT"
 echo ""
 
