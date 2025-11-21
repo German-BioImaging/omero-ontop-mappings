@@ -17,8 +17,8 @@ on:
     - cron: '0 0 * * 0'
 
 jobs:
-  test:
-    name: Run integration tests against OMERO
+  unit_test:
+    name: Run test queries
     runs-on: ubuntu-latest
     env:
       STAGE: app
@@ -26,31 +26,9 @@ jobs:
       VERBOSE: true
     steps:
       - uses: actions/checkout@v4
-      - name: Checkout omero-test-infra
-        uses: actions/checkout@master
-        with:
-          repository: ome/omero-test-infra
-          path: .omero
-          ref: ${{ secrets.OMERO_TEST_INFRA_REF }}
-      - name: Install java
-        run: sudo apt install default-jdk -y
-      - name: Install omero-py
-        run: utils/install_omero-py.sh
+      - name: pytest
+        run: sudo apt install python3-pytest python3-rdflib python3-pandas
       - name: ontop-cli
         run: utils/install_ontop.sh
-      - name: patch portmapping
-        run: cp utils/portmapping.patch .omero && cd .omero && patch -p1 < portmapping.patch && git diff
-      - name: check python
-        run: $(which python) --version
-      - name: start omero
-        run: .omero/docker dev start_up
-      - name: db user 
-        run: PGPASSWORD=postgres psql -U postgres -d postgres -h localhost -p 15432 < sql/ontop_user.sql
-      - name: check processes
-        run: ps ax | grep docker
-      - name: test omero web
-        run: wget http://localhost:14080 && ls -lrt
-      - name: Launch omero, insert data and launch ontop
-        run: bash utils/omero-ontop.sh
       - name: pytest
         run: pytest

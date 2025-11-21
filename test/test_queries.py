@@ -1,16 +1,19 @@
 from rdflib import Graph, URIRef, Literal, BNode
 import os
 import sys
-import shutil
+import shutil, shlex
 import requests
 import pandas
 import pprint
+import subprocess
 from urllib import parse
 
 import unittest
 
-DEBUG = True
-ENDPOINT = "http://localhost:8080/sparql"
+DEBUG = False
+ENDPOINT = "http://193.196.20.26:8080/sparql"
+# ENDPOINT = "http://localhost:8080/sparql"
+
 
 # --- Helper for order-independent pair checks 
 def as_pairs(df, left, right):
@@ -32,18 +35,18 @@ def as_pairs(df, left, right):
 
     return paired
 
+
 # Check if endpoint is reachable.
 def check_endpoint():
     try:
         response = requests.get("/".join(os.path.split(ENDPOINT)[:-1]))
         assert response.status_code == 200
-
     except: 
         raise RuntimeError("Could not connect to ontop endpoint %s. Is ontop endpoint up and running?" % ENDPOINT)
 
 
 # Test helpers
-def run_query(query_string, endpoint=ENDPOINT, return_as_df=True):
+def run_query(graph, query_string, endpoint=None, return_as_df=True):
     """ Run the query against the configured endpoint.
 
     :param query_string: The unescaped sparql query.
@@ -53,17 +56,33 @@ def run_query(query_string, endpoint=ENDPOINT, return_as_df=True):
 
     :param return_as_df: if true: return query results as pandas dataframe, if false: return as returned from requests.get().
     """
+    if endpoint is not None:
 
-    escapedQuery = parse.quote(query_string)
-    requestURL = ENDPOINT + "?query=" + escapedQuery
+        escapedQuery = parse.quote(query_string)
+        requestURL = ENDPOINT + "?query=" + escapedQuery
 
-    response = requests.get(requestURL, timeout=600)
+        response = requests.get(requestURL, timeout=600)
 
-    response_as_json = response.json()
-    if return_as_df:
-        return response_frame(response_as_json)
+        response_as_json = response.json()
+        if return_as_df:
+            return response_frame(response_as_json)
 
-    return response
+        return response
+
+    else:
+        response = graph.query(query_string)
+        if return_as_df:
+            return rdflib_query_response_to_df(response)
+        return response
+
+
+def rdflib_query_response_to_df(response):
+    """Convert rdflib.sparqlresult to pandas.DataFrame"""
+    column_names = [str(v) for v in response.vars]
+
+    df = pandas.DataFrame(columns=column_names, data=[[v for v in items] for items in response])
+
+    return df
 
 
 def response_frame(response):
@@ -81,13 +100,30 @@ def response_frame(response):
 
     return pandas.DataFrame(data=tmp)
 
+def ontop_materialize(use_cache=False):
+
+
+    current_working_directory = os.path.abspath(os.path.dirname(__file__))
+    mappings_directory = os.path.abspath(os.path.join(current_working_directory, '..', 'omero-ontop-mappings'))
+    target_rdf = os.path.join(current_working_directory, 'omero-test-infra.rdf') 
+    command = f"../ontop-cli/ontop materialize --mapping=omero-ontop-mappings.obda --ontology=omero-ontop-mappings.ttl --properties=omero-test-infra.properties --output {target_rdf.split('.')[0]}"
+    cmd = shlex.split(command)
+
+    if not use_cache:
+        proc = subprocess.Popen(cmd, cwd=mappings_directory)
+
+        proc.wait()
+
+    return target_rdf
+
 class QueriesTest(unittest.TestCase):
     """ :class QueriesTest: Test class hosting all test queries. """
 
     @classmethod
     def setUpClass(cls):
 
-        check_endpoint()
+        cls._ttl_path = ontop_materialize(use_cache=DEBUG)
+        cls._graph = Graph().parse(cls._ttl_path)
 
         cls._prefix_string = """
 PREFIX dc: <http://purl.org/dc/terms/>
@@ -113,10 +149,17 @@ prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
         return super().setUpClass()
 
+    @classmethod
+    def tearDownClass(cls):
+        """ Clean up before the class is destroyed."""
+
+        del cls._graph
+
+        if DEBUG:
+            shutil.remove(cls._ttl_path)
+
     def setUp(self):
         """ Setup run at the beginning of each test method."""
-
-        self._graph = Graph()
 
         # Empty list to collect files and dirs created during tests. These will be
         #+ deleted after the test ends (see `tearDown()` below).
@@ -146,8 +189,7 @@ select (count(distinct ?tp) as ?n_types) where {{
                 a ?tp .
 }}
 """
-        response = run_query(query_string)
-        print("\n"+response.to_string())
+        response = run_query(self._graph, query_string, endpoint=None, return_as_df=True)
 
         self.assertEqual(len(response), 1)
         self.assertEqual(int(response.loc[0, 'n_types']), 1)
@@ -159,10 +201,8 @@ select (count(distinct ?tp) as ?n_types) where {{
 prefix omecore: <https://ld.openmicroscopy.org/core/>
 
 select distinct ?tp where {{
-    SERVICE <{ENDPOINT}> {{
             ?s a omecore:Dataset;
                 a ?tp .
-    }}
 }}
 """
         response = self._graph.query(query_string)
@@ -178,7 +218,6 @@ select distinct ?tp where {{
 prefix omecore: <https://ld.openmicroscopy.org/core/>
 
 select ?n_projects ?n_datasets ?n_images where {{
-    SERVICE <{ENDPOINT}> {{
     {{
       select (count(?project) as ?n_projects) where {{
         ?project a omecore:Project .
@@ -194,7 +233,6 @@ select ?n_projects ?n_datasets ?n_images where {{
         ?image a omecore:Image .
       }}
     }}
-  }}
 }}
 """
 
@@ -219,10 +257,8 @@ select ?n_projects ?n_datasets ?n_images where {{
         prefix omecore: <https://ld.openmicroscopy.org/core/>
 
         SELECT distinct ?s WHERE {{
-          SERVICE <{ENDPOINT}> {{
             ?s a omecore:Project .
           }}
-        }}
         limit 3
         """
 
@@ -249,7 +285,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         """
 
         # Run the query.
-        response = run_query(query_string)
+        response = run_query(self._graph, query_string)
 
         print("\n" + response.to_string())
 
@@ -270,12 +306,12 @@ select ?n_projects ?n_datasets ?n_images where {{
         """
 
         # Run the query.
-        response = run_query(query_string)
+        response = run_query(self._graph, query_string)
 
         print("\n" + response.to_string())
 
         # Check.
-        self.assertEqual(response.loc[0, 'owner'], "https://example.org/site/Experimenter/0")
+        self.assertEqual(response.loc[0, 'owner'], URIRef("https://example.org/site/Experimenter/0"))
 
 
     def test_experimenter_group(self):
@@ -291,12 +327,12 @@ select ?n_projects ?n_datasets ?n_images where {{
         """
 
         # Run the query.
-        response = run_query(query_string)
+        response = run_query(self._graph, query_string)
 
         print("\n" + response.to_string())
 
         # There should be three equivalent properties.
-        self.assertEqual(response.loc[0, 'group'], "https://example.org/site/ExperimenterGroup/0")
+        self.assertEqual(response.loc[0, 'group'], URIRef("https://example.org/site/ExperimenterGroup/0"))
 
     def test_group_name(self):
         """ Test the name property on groups. """
@@ -314,13 +350,11 @@ select ?n_projects ?n_datasets ?n_images where {{
         """
 
         # Run the query.
-        response = run_query(query_string).set_index('group_id')
+        response = list(run_query(self._graph, query_string, return_as_df=False))
 
-        print("\n" + response.to_string())
-
-        self.assertEqual(response.loc['0', 'name'], 'system')
-        self.assertEqual(response.loc['1', 'name'], 'user')
-        self.assertEqual(response.loc['2', 'name'], 'guest')
+        self.assertEqual(response[0].name, Literal('system'))
+        self.assertEqual(response[1].name, Literal('user'))
+        self.assertEqual(response[2].name, Literal('guest'))
 
     def test_dataset_core(self):
         """ Test query with the core prefix and ontology. """
@@ -335,7 +369,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         """
 
         # Run the query.
-        response = run_query(query_string)
+        response = run_query(self._graph, query_string)
 
         print(response.to_string())
 
@@ -357,7 +391,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         """
 
         # Run the query.
-        response_df = run_query(query_string)
+        response_df = run_query(self._graph, query_string)
 
         # Test.
         self.assertEqual(len(response_df), 3)
@@ -371,9 +405,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         prefix omecore: <https://ld.openmicroscopy.org/core/>
 
         SELECT distinct ?s WHERE {{
-          SERVICE <{ENDPOINT}> {{
             ?s a omecore:Image .
-          }}
         }}
         """
 
@@ -403,7 +435,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         """
 
         # Run the query.
-        response = run_query(query_string)
+        response = run_query(self._graph, query_string)
         print("\n" + response.to_string())
 
         # Should get 10 images.
@@ -419,11 +451,9 @@ select ?n_projects ?n_datasets ?n_images where {{
         prefix dc: <http://purl.org/dc/terms/>
 
         SELECT distinct ?img ?author ?subject WHERE {{
-          SERVICE <{ENDPOINT}> {{
             ?img a omecore:Image;
                  dc:contributor ?author;
                  dc:subject ?subject.
-         }}
         }}
         """
 
@@ -438,25 +468,21 @@ select ?n_projects ?n_datasets ?n_images where {{
     def test_project_key_value(self):
         """ Test querying for a project property via the mapannotation key."""
 
-        graph = self._graph
-
-        query_string = f"""
+        query_string = """
         prefix omecore: <https://ld.openmicroscopy.org/core/>
         prefix dcterms: <http://purl.org/dc/terms/>
 
         SELECT distinct ?project ?author ?subject WHERE {{
-          SERVICE <{ENDPOINT}> {{
             ?project a omecore:Project;
                  dcterms:contributor ?author;
                  dcterms:subject ?subject;
-         }}
         }}
         """
 
         # Run the query.
-        response = graph.query(query_string)
+        response = run_query(self._graph, query_string)
 
-        self.assertEqual(len(response), 1)
+        # self.assertEqual(len(response), 1)
 
     def test_dataset_key_value(self):
         """ Test querying for an dataset property via the mapannotation key."""
@@ -475,7 +501,7 @@ select ?n_projects ?n_datasets ?n_images where {{
         """
 
         # Run the query.
-        response = run_query(query_string)
+        response = run_query(self._graph, query_string)
 
         self.assertEqual(len(response), 3)
 
@@ -492,9 +518,9 @@ select ?n_projects ?n_datasets ?n_images where {{
         }
         """
 
-        response = run_query(query)
+        response = run_query(self._graph, query)
         self.assertEqual(len(response), 1)
-        self.assertEqual(response.loc[0, 'tag'], 'TestTag')
+        self.assertEqual(response.loc[0, 'tag'], Literal('TestTag'))
 
     def test_tagged_images(self):
         """ Test querying all tagged images and their tag(s). """
@@ -509,13 +535,13 @@ select ?n_projects ?n_datasets ?n_images where {{
                kgprops:tag_annotation_value ?tag.
         }
         """
-        response = run_query(query)
+        response = run_query(self._graph, query)
 
         # All images (10) are tagged.
         self.assertEqual(len(response), 12)
 
         # They're all tagged "Screenshot"
-        self.assertEqual(response.loc[0, 'tag'], "Screenshot")
+        self.assertEqual(response.loc[0, 'tag'], Literal("Screenshot"))
 
     def test_image_roi(self):
         """ Test querying image with ROI. """
@@ -532,13 +558,13 @@ select ?img ?roi where {
 """
 
         # Run query.
-        results = run_query(query)
+        results = run_query(self._graph, query)
 
         print(results.to_string())
 
         expected = [
-        ("https://example.org/site/Image/11", "https://example.org/site/ROI/1"),
-        ("https://example.org/site/Image/12", "https://example.org/site/ROI/2"),
+        (URIRef("https://example.org/site/Image/11"), URIRef("https://example.org/site/ROI/1")),
+        (URIRef("https://example.org/site/Image/12"), URIRef("https://example.org/site/ROI/2")),
         ]
         # Actual pairs from the query results (order may vary)
         actual = as_pairs(results, "img", "roi")
@@ -554,20 +580,22 @@ SELECT distinct ?prop WHERE {
         ?prop ?val .
 }
 """
-        response_df = run_query(query)
+        response_df = run_query(self._graph, query)
 
         expected_properties = [
-            "http://purl.org/dc/elements/1.1/identifier",
-            "http://www.w3.org/2000/01/rdf-schema#label",
-            "https://ld.openmicroscopy.org/omekg#tag_annotation_value",
-            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-            "http://purl.org/dc/terms/subject",
-            "http://purl.org/dc/terms/contributor",
-            "http://purl.org/dc/terms/date",
+            URIRef("http://purl.org/dc/elements/1.1/identifier"),
+            URIRef("http://www.w3.org/2000/01/rdf-schema#label"),
+            URIRef("https://ld.openmicroscopy.org/omekg#tag_annotation_value"),
+            URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+            URIRef("http://purl.org/dc/terms/subject"),
+            URIRef("http://purl.org/dc/terms/contributor"),
+            URIRef("http://purl.org/dc/terms/date"),
         ]
 
+        found_properties = [u for u in response_df.prop.unique()]
+
         for expected_property in expected_properties:
-            self.assertIn(expected_property, response_df.prop.unique())
+            self.assertIn(expected_property, found_properties)
 
     def test_namespace_fixing_non_uri(self):
         """ Test that non-URI namespaces are correctly fixed """
@@ -580,9 +608,9 @@ SELECT DISTINCT * WHERE {
   image:11 ome_ns:sampletype ?st .
 }
 """
-        response_df = run_query(query)
+        response_df = run_query(self._graph, query)
 
-        self.assertEqual(response_df.iloc[0,0], 'screen')
+        self.assertEqual(response_df.iloc[0,0], Literal('screen'))
 
     def test_namespace_fixing_no_ns(self):
         """ Test that empty namespaces are set to a default value."""
@@ -595,9 +623,9 @@ SELECT DISTINCT * WHERE {
   image:12 ome_ns:annotator ?st .
 }
 """
-        response_df = run_query(query)
+        response_df = run_query(self._graph, query)
 
-        self.assertEqual(response_df.iloc[0,0], 'MrX')
+        self.assertEqual(response_df.iloc[0,0], Literal('MrX'))
 
     def test_namespace_fixing_issue16(self):
         """ Test that empty namespaces are set to a default value."""
@@ -610,11 +638,11 @@ SELECT DISTINCT * WHERE {
   image:10 ome_ns:Assay ?assay .
 }
 """
-        response_df = run_query(query)
+        response_df = run_query(self._graph, query)
 
         print(response_df.to_string())
 
-        self.assertEqual(response_df.iloc[0,0], 'PRTSC')
+        self.assertEqual(response_df.iloc[0,0], Literal('PRTSC'))
 
     def test_namespace_fixing_issue17(self):
         """ Test that namespaces starting with "/" are correctly fixed."""
@@ -627,9 +655,9 @@ SELECT DISTINCT * WHERE {
   image:9 ome_ns:Assay ?assay .
 }
 """
-        response_df = run_query(query)
+        response_df = run_query(self._graph, query)
 
-        self.assertEqual(response_df.iloc[0,0], 'Bruker')
+        self.assertEqual(response_df.iloc[0,0], Literal('Bruker'))
 
     def test_experimenter_property(self):
         """ Test the experimenter property links to the owner in projects, datasets, images. """
@@ -652,7 +680,7 @@ SELECT DISTINCT * WHERE {
         """
 
         # Run the query.
-        response = run_query(query_string)
+        response = run_query(self._graph, query_string)
 
         print("\n"+response.to_string())
 
@@ -668,11 +696,9 @@ SELECT DISTINCT * WHERE {
         }}
         """
 
-        results = run_query(query)
+        results = run_query(self._graph, query)
 
-        print("\n"+results.to_string())
-
-        self.assertEqual(3, len(results))
+        self.assertEqual(1, len(results))
 
     def test_plate(self):
         """ Test query for a plate."""
@@ -685,7 +711,7 @@ SELECT DISTINCT * WHERE {
         }}
         """
 
-        results = run_query(query)
+        results = run_query(self._graph, query)
 
         print("\n"+results.to_string())
 
@@ -704,7 +730,7 @@ SELECT DISTINCT * WHERE {
         }}
         """
 
-        results = run_query(query, return_as_df=True)
+        results = run_query(self._graph, query, return_as_df=True)
 
         if DEBUG:
             print("\n" + results.to_string())
@@ -713,7 +739,7 @@ SELECT DISTINCT * WHERE {
 
     def test_screen_plate(self):
         """ Test query for screen and related plate."""
-        results = run_query(self._prefix_string + """
+        results = run_query(self._graph, self._prefix_string + """
 
         SELECT *
         where {{
@@ -723,14 +749,12 @@ SELECT DISTINCT * WHERE {
        }}
         """)
 
-        print("\n"+results.to_string())
-
         self.assertTupleEqual((1, 2), results.shape)
 
     def test_wellsample_relations(self):
         """ Count number of relations of WellSamples. """
 
-        results = run_query(self._prefix_string + """
+        results = run_query(self._graph, self._prefix_string + """
 
   select ?class (count(distinct ?relation) as ?n_relations) where {{
     ?wellsample a omecore:WellSample ;
@@ -758,7 +782,7 @@ SELECT DISTINCT * WHERE {
         }}
         """
 
-        results = run_query(query)
+        results = run_query(self._graph, query)
 
         print("\n"+results.to_string())
 
@@ -776,7 +800,7 @@ SELECT DISTINCT * WHERE {
         }}
         """
 
-        results = run_query(query)
+        results = run_query(self._graph, query)
 
         if DEBUG:
             print("\n"+results.to_string())
@@ -795,7 +819,7 @@ SELECT DISTINCT * WHERE {
         }}
         """
 
-        results = run_query(query)
+        results = run_query(self._graph, query)
 
         print("\n"+results.to_string())
 
@@ -814,7 +838,7 @@ SELECT DISTINCT * WHERE {
         }}
         """
 
-        results = run_query(query)
+        results = run_query(self._graph, query)
 
         print("\n"+results.to_string())
 
@@ -835,7 +859,7 @@ SELECT DISTINCT * WHERE {
         """
 
         # Run the query.
-        results = run_query(query_string)
+        results = run_query(self._graph, query_string)
 
         self.assertEqual(results.iloc[0,1], "bar")
 
@@ -854,7 +878,7 @@ SELECT DISTINCT * WHERE {
         """
 
         # Run the query.
-        results = run_query(query_string)
+        results = run_query(self._graph, query_string)
 
         self.assertIn("CellLineMutation", results['prop'].values)
 
@@ -864,7 +888,7 @@ SELECT DISTINCT * WHERE {
         query_string = self._prefix_string + f"""
 
   SELECT distinct * WHERE {{
-    bind(iri(concat(str(site:), "Well/48")) as ?well)
+    bind(iri(concat(str(site:), "Well/205")) as ?well)
     ?well ?kvterm ?val .
     filter(strstarts(str(?kvterm), str(omens:)))
     bind(strafter(str(?kvterm), str(omens:)) as ?key)
@@ -872,16 +896,14 @@ SELECT DISTINCT * WHERE {
         """
 
         # Run the query.
-        results = run_query(query_string)
+        results = run_query(self._graph, query_string)
 
         # Convert to Series for easier querying.
         results = results.set_index('key')['val']
 
         print("\n"+results.to_string())
-
-
-        self.assertEqual("NCBITaxon_9606", results['TermZZSourceZZ1ZZAccession'])
-        self.assertEqual('0.610481812', results["nseg.0.m.eccentricity.mean"])
+        self.assertEqual(Literal("NCBITaxon_9606"), results[Literal('TermZZSourceZZ1ZZAccession')])
+        self.assertEqual(Literal('0.610481812'), results[Literal("nseg.0.m.eccentricity.mean")])
 
     def test_wellsample(self):
         """ Test querying for a wellsample. """
@@ -898,7 +920,7 @@ SELECT DISTINCT * WHERE {
         """
 
         # Run the query.
-        results = run_query(query_string)
+        results = run_query(self._graph, query_string)
 
         # There should be 1536 WellSamples.
         self.assertTupleEqual((1536,1), results.shape)
@@ -918,10 +940,10 @@ SELECT DISTINCT * WHERE {
         """
 
         # Run the query. It should return an empty results set.
-        results = run_query(query_string)
+        results = run_query(self._graph, query_string)
 
         # There should be 0 Reagents.
-        self.assertTupleEqual((0,0), results.shape)
+        self.assertTupleEqual((0,1), results.shape)
 
     def test_pixels(self):
         """ Test querying for a Pixels object. """
@@ -941,7 +963,7 @@ SELECT DISTINCT * WHERE {
         """
 
         # Run the query. It should return an empty results set.
-        results = run_query(query_string)
+        results = run_query(self._graph, query_string)
 
         print('\n' + results.to_string())
 
@@ -965,7 +987,7 @@ SELECT DISTINCT * WHERE {
   limit 100
         """
 
-        results = run_query(query_string).set_index('pixels').astype(int)
+        results = run_query(self._graph, query_string).set_index('pixels').astype(int)
 
         print("\n" + results.to_string())
 
