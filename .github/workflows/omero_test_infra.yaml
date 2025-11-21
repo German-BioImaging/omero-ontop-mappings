@@ -24,7 +24,7 @@ jobs:
       STAGE: app
       NOCLEAN: true
       VERBOSE: true
-      steps:
+    steps:
       - uses: actions/checkout@v4
       - name: ontop-cli
         run: utils/install_ontop.sh
