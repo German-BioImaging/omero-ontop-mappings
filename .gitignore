@@ -4,7 +4,6 @@ ontop-cli/
 .omero/
 .ipynb_checkpoints/
 __pycache__/
-*.properties
 !omero-ontop-mappings/omero-ontop-mappings.properties
 /mpieb/
 .jupyter/
@@ -16,3 +15,4 @@ test-ontop.sh
 test/test.ttl
 *.q
 /queries/sparql/queries_mpb.org
+tmp/

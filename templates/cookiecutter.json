@@ -1,0 +1,10 @@
+{
+  "deploy_name": "omero-ontop-config",
+  "jdbc_user": "",
+  "jdbc_password": "",
+  "db_host": "ome.evolbio.mpg.de",
+
+  "prefix": "ome_instance",
+  "site_uri": "https://example.org/site/",
+  "publiccond": ">=0"
+}
