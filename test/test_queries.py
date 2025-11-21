@@ -4,7 +4,6 @@ import sys
 import shutil, shlex
 import requests
 import pandas
-import pprint
 import subprocess
 from urllib import parse
 
@@ -47,7 +46,7 @@ def check_endpoint():
 
 # Test helpers
 def run_query(graph, query_string, endpoint=None, return_as_df=True):
-    """ Run the query against the configured endpoint.
+    """ Run the query against the configured endpoint or graph.
 
     :param query_string: The unescaped sparql query.
     :example query_string: 'select * where {?s ?p ?o .} limit 10'
@@ -287,7 +286,8 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Run the query.
         response = run_query(self._graph, query_string)
 
-        print("\n" + response.to_string())
+        if DEBUG:
+            print("\n" + response.to_string())
 
 
         self.assertTupleEqual((1,3), response.shape)
@@ -308,7 +308,8 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Run the query.
         response = run_query(self._graph, query_string)
 
-        print("\n" + response.to_string())
+        if DEBUG:
+            print("\n" + response.to_string())
 
         # Check.
         self.assertEqual(response.loc[0, 'owner'], URIRef("https://example.org/site/Experimenter/0"))
@@ -329,7 +330,8 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Run the query.
         response = run_query(self._graph, query_string)
 
-        print("\n" + response.to_string())
+        if DEBUG:
+            print("\n" + response.to_string())
 
         # There should be three equivalent properties.
         self.assertEqual(response.loc[0, 'group'], URIRef("https://example.org/site/ExperimenterGroup/0"))
@@ -371,7 +373,8 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Run the query.
         response = run_query(self._graph, query_string)
 
-        print(response.to_string())
+        if DEBUG:
+            print(response.to_string())
 
         # Test.
         self.assertEqual(len(response), 3)
@@ -436,7 +439,8 @@ select ?n_projects ?n_datasets ?n_images where {{
 
         # Run the query.
         response = run_query(self._graph, query_string)
-        print("\n" + response.to_string())
+        if DEBUG:
+            print("\n" + response.to_string())
 
         # Should get 10 images.
         self.assertEqual(len(response), 12)
@@ -460,8 +464,9 @@ select ?n_projects ?n_datasets ?n_images where {{
         # Run the query.
         response = graph.query(query_string)
 
-        for item in response:
-            print(item)
+        if DEBUG:
+            for item in response:
+                print(item)
 
         self.assertEqual(len(response), 12)
 
@@ -560,7 +565,8 @@ select ?img ?roi where {
         # Run query.
         results = run_query(self._graph, query)
 
-        print(results.to_string())
+        if DEBUG:
+            print(results.to_string())
 
         expected = [
         (URIRef("https://example.org/site/Image/11"), URIRef("https://example.org/site/ROI/1")),
@@ -568,7 +574,7 @@ select ?img ?roi where {
         ]
         # Actual pairs from the query results (order may vary)
         actual = as_pairs(results, "img", "roi")
-        print("Actual pairs:", actual)
+        if DEBUG: print("Actual pairs:", actual)
         # Check that actual pairs match expected, ignoring order.
         self.assertCountEqual(actual, expected)
 
@@ -640,7 +646,8 @@ SELECT DISTINCT * WHERE {
 """
         response_df = run_query(self._graph, query)
 
-        print(response_df.to_string())
+        if DEBUG:
+            print(response_df.to_string())
 
         self.assertEqual(response_df.iloc[0,0], Literal('PRTSC'))
 
@@ -682,7 +689,8 @@ SELECT DISTINCT * WHERE {
         # Run the query.
         response = run_query(self._graph, query_string)
 
-        print("\n"+response.to_string())
+        if DEBUG:
+            print("\n"+response.to_string())
 
 
     def test_screen(self):
@@ -713,7 +721,8 @@ SELECT DISTINCT * WHERE {
 
         results = run_query(self._graph, query)
 
-        print("\n"+results.to_string())
+        if DEBUG:
+            print("\n"+results.to_string())
 
         self.assertEqual(1, len(results))
 
@@ -765,7 +774,8 @@ SELECT DISTINCT * WHERE {
   order by ?n_relations
        """)
 
-        print(results.to_string())
+        if DEBUG:
+            print(results.to_string())
         self.assertTupleEqual( (1,2), results.shape )
         self.assertEqual(int(results.iloc[0,1]), 1536) # 384*4 = 1536 related images 
 
@@ -784,7 +794,8 @@ SELECT DISTINCT * WHERE {
 
         results = run_query(self._graph, query)
 
-        print("\n"+results.to_string())
+        if DEBUG:
+            print("\n"+results.to_string())
 
         self.assertTupleEqual((384, 2), results.shape)
 
@@ -821,7 +832,8 @@ SELECT DISTINCT * WHERE {
 
         results = run_query(self._graph, query)
 
-        print("\n"+results.to_string())
+        if DEBUG:
+            print("\n"+results.to_string())
 
         self.assertEqual(1, len(results))
 
@@ -840,47 +852,10 @@ SELECT DISTINCT * WHERE {
 
         results = run_query(self._graph, query)
 
-        print("\n"+results.to_string())
+        if DEBUG:
+            print("\n"+results.to_string())
 
         self.assertEqual(0, len(results))
-
-    @unittest.expectedFailure
-    def test_plate_key_value(self):
-        """ Test querying for plate kv annotations as properties and values. """
-
-        query_string = self._prefix_string + f"""
-
-        SELECT * WHERE {{
-            bind(iri(concat(str(site:), "Plate/1")) as ?plate)
-            ?plate omens:foo ?foo
-        }}
-        order by ?key
-
-        """
-
-        # Run the query.
-        results = run_query(self._graph, query_string)
-
-        self.assertEqual(results.iloc[0,1], "bar")
-
-    @unittest.expectedFailure
-    def test_plateacquisition_key_value(self):
-        """ Test querying for plate acquisition (run) kv annotations as properties and values. """
-
-        query_string = self._prefix_string + f"""
-
-        SELECT * WHERE {{
-            ?run a omecore:PlateAcquisition;
-                 ?prop ?val.
-            filter(strstarts(str(?prop), str(omens)))
-        }}
-        order by ?prop
-        """
-
-        # Run the query.
-        results = run_query(self._graph, query_string)
-
-        self.assertIn("CellLineMutation", results['prop'].values)
 
     def test_well_key_value(self):
         """ Test querying for a well kv-annotations as property value pairs."""
@@ -901,7 +876,8 @@ SELECT DISTINCT * WHERE {
         # Convert to Series for easier querying.
         results = results.set_index('key')['val']
 
-        print("\n"+results.to_string())
+        if DEBUG:
+            print("\n"+results.to_string())
         self.assertEqual(Literal("NCBITaxon_9606"), results[Literal('TermZZSourceZZ1ZZAccession')])
         self.assertEqual(Literal('0.610481812'), results[Literal("nseg.0.m.eccentricity.mean")])
 
@@ -965,7 +941,8 @@ SELECT DISTINCT * WHERE {
         # Run the query. It should return an empty results set.
         results = run_query(self._graph, query_string)
 
-        print('\n' + results.to_string())
+        if DEBUG:
+            print('\n' + results.to_string())
 
     def test_channels(self):
         """ Test querying for Channels object. """
@@ -989,7 +966,8 @@ SELECT DISTINCT * WHERE {
 
         results = run_query(self._graph, query_string).set_index('pixels').astype(int)
 
-        print("\n" + results.to_string())
+        if DEBUG:
+            print("\n" + results.to_string())
 
         self.assertEqual(results['min_red'].sum(), 0)
         self.assertTrue(all(results['max_blue'] == 255))
