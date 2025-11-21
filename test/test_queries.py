@@ -14,6 +14,7 @@ DEBUG = False
 ENDPOINT = "http://193.196.20.26:8080/sparql"
 # ENDPOINT = "http://localhost:8080/sparql"
 
+
 # --- Helper for order-independent pair checks 
 def as_pairs(df, left, right):
     """
@@ -34,12 +35,12 @@ def as_pairs(df, left, right):
 
     return paired
 
+
 # Check if endpoint is reachable.
 def check_endpoint():
     try:
         response = requests.get("/".join(os.path.split(ENDPOINT)[:-1]))
         assert response.status_code == 200
-
     except: 
         raise RuntimeError("Could not connect to ontop endpoint %s. Is ontop endpoint up and running?" % ENDPOINT)
 
@@ -105,7 +106,7 @@ def ontop_materialize(use_cache=False):
     current_working_directory = os.path.abspath(os.path.dirname(__file__))
     mappings_directory = os.path.abspath(os.path.join(current_working_directory, '..', 'omero-ontop-mappings'))
     target_rdf = os.path.join(current_working_directory, 'omero-test-infra.rdf') 
-    command = f"../ontop-cli/ontop materialize --mapping=omero-ontop-mappings.obda --ontology=omero-ontop-mappings.ttl --properties=omero-ontop-mappings.properties --output {target_rdf.split('.')[0]}"
+    command = f"../ontop-cli/ontop materialize --mapping=omero-ontop-mappings.obda --ontology=omero-ontop-mappings.ttl --properties=omero-test-infra.properties --output {target_rdf.split('.')[0]}"
     cmd = shlex.split(command)
 
     if not use_cache:
@@ -121,8 +122,8 @@ class QueriesTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
 
-        ttl_path = ontop_materialize(use_cache=DEBUG)
-        cls._graph = Graph().parse(ttl_path)
+        cls._ttl_path = ontop_materialize(use_cache=DEBUG)
+        cls._graph = Graph().parse(cls._ttl_path)
 
         cls._prefix_string = """
 PREFIX dc: <http://purl.org/dc/terms/>
@@ -147,6 +148,15 @@ prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 """
 
         return super().setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        """ Clean up before the class is destroyed."""
+
+        del cls._graph
+
+        if DEBUG:
+            shutil.remove(cls._ttl_path)
 
     def setUp(self):
         """ Setup run at the beginning of each test method."""
@@ -688,7 +698,7 @@ SELECT DISTINCT * WHERE {
 
         results = run_query(self._graph, query)
 
-        self.assertEqual(3, len(results))
+        self.assertEqual(1, len(results))
 
     def test_plate(self):
         """ Test query for a plate."""
@@ -878,7 +888,7 @@ SELECT DISTINCT * WHERE {
         query_string = self._prefix_string + f"""
 
   SELECT distinct * WHERE {{
-    bind(iri(concat(str(site:), "Well/96")) as ?well)
+    bind(iri(concat(str(site:), "Well/205")) as ?well)
     ?well ?kvterm ?val .
     filter(strstarts(str(?kvterm), str(omens:)))
     bind(strafter(str(?kvterm), str(omens:)) as ?key)
@@ -893,7 +903,7 @@ SELECT DISTINCT * WHERE {
 
         print("\n"+results.to_string())
         self.assertEqual(Literal("NCBITaxon_9606"), results[Literal('TermZZSourceZZ1ZZAccession')])
-        self.assertEqual(Literal('0.601114562'), results[Literal("nseg.0.m.eccentricity.mean")])
+        self.assertEqual(Literal('0.610481812'), results[Literal("nseg.0.m.eccentricity.mean")])
 
     def test_wellsample(self):
         """ Test querying for a wellsample. """

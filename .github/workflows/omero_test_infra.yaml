@@ -18,7 +18,7 @@ on:
 
 jobs:
   unit_test:
-    name: Run test querieskk
+    name: Run test queries
     runs-on: ubuntu-latest
     env:
       STAGE: app
@@ -31,4 +31,4 @@ jobs:
       - name: ontop-cli
         run: utils/install_ontop.sh
       - name: pytest
-        run: pytest test/test_queries.py
+        run: pytest
