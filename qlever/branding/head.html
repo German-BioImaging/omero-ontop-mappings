@@ -1,0 +1,109 @@
+{% load static %}<head>
+  <title>The OMERO QLever SPARQL engine</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" type="image/png" href="{% static "favicon.ico" %}">
+
+  <!-- The stylesheets for this page -->
+  <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+
+  <!-- Bootstraps CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- CSS Code for the UI  -->
+  <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+  <link rel="stylesheet" type="text/css" href="{% static "css/codemirror.css" %}">
+
+  <!-- The basic jQuery library & jQuery UI library -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <script>
+  var predicateResultTypes = {};
+  var ENTITY = 0;
+  var LITERAL = 1;
+  var LANGUAGELITERAL = 2;
+  
+  var BASEURL = "{{ backend.baseUrl }}";
+  {% if noSlugMode %}
+  var NO_SLUG_MODE = true;
+  {% else %}
+  var NO_SLUG_MODE = false;
+  {% endif %}
+  var SLUG = "{{ backend.slug }}";
+  var ENTITYNAMERELATIONS = {% autoescape off %}{{ backend.entityNameQueries }}{% endautoescape %}
+  var SUBJECTNAME = ENTITYNAMERELATIONS["SUBJECTNAME"];
+  var PREDICATENAME = ENTITYNAMERELATIONS["PREDICATENAME"];
+  var OBJECTNAME = ENTITYNAMERELATIONS["OBJECTNAME"];
+  var ALTERNATIVESUBJECTNAME = ENTITYNAMERELATIONS["ALTERNATIVESUBJECTNAME"];
+  var ALTERNATIVEPREDICATENAME = ENTITYNAMERELATIONS["ALTERNATIVEPREDICATENAME"];
+  var ALTERNATIVEOBJECTNAME = ENTITYNAMERELATIONS["ALTERNATIVEOBJECTNAME"];
+  var SUGGESTSUBJECTS = ENTITYNAMERELATIONS["SUGGESTSUBJECTS"];
+  var SUGGESTPREDICATES = ENTITYNAMERELATIONS["SUGGESTPREDICATES"];
+  var SUGGESTOBJECTS = ENTITYNAMERELATIONS["SUGGESTOBJECTS"];
+  var SUGGESTSUBJECTS_CONTEXT_INSENSITIVE = ENTITYNAMERELATIONS["SUGGESTSUBJECTSCONTEXTINSENSITIVE"];
+  var SUGGESTPREDICATES_CONTEXT_INSENSITIVE = ENTITYNAMERELATIONS["SUGGESTPREDICATESCONTEXTINSENSITIVE"];
+  var SUGGESTOBJECTS_CONTEXT_INSENSITIVE = ENTITYNAMERELATIONS["SUGGESTOBJECTSCONTEXTINSENSITIVE"];
+  var SUGGESTOBJECTS_CONTEXT_HALFSENSITIVE = SUGGESTOBJECTS.replace(/%CONNECTED_TRIPLES%\s*/g, "")
+  // console.log("Half-sensitive object AC query template:\n", SUGGESTOBJECTS_CONTEXT_HALFSENSITIVE);
+  var COLLECTEDPREFIXES = {% autoescape off %}{{ prefixes }}{% endautoescape %};
+  var LANGUAGES = {% autoescape off %}{{ backend.languages }}{% endautoescape %};
+  var KEYWORDS = {% autoescape off %}{{ backend.keywords }}{% endautoescape %};
+  var FUNCTIONS = {% autoescape off %}{{ backend.functions }}{% endautoescape %};
+  var PREDICATESUGGESTIONS = {% autoescape off %}{{ backend.predicateSuggestions }}{% endautoescape %};
+  var SUGGEST_PREFIXNAMES_FOR_PREDICATES = {{ backend.suggestPrefixnamesForPredicates|lower }};
+  var FILLPREFIXES = {{ backend.fillPrefixes|lower }};
+  var FILTER_TYPES = {% if backend.filterEntities %}ENTITY{% else %}LITERAL{% endif %};
+  var REPLACE_PREDICATES = {% autoescape off %}{{ backend.replacePredicatesList }}{% endautoescape %};
+  var SUGGESTIONENTITYVARIABLE = "{{ backend.suggestionEntityVariable}}";
+  var SUGGESTIONNAMEVARIABLE = "{{ backend.suggestionNameVariable}}";
+  var SUGGESTIONALTNAMEVARIABLE = "{{ backend.suggestionAltNameVariable}}";
+  var SUGGESTIONREVERSEDVARIABLE = "{{ backend.suggestionReversedVariable}}";
+  var WARMUP_AC_PLACEHOLDERS = {% autoescape off %}{{ backend.getWarmupAndAcPlaceholders }}{% endautoescape %};
+  var DEFAULT_TIMEOUT = {{ backend.defaultModeTimeout }};
+  var MIXED_MODE_TIMEOUT = {{ backend.mixedModeTimeout }};
+  var examples = [];
+  {% for example in examples %}
+  examples.push(`{{ example.query|addslashes|safe }}`);
+  {% endfor %}
+  var MAP_VIEW_BASE_URL = "{{ backend.mapViewBaseURL }}";
+  </script>
+
+  <!-- Bootstraps JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <!-- WASM formatter -->
+  <script type="module">
+    import { format, determineOperationType } from "{% static '/wasm/formatter/index.js' %}";
+    window.format = format;
+    window.determineOperationType = determineOperationType;
+  </script>
+
+  <!-- Our own JavaScript code for this demo -->
+  <script src="{% static "js/helper.js" %}"></script>
+  <script src="{% static "js/raphael.js" %}"></script>
+  <script src="{% static "js/treant.js" %}"></script>
+  <script src="{% static "js/qleverUI.js" %}"></script>
+  <script src="{% static "js/keywordSearch.js" %}" defer></script>
+
+  <!-- CodeMirror and it's modules and language mode -->
+  <script src="{% static "js/codemirror/codemirror.js" %}"></script>
+  <script src="{% static "js/codemirror/modules/autocomplete.js" %}"></script>
+  <script src="{% static "js/codemirror/modules/active-line.js" %}"></script>
+  <script src="{% static "js/codemirror/modules/show-hint.js" %}"></script>
+  <script src="{% static "js/codemirror/modules/search.js" %}"></script>
+
+  <script src="{% static "js/codemirror/modes/sparql/sparql.js" %}"></script>
+  <script src="{% static "js/codemirror/modes/sparql/sparql-hint.js" %}"></script>
+
+  {% if request.GET.test %}
+    <!-- Jasemine JS Testing Framework -->
+    <link rel="shortcut icon" type="image/png" href="{% static "tests/jasmine/lib/jasmine-2.8.0/jasmine_favicon.png" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "tests/jasmine/lib/jasmine-2.8.0/jasmine.css" %}">
+
+    <script type="text/javascript" src="{% static "tests/jasmine/lib/jasmine-2.8.0/jasmine.js" %}"></script>
+    <script type="text/javascript" src="{% static "tests/jasmine/lib/jasmine-2.8.0/jasmine-html.js" %}"></script>
+    <script type="text/javascript" src="{% static "tests/jasmine/lib/jasmine-2.8.0/boot.js" %}"></script>
+    <script type="text/javascript" src="{% static "tests/interface.js" %}"></script>
+  {% endif %}
+</head>

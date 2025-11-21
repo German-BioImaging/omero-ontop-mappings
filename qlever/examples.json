@@ -1,0 +1,7 @@
+[
+  {
+    "backend": "mpiebkg",
+    "name": "basic query",
+    "query": "PREFIX omecore: <https://ld.openmicroscopy.org/core/>\nPREFIX omens: <http://www.openmicroscopy.org/ns/default/>\nSELECT distinct ?investigation ?study ?assay ?img_name WHERE {\n    ?img a omecore:Image;\n         omens:Investigation ?investigation ;\n         omens:Study ?study;\n         omens:Assay ?assay .\n}"
+  }
+]
