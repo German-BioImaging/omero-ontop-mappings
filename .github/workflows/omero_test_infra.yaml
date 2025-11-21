@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: pytest
-        run: apt install python3-pytest python3-rdflib python3-pandas
+        run: sudo apt install python3-pytest python3-rdflib python3-pandas
       - name: ontop-cli
         run: utils/install_ontop.sh
       - name: pytest
