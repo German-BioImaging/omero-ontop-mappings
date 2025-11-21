@@ -154,8 +154,8 @@ prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
         del cls._graph
 
-        if DEBUG:
-            shutil.remove(cls._ttl_path)
+        if not DEBUG:
+            os.remove(cls._ttl_path)
 
     def setUp(self):
         """ Setup run at the beginning of each test method."""
