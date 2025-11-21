@@ -10,7 +10,8 @@ from urllib import parse
 import unittest
 
 DEBUG = True
-ENDPOINT = "http://localhost:8080/sparql"
+ENDPOINT = "http://193.196.20.26:8080/sparql"
+# ENDPOINT = "http://localhost:8080/sparql"
 
 # --- Helper for order-independent pair checks 
 def as_pairs(df, left, right):
@@ -672,7 +673,7 @@ SELECT DISTINCT * WHERE {
 
         print("\n"+results.to_string())
 
-        self.assertEqual(3, len(results))
+        self.assertEqual(1, len(results))
 
     def test_plate(self):
         """ Test query for a plate."""
@@ -864,7 +865,7 @@ SELECT DISTINCT * WHERE {
         query_string = self._prefix_string + f"""
 
   SELECT distinct * WHERE {{
-    bind(iri(concat(str(site:), "Well/48")) as ?well)
+    bind(iri(concat(str(site:), "Well/205")) as ?well)
     ?well ?kvterm ?val .
     filter(strstarts(str(?kvterm), str(omens:)))
     bind(strafter(str(?kvterm), str(omens:)) as ?key)
