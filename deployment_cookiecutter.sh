@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
+# default python binary used to install QLever if requested
+PYTHON_BIN="${PYTHON_BIN:-python}"
 
 # Temporary working directory for Cookiecutter
 OUT="tmp"                     
@@ -75,6 +77,58 @@ while true; do
   esac
 done
 
+###############################################################################
+# QLever SPARQL endpoint questions (both asked here, before Cookiecutter)
+###############################################################################
+
+CREATE_QLEVER_ENDPOINT="no"
+INSTALL_QLEVER="no"
+
+echo ""
+echo "QLever SPARQL endpoint setup:"
+while true; do
+  read -r -p "Do you want to create a QLever SPARQL endpoint serving the materialized RDF? [no]/yes: " ENABLE_QLEVER
+  ENABLE_QLEVER=${ENABLE_QLEVER:-no}
+  ENABLE_QLEVER_LC=$(echo "$ENABLE_QLEVER" | tr '[:upper:]' '[:lower:]')
+
+  case "$ENABLE_QLEVER_LC" in
+    yes|y)
+      CREATE_QLEVER_ENDPOINT="yes"
+      break
+      ;;
+    no|n)
+      CREATE_QLEVER_ENDPOINT="no"
+      break
+      ;;
+    *)
+      echo "Please answer 'yes' or 'no' (or press Enter for 'no')."
+      ;;
+  esac
+done
+
+if [[ "$CREATE_QLEVER_ENDPOINT" == "yes" ]]; then
+  QLEVER_DIR_PREVIEW="${PREFIX}/qlever"
+  while true; do
+    read -r -p "Do you want to install QLever? [no]/yes: " INSTALL_QLEVER_ANSWER
+    INSTALL_QLEVER_ANSWER=${INSTALL_QLEVER_ANSWER:-no}
+    INSTALL_QLEVER_LC=$(echo "$INSTALL_QLEVER_ANSWER" | tr '[:upper:]' '[:lower:]')
+
+    case "$INSTALL_QLEVER_LC" in
+      yes|y)
+        INSTALL_QLEVER="yes"
+        break
+        ;;
+      no|n)
+        INSTALL_QLEVER="no"
+        break
+        ;;
+      *)
+        echo "Please answer 'yes' or 'no' (or press Enter for 'no')."
+        ;;
+    esac
+  done
+fi
+
 # 2) Build cookiecutter args 
 CC_ARGS=(
   "templates"
@@ -88,7 +142,7 @@ CC_ARGS=(
   site_uri="$SITE_URI"
   publiccond="$PUBLICCOND"
 )
-
+echo ""
 echo "⚙️  Running Cookiecutter ..."
 cookiecutter "${CC_ARGS[@]}"
 
@@ -137,6 +191,36 @@ fi
 echo "📁 Creating deployment folder '$PREFIX'..."
 mkdir -p "$PREFIX"
 
+###############################################################################
+# QLever folder + optional venv-local install
+###############################################################################
+if [[ "$CREATE_QLEVER_ENDPOINT" == "yes" ]]; then
+  QLEVER_DIR="${PREFIX}/qlever"
+  INSTALL_LOG="$QLEVER_DIR/qlever_install.log"
+
+  echo "📁 Creating QLever subdirectory: $QLEVER_DIR"
+  mkdir -p "$QLEVER_DIR"
+
+  if [[ "$INSTALL_QLEVER" == "yes" ]]; then
+    echo "⬇️ Installing QLever into current virtual environment."
+    if command -v "$PYTHON_BIN" >/dev/null 2>&1; then
+      if "$PYTHON_BIN" -m pip install qlever --quiet >"$INSTALL_LOG" 2>&1; then ## use quiet flag. Report only if error occurs
+        echo "   QLever installed successfully. (Details in $INSTALL_LOG)"
+      else
+        echo "⚠️ QLever installation failed. Showing log:"
+        echo "------------------------------------------------------------"
+        cat "$INSTALL_LOG"
+        echo "------------------------------------------------------------"
+      fi
+    else
+      echo "⚠️ '${PYTHON_BIN}' command not found. Please ensure your virtual environment is activated"
+      echo "   or set PYTHON_BIN to the correct interpreter before running this script."
+    fi
+  else
+    echo "Skipping QLever installation. Directory '$QLEVER_DIR' is ready for manual setup."
+  fi
+fi
+
 # 5) Copy / rename files into deployment folder
 
 # Properties from Cookiecutter (already escaped & chmodded by hook)
@@ -183,20 +267,24 @@ echo "   jdbc.url  : $jdbc_url"
 echo "   prefix    : $PREFIX"
 echo "   site_uri  : $SITE_URI"
 echo "   publiccond: $PUBLICCOND"
+if [[ "$CREATE_QLEVER_ENDPOINT" == "yes" ]]; then
+  if [[ "$INSTALL_QLEVER" == "yes" ]]; then
+    echo "   qlever    : directory '$PREFIX/qlever' created, '${PYTHON_BIN} -m pip install qlever' attempted"
+  else
+    echo "   qlever    : directory '$PREFIX/qlever' created (QLever not installed by script)"
+  fi
+fi
 echo ""
-echo "To start the endpoint:"
+echo "To start ontop endpoint:"
 echo "  cd $PREFIX"
 echo "  ./${PREFIX}-ontop-endpoint.sh"
 echo ""
-
-
 
 ################################################################################
 # 7) Create materialization script in same directory as deployment folder
 ################################################################################
 
 MAT_DIR=${PREFIX}
-#MAT_SCRIPT="${MAT_DIR}/"${"PREFIX"}-ontop-materialize.sh"
 MAT_SCRIPT="${MAT_DIR}/${PREFIX}-ontop-materialize.sh"
 
 cat > "$MAT_SCRIPT" <<EOF
@@ -238,4 +326,41 @@ echo ""
 echo "🧪 Materialization script created:"
 echo "   $MAT_SCRIPT"
 echo ""
+###############################################################################
+# QLever: Copy qlever scripts
+###############################################################################
+if [[ "$CREATE_QLEVER_ENDPOINT" == "yes" ]]; then
 
+  QLEVER_SRC="./qlever"
+  QLEVER_DST="${PREFIX}/qlever"
+
+  if [[ ! -d "$QLEVER_SRC" ]]; then
+    echo "⚠️ WARNING: qLever folder not found at $QLEVER_SRC"
+  else
+    echo "📁 Copying QLever scripts..."
+    mkdir -p "$QLEVER_DST"
+    cp -R  "$QLEVER_SRC/" "$QLEVER_DST/"   # notice the trailing slashes
+    chmod +x "$QLEVER_DST/"*.sh 2>/dev/null || true
+  fi
+
+  echo ""
+  echo "🚀 QLever setup information"
+  echo ""
+  echo "To use the QLever SPARQL endpoint, follow these steps:"
+  echo ""
+  echo "1️⃣ Change into the QLever directory:"
+  echo "   cd ${PREFIX}/qlever"
+  echo ""
+  echo "2️⃣ Index the materialized RDF data:"
+  echo "   ./reindex_ome_data.sh"
+  echo ""
+  echo "  This will create the QLever index files inside:"
+  echo "    ${PREFIX}/qlever/index_output/"
+  echo ""
+  echo "3️⃣ Start the QLever server:"
+  echo "   ./start_qlever.sh"
+  echo ""
+  echo "4️⃣ Start the QLever Web UI:"
+  echo "   ./launch_qlever-ui-mpiebkg.sh"
+  echo ""
+fi
