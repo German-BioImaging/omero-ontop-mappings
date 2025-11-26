@@ -6,29 +6,60 @@ This repository contains the code to create a virtual knowledge graph for [OMERO
 The utility script in *utils\/install_ontop.sh* can be used to install the ontop cli into *ontop-cli*. We will assume the binary *ontop* is located in that directory. The script also installs the postgresql jdbc driver into *ontop-cli\/jdbc\/*.
 
 ## Deployment
-To deploy your own OMERO-VKG, follow these steps:
-### Generate site configuration directory
-In the top level directory, run the command
-```console
-bash deploy.sh PREFIX URI USERIDFILTER
+
+To deploy your own OMERO–VKG instance, use the interactive deployment script included in this repository.
+
+### 1. Generate a deployment directory
+
+From the top-level directory, run:
+
+```bash
+./deployment_cookiecutter.sh
 ```
-Replace `PREFIX` AND `URI` with the prefix name and URL for your OMERO instance, respectively. E.g. for the (hypothetical ) Institute of Bioimaging, running 
-OMERO at `https://ome.iob.net`, a sensible choice could be `bash deploy.sh iob https://ome.iob.net/`.
-`USERIDFILTER` is a filter condition on the user_id property. E.g. "=2" declares that only objects owned by the user with ID 2 are mapped and can hence be queried via SPARQL. You can write any valid SQL (Postgresql) condition here including the operator "=, <, >, ..." and the right hand side of the comparison.
+The script will guide you through a series of questions, including:
+ - PostgreSQL username, password, and host.
+ - The RDF prefix for the deployment (used as folder name and ontology prefix).
+ - The site URI (base IRI for your instance).
+ - A SQL filter controlling which OMERO users' data are exposed.
+   (e.g. =2 for a particular public OMERO user, or >=0 for all users).
+ - Whether to create a QLever SPARQL endpoint and its UI.
 
-`deploy.sh`  creates a new deployment directory named *iob\/* (in the example above),
-containing these files:
+After completing the prompts, a new directory named after your chosen prefix
+(e.g. ome_instance) will be created.
 
-1. *iob.ttl*: The mapping ontology
-1. *iob.obda*: The mappings with adjusted site prefix and URL.
-1. *iob.properties*: Properties file containing the database connection parameters.
-1. *catalog-v001.xml*: 3rd party ontologies imported into *iob.ttl*, in particular the OME core ontology.
+### 2. Contents of the deployment directory
 
+A typical deployment directory includes:
 
-### Edit properties file
-In the properties file, you need to change the values for `jdbc.user`, `jdbc.password`, and `jdbc.url`. Consider setting up a read-only database user (role)
-with SELECT rights on the public database tables (see below). The `jdbc.url` should be configured according to your OMERO DB host's hostname and port on which
-the postgresql daemon accepts requests. Leave the `jdbc.driver` value as it is.
+- PREFIX.ttl – The mapping ontology
+- PREFIX.obda – OBDA mappings with your site prefix and URI
+- PREFIX.properties – Database connection settings for ONTOP
+- catalog-v001.xml – Imported third-party ontologies
+- portal.toml – Metadata portal configuration
+- PREFIX-ontop-endpoint.sh – Script to start the ONTOP SPARQL endpoint
+- PREFIX-ontop-materialize.sh – Script to materialize the RDF graph
+- qlever/ (optional) – Helper scripts for QLever indexing, server and qlever UI
+
+### 3. Start the ONTOP SPARQL endpoint
+
+```bash
+cd PREFIX
+./PREFIX-ontop-endpoint.sh
+```
+The Ontop endpoint will the properties file that was automatically setup by the interactive deployment script.
+
+### 4. (Optional) Use QLever as a high-performance SPARQL endpoint
+```bash
+cd PREFIX/
+ ./PREFIX-ontop-materialize.sh  # Materialize RDF graph (.ttl format) 
+cd qlever
+./reindex_ome_data.sh           # Build QLever index
+./start_qlever.sh               # Start QLever SPARQL server
+./launch_qlever-ui-mpiebkg.sh   # Start the QLever web UI (optional)
+```
+For more details see  
+➡️ [Qlever configuration](docs/qlever_docs.md)
+
 
 #### Create read-only OMERO DB user
 Consult *utils/setup_ontop_dbuser.sh* and *queries/sql/ontop_user.sql* to setup the read-only DB user.
