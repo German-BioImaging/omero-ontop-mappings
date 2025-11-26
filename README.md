@@ -57,6 +57,10 @@ cd qlever
 ./start_qlever.sh               # Start QLever SPARQL server
 ./launch_qlever-ui-mpiebkg.sh   # Start the QLever web UI (optional)
 ```
+
+**Note:** Materialization and QLever reindexing should be performed periodically. Otherwise the data will gradually
+become outdate.
+
 For more details see  
 ➡️ [Qlever configuration](docs/qlever_docs.md)
 
