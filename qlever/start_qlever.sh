@@ -3,8 +3,15 @@ set -euo pipefail
 # manual start script for "qlever start"
 # the index data is expected to be in ./index_output/ after using index_ome_data.sh
 # --- Configuration ------------------------------------------------------------
-INSTANCE_NAME="MPIEBKG"
-INDEX_DIR="$(pwd)/index_output" # New location of indexed data
+#Directory where this script is executed (qlever/ subdirectory)
+QLEVER_DIR="$(pwd)"
+# Parent directory is the deployment folder (e.g. ome_instance/)
+DEPLOY_DIR="$(dirname "$QLEVER_DIR")"
+# Use the deployment folder name (PREFIX) as the instance name
+INSTANCE_NAME="$(basename "$DEPLOY_DIR")"
+# Directory that contains the index files
+INDEX_DIR="${QLEVER_DIR}/index_output"
+
 PORT="8888"
 TOKEN="_eqIrM740XtRq"
 CONTAINER_NAME="qlever.server.${INSTANCE_NAME}"

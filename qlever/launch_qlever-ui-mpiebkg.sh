@@ -1,13 +1,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 # Manual launch script for "qlever-ui" with MPIEBKG backend in Docker
-# Use current directory as the instance
+
+# Use current directory as the qlever instance dir
 INSTANCE_DIR="$(pwd)"
+
+# Parent directory is the deployment folder (same as PREFIX, e.g. ome_instance/)
+DEPLOY_DIR="$(dirname "$INSTANCE_DIR")"
+
+# Deployment instance name (PREFIX)
+INSTANCE_NAME="$(basename "$DEPLOY_DIR")"
+
 CNAME="qlever.ui.MPIEBKG"
 IMAGE="docker.io/adfreiburg/qlever-ui:latest"
 PORT="8176"
 
-DB_FILE="$INSTANCE_DIR/MPIEBKG.ui-db.sqlite3"
+# Make DB name consistent with the deployment instance name
+DB_FILE="$INSTANCE_DIR/${INSTANCE_NAME}.ui-db.sqlite3"
+
 CFG_MAIN="$INSTANCE_DIR/Qleverfile-ui.yml"
 EXAMPLES_JSON="$INSTANCE_DIR/examples.json"
 
