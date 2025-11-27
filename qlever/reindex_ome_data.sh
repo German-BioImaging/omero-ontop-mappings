@@ -105,14 +105,22 @@ OBDA_FILE="${DEPLOY_DIR}/${INSTANCE_NAME}.obda"
 INFERRED_GRAPH_URI=""
 
 if [[ -f "$OBDA_FILE" ]]; then
-  #Find prefix line:
-  #   INSTANCE_NAME: <https://example.org/site/>
-  INFERRED_GRAPH_URI="$(
-    grep -E "^[[:space:]]*${INSTANCE_NAME}:[[:space:]]*<" "$OBDA_FILE" 2>/dev/null \
-      | head -n1 \
-      | sed -E 's/.*<([^>]+)>.*/\1/'
-  )" || true
+  # Look for a prefix line and site URI mapping like:
+  #   PREFIX ome: <http://openmicroscopy.org/site/>
+    INFERRED_GRAPH_URI="$(
+    awk -v p="${INSTANCE_NAME}:" '
+      $1 == p {
+        uri = $2
+        # strip optional surrounding < >
+        gsub(/^</, "", uri)
+        gsub(/>$/, "", uri)
+        print uri
+        exit
+      }
+    ' "$OBDA_FILE"
+  )"
 fi
+
 
 # Default graph URI choice:
 # 1) CLI argument if provided
