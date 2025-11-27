@@ -36,11 +36,11 @@ read -r -p "DB host [localhost]: " DB_HOST
 DB_HOST=${DB_HOST:-localhost}
 echo ""
 echo "Enter PREFIX: RDF prefix for site instance, e.g. \"iob\"."
-read -r -p "prefix [ome_instance]: " PREFIX
-PREFIX=${PREFIX:-ome_instance}
+read -r -p "prefix [ex]: " PREFIX
+PREFIX=${PREFIX:-ex}
 echo "Enter URI: URI of site instance including trailing slash or #, e.g. \"https://institute.of.bioimaging.com/\"."
-read -r -p "site_uri [https://example.org/site/]: " SITE_URI
-SITE_URI=${SITE_URI:-https://example.org/site/}
+read -r -p "site_uri [https://example.org/]: " SITE_URI
+SITE_URI=${SITE_URI:-https://example.org/}
 echo ""
 echo "Setting public data mapping:"
 echo "  - YES  → Only data of the public user is mapped (enter that user's OMERO ID)."
@@ -127,6 +127,22 @@ if [[ "$CREATE_QLEVER_ENDPOINT" == "yes" ]]; then
         ;;
     esac
   done
+fi
+## Use most recent mapping file to create template for cookiecutter
+echo ""
+echo "🔄 Preparing OBDA template for Cookiecutter ..."
+
+if [[ -f "prepare_obda_template.py" ]]; then
+  if command -v "$PYTHON_BIN" >/dev/null 2>&1; then
+    "$PYTHON_BIN" prepare_obda_template.py
+  else
+    echo "❌ ERROR: Python interpreter '$PYTHON_BIN' not found."
+    echo "   Set PYTHON_BIN before running this script, e.g.:"
+    echo "   PYTHON_BIN=python3 ./deployment_cookiecutter.sh"
+    exit 1
+  fi
+else
+  echo "⚠️ WARNING: prepare_obda_template.py not found — OBDA template not updated."
 fi
 
 # 2) Build cookiecutter args 

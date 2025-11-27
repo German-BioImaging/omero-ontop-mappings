@@ -7,7 +7,8 @@ The utility script in *utils\/install_ontop.sh* can be used to install the ontop
 
 ## Deployment
 
-To deploy your own OMERO–VKG instance, use the interactive deployment script included in this repository.
+To deploy your own OMERO–VKG instance, use the interactive deployment script included in this repository
+(it assumes cookiecutter is installed and in your $PATH. If not, check https://www.cookiecutter.io).
 
 ### 1. Generate a deployment directory
 
@@ -19,9 +20,8 @@ From the top-level directory, run:
 The script will guide you through a series of questions, including:
  - PostgreSQL username, password, and host.
  - The RDF prefix for the deployment (used as folder name and ontology prefix).
- - The site URI (base IRI for your instance).
- - A SQL filter controlling which OMERO users' data are exposed.
-   (e.g. =2 for a particular public OMERO user, or >=0 for all users).
+ - The site URI (base URI for your instance).
+ - A SQL filter controlling which OMERO users' data are exposed. Only data owned by the user(s) matching the filter and by users in the same groups as the filtered user(s) are mapped and accessible in the virtual KG. (e.g. =2 for a particular public OMERO user, or >=0 for all users).
  - Whether to create a QLever SPARQL endpoint and its UI.
 
 After completing the prompts, a new directory named after your chosen prefix
@@ -46,7 +46,7 @@ A typical deployment directory includes:
 cd PREFIX
 ./PREFIX-ontop-endpoint.sh
 ```
-The Ontop endpoint will the properties file that was automatically setup by the interactive deployment script.
+This will launch the ontop sparql query interface at http://localhost:8080, the endpoint is at http://localhost:8080/sparql (the Ontop endpoint will use the properties file that was automatically setup by the interactive deployment script).
 
 ### 4. (Optional) Use QLever as a high-performance SPARQL endpoint
 ```bash
@@ -59,7 +59,7 @@ cd qlever
 ```
 
 **Note:** Materialization and QLever reindexing should be performed periodically. Otherwise the data will gradually
-become outdate.
+become outdated.
 
 For more details see  
 ➡️ [Qlever configuration](docs/qlever_docs.md)
