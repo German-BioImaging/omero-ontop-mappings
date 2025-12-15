@@ -355,7 +355,7 @@ if [[ "$CREATE_QLEVER_ENDPOINT" == "yes" ]]; then
   else
     echo "📁 Copying QLever scripts..."
     mkdir -p "$QLEVER_DST"
-    cp -R  "$QLEVER_SRC/" "$QLEVER_DST/"   # notice the trailing slashes
+    cp -a "$QLEVER_SRC"/. "$QLEVER_DST"/ #portable for Mac and linux. Avoids extra unnecessary subdirectory on ubuntu 
     chmod +x "$QLEVER_DST/"*.sh 2>/dev/null || true
   fi
 
