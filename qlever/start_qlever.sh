@@ -50,11 +50,11 @@ start_server() {
     --entrypoint bash "$IMAGE" -c "
       ServerMain \
         -i ${INSTANCE_NAME} \
-        -j 8 \
+        -j 4 \
         -p ${PORT} \
-        -m 5G \
-        -c 2G \
-        -e 1G \
+        -m 18G \
+        -c 1G \
+        -e 16G \
         -k 200 \
         -s 30s \
         -a ${TOKEN} \
