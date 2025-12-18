@@ -29,6 +29,37 @@ case "${1:-start}" in
   start)
     echo "🟢 Starting qlever-ui..."
     docker rm -f "$CNAME" >/dev/null 2>&1 || true
+    
+    # Edit Qleverfile-ui.yml
+    ### Ensure baseUrl is not localhost when deploy on a server
+    UI_CFG="$CFG_MAIN"
+
+    CURRENT_BASEURL="$(grep -E '^[[:space:]]*baseUrl:' "$UI_CFG" | awk '{print $2}')"
+    HOSTNAME_DETECTED="$(hostname -f 2>/dev/null || hostname)"
+
+    if [[ "$CURRENT_BASEURL" == "http://localhost:8888" || "$CURRENT_BASEURL" == "http://127.0.0.1:8888" ]]; then
+      echo "Default qlever-ui is configured to use localhost."
+      echo
+      echo "Detected this host name:"
+      echo "  $HOSTNAME_DETECTED"
+      echo
+      echo "Choose baseUrl is launching in a live server:"
+      echo "  1) Keep localhost"
+      echo "  2) Use hostname"
+      read -rp "Select [1-2] (default 1): " choice
+      choice="${choice:-1}"
+
+      if [[ "$choice" == "2" ]]; then
+        NEW_BASEURL="http://${HOSTNAME_DETECTED}:8888"
+        sed -i.bak -E "s|^[[:space:]]*baseUrl:.*|    baseUrl: ${NEW_BASEURL}|" "$UI_CFG" \
+        && rm -f "${UI_CFG}.bak"
+        echo "✅ baseUrl updated to use hostname"
+      else
+        echo "ℹ️  Keeping baseUrl as localhost"
+      fi
+    fi
+
+    ###
 
     # Base mounts
     RUN_ARGS="--name $CNAME -p ${PORT}:7000 -v \"$INSTANCE_DIR\":/app/db -e QLEVERUI_DATABASE_URL=sqlite:////app/db/$(basename "$DB_FILE")"
@@ -111,7 +142,18 @@ PY"
       echo "ℹ️  No examples.json found — skipping examples import."
     fi
 
-    echo "✅ qlever-ui started at http://localhost:${PORT}/mpiebkg"
+    # Determine URL to show to the user
+    UI_HOST="localhost"
+    if [[ "${choice:-1}" == "2" ]]; then
+    UI_HOST="$HOSTNAME_DETECTED"
+    fi
+
+    # Read the backend URL from the config (what the UI will call)
+    FINAL_BASEURL="$(awk '/^[[:space:]]*baseUrl:/{print $2; exit}' "$UI_CFG")"
+
+    echo "✅ qlever-ui started:"
+    echo "   UI:      http://${UI_HOST}:${PORT}/mpiebkg"
+    echo "   Backend: ${FINAL_BASEURL}" 
     ;;
 
   stop)
