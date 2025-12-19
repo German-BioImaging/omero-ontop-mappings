@@ -50,10 +50,10 @@ case "${1:-start}" in
     if [[ "$CURRENT_BASEURL" == "http://localhost:8888" || "$CURRENT_BASEURL" == "http://127.0.0.1:8888" ]]; then
       echo "Default qlever-ui is configured to use localhost."
       echo
-      echo "Detected this host name:"
+      echo "Detected hostname:"
       echo "  $HOSTNAME_DETECTED"
       echo
-      echo "Choose baseUrl is launching in a live server:"
+      echo "Choose baseUrl (use hostname when launching qlever-ui in a live server):"
       echo "  1) Keep localhost"
       echo "  2) Use hostname"
       read -rp "Select [1-2] (default 1): " choice
