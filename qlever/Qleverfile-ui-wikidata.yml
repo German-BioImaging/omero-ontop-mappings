@@ -1,0 +1,12 @@
+config:
+  backend:
+    name: wikidata
+    slug: wikidata
+    sortKey: 2
+    baseUrl: http://localhost:8890 # replace 'localhost' and  use actual name of host machine when running in a live server
+    apiToken: ''
+    isDefault: false
+    isNoSlugMode: 'False'
+    maxDefault: '100'
+
+  examples: []
