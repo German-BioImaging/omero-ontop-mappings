@@ -41,46 +41,60 @@ LIMIT 10
 [[tabGroups.tabs]]
 name="Project/Dataset/Image hierarchy"
 query="""
+PREFIX prefix: <http://prefix.cc/>
 PREFIX omecore: <https://ld.openmicroscopy.org/core/>
 PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix dcterms: <http://purl.org/dc/terms/>
 
 select distinct * where {
   ?proj a omecore:Project ;
-    omecore:dataset ?dataset .
+        dcterms:hasPart ?dataset .
   ?dataset a omecore:Dataset ;
-    omecore:image ?image .
-  ?image a omecore:Image ;
-    rdfs:label ?name .
+           dcterms:hasPart ?image .
+  ?image a omecore:Image .
 }
-order by ?image ?dataset ?proj
+order by ?project ?dataset ?image
+limit 25
+
+"""
+
+[[tabGroups.tabs]]
+name="Image map annotations"
+query="""
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+SELECT distinct  * WHERE {
+    ?img a omecore:Image;
+         rdfs:label ?img_name;
+         omecore:hasAnnotation ?annotation_obj.
+  ?annotation_obj omecore:mapEntry [omecore:key ?key ; omecore:value ?value]
+}
 limit 20
 """
 
 [[tabGroups.tabs]]
-name="Image annotations (from key-value pairs)"
+name="Map annotation keys"
 query="""
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX omecore: <https://ld.openmicroscopy.org/core/>
-PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
-SELECT distinct ?investigation ?study ?assay ?img_name WHERE {
+SELECT distinct ?key WHERE {
     ?img a omecore:Image;
-         omens:Investigation ?investigation ;
-         omens:Study ?study;
-         omens:Assay ?assay .
-    }
+         rdfs:label ?img_name;
+         omecore:hasAnnotation/omecore:mapEntry/omecore:key ?annotation_obj.
+}
+limit 20
 """
 
-[[tabsGroups.tabs]]
+[[tabGroups.tabs]]
 name="Images and (optional) tags"
 query="""
 PREFIX omecore: <https://ld.openmicroscopy.org/core/>
 PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
 
   SELECT distinct ?img ?tag WHERE {
-      ?img a ome_core:Image.
-      OPTIONAL {
-        ?img omecore:tagAnnotationValue ?tag .
-      }
+      ?img a omecore:Image; 
+           omekg:tag_annotation_value ?tag .
    }
   order by ?img
   limit 10
@@ -90,33 +104,33 @@ PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
 name="Aggregations"
 
 [[tabGroups.tabs]]
-name="Number of images"
+name="Number of images grouped by dataset"
 query="""
 PREFIX omecore: <https://ld.openmicroscopy.org/core/>
-PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
-SELECT (count(?img) as ?Nimg)
+PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
+prefix dcterms: <http://purl.org/dc/terms/>
+
+SELECT ?dataset (count(distinct ?img) as ?Nimg)
 WHERE {
-  ?img a omecore:Image .
+  ?img a omecore:Image ;
+       ^dcterms:hasPart ?dataset . # Uses inverse property.
+  ?dataset a omecore:Dataset .
 }
+group by ?dataset
+order by desc(?Nimg) # Descending sort by number of images.
 """
 
 [[tabGroups.tabs]]
-name="Number of images grouped by dataset"
+name="Total number of images"
 query="""
 PREFIX omecore: <https://ld.openmicroscopy.org/core/>
 PREFIX omekg: <https://ld.openmicroscopy.org/omekg#>
 PREFIX omens: <http://www.openmicroscopy.org/ns/default/>
 
-SELECT ?dataset (count(distinct ?img) as ?Nimg)
+SELECT (count(distinct ?img) as ?Nimg)
 WHERE {
   ?img a omecore:Image ;
-       ^omecore:image ?dataset . # Uses inverse property.
-  ?dataset a omecore:Dataset .
-
-
 }
-group by ?dataset
-order by desc(?Nimg) # Descending sort by number of images.
 """
 
 [[tabGroups]]
@@ -149,4 +163,22 @@ WHERE {
            ?property ?val .
 }
 order by ?class
+"""
+
+[[tabGroups]]
+name="Tests"
+
+[[tabGroups.tabs]]
+name="Total number of images"
+query="""
+PREFIX omecore: <https://ld.openmicroscopy.org/core/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+ask where {
+  {
+    select (count(?img) as ?nimg) where {
+      ?img a omecore:Image .}
+  }
+  filter(?nimg="1560"^^xsd:integer)
+}
 """
