@@ -20,7 +20,7 @@ dcterms:		http://purl.org/dc/terms/
 
 [MappingDeclaration] @collection [[
 mappingId	image-id
-target		{{ cookiecutter.prefix }}:Image/{id} a core:Image ; dc:identifier {id}^^xsd:integer . 
+target		{{ cookiecutter.prefix }}:Image/{id} a core:Image ; dc:identifier {id}^^xsd:integer ;  this:ome_details {{ cookiecutter.prefix }}:webclient/img_detail/{id}/ ; this:json  {{ cookiecutter.prefix }}:api/v0/m/images/{id}/ ; this:download {{ cookiecutter.prefix }}:webgateway/render_image/{id}/ .
 source		select id, group_id from image where group_id in (select parent as group_id from groupexperimentermap where child{{ cookiecutter.publiccond }})
 
 mappingId	dataset-id
@@ -219,7 +219,7 @@ source		select
 			join annotation on projectannotationlink.child = annotation.id where annotation.textvalue is not NULL
 
 mappingId	MAPID-dataset-image
-target		{{ cookiecutter.prefix }}:Dataset/{dataset_id} dcterms:hasPart {{ cookiecutter.prefix }}:Image/{image_id} . {{ cookiecutter.prefix }}:Image/{dataset_id} dcterms:isPartOf {{ cookiecutter.prefix }}:Dataset/{dataset_id} . 
+target		{{ cookiecutter.prefix }}:Dataset/{dataset_id} dcterms:hasPart {{ cookiecutter.prefix }}:Image/{image_id} . {{ cookiecutter.prefix }}:Image/{image_id} dcterms:isPartOf {{ cookiecutter.prefix }}:Dataset/{dataset_id} . 
 source		select
 			_dataset.id as dataset_id,
 			_datasetimagelink.child as image_id
@@ -460,5 +460,15 @@ source		select id, name from experimentergroup
 mappingId	MAPID-46c04d4dc2634ed7ac794eb82be9820a
 target		{{ cookiecutter.prefix }}:Experimenter/{child} core:experimenter_group {{ cookiecutter.prefix }}:ExperimenterGroup/{parent} . 
 source		select child, parent from groupexperimentermap
+
+
+
+mappingId        MAPID-image-mapannotation-link
+target           {{ cookiecutter.prefix }}:Image/{image_id} core:hasAnnotation {{ cookiecutter.prefix }}:MapAnnotation/{ann_id} . {{ cookiecutter.prefix }}:MapAnnotation/{ann_id} a core:MapAnnotation ; dc:identifier {ann_id}^^xsd:integer .
+source           select ial.parent as image_id, ial.child as ann_id from imageannotationlink ial join annotation a on a.id = ial.child where a.discriminator = '/map/'
+
+mappingId        MAPID-mapannotation-entries
+target           {{ cookiecutter.prefix }}:MapAnnotation/{ann_id} core:mapEntry {{ cookiecutter.prefix }}:MapAnnotation/{ann_id}/entry/{idx} . {{ cookiecutter.prefix }}:MapAnnotation/{ann_id}/entry/{idx} core:key {k}^^xsd:string ; core:value {v}^^xsd:string .
+source           select annotation_id as ann_id, "index" as idx, name as k, value as v from annotation_mapvalue
 ]]
 
