@@ -1,0 +1,55 @@
+[PrefixDeclaration]
+:		https://ld.openmicroscopy.org/omekg/
+dc:		http://purl.org/dc/elements/1.1/
+owl:		http://www.w3.org/2002/07/owl#
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+xml:		http://www.w3.org/XML/1998/namespace
+xsd:		http://www.w3.org/2001/XMLSchema#
+core:		https://ld.openmicroscopy.org/core/
+obda:		https://w3id.org/obda/vocabulary#
+rdfs:		http://www.w3.org/2000/01/rdf-schema#
+site:		http://example.org/
+skos:		http://www.w3.org/2004/02/skos/core#
+test:		http://test.me/
+this:		https://ld.openmicroscopy.org/omekg#
+omekg:		https://ld.openmicroscopy.org/omekg/
+vcard:		http://www.w3.org/2006/vcard/ns#
+linkml:		https://w3id.org/linkml/
+dcterms:		http://purl.org/dc/terms/
+omeswat:	http://kg.nfdi4bioimage.de/ome4swat/
+
+[MappingDeclaration] @collection [[
+mappingId	image-id
+target		omeswat:Image/{id} a core:Image ; dc:identifier {id}^^xsd:integer ;  this:ome_details omeswat:webclient/img_detail/{id}/ ; this:json  omeswat:api/v0/m/images/{id}/ ; this:download omeswat:webgateway/render_image/{id}/ .
+source		select id, group_id from image where group_id in (select parent as group_id from groupexperimentermap where child>=0)
+
+mappingId	dataset-id
+target		omeswat:Dataset/{id} a core:Dataset ; dc:identifier {id}^^xsd:integer . 
+source		select id, group_id from dataset where group_id in (select parent as group_id from groupexperimentermap where child>=0)
+
+mappingId	project-id
+target		omeswat:Project/{id} a core:Project ; dc:identifier {id}^^xsd:integer . 
+source		select id, group_id from project where group_id in (select parent as group_id from groupexperimentermap where child>=0)
+
+mappingId	image-attributes
+target		omeswat:Image/{id} rdfs:label {name}^^xsd:string ; rdfs:comment {description}^^xsd:string ; core:experimenter omeswat:Experimenter/{owner_id} ; core:experimenter_group omeswat:ExperimenterGroup/{group_id} . 
+source		select id, name, description, owner_id, group_id from image where group_id in (select parent as group_id from groupexperimentermap where child>=0)
+
+mappingId	MAPID-project-dataset
+target		omeswat:Project/{project_id} dcterms:hasPart omeswat:Dataset/{dataset_id} . omeswat:Dataset/{dataset_id} dcterms:isPartOf omeswat:Project/{project_id} . 
+source		select
+			_project.id as project_id,
+			_projectdatasetlink.child as dataset_id
+			from project as _project
+			left join projectdatasetlink as _projectdatasetlink on _project.id = _projectdatasetlink.parent
+
+mappingId	MAPID-image_tag
+target		omeswat:Image/{image_id} this:tag_annotation_value {tag_text}^^xsd:string . 
+source		select
+			image.id as image_id,
+			annotation.textvalue as tag_text
+			from image
+			join imageannotationlink on imageannotationlink.parent = image.id
+			join annotation on imageannotationlink.child = annotation.id where annotation.textvalue is not NULL
+]]
+
