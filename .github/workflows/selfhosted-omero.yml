@@ -24,6 +24,10 @@ jobs:
       PGUSER: ontop
       PGPASSWORD: "!ontop$"
 
+      # Default: keep CI fast; HCS tests are skipped by pytest.
+      # Set to "1" if you want HSC test.
+      RUN_HCS_IN_CI: "0"
+
     steps:
       - uses: actions/checkout@v4
 
@@ -211,51 +215,53 @@ jobs:
       # ---------------------------------------------------------------------
       # Populate HCS  INSIDE the OMERO container
       # ---------------------------------------------------------------------
-      #- name: Populate OMERO HCS dataset (inside container)
-      #  run: |
-      #    set -euo pipefail
+      - name: Populate OMERO HCS dataset (inside container)
+        if: env.RUN_HCS_IN_CI == '1'
+        run: |
+          set -euo pipefail
 
-      #    docker compose -f .omero/docker-compose.yml exec -T omero bash -lc '
-      #      set -euo pipefail
-      #      OMERO=/opt/omero/server/OMERO.server/bin/omero
+          docker compose -f .omero/docker-compose.yml exec -T omero bash -lc '
+            set -euo pipefail
+            OMERO=/opt/omero/server/OMERO.server/bin/omero
             
-      #      # login (inside container uses internal port)
-      #      "$OMERO" login -C -u root -w omero -s localhost:4064
+            # login (inside container uses internal port)
+            "$OMERO" login -C -u root -w omero -s localhost:4064
 
-      #      Screen=$("$OMERO" obj new Screen name="IDR0017-Screen")
-      #      echo "Created Screen: $Screen"
+            Screen=$("$OMERO" obj new Screen name="IDR0017-Screen")
+            echo "Created Screen: $Screen"
 
-      #      "$OMERO" import /repo/img/idr0017/idr0017.xdce -T "$Screen"
-      #    '
+            "$OMERO" import /repo/img/idr0017/idr0017.xdce -T "$Screen"
+          '
 
       # ---------------------------------------------------------------------
       # Add Well:205 MapAnnotation needed by pytest 
       # ---------------------------------------------------------------------
-      #- name: Add Well:205 key-value annotation expected by pytest
-      #  run: |
-      #    set -euo pipefail
+      - name: Add Well:205 key-value annotation expected by pytest
+        if: env.RUN_HCS_IN_CI == ' 1'
+        run: |
+          set -euo pipefail
 
-      #    docker compose -f .omero/docker-compose.yml exec -T omero bash -lc '
-      #      set -euo pipefail
-      #      OMERO=/opt/omero/server/OMERO.server/bin/omero
+          docker compose -f .omero/docker-compose.yml exec -T omero bash -lc '
+            set -euo pipefail
+            OMERO=/opt/omero/server/OMERO.server/bin/omero
 
-      #      # Login (inside container uses internal SSL port)
-      #      "$OMERO" login -C -u root -w omero -s localhost:4064
+            # Login (inside container uses internal SSL port)
+            "$OMERO" login -C -u root -w omero -s localhost:4064
 
-      #      # Create MapAnnotation and capture numeric ID
-      #      ANN_ID=$("$OMERO" obj new MapAnnotation ns="http://www.openmicroscopy.org/ns/default/" | cut -d: -f2)
-      #      echo "Created MapAnnotation:${ANN_ID}"
+            # Create MapAnnotation and capture numeric ID
+            ANN_ID=$("$OMERO" obj new MapAnnotation ns="http://www.openmicroscopy.org/ns/default/" | cut -d: -f2)
+            echo "Created MapAnnotation:${ANN_ID}"
 
-      #      # Set key/value pairs (keys must match what mappings expect)
-      #      "$OMERO" obj map-set "MapAnnotation:${ANN_ID}" mapValue "Term/Source/1/Accession" "NCBITaxon_9606"
-      #      "$OMERO" obj map-set "MapAnnotation:${ANN_ID}" mapValue "nseg.0.m.eccentricity.mean" "0.610481812"
+            # Set key/value pairs (keys must match what mappings expect)
+            "$OMERO" obj map-set "MapAnnotation:${ANN_ID}" mapValue "Term/Source/1/Accession" "NCBITaxon_9606"
+            "$OMERO" obj map-set "MapAnnotation:${ANN_ID}" mapValue "nseg.0.m.eccentricity.mean" "0.610481812"
 
-      #      # Link to the well (Well:205 from HCS import)
-      #      "$OMERO" obj new WellAnnotationLink parent="Well:205" child="MapAnnotation:${ANN_ID}"
+            # Link to the well (Well:205 from HCS import)
+            "$OMERO" obj new WellAnnotationLink parent="Well:205" child="MapAnnotation:${ANN_ID}"
 
-      #      # Optional: quick sanity output
-      #      "$OMERO" hql "select count(l.id) from WellAnnotationLink l where l.parent.id=205" || true
-      #    '
+            # Optional: quick sanity output
+            "$OMERO" hql "select count(l.id) from WellAnnotationLink l where l.parent.id=205" || true
+          '
      
     
       # ---------------------------------------------------------------------
