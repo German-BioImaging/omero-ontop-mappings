@@ -909,7 +909,8 @@ SELECT DISTINCT * WHERE {
 
         if DEBUG:
             print("\n"+results.to_string())
-        self.assertEqual(Literal("NCBITaxon_9606"), results[Literal('TermZZSourceZZ1ZZAccession')])
+        #self.assertEqual(Literal("NCBITaxon_9606"), results[Literal('TermZZSourceZZ1ZZAccession')])
+        self.assertEqual(Literal("NCBITaxon_9606"), results[Literal('Term/Source/1/Accession')])
         self.assertEqual(Literal('0.610481812'), results[Literal("nseg.0.m.eccentricity.mean")])
 
     @unittest.skipIf(SKIP_HCS_TESTS, SKIP_HCS_REASON)

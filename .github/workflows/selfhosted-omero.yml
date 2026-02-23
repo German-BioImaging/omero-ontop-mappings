@@ -237,7 +237,7 @@ jobs:
       # Add Well:205 MapAnnotation needed by pytest 
       # ---------------------------------------------------------------------
       - name: Add Well:205 key-value annotation expected by pytest
-        if: env.RUN_HCS_IN_CI == ' 1'
+        if: env.RUN_HCS_IN_CI == '1'
         run: |
           set -euo pipefail
 
