@@ -209,8 +209,8 @@ jobs:
       - name: Populate OMERO (CI script)
         run: |
           set -euo pipefail
-          chmod +x utils/insert_data_WORKFLOW.sh
-          ./utils/insert_data_WORKFLOW.sh
+          chmod +x utils/insert_data_unified.sh
+          MODE=container ./utils/insert_data_unified.sh
 
       # ---------------------------------------------------------------------
       # Populate HCS  INSIDE the OMERO container
