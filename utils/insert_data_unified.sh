@@ -139,8 +139,7 @@ TAG1="$(run_omero "tag create --name 'TestTag'")"
 run_omero "obj new DatasetAnnotationLink parent='$DS1' child='$TAG1'"
 
 MAP2="$(run_omero "obj new MapAnnotation ns='http://purl.org/dc/terms/'")"
-# Preserve original behavior: DS2 linked to MAP1
-run_omero "obj new DatasetAnnotationLink parent='$DS2' child='$MAP1'"
+run_omero "obj new DatasetAnnotationLink parent='$DS2' child='$MAP2'"
 run_omero "obj map-set '$MAP2' mapValue contributor 'Anonymous'"
 run_omero "obj map-set '$MAP2' mapValue subject 'Ontop Tutorial'"
 run_omero "obj map-set '$MAP2' mapValue provenance 'Screenshots'"
