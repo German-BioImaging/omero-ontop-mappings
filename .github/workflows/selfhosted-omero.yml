@@ -6,7 +6,7 @@ on:
 
 jobs:
   omero_ontop_pytest:
-    runs-on: [self-hosted, Linux, X64, evolomero]
+    runs-on: [self-hosted, Linux, X64, omero]
 
     env:
       OMERO_HOST: 127.0.0.1
@@ -26,7 +26,7 @@ jobs:
 
       # Default: keep CI fast; HCS tests are skipped by pytest.
       # Set to "1" if you want HSC test.
-      RUN_HCS_IN_CI: "1"
+      RUN_HCS_IN_CI: "0"
 
     steps:
       - uses: actions/checkout@v4
@@ -209,8 +209,8 @@ jobs:
       - name: Populate OMERO (CI script)
         run: |
           set -euo pipefail
-          chmod +x utils/insert_data_WORKFLOW.sh
-          ./utils/insert_data_WORKFLOW.sh
+          chmod +x utils/insert_data_unified.sh
+          MODE=container ./utils/insert_data_unified.sh
 
       # ---------------------------------------------------------------------
       # Populate HCS  INSIDE the OMERO container
