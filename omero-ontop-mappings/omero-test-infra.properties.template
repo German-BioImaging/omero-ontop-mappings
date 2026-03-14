@@ -1,0 +1,4 @@
+jdbc.password=${PGPASSWORD}
+jdbc.user=${PGUSER}
+jdbc.url=jdbc\:postgresql\://${PGHOST}\:${PGPORT}/${PGDATABASE}
+jdbc.driver=org.postgresql.Driver

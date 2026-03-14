@@ -15,8 +15,8 @@ jobs:
       OMERO_PASS: omero
 
       # Postgres service exposed by docker-compose.override.yml
-      PGHOST: 127.0.0.1
-      PGPORT: "15432"
+      PGHOST: db
+      PGPORT: "5432"
 
       OMERO_DB: postgres
       
@@ -28,8 +28,19 @@ jobs:
       # Set to "1" if you want HSC test.
       RUN_HCS_IN_CI: "0"
 
+      # Path to the generated Ontop properties file
+      ONTOP_PROPERTIES_FILE: omero-test-infra.ci.properties
+
+      # Fixed compose project name to ensure access test-infra network
+      COMPOSE_PROJECT_NAME: ci-omero
+
     steps:
       - uses: actions/checkout@v4
+
+      - name: Build CI container
+        run: |
+          set -euo pipefail
+          docker build --pull -f Dockerfile.ci -t omero-ci-test .
 
       - name: Show runner info
         run: |
@@ -39,6 +50,21 @@ jobs:
           uname -a
           docker --version
           docker compose version || true
+
+      # ---------------------------------------------------------------------
+      # Generate Ontop properties for CI (with envsubst)
+      # ---------------------------------------------------------------------
+      - name: Generate Ontop properties for CI
+        run: |
+          set -euo pipefail
+
+          envsubst < omero-ontop-mappings/omero-test-infra.properties.template \
+            > "omero-ontop-mappings/${ONTOP_PROPERTIES_FILE}"
+          
+          echo "Generated CI Ontop properties:"
+          sed \
+            -e 's/^jdbc.password=.*/jdbc.password=***hidden***/' \
+            "omero-ontop-mappings/${ONTOP_PROPERTIES_FILE}"
 
       # ---------------------------------------------------------------------
       # omero-test-infra + port override 
@@ -72,15 +98,15 @@ jobs:
         run: |
           set -euo pipefail
           cd .omero
-          docker compose up -d
+          docker compose -p "${COMPOSE_PROJECT_NAME}" up -d
 
       - name: Compose ps + logs for debugging
         run: |
           set -euo pipefail
           cd .omero
-          docker compose ps
-          docker compose logs --no-color --tail=120 db || true
-          docker compose logs --no-color --tail=200 omero || true
+          docker compose -p "${COMPOSE_PROJECT_NAME}" ps
+          docker compose -p "${COMPOSE_PROJECT_NAME}" logs --no-color --tail=120 db || true
+          docker compose -p "${COMPOSE_PROJECT_NAME}" logs --no-color --tail=200 omero || true
 
       # ---------------------------------------------------------------------
       # Wait for Postgres 
@@ -90,7 +116,7 @@ jobs:
           set -euo pipefail
           cd .omero
           for i in $(seq 1 120); do
-            if docker compose exec -T db pg_isready -U postgres -d postgres >/dev/null 2>&1; then
+            if docker compose -p "${COMPOSE_PROJECT_NAME}" exec -T db pg_isready -U postgres -d postgres >/dev/null 2>&1; then
               echo "Postgres is ready."
               exit 0
             fi
@@ -98,8 +124,8 @@ jobs:
             sleep 2
           done
           echo "Postgres never became ready."
-          docker compose ps
-          docker compose logs --no-color --tail=400 db || true
+          docker compose -p "${COMPOSE_PROJECT_NAME}" ps
+          docker compose -p "${COMPOSE_PROJECT_NAME}" logs --no-color --tail=400 db || true
           exit 1
 
       # ---------------------------------------------------------------------
@@ -111,12 +137,12 @@ jobs:
           cd .omero
 
           echo "Databases right now:"
-          docker compose exec -T db psql -U postgres -d postgres -c "\l"
+          docker compose -p "${COMPOSE_PROJECT_NAME}" exec -T db psql -U postgres -d postgres -c "\l"
 
-          docker compose exec -T db psql -U postgres -d postgres -c \
+          docker compose -p "${COMPOSE_PROJECT_NAME}" exec -T db psql -U postgres -d postgres -c \
             "DO \$\$ BEGIN IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'ontop') THEN CREATE ROLE ontop LOGIN PASSWORD '!ontop$'; END IF; END \$\$;"
 
-          docker compose exec -T db psql -U postgres -d postgres -c "\du ontop" || true
+          docker compose -p "${COMPOSE_PROJECT_NAME}" exec -T db psql -U postgres -d postgres -c "\du ontop" || true
 
       # ---------------------------------------------------------------------
       # Wait for OMERO 
@@ -128,7 +154,7 @@ jobs:
           echo "Waiting for OMERO schema in DB '${OMERO_DB}'..."
 
           for i in $(seq 1 300); do
-            if docker compose exec -T db \
+            if docker compose -p "${COMPOSE_PROJECT_NAME}" exec -T db \
               psql -U postgres -d "${OMERO_DB}" -tAc "SELECT to_regclass('public.dbpatch');" \
               | grep -q "dbpatch"; then
               echo "OK: public.dbpatch exists (OMERO schema is ready)."
@@ -136,13 +162,13 @@ jobs:
             fi
 
             echo "OMERO schema not ready yet ($i/300). Tail OMERO logs:"
-            docker compose logs --no-color --tail=60 omero || true
+            docker compose -p "${COMPOSE_PROJECT_NAME}" logs --no-color --tail=60 omero || true
             sleep 5
           done
 
           echo "ERROR: OMERO schema marker never appeared."
-          docker compose logs --no-color --tail=400 omero || true
-          docker compose logs --no-color --tail=250 db || true
+          docker compose -p "${COMPOSE_PROJECT_NAME}" logs --no-color --tail=400 omero || true
+          docker compose -p "${COMPOSE_PROJECT_NAME}" logs --no-color --tail=250 db || true
           exit 1
 
       # ---------------------------------------------------------------------
@@ -155,53 +181,30 @@ jobs:
 
           echo "Granting privileges for ontop on DB=${OMERO_DB} ..."
 
-          docker compose exec -T db psql -U postgres -d postgres -c \
+          docker compose -p "${COMPOSE_PROJECT_NAME}" exec -T db psql -U postgres -d postgres -c \
             "GRANT CONNECT ON DATABASE ${OMERO_DB} TO ontop;"
 
-          docker compose exec -T db psql -U postgres -d "${OMERO_DB}" -c \
+          docker compose -p "${COMPOSE_PROJECT_NAME}" exec -T db psql -U postgres -d "${OMERO_DB}" -c \
             "GRANT USAGE ON SCHEMA public TO ontop;"
 
-          docker compose exec -T db psql -U postgres -d "${OMERO_DB}" -c \
+          docker compose -p "${COMPOSE_PROJECT_NAME}" exec -T db psql -U postgres -d "${OMERO_DB}" -c \
             "GRANT SELECT ON ALL TABLES IN SCHEMA public TO ontop;"
 
-          docker compose exec -T db psql -U postgres -d "${OMERO_DB}" -c \
+          docker compose -p "${COMPOSE_PROJECT_NAME}" exec -T db psql -U postgres -d "${OMERO_DB}" -c \
             "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO ontop;"
 
           echo "Sanity check: ontop can read dbpatch:"
-          docker compose exec -T db psql -U ontop -d "${OMERO_DB}" -tAc \
+          docker compose -p "${COMPOSE_PROJECT_NAME}" exec -T db psql -U ontop -d "${OMERO_DB}" -tAc \
             "SELECT COUNT(*) FROM public.dbpatch;" || true
-
-      # ---------------------------------------------------------------------
-      # Python: 3.10 + prebuilt Ice wheel 
-      # ---------------------------------------------------------------------
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      - name: Install Python deps + OMERO CLI (prebuilt zeroc-ice wheel)
-        run: |
-          set -euo pipefail
-          python -m pip install --upgrade pip setuptools wheel
-          python -m pip install \
-            https://github.com/glencoesoftware/zeroc-ice-py-linux-x86_64/releases/download/20240202/zeroc_ice-3.6.5-cp310-cp310-manylinux_2_28_x86_64.whl
-          python -m pip install "omero-py==5.21.2" pytest rdflib pandas requests
-
-          which omero
-          omero version
 
       # ---------------------------------------------------------------------
       # Verify repo mount inside OMERO container
       # ---------------------------------------------------------------------
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "17"
-
       - name: Verify repo mount inside OMERO container
         run: |
           set -euo pipefail
           cd .omero
-          docker compose exec -T omero sh -lc "ls -la /repo && ls -la /repo/img | head -n 30"
+          docker compose -p "${COMPOSE_PROJECT_NAME}" exec -T omero sh -lc "ls -la /repo && ls -la /repo/img | head -n 30"
 
       # ---------------------------------------------------------------------
       # Populate OMERO INSIDE the container 
@@ -220,7 +223,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          docker compose -f .omero/docker-compose.yml exec -T omero bash -lc '
+          docker compose -p "${COMPOSE_PROJECT_NAME}" -f .omero/docker-compose.yml exec -T omero bash -lc '
             set -euo pipefail
             OMERO=/opt/omero/server/OMERO.server/bin/omero
             
@@ -241,7 +244,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          docker compose -f .omero/docker-compose.yml exec -T omero bash -lc '
+          docker compose -p "${COMPOSE_PROJECT_NAME}" -f .omero/docker-compose.yml exec -T omero bash -lc '
             set -euo pipefail
             OMERO=/opt/omero/server/OMERO.server/bin/omero
 
@@ -262,28 +265,35 @@ jobs:
             # Optional: quick sanity output
             "$OMERO" hql "select count(l.id) from WellAnnotationLink l where l.parent.id=205" || true
           '
-     
-    
       # ---------------------------------------------------------------------
-      # Ontop + pytest
-      # ---------------------------------------------------------------------
-      - name: Install ontop-cli
-        run: |
-          set -euo pipefail
-          chmod +x utils/install_ontop.sh
-          utils/install_ontop.sh
-
-      - name: Debug confirm Postgres port open on runner
-        run: |
-          set -euo pipefail
-          echo "Checking Postgres ${PGHOST}:${PGPORT} ..."
-          (echo >/dev/tcp/${PGHOST}/${PGPORT}) >/dev/null 2>&1 && echo "PG port open" || (echo "PG port NOT open" && exit 1)
+      # Run pytest in the CI container
+      # ---------------------------------------------------------------------    
 
       - name: Run pytest
         run: |
           set -euo pipefail
-          pytest -q
 
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e PYTHONDONTWRITEBYTECODE=1 \
+            -e GITHUB_ACTIONS=true \
+            -e RUN_HCS_IN_CI="${RUN_HCS_IN_CI}" \
+            -e ONTOP_PROPERTIES_FILE="${ONTOP_PROPERTIES_FILE}" \
+            --network "${COMPOSE_PROJECT_NAME}_default" \
+            -v "${PWD}:/workspace" \
+            -w /workspace \
+            omero-ci-test \
+            bash -lc '
+              rm -f /workspace/ontop-cli
+              ln -s /opt/ontop-cli /workspace/ontop-cli
+
+              echo "PWD=$(pwd)"
+              ls -la /workspace/ontop-cli || true
+              ls -la /workspace/ontop-cli/jdbc || true
+              ls -la /workspace/ontop-cli/ontop || true
+
+              python -m pytest -q
+            '
       # ---------------------------------------------------------------------
       # Teardown always
       # ---------------------------------------------------------------------
@@ -293,9 +303,8 @@ jobs:
           set -euo pipefail
           if [ -d .omero ]; then
             cd .omero
-            docker compose ps || true
-            docker compose logs --no-color --tail=300 omero || true
-            docker compose logs --no-color --tail=200 db || true
-            docker compose down -v || true
+            docker compose -p "${COMPOSE_PROJECT_NAME}" ps || true
+            docker compose -p "${COMPOSE_PROJECT_NAME}" logs --no-color --tail=300 omero || true
+            docker compose -p "${COMPOSE_PROJECT_NAME}" logs --no-color --tail=200 db || true
+            docker compose -p "${COMPOSE_PROJECT_NAME}" down -v || true
           fi
-
