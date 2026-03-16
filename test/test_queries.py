@@ -105,18 +105,31 @@ def response_frame(response):
     return pandas.DataFrame(data=tmp)
 
 def ontop_materialize(use_cache=False):
-
-
     current_working_directory = os.path.abspath(os.path.dirname(__file__))
-    mappings_directory = os.path.abspath(os.path.join(current_working_directory, '..', 'omero-ontop-mappings'))
-    target_rdf = os.path.join(current_working_directory, 'omero-test-infra.rdf') 
-    command = f"../ontop-cli/ontop materialize --mapping=omero-ontop-mappings.obda --ontology=omero-ontop-mappings.ttl --properties=omero-test-infra.properties --output {target_rdf.split('.')[0]}"
+    mappings_directory = os.path.abspath(
+        os.path.join(current_working_directory, '..', 'omero-ontop-mappings')
+    )
+    target_rdf = os.path.join(current_working_directory, 'omero-test-infra.rdf')
+
+    properties_file = os.environ.get(
+        "ONTOP_PROPERTIES_FILE",
+        "omero-test-infra.properties",
+    )
+
+    command = (
+        f"../ontop-cli/ontop materialize "
+        f"--mapping=omero-ontop-mappings.obda "
+        f"--ontology=omero-ontop-mappings.ttl "
+        f"--properties={properties_file} "
+        f"--output {target_rdf.split('.')[0]}"
+    )
     cmd = shlex.split(command)
 
     if not use_cache:
         proc = subprocess.Popen(cmd, cwd=mappings_directory)
-
-        proc.wait()
+        return_code = proc.wait()
+        if return_code != 0:
+            raise RuntimeError(f"Ontop materialization failed with exit code {return_code}")
 
     return target_rdf
 
