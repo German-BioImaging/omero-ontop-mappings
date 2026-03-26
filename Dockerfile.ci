@@ -1,0 +1,40 @@
+FROM python:3.10-bookworm
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONDONTWRITEBYTECODE=1
+
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jre-headless \
+    curl \
+    wget \
+    unzip \
+    git \
+    ca-certificates \
+    bash \
+    postgresql-client \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /workspace
+
+COPY requirements.txt /tmp/requirements.txt
+#  Install omero-py. Previously installed by workflow, safer to install in Dockerfile to avoid running commands on host machine.
+RUN python -m pip install --upgrade pip setuptools wheel \
+ && python -m pip install -r /tmp/requirements.txt \
+ && python -m pip install pytest rdflib pandas requests \
+ && python -m pip install \
+    https://github.com/glencoesoftware/zeroc-ice-py-linux-x86_64/releases/download/20240202/zeroc_ice-3.6.5-cp310-cp310-manylinux_2_28_x86_64.whl \
+ && python -m pip install "omero-py==5.21.2"
+
+# Install Ontop CLI and PostgreSQL JDBC driver. Install in /opt/ontop-cli to avoid permissions issues
+RUN wget -q https://github.com/ontop/ontop/releases/download/ontop-5.4.0/ontop-cli-5.4.0.zip \
+ && mkdir -p /tmp/ontop-extract /opt/ontop-cli \
+ && unzip -q ontop-cli-5.4.0.zip -d /tmp/ontop-extract \
+ && ontop_bin="$(find /tmp/ontop-extract -type f -name ontop | head -n 1)" \
+ && test -n "$ontop_bin" \
+ && ontop_dir="$(dirname "$ontop_bin")" \
+ && cp -a "$ontop_dir"/. /opt/ontop-cli/ \
+ && mkdir -p /opt/ontop-cli/jdbc \
+ && wget -q -O /opt/ontop-cli/jdbc/postgresql-42.7.4.jar \
+    https://jdbc.postgresql.org/download/postgresql-42.7.4.jar \
+ && rm -rf /tmp/ontop-extract ontop-cli-5.4.0.zip
+CMD ["bash"]
