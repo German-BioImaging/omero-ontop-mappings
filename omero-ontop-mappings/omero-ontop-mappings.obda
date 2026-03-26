@@ -466,5 +466,32 @@ source		select ial.parent as image_id, ial.child as ann_id from imageannotationl
 mappingId	MAPID-mapannotation-entries
 target		ome_instance:MapAnnotation/{ann_id} core:mapEntry ome_instance:MapAnnotation/{ann_id}/entry/{idx} . ome_instance:MapAnnotation/{ann_id}/entry/{idx} core:key {k}^^xsd:string ; core:value {v}^^xsd:string . 
 source		select annotation_id as ann_id, "index" as idx, name as k, value as v from annotation_mapvalue
+
+mappingId	project-mapannotation
+target		ome_instance:Project/{project_id} core:hasAnnotation ome_instance:MapAnnotation/{child} . 
+source		select parent as project_id, child from projectannotationlink
+
+mappingId	dataset-mapannotation
+target		ome_instance:Dataset/{dataset_id} core:hasAnnotation ome_instance:MapAnnotation/{child} . 
+source		select parent as dataset_id, child from datasetannotationlink
+
+mappingId	plate-mapannotation
+target		ome_instance:Plate/{plate_id} core:hasAnnotation ome_instance:MapAnnotation/{child} . 
+source		select parent as plate_id, child from plateannotationlink
+
+mappingId	screen-mapannotation
+target		ome_instance:Screen/{screen_id} core:hasAnnotation ome_instance:MapAnnotation/{child} . 
+source		select parent as screen_id, child from screenannotationlink
+
+mappingId	well-mapannotation
+target		ome_instance:Well/{well_id} core:hasAnnotation ome_instance:MapAnnotation/{child} . 
+source		select parent as well_id, child from wellannotationlink
+
+mappingId	MAPID-image-mapannotation-link
+target		ome_instance:Image/{image_id} core:hasAnnotation ome_instance:MapAnnotation/{ann_id} . ome_instance:MapAnnotation/{ann_id} a core:MapAnnotation ; dc:identifier {ann_id}^^xsd:integer . 
+source		select ial.parent as image_id, ial.child as ann_id from imageannotationlink ial join annotation a on a.id = ial.child where a.discriminator = '/map/'
+
+mappingId	MAPID-mapannotation-entries
+target		ome_instance:MapAnnotation/{ann_id} core:map ome_instance:MapAnnotation/{ann_id}/entry/{idx} . ome_instance:MapAnnotation/{ann_id}/entry/{idx} core:key {k}^^xsd:string ; core:value {v}^^xsd:string . 
 ]]
 
