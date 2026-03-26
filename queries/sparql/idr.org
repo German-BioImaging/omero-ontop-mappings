@@ -7,14 +7,7 @@ tags: sparql, idr, omero, ontop, federation, rdf, uniprot, string-db, wikidata, 
 :END:
 The native ontop sparql endpoint does not support federated queries, so we have to spin up a qlever instance. We deploy
 omero-ontop-mappings including qlever.
-
-could not get qlever running so dumped the materialized ttl into fuseki: http://localhost:3030/biohack-omero/
-* Queries
-:PROPERTIES:
-:ID:       502abcb4-dea7-40af-a52c-b7b4a273de33
-:header-args:sparql: :url http://localhost:3030/biohack-omero/ :results output table replace :wrap example :noweb yes
-:END:
-** Prefixes
+* Prefixes
 :PROPERTIES:
 :ID:       0f409a41-83dd-4450-a84c-adf3abcae46a
 :END:
@@ -25,7 +18,7 @@ could not get qlever running so dumped the materialized ttl into fuseki: http://
   prefix dcterms: <http://purl.org/dc/terms/>
   prefix dc: <http://purl.org/dc/elements/1.1/>
   prefix idr: <https://idr.openmicroscopy.org/>
-  prefix biohack: <http://swat4hcls/biohackathon/2026/omero/>
+  prefix ex: <https://example.org/site/>
   prefix omekg: <https://ld.openmicroscopy.org/omekg#>
 #+end_src
 
@@ -40,19 +33,93 @@ could not get qlever running so dumped the materialized ttl into fuseki: http://
 
 #+RESULTS:
 #+begin_example
-| s                                                 | p                                                     | o                                                            |
-|---------------------------------------------------+-------------------------------------------------------+--------------------------------------------------------------|
-| http://swat4hcls/biohackathon/2026/omero/ROI/592  | http://www.w3.org/2000/01/rdf-schema#label            | idr0017.xdce [Well D-10, Field #1]                           |
-| http://swat4hcls/biohackathon/2026/omero/ROI/592  | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/ROI/592  | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Well/350 | http://purl.org/dc/elements/1.1/identifier            | 350                                                          |
-| http://swat4hcls/biohackathon/2026/omero/Well/350 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/Well                      |
-| http://swat4hcls/biohackathon/2026/omero/Well/350 | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Well/350 | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Well/350 | http://purl.org/dc/terms/hasPart                      | http://swat4hcls/biohackathon/2026/omero/WellSample/1396     |
-| http://swat4hcls/biohackathon/2026/omero/Well/350 | http://purl.org/dc/terms/hasPart                      | http://swat4hcls/biohackathon/2026/omero/WellSample/1397     |
-| http://swat4hcls/biohackathon/2026/omero/Well/350 | http://purl.org/dc/terms/hasPart                      | http://swat4hcls/biohackathon/2026/omero/WellSample/1398     |
+| s                                            | p                                             | o |
+|----------------------------------------------+-----------------------------------------------+---|
+| https://example.org/site/Experimenter/0      | http://purl.org/dc/elements/1.1/identifier    | 0 |
+| https://example.org/site/ExperimenterGroup/0 | http://purl.org/dc/elements/1.1/identifier    | 0 |
+| https://example.org/site/WellSample/1        | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1001     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1005     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1009     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/101      | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1013     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1017     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1021     | https://ld.openmicroscopy.org/core/well_index | 0 |
 #+end_example
+
+#+begin_src sparql
+  <<prefixes>>
+  select * where {
+    ?ds a core:Plate ;
+        dcterms:hasPart/dcterms:hasPart ?well .
+    ?well ?prop ?val .
+    }
+  limit 100
+#+end_src
+
+
+Which objects have map annotations?
+#+begin_src sparql
+  <<prefixes>>
+
+  select distinct ?obj where {
+    ?obj core:hasAnnotation/core:map [core:key ?key; core:value ?value]
+    }
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+| obj                                |
+|------------------------------------|
+| https://example.org/site/Dataset/1 |
+| https://example.org/site/Dataset/2 |
+| https://example.org/site/Dataset/3 |
+| https://example.org/site/Image/1   |
+| https://example.org/site/Image/10  |
+| https://example.org/site/Image/11  |
+| https://example.org/site/Image/12  |
+| https://example.org/site/Image/2   |
+| https://example.org/site/Image/3   |
+| https://example.org/site/Image/4   |
+| https://example.org/site/Image/5   |
+| https://example.org/site/Image/6   |
+| https://example.org/site/Image/7   |
+| https://example.org/site/Image/8   |
+| https://example.org/site/Image/9   |
+| https://example.org/site/Project/1 |
+#+end_example
+
+* Queries against local qlever endpoint
+:PROPERTIES:
+:ID:       54853afc-31aa-45b8-a464-d7ef72d744c4
+:header-args:sparql: :url http://localhost:8888/ :results output table replace :wrap example :noweb yes
+:END:
+#+begin_src sparql
+  select * where {?s ?p ?o} limit 10
+#+end_src
+
+#+RESULTS:
+#+begin_example
+| s                                            | p                                             | o |
+|----------------------------------------------+-----------------------------------------------+---|
+| https://example.org/site/Experimenter/0      | http://purl.org/dc/elements/1.1/identifier    | 0 |
+| https://example.org/site/ExperimenterGroup/0 | http://purl.org/dc/elements/1.1/identifier    | 0 |
+| https://example.org/site/WellSample/1        | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1001     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1005     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1009     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/101      | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1013     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1017     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1021     | https://ld.openmicroscopy.org/core/well_index | 0 |
+#+end_example
+
+* IDR queries
+:PROPERTIES:
+:ID:       dc2b3d05-9793-41c4-9b7d-cc6b2f4a5293
+:header-args:sparql: :url http://81.24.10.88:8080/sparql :results output table replace :wrap example :noweb yes
+:END:
 
 Now try to reach the IDR dump
 #+begin_src sparql :url http://81.24.10.88:8080/sparql
@@ -80,11 +147,6 @@ Now try to reach the IDR dump
 | https://idr.openmicroscopy.org/Image/113308 |
 | https://idr.openmicroscopy.org/Image/113309 |
 #+end_example
-** IDR queries
-:PROPERTIES:
-:ID:       dc2b3d05-9793-41c4-9b7d-cc6b2f4a5293
-:header-args:sparql: :url http://81.24.10.88:8080/sparql :results output table replace :wrap example :noweb yes
-:END:
 
 
 #+name: idr image annotations
@@ -99,28 +161,6 @@ Now try to reach the IDR dump
 
 
 #+end_src
-
-#+RESULTS: idr image annotations
-| HTTP/1.1 400                           |                          |
-|----------------------------------------+--------------------------|
-| Vary: Origin                           |                          |
-| Vary: Access-Control-Request-Method    |                          |
-| Vary: Access-Control-Request-Headers   |                          |
-| Content-Type: text/plain;charset=UTF-8 |                          |
-| Content-Length: 175                    |                          |
-| Date: Thu                              | 26 Mar 2026 12:49:56 GMT |
-| Connection: close                      |                          |
-|                                        |                          |
-| Encountered " "<<" "<< "" at line 1    | column 1.                |
-| Was expecting one of:                  |                          |
-| base ...                               |                          |
-| prefix ...                             |                          |
-| select ...                             |                          |
-| construct ...                          |                          |
-| describe ...                           |                          |
-| ask ...                                |                          |
-|                                        |                          |
-
 
 #+name: idr image kv annotation
 #+begin_src sparql :url http://81.24.10.88:8080/sparql
@@ -174,125 +214,3 @@ ok, so let's get some gene identifiers from images
 | https://idr.openmicroscopy.org/Image/258350 | Gene Identifier | ENSG00000176974 |
 | https://idr.openmicroscopy.org/Image/259185 | Gene Identifier | ENSG00000176974 |
 #+end_example
-
-#+begin_src sparql :url http://localhost:3030/biohack-omero/
-  <<prefixes>>
-  select * where {
-    ?ds a core:Plate ;
-        dcterms:hasPart/dcterms:hasPart ?well .
-    ?well ?prop ?val .
-    }
-  limit 100
-#+end_src
-
-#+RESULTS:
-#+begin_example
-| ds                                               | well                                                     | prop                                                  | val                                                          |
-|--------------------------------------------------+----------------------------------------------------------+-------------------------------------------------------+--------------------------------------------------------------|
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1396 | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/1447          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1396 | http://purl.org/dc/elements/1.1/identifier            | 1396                                                         |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1396 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1396 | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1396 | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1396 | https://ld.openmicroscopy.org/core/well_index         | 0                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1397 | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/1448          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1397 | http://purl.org/dc/elements/1.1/identifier            | 1397                                                         |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1397 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1397 | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1397 | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1397 | https://ld.openmicroscopy.org/core/well_index         | 1                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1398 | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/1449          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1398 | http://purl.org/dc/elements/1.1/identifier            | 1398                                                         |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1398 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1398 | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1398 | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1398 | https://ld.openmicroscopy.org/core/well_index         | 2                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1399 | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/1450          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1399 | http://purl.org/dc/elements/1.1/identifier            | 1399                                                         |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1399 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1399 | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1399 | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1399 | https://ld.openmicroscopy.org/core/well_index         | 3                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1037 | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/1088          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1037 | http://purl.org/dc/elements/1.1/identifier            | 1037                                                         |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1037 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1037 | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1037 | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1037 | https://ld.openmicroscopy.org/core/well_index         | 0                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1039 | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/1090          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1039 | http://purl.org/dc/elements/1.1/identifier            | 1039                                                         |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1039 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1039 | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1039 | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1039 | https://ld.openmicroscopy.org/core/well_index         | 2                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1038 | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/1089          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1038 | http://purl.org/dc/elements/1.1/identifier            | 1038                                                         |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1038 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1038 | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1038 | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1038 | https://ld.openmicroscopy.org/core/well_index         | 1                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1040 | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/1091          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1040 | http://purl.org/dc/elements/1.1/identifier            | 1040                                                         |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1040 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1040 | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1040 | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/1040 | https://ld.openmicroscopy.org/core/well_index         | 3                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/888  | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/939           |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/888  | http://purl.org/dc/elements/1.1/identifier            | 888                                                          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/888  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/888  | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/888  | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/888  | https://ld.openmicroscopy.org/core/well_index         | 3                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/887  | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/938           |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/887  | http://purl.org/dc/elements/1.1/identifier            | 887                                                          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/887  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/887  | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/887  | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/887  | https://ld.openmicroscopy.org/core/well_index         | 2                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/885  | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/936           |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/885  | http://purl.org/dc/elements/1.1/identifier            | 885                                                          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/885  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/885  | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/885  | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/885  | https://ld.openmicroscopy.org/core/well_index         | 0                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/886  | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/937           |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/886  | http://purl.org/dc/elements/1.1/identifier            | 886                                                          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/886  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/886  | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/886  | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/886  | https://ld.openmicroscopy.org/core/well_index         | 1                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/442  | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/493           |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/442  | http://purl.org/dc/elements/1.1/identifier            | 442                                                          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/442  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/442  | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/442  | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/442  | https://ld.openmicroscopy.org/core/well_index         | 1                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/441  | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/492           |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/441  | http://purl.org/dc/elements/1.1/identifier            | 441                                                          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/441  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/441  | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/441  | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/441  | https://ld.openmicroscopy.org/core/well_index         | 0                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/444  | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/495           |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/444  | http://purl.org/dc/elements/1.1/identifier            | 444                                                          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/444  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/444  | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/444  | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/444  | https://ld.openmicroscopy.org/core/well_index         | 3                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/443  | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/494           |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/443  | http://purl.org/dc/elements/1.1/identifier            | 443                                                          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/443  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/443  | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/443  | https://ld.openmicroscopy.org/core/experimenter       | http://swat4hcls/biohackathon/2026/omero/Experimenter/0      |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/443  | https://ld.openmicroscopy.org/core/well_index         | 2                                                            |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/243  | http://purl.org/dc/terms/relation                     | http://swat4hcls/biohackathon/2026/omero/Image/294           |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/243  | http://purl.org/dc/elements/1.1/identifier            | 243                                                          |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/243  | http://www.w3.org/1999/02/22-rdf-syntax-ns#type       | https://ld.openmicroscopy.org/core/WellSample                |
-| http://swat4hcls/biohackathon/2026/omero/Plate/1 | http://swat4hcls/biohackathon/2026/omero/WellSample/243  | https://ld.openmicroscopy.org/core/experimenter_group | http://swat4hcls/biohackathon/2026/omero/ExperimenterGroup/0 |
-#+end_example
-
-#+begin_src sparql http://localhost:3030/biohack-omero/
-  <<prefixes>>
-
-  
-#+end_src
