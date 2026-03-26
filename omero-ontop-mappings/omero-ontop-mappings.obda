@@ -190,32 +190,12 @@ source		select
 			experiment.id as experiment_id
 			from experiment ;
 
-mappingId	MAPID-dataset_tag
-target		ome_instance:Dataset/{dataset_id} this:tag_annotation_value {tag_text}^^xsd:string . 
+mappingId	MAPID-annotation-textvalue
+target		ome_instance:Annotation/{annotation_id} core:value {tag_text}^^xsd:string . 
 source		select
-			dataset.id as dataset_id,
-			annotation.textvalue as tag_text
-			from dataset
-			join datasetannotationlink on datasetannotationlink.parent = dataset.id
-			join annotation on datasetannotationlink.child = annotation.id where annotation.textvalue is not NULL
-
-mappingId	MAPID-image_tag
-target		ome_instance:Image/{image_id} this:tag_annotation_value {tag_text}^^xsd:string . 
-source		select
-			image.id as image_id,
-			annotation.textvalue as tag_text
-			from image
-			join imageannotationlink on imageannotationlink.parent = image.id
-			join annotation on imageannotationlink.child = annotation.id where annotation.textvalue is not NULL
-
-mappingId	MAPID-project-3
-target		ome_instance:Project/{project_id} this:tag_annotation_value {tag_text}^^xsd:string . 
-source		select
-			_project.id as project_id,
-			annotation.textvalue as tag_text
-			from project as _project
-			join projectannotationlink on projectannotationlink.parent = _project.id
-			join annotation on projectannotationlink.child = annotation.id where annotation.textvalue is not NULL
+			annotation.textvalue as tag_text,
+      annotation.id as annotation_id
+			from annotation
 
 mappingId	MAPID-dataset-image
 target		ome_instance:Dataset/{dataset_id} dcterms:hasPart ome_instance:Image/{image_id} . ome_instance:Image/{image_id} dcterms:isPartOf ome_instance:Dataset/{dataset_id} . 
@@ -377,15 +357,6 @@ source		select _plateacquisition.id as plateacquisition_id, concat(
 			left join plateacquisitionannotationlink as _plateacquisitionannotationlink on _plateacquisitionannotationlink.parent = _plateacquisition.id
 			left join annotation as _annotation on _plateacquisitionannotationlink.child = _annotation.id
 			left join annotation_mapvalue as _annotation_mapvalue on _annotation.id = _annotation_mapvalue.annotation_id
-
-mappingId	MAPID-screen-tag
-target		ome_instance:Screen/{screen_id} this:tag_annotation_value {tag_text}^^xsd:string . 
-source		select
-			screen.id as screen_id,
-			annotation.textvalue as tag_text
-			from screen
-			join screenannotationlink on screenannotationlink.parent = screen.id
-			join annotation on screenannotationlink.child = annotation.id where annotation.textvalue is not NULL
 
 mappingId	MAPID-plate-tag
 target		ome_instance:Plate/{plate_id} this:tag_annotation_value {tag_text}^^xsd:string . 
