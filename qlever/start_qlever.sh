@@ -48,7 +48,7 @@ start_server() {
     -p ${PORT}:${PORT} \
     --name "$CONTAINER_NAME" --init \
     --entrypoint bash "$IMAGE" -c "
-      ServerMain \
+      qlever-server \
         -i ${INSTANCE_NAME} \
         -j 4 \
         -p ${PORT} \

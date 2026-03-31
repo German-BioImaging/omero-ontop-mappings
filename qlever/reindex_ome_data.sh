@@ -207,7 +207,7 @@ docker run --rm \
   --entrypoint bash docker.io/adfreiburg/qlever:latest -c "
     set -euo pipefail
     ulimit -Sn 500000
-    IndexBuilderMain \
+    qlever-index \
       -i ${INSTANCE_NAME} \
       -s /index/${INSTANCE_NAME}.settings.json \
       --vocabulary-type on-disk-compressed \
