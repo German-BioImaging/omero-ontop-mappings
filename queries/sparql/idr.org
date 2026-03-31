@@ -1,0 +1,216 @@
+#+title: Example queries against the IDR dump
+#+author: Carsten Fortmann-Grote (@CFGrote)
+tags: sparql, idr, omero, ontop, federation, rdf, uniprot, string-db, wikidata, oma, osm
+* Preparations
+:PROPERTIES:
+:ID:       8ffa3674-ddcd-43d0-a3ee-575a4fa9940c
+:END:
+The native ontop sparql endpoint does not support federated queries, so we have to spin up a qlever instance. We deploy
+omero-ontop-mappings including qlever.
+* Prefixes
+:PROPERTIES:
+:ID:       0f409a41-83dd-4450-a84c-adf3abcae46a
+:END:
+#+begin_src sparql :eval no :noweb-ref prefixes
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  prefix core: <https://ld.openmicroscopy.org/core/>
+  prefix dcterms: <http://purl.org/dc/terms/>
+  prefix dc: <http://purl.org/dc/elements/1.1/>
+  prefix idr: <https://idr.openmicroscopy.org/>
+  prefix ex: <https://example.org/site/>
+  prefix omekg: <https://ld.openmicroscopy.org/omekg#>
+#+end_src
+
+#+begin_src sparql 
+  <<prefixes>>
+  select ?s ?p ?o
+  where {
+    ?s ?p ?o
+    }
+  limit 10
+#+end_src
+
+#+RESULTS:
+#+begin_example
+| s                                            | p                                             | o |
+|----------------------------------------------+-----------------------------------------------+---|
+| https://example.org/site/Experimenter/0      | http://purl.org/dc/elements/1.1/identifier    | 0 |
+| https://example.org/site/ExperimenterGroup/0 | http://purl.org/dc/elements/1.1/identifier    | 0 |
+| https://example.org/site/WellSample/1        | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1001     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1005     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1009     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/101      | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1013     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1017     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1021     | https://ld.openmicroscopy.org/core/well_index | 0 |
+#+end_example
+
+#+begin_src sparql
+  <<prefixes>>
+  select * where {
+    ?ds a core:Plate ;
+        dcterms:hasPart/dcterms:hasPart ?well .
+    ?well ?prop ?val .
+    }
+  limit 100
+#+end_src
+
+
+Which objects have map annotations?
+#+begin_src sparql
+  <<prefixes>>
+
+  select distinct ?obj where {
+    ?obj core:hasAnnotation/core:map [core:key ?key; core:value ?value]
+    }
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+| obj                                |
+|------------------------------------|
+| https://example.org/site/Dataset/1 |
+| https://example.org/site/Dataset/2 |
+| https://example.org/site/Dataset/3 |
+| https://example.org/site/Image/1   |
+| https://example.org/site/Image/10  |
+| https://example.org/site/Image/11  |
+| https://example.org/site/Image/12  |
+| https://example.org/site/Image/2   |
+| https://example.org/site/Image/3   |
+| https://example.org/site/Image/4   |
+| https://example.org/site/Image/5   |
+| https://example.org/site/Image/6   |
+| https://example.org/site/Image/7   |
+| https://example.org/site/Image/8   |
+| https://example.org/site/Image/9   |
+| https://example.org/site/Project/1 |
+#+end_example
+
+* Queries against local qlever endpoint
+:PROPERTIES:
+:ID:       54853afc-31aa-45b8-a464-d7ef72d744c4
+:header-args:sparql: :url http://localhost:8888/ :results output table replace :wrap example :noweb yes
+:END:
+#+begin_src sparql
+  select * where {?s ?p ?o} limit 10
+#+end_src
+
+#+RESULTS:
+#+begin_example
+| s                                            | p                                             | o |
+|----------------------------------------------+-----------------------------------------------+---|
+| https://example.org/site/Experimenter/0      | http://purl.org/dc/elements/1.1/identifier    | 0 |
+| https://example.org/site/ExperimenterGroup/0 | http://purl.org/dc/elements/1.1/identifier    | 0 |
+| https://example.org/site/WellSample/1        | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1001     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1005     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1009     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/101      | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1013     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1017     | https://ld.openmicroscopy.org/core/well_index | 0 |
+| https://example.org/site/WellSample/1021     | https://ld.openmicroscopy.org/core/well_index | 0 |
+#+end_example
+
+* IDR queries
+:PROPERTIES:
+:ID:       dc2b3d05-9793-41c4-9b7d-cc6b2f4a5293
+:header-args:sparql: :url http://81.24.10.88:8080/sparql :results output table replace :wrap example :noweb yes
+:END:
+
+Now try to reach the IDR dump
+#+begin_src sparql :url http://81.24.10.88:8080/sparql
+  <<prefixes>>
+
+  select ?img where {
+    ?img a core:Image .
+    }
+  limit 10
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+| img                                         |
+|---------------------------------------------|
+| https://idr.openmicroscopy.org/Image/113094 |
+| https://idr.openmicroscopy.org/Image/1461   |
+| https://idr.openmicroscopy.org/Image/113095 |
+| https://idr.openmicroscopy.org/Image/113096 |
+| https://idr.openmicroscopy.org/Image/112339 |
+| https://idr.openmicroscopy.org/Image/112340 |
+| https://idr.openmicroscopy.org/Image/112341 |
+| https://idr.openmicroscopy.org/Image/113307 |
+| https://idr.openmicroscopy.org/Image/113308 |
+| https://idr.openmicroscopy.org/Image/113309 |
+#+end_example
+
+
+#+name: idr image annotations
+#+begin_src sparql
+  <<prefixes>>
+
+  select * where {
+    ?img a core:Image ;
+         core:hasAnnotation ?annotation .
+    }
+  limit 10
+
+
+#+end_src
+
+#+name: idr image kv annotation
+#+begin_src sparql :url http://81.24.10.88:8080/sparql
+  <<prefixes>>
+
+  select * where {
+    <https://idr.openmicroscopy.org/MapAnnotation/4563513> core:mapEntry ?map .
+    ?map ?key ?val .
+    }
+  limit 10
+
+
+#+end_src
+
+#+RESULTS: idr image kv annotation
+#+begin_example
+| map                                                          | key                                      | val                                       |
+|--------------------------------------------------------------+------------------------------------------+-------------------------------------------|
+| https://idr.openmicroscopy.org/MapAnnotation/4563513/entry/0 | https://ld.openmicroscopy.org/core/key   | Gene Identifier                           |
+| https://idr.openmicroscopy.org/MapAnnotation/4563513/entry/1 | https://ld.openmicroscopy.org/core/key   | Gene Identifier URL                       |
+| https://idr.openmicroscopy.org/MapAnnotation/4563513/entry/2 | https://ld.openmicroscopy.org/core/key   | Gene Symbol                               |
+| https://idr.openmicroscopy.org/MapAnnotation/4563513/entry/0 | https://ld.openmicroscopy.org/core/value | ENSG00000176974                           |
+| https://idr.openmicroscopy.org/MapAnnotation/4563513/entry/1 | https://ld.openmicroscopy.org/core/value | http://www.ensembl.org/id/ENSG00000176974 |
+| https://idr.openmicroscopy.org/MapAnnotation/4563513/entry/2 | https://ld.openmicroscopy.org/core/value | SHMT1                                     |
+#+end_example
+
+ok, so let's get some gene identifiers from images
+#+begin_src sparql 
+  <<prefixes>>
+  select * where {
+    ?img a core:Image ;
+         core:hasAnnotation/core:mapEntry [core:key ?key;
+                                           core:value ?value] .
+  filter(?key="Gene Identifier")
+  }
+  limit 10
+#+end_src
+
+#+RESULTS:
+#+begin_example
+| img                                         | key             | value           |
+|---------------------------------------------+-----------------+-----------------|
+| https://idr.openmicroscopy.org/Image/215273 | Gene Identifier | ENSG00000176974 |
+| https://idr.openmicroscopy.org/Image/216804 | Gene Identifier | ENSG00000176974 |
+| https://idr.openmicroscopy.org/Image/217124 | Gene Identifier | ENSG00000176974 |
+| https://idr.openmicroscopy.org/Image/218837 | Gene Identifier | ENSG00000176974 |
+| https://idr.openmicroscopy.org/Image/219080 | Gene Identifier | ENSG00000176974 |
+| https://idr.openmicroscopy.org/Image/228240 | Gene Identifier | ENSG00000176974 |
+| https://idr.openmicroscopy.org/Image/228709 | Gene Identifier | ENSG00000176974 |
+| https://idr.openmicroscopy.org/Image/229198 | Gene Identifier | ENSG00000176974 |
+| https://idr.openmicroscopy.org/Image/258350 | Gene Identifier | ENSG00000176974 |
+| https://idr.openmicroscopy.org/Image/259185 | Gene Identifier | ENSG00000176974 |
+#+end_example
