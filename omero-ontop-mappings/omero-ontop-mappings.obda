@@ -458,5 +458,24 @@ mappingId	well-mapannotation
 target		ome_instance:Well/{well_id} core:hasAnnotation ome_instance:MapAnnotation/{child} . 
 source		select parent as well_id, child from wellannotationlink
 
+mappingId	MAPID-dataset_tag
+target		ome_instance:Dataset/{dataset_id} this:tag_annotation_value {tag_text}^^xsd:string .
+source		select
+			dataset.id as dataset_id,
+			annotation.textvalue as tag_text
+			from dataset
+			join datasetannotationlink on datasetannotationlink.parent = dataset.id
+			join annotation on datasetannotationlink.child = annotation.id where annotation.textvalue is not NULL
+
+mappingId	MAPID-image_tag
+target		ome_instance:Image/{image_id} this:tag_annotation_value {tag_text}^^xsd:string .
+source		select
+			image.id as image_id,
+			annotation.textvalue as tag_text
+			from image
+			join imageannotationlink on imageannotationlink.parent = image.id
+			join annotation on imageannotationlink.child = annotation.id where annotation.textvalue is not NULL
+
+
 ]]
 
