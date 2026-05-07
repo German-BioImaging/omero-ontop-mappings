@@ -458,11 +458,24 @@ mappingId	well-mapannotation
 target		ome_instance:Well/{well_id} core:hasAnnotation ome_instance:MapAnnotation/{child} . 
 source		select parent as well_id, child from wellannotationlink
 
-mappingId	MAPID-image-mapannotation-link
-target		ome_instance:Image/{image_id} core:hasAnnotation ome_instance:MapAnnotation/{ann_id} . ome_instance:MapAnnotation/{ann_id} a core:MapAnnotation ; dc:identifier {ann_id}^^xsd:integer . 
-source		select ial.parent as image_id, ial.child as ann_id from imageannotationlink ial join annotation a on a.id = ial.child where a.discriminator = '/map/'
+mappingId	MAPID-dataset_tag
+target		ome_instance:Dataset/{dataset_id} this:tag_annotation_value {tag_text}^^xsd:string .
+source		select
+			dataset.id as dataset_id,
+			annotation.textvalue as tag_text
+			from dataset
+			join datasetannotationlink on datasetannotationlink.parent = dataset.id
+			join annotation on datasetannotationlink.child = annotation.id where annotation.textvalue is not NULL
 
-mappingId	MAPID-mapannotation-entries
-target		ome_instance:MapAnnotation/{ann_id} core:map ome_instance:MapAnnotation/{ann_id}/entry/{idx} . ome_instance:MapAnnotation/{ann_id}/entry/{idx} core:key {k}^^xsd:string ; core:value {v}^^xsd:string . 
+mappingId	MAPID-image_tag
+target		ome_instance:Image/{image_id} this:tag_annotation_value {tag_text}^^xsd:string .
+source		select
+			image.id as image_id,
+			annotation.textvalue as tag_text
+			from image
+			join imageannotationlink on imageannotationlink.parent = image.id
+			join annotation on imageannotationlink.child = annotation.id where annotation.textvalue is not NULL
+
+
 ]]
 
