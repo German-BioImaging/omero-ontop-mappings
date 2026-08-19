@@ -97,7 +97,7 @@ case "${1:-start}" in
     fi
 
     # Base mounts
-    RUN_ARGS="--name $CNAME -p ${PORT}:7000 -v \"$INSTANCE_DIR\":/app/db -e QLEVERUI_DATABASE_URL=sqlite:////app/db/$(basename "$DB_FILE")"
+    RUN_ARGS="--name $CNAME --restart=unless-stopped -p ${PORT}:7000 -v \"$INSTANCE_DIR\":/app/db -e QLEVERUI_DATABASE_URL=sqlite:////app/db/$(basename "$DB_FILE")"
     [ -f "$FAVICON" ]    && RUN_ARGS="$RUN_ARGS -v \"$FAVICON\":/app/backend/static/favicon.ico:ro"
     [ -f "$STYLE" ]      && RUN_ARGS="$RUN_ARGS -v \"$STYLE\":/app/backend/static/css/style.css:ro"
     [ -f "$LOGO_SVG" ]   && RUN_ARGS="$RUN_ARGS -v \"$LOGO_SVG\":/app/backend/static/img/LOGO.svg:ro"
